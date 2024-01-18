@@ -1,0 +1,106 @@
+package frc.robot.subsystems.shooter;
+
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.SafeMotor.IdleMode;
+import frc.robot.utility.shuffleboard.ShuffleboardValue;
+
+//TODO: Keep in mind this doesn't implement SimpleFeedforward 
+public class Shooter extends SubsystemBase {
+    public enum ShooterSpeeds {
+        AMP(500),//right
+        SPEAKER(1000),//left
+        STOP(0), 
+        POSITION_TOLERANCE(5),
+
+        ;
+        private final ShuffleboardValue<Double> velocityRPM;
+        private ShooterSpeeds(double velocityRPM) {
+            this.velocityRPM = ShuffleboardValue.create(velocityRPM, Shooter.class.
+                getSimpleName()+"/"+name()+": Velocity (RPM)", Shooter.class.getSimpleName())
+                    .withSize(1, 3)
+                    .build();
+        }
+        public double get() {
+            return velocityRPM.get();
+        }
+    }
+    protected final SafeCanSparkMax motorL, motorR;
+    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
+        (0.0, "Target Velocity", Shooter.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
+        (0.0, "Encoder Velocity", Shooter.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
+        (0.0, "Encoder Velocity Error", Shooter.class.getSimpleName()).build();
+    
+    private final PIDController shooterController;
+    private final SimpleMotorFeedforward feedforward;
+    // private final RelativeEncoder shooterEncoder, hoodEncoder;
+    
+    private final ShuffleboardValue<Boolean> isEnabled;
+
+    public Shooter(Boolean isEnabled) {
+        this.isEnabled = ShuffleboardValue.create(isEnabled, "Is Enabled", Shooter.class.getSimpleName())
+            .withWidget(BuiltInWidgets.kToggleSwitch)
+            .build();
+
+        motorL = new SafeCanSparkMax(
+            1,
+            MotorType.kBrushless,
+            this.isEnabled,
+                ShuffleboardValue.create(0.0, "VoltageL", Shooter.class.getSimpleName())
+                    .build()
+        );
+        motorR = new SafeCanSparkMax(
+            4,
+            MotorType.kBrushless,
+            this.isEnabled,
+                ShuffleboardValue.create(0.0, "VoltageR", Shooter.class.getSimpleName())
+                    .build() 
+        );
+        motorL.setInverted(true);
+        motorR.setInverted(false);
+        // motorL.follow(motorR, false);
+        shooterController = new PIDController(
+            0.0008,//0.000173611
+            0,
+            0);
+        motorL.setIdleMode(IdleMode.Brake);
+        motorR.setIdleMode(IdleMode.Brake);
+        feedforward = new SimpleMotorFeedforward(0.000,0,0);
+        shooterController.setTolerance(ShooterSpeeds.POSITION_TOLERANCE.get());
+    }
+
+    @Override
+    public void periodic() {
+        setIntakePower(shooterController.calculate(getVelocity())+
+            feedforward.calculate(getVelocity(), getVelocity()));
+    }
+  
+    @Override
+    public void simulationPeriodic() {}
+
+    public Command setTargetVelocity(ShooterSpeeds velocity) {
+        return runOnce(() -> {
+            shooterController.setSetpoint(velocity.get());
+            targetVelocityWriter.set(velocity.get());
+        });
+    }
+
+    public double getVelocity() {
+        return motorL.getEncoder().getVelocity();
+        // return motorR.getEncoder().getVelocity();
+    }
+      
+    private void setIntakePower(double power) {
+        // if (!isEnabled.get()) return;
+        motorL.setPower(power);
+        motorR.setPower(power);
+    }
+}

@@ -1,0 +1,29 @@
+TODO:
+- Limelight Tracking
+        Change Shooter targetVelocity
+        Align Drivetrain
+        auto align-Make a button that automatically aligns to 180 degrees with a press of a button; only when held - still leave control of drive to driver except for turning
+- Sophie/Sebastian: Program Teleop Button except for Arm
+- PathPlannerFollow.java and Auto -Lucky
+- Robot Tracking on Field
+- Field Centric Turning
+- Lights: Add lights to have the robot tell us any errors with can, etc; Make LEDs show Errors
+- Extension automatically commit any code when pushing code to bot (added it) - need to see if 
+- SubsystemCheck Command??
+- Fix the PathPlanner Auto Code
+- Update Radios: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/radio-programming.html#prerequisites 
+- Does Roborio need updates?
+
+
+
+FIX the Motors in same file from having hte same shuffle boeard names
+Fix AutoChooser
+Need Long USB Cable
+
+
+Test:
+- Limelight AutoAim.java
+- Make all of the writes that are not necessary during a match be in a practice only writers (Helps prevent the likelihood of loop overruns)
+
+Done:
+April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38 (kind of)

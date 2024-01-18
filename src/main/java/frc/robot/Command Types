@@ -1,0 +1,4 @@
+new SequentialCommand
+new ParallelCommand
+new ConditionalCommand
+new FunctionalCommand
