@@ -16,6 +16,7 @@ TODO:
 
 
 
+
 FIX the Motors in same file from having hte same shuffle boeard names
 Fix AutoChooser
 Need Long USB Cable
@@ -24,6 +25,7 @@ Need Long USB Cable
 Test:
 - Limelight AutoAim.java
 - Make all of the writes that are not necessary during a match be in a practice only writers (Helps prevent the likelihood of loop overruns)
+- Limit Switch to the Intake
 
 Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38 (kind of)

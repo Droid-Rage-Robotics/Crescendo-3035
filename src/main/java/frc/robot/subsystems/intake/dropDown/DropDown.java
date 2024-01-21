@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,6 +27,7 @@ public class DropDown extends SubsystemBase {
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
+    protected final DigitalInput intakeLimitSwitch;
     // protected final RelativeEncoder encoder;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
@@ -71,12 +73,17 @@ public class DropDown extends SubsystemBase {
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset encoder", DropDown.class.getSimpleName());
 
         motor.burnFlash();
+        intakeLimitSwitch = new DigitalInput(0);//WHERE is it plugged in
     }
 
     @Override
     public void periodic() {
         // motor.set(calculateFeedforward(getTargetPosition(), 0.) + calculatePID(getTargetPosition()));
         setVoltage(calculateFeedforward(getTargetPosition(), 2.3793) + calculatePID(getTargetPosition()));
+    
+        if(intakeLimitSwitch.get()){    //NEED to check whether to add !
+            resetEncoder();
+        }
     }
   
     @Override
