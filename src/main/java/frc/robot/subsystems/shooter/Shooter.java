@@ -14,8 +14,8 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //TODO: Keep in mind this doesn't implement SimpleFeedforward 
 public class Shooter extends SubsystemBase {
     public enum ShooterSpeeds {
-        AMP(500),//right
-        SPEAKER(1000),//left
+        AMP(2000),//right
+        SPEAKER(6000),//left
         STOP(0), 
         POSITION_TOLERANCE(5),
 
@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
         motorR.setInverted(false);
         // motorL.follow(motorR, false);
         shooterController = new PIDController(
-            0.0008,//0.000173611
+            0.00005,//0.000173611    //.00005
             0,
             0);
         motorL.setIdleMode(IdleMode.Brake);
@@ -79,7 +79,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setIntakePower(shooterController.calculate(getVelocity())+
+        setPower(shooterController.calculate(getVelocity())+
             feedforward.calculate(getVelocity(), getVelocity()));
     }
   
@@ -98,7 +98,7 @@ public class Shooter extends SubsystemBase {
         // return motorR.getEncoder().getVelocity();
     }
       
-    private void setIntakePower(double power) {
+    private void setPower(double power) {
         // if (!isEnabled.get()) return;
         motorL.setPower(power);
         motorR.setPower(power);

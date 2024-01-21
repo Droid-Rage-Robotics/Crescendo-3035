@@ -24,10 +24,11 @@ public class Climb extends SubsystemBase{
     }
     private final PIDController controller = new PIDController(2.4, 0, 0);
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
-    private final ShuffleboardValue<Double> voltage = ShuffleboardValue.create(0.0, "Voltage", Climb.class.getSimpleName())
+    private final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
+        (0.0, "Voltage", Climb.class.getSimpleName())
         .build();
 
-    private final SafeCanSparkMax leftMotor, rightMotor;
+    private final SafeCanSparkMax motorL, motorR;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue.create(0.0, "Encoder Position", Climb.class.getSimpleName())
         .withSize(1, 3)
@@ -38,31 +39,32 @@ public class Climb extends SubsystemBase{
     private final RelativeEncoder encoder;
 
     public Climb(Boolean isEnabledLeft, Boolean isEnabledRight) {
-        leftMotor = new SafeCanSparkMax(
+        motorL = new SafeCanSparkMax(
             16, 
             MotorType.kBrushless,
             ShuffleboardValue.create(isEnabledLeft, "Is Enabled Left", Climb.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            voltage
+            voltageWriter
         );
 
-        rightMotor = new SafeCanSparkMax(
+        motorR = new SafeCanSparkMax(
             15, 
             MotorType.kBrushless,
             ShuffleboardValue.create(isEnabledRight, "Is Enabled Right", Climb.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            voltage
+            voltageWriter
         );
-        leftMotor.setIdleMode(IdleMode.Brake);
-        rightMotor.setIdleMode(IdleMode.Brake);
-        leftMotor.setInverted(false);
-        rightMotor.follow(leftMotor, true);
+        motorL.setIdleMode(IdleMode.Brake);
+        motorR.setIdleMode(IdleMode.Brake);
+        motorL.setInverted(false);
+        motorR.setInverted(true);
+        // motorR.follow(leftMotor, true);
         
         controller.setTolerance(0.1);
 
-        encoder = leftMotor.getEncoder();
+        encoder = motorL.getEncoder();
         // encoder = rightMotor.getEncoder();
         encoder.setPositionConversionFactor(Constants.ROT_TO_INCHES);
 
@@ -73,19 +75,26 @@ public class Climb extends SubsystemBase{
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", Climb.class.getSimpleName());
     }
 
+    @Override
+    public void periodic() {
+        setPower(controller.calculate(getEncoderPosition())+
+            feedforward.calculate(getVelocity(), getVelocity()));
+    }
     
-    // protected PIDController getController() {
-    //     return controller;
-    // }
-  
-    // protected SimpleMotorFeedforward getFeedforward() {
-    //     return feedforward;
-    // }
-
-    
+    private void setPower(double power) {
+        // if (!isEnabled.get()) return;
+        motorL.setPower(power);
+        motorR.setPower(power);
+    }
     protected void setVoltage(double voltage) {
-        leftMotor.setVoltage(voltage);
+        voltageWriter.set(voltage);    
+        motorL.setVoltage(voltage);
         // rightMotor.setVoltage(voltage);
+    }
+
+    public double getVelocity() {
+        return motorL.getEncoder().getVelocity();
+        // return motorR.getEncoder().getVelocity();
     }
 
     
