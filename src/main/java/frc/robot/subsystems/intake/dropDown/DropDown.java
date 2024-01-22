@@ -1,6 +1,5 @@
 package frc.robot.subsystems.intake.dropDown;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -11,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -22,6 +22,23 @@ public class DropDown extends SubsystemBase {
         public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
+    }
+
+    public enum Position{//What do these positions even mean
+        INTAKE( 0),//Intake Pos
+        OUTTAKE(0),//Where to be when outtaking
+        SHOOTER_TRANSFER(0),//Transfer to  - Position to Reset Encoder
+        ELEV_TRANSFER(0), //transfer to elev4
+        ;
+
+        private final ShuffleboardValue<Double>  dropPos;
+
+        private Position(double dropPos) {
+            this.dropPos = ShuffleboardValue.create(dropPos, Position.class.getSimpleName()+"/"+name()+
+                ": dropPos (RPM)", Intake.class.getSimpleName())
+                .withSize(1, 3)
+                .build();
+        }
     }
 
     protected final SafeCanSparkMax motor;
@@ -91,6 +108,9 @@ public class DropDown extends SubsystemBase {
         periodic();
     }
 
+    public Command setTargetPosCommand(Position position){
+        return new InstantCommand(()->controller.setSetpoint(position.dropPos.get()));
+    }
     public Command setTargetPosCommand(double positionRadians){
         return new InstantCommand(()->controller.setSetpoint(positionRadians));
     }
@@ -102,7 +122,7 @@ public class DropDown extends SubsystemBase {
     }
 
 
-    public void setTargetPosition(double positionRadians) {
+    protected void setTargetPosition(double positionRadians) {
         controller.setSetpoint(positionRadians);
     }
 

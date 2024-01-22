@@ -12,13 +12,13 @@ import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 @Deprecated
-public class IntakeDropDown extends SubsystemBase {
+public class BadIntakeDropDown extends SubsystemBase {
     public static class DropDownConstants {
         public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
-    public enum Position 
+    private enum Position 
     // implements ShuffleboardValueEnum<Double> 
     {
         INTAKE( 0),
@@ -56,7 +56,7 @@ public class IntakeDropDown extends SubsystemBase {
     protected final ArmFeedforward dropFeedforward;
 
 
-    public IntakeDropDown(Boolean isEnabled) {
+    public BadIntakeDropDown(Boolean isEnabled) {
         dropDown = new SafeCanSparkMax(
             9,
             MotorType.kBrushless,
