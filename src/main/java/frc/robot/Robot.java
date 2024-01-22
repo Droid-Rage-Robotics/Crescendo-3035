@@ -9,6 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.Light;
+import frc.robot.subsystems.clawPivot.PivotAbsolute;
+import frc.robot.subsystems.drive.SwerveDrive;
+import frc.robot.subsystems.elevator.VerticalElevator;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.dropDown.DropDown;
 import frc.robot.subsystems.shooter.Shooter;
 
 /**
@@ -20,14 +26,21 @@ import frc.robot.subsystems.shooter.Shooter;
 public class Robot extends TimedRobot {
     // private final SwerveDrive drive = new SwerveDrive(true);
     // private final VerticalElevator verticalElevator = new VerticalElevator(true, true);
-    // private final VerticalElevatorSetPower verticalElevatorSetPower = new VerticalElevatorSetPower();
-    // private final HorizontalElevator horizontalElevator = new HorizontalElevator(true);
     // private final PivotAbsolute pivot = new PivotAbsolute(true);
-    // private final Intake intake = new Intake(true);
-    // private final Arm arm = new Arm(verticalElevator, horizontalElevator, pivot, intake);
+    
     private final Shooter shooter = new Shooter(true);
+    // private final Intake intake = new Intake(false);
+    // private final DropDown dropDown = new DropDown(false);
+    
     // private Field2d field = new Field2d(); //TODO:How does this work
-    // private RobotContainer robotContainer = new RobotContainer(shooter);
+    private RobotContainer robotContainer = new RobotContainer(
+        // drive,
+        shooter
+        // intake,
+        // dropDown
+        // vision,
+        // light
+        );
     
     private final CommandXboxController operator =
         new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
@@ -107,14 +120,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
-        // robotContainer.configureTeleOpBindings(
-        //     // drive
-        //     );
-
-            operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP))
-        .onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
-        operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER))
-        .onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+        // robotContainer.configureTeleOpBindings( );
+        robotContainer.configureShooterTestBindings();
         // robotContainer.configureTeleOpDriverOnlyBindings();
     }
 

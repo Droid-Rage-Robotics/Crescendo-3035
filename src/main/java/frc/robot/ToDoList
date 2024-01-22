@@ -15,12 +15,11 @@ TODO:
 - Does Roborio need updates? Do ON all
 - Heading Direction of Drivetrain after Auto 
 
-
-
-
+Non Urget ToDos:
 FIX the Motors in same file from having hte same shuffle boeard names
 Fix AutoChooser
 Need Long USB Cable
+Make and extended Subsystems to have protected instead of private
 
 
 Test:

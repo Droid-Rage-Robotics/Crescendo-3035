@@ -12,6 +12,9 @@ import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.Intake.Velocity;
+import frc.robot.subsystems.intake.dropDown.DropDown;
+import frc.robot.subsystems.intake.dropDown.DropDown.Position;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.Shooter.ShooterSpeeds;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -26,20 +29,27 @@ public class RobotContainer {
         (0.0, "Match Time", "Misc")
         .withWidget(BuiltInWidgets.kTextView)
         .build();
+    
+    // private final SwerveDrive drive;
     private final Shooter shooter;
-    private final SwerveDrive drive;
-    private final Vision vision;
-    private final Light light;
+    // private final Intake intake;
+    // private final DropDown dropDown;
+    // private final Vision vision;
+    // private final Light light;
     public RobotContainer(
-        SwerveDrive drive,
-        Shooter shooter,
+        // SwerveDrive drive,
+        Shooter shooter
+        Intake intake,
+        DropDown dropDown
         Vision vision,
         Light light
         ) {
-            this.drive = drive;
+            // this.drive = drive;
             this.shooter = shooter;
-            this.vision = vision;
-            this.light = light;
+            // this.intake = intake;
+            // this.dropDown = dropDown;
+            // this.vision = vision;
+            // this.light = light;
     }
 
     public void configureTeleOpBindings() {
@@ -47,17 +57,28 @@ public class RobotContainer {
         DriverStation.silenceJoystickConnectionWarning(true);
         // light.setDefaultCommand(new LightCommand(intake, light, driver));
         
-        drive.setDefaultCommand(
-            new SwerveDriveTeleop(
-                drive, 
-                driver::getLeftX, 
-                driver::getLeftY, 
-                driver::getRightX,
-                driver.rightBumper()
-                )
-            );
-        operator.rightTrigger().onTrue(new AutoAim(drive, vision, light)
-            .andThen(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER)));
+        // drive.setDefaultCommand(
+        //     new SwerveDriveTeleop(
+        //         drive, 
+        //         driver::getLeftX, 
+        //         driver::getLeftY, 
+        //         driver::getRightX,
+        //         driver.rightBumper()
+        //         )
+        //     );
+        // operator.rightTrigger().onTrue(new AutoAim(drive, vision, light)
+        //     .andThen(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER)));
+
+
+
+
+
+
+
+        // driver.rightTrigger().onTrue(intake.setTargetVelocityCommand(Velocity.INTAKE))
+        //     .onTrue(dropDown.setTargetPosCommand(Position.INTAKE))
+        //     .onTrue(intake.setTargetVelocityCommand(Velocity.STOP))
+        //     .onTrue(dropDown.setTargetPosCommand(Position.));
     }
 
     public void configureShooterTestBindings(){
