@@ -14,8 +14,8 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //TODO: Keep in mind this doesn't implement SimpleFeedforward 
 public class Shooter extends SubsystemBase {
     public enum ShooterSpeeds {
-        AMP(2000),//right
-        SPEAKER(6000),//left
+        AMP(1000),//right
+        SPEAKER(20000),//left
         STOP(0), 
         POSITION_TOLERANCE(5),
 
