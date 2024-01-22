@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
+import frc.robot.commands.LightCommand.IntakeState;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -55,6 +56,8 @@ public class Intake extends SubsystemBase {
         (0.0, "Encoder Velocity", Intake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
         (0.0, "Encoder Velocity Error", Intake.class.getSimpleName()).build();
+    protected final ShuffleboardValue<String> intakeStateWriter = ShuffleboardValue.create
+        ("Test", "Intake State", Intake.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Boolean> isElementInWriter = ShuffleboardValue.create
             (false, "Is Element In", Intake.class.getSimpleName()).build();
@@ -149,7 +152,8 @@ public class Intake extends SubsystemBase {
         intake.getEncoder().setPosition(0);//TODO: Test
     }
 
-    
-
+    public void setIntakeState(IntakeState state){
+        intakeStateWriter.set(state.name());
+    }
 }
 

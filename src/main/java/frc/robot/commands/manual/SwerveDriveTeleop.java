@@ -18,22 +18,22 @@ public class SwerveDriveTeleop extends Command {
     private final Supplier<Double> x, y, turn;
     private final SlewRateLimiter xLimiter, yLimiter, turnLimiter;
     // private static final PIDController autoBalanceY = new PIDController(0.006, 0, 0.0005);
-
     private volatile double xSpeed, ySpeed, turnSpeed;
 
-    private Trigger lockTrigger;
     public SwerveDriveTeleop(SwerveDrive drive,
-            Supplier<Double> x, Supplier<Double> y, Supplier<Double> turn, Trigger lockTrigger) {
+            Supplier<Double> x, Supplier<Double> y, Supplier<Double> turn, Trigger rightBumper) {
         this.drive = drive;
         this.x = x;
         this.y = y;
         this.turn = turn;
-        this.lockTrigger = lockTrigger;
 
         this.xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.turnLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND.get());
 
+        //Slow Mode vs Fast
+        rightBumper.whileTrue(drive.setSlowSpeed())
+            .onFalse(drive.setNormalSpeed());
 
 
         addRequirements(drive);
@@ -127,16 +127,6 @@ public class SwerveDriveTeleop extends Command {
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 
         SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-
-        // if (lockTrigger.getAsBoolean()) {
-        //     drive.setModuleStates(new SwerveModuleState[] {
-        //         new SwerveModuleState(0.01, new Rotation2d(Math.PI / 4)),
-        //         new SwerveModuleState(0.01, new Rotation2d(-Math.PI / 4)),
-        //         new SwerveModuleState(0.01, new Rotation2d(-Math.PI / 4)),
-        //         new SwerveModuleState(0.01, new Rotation2d(Math.PI / 4))
-        //     });
-        // }
-        //TODO: Test
         drive.setModuleStates(states);
     }
 

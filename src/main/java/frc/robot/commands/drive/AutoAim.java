@@ -49,6 +49,7 @@ public class AutoAim extends Command {//TODO: Test this
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Should be Moved to LightCommand
       light.setAllColor(light.red);
     if(turnController.atSetpoint()&&distanceController.atSetpoint()){
       light.setAllColor(light.green);
