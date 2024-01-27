@@ -16,15 +16,14 @@ import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-//Uses feedforward and controller with relative encoder
-public class DropDown extends SubsystemBase {
+public class IntakeDropDown extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
 
-    public enum Position{//What do these positions even mean
+    public enum Position{
         INTAKE( 0),//Intake Pos
         OUTTAKE(0),//Where to be when outtaking
         SHOOTER_TRANSFER(0),//Transfer to  - Position to Reset Encoder
@@ -48,26 +47,26 @@ public class DropDown extends SubsystemBase {
     // protected final RelativeEncoder encoder;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", DropDown.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", IntakeDropDown.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", DropDown.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", IntakeDropDown.class.getSimpleName())
         .withSize(1, 2)
         .build();
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Moving manually", DropDown.class.getSimpleName())
+        ShuffleboardValue.create(false, "Moving manually", IntakeDropDown.class.getSimpleName())
         .build();
     
-    public DropDown(Boolean isEnabled) {
+    public IntakeDropDown(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             18, 
             MotorType.kBrushless,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", DropDown.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Is Enabled", IntakeDropDown.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Voltage", DropDown.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Voltage", IntakeDropDown.class.getSimpleName())
                 .build()
         );
         motor.setIdleMode(IdleMode.Coast);//TODO:Make it brake 
@@ -83,11 +82,11 @@ public class DropDown extends SubsystemBase {
         // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);
         // feedforward = new ArmFeedforward(0, 0,0);
 
-        ComplexWidgetBuilder.create(controller, "PID Controller", DropDown.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "PID Controller", IntakeDropDown.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset encoder", DropDown.class.getSimpleName());
+        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset encoder", IntakeDropDown.class.getSimpleName());
 
         motor.burnFlash();
         intakeLimitSwitch = new DigitalInput(0);//WHERE is it plugged in
@@ -108,10 +107,10 @@ public class DropDown extends SubsystemBase {
         periodic();
     }
 
-    public Command setTargetPosCommand(Position position){
+    public Command setTargetCommand(Position position){
         return new InstantCommand(()->controller.setSetpoint(position.dropPos.get()));
     }
-    public Command setTargetPosCommand(double positionRadians){
+    public Command setTargetCommand(double positionRadians){
         return new InstantCommand(()->controller.setSetpoint(positionRadians));
     }
     public void setMovingManually(boolean value) {

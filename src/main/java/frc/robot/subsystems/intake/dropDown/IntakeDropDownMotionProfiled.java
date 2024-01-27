@@ -1,11 +1,10 @@
-package frc.robot.subsystems.clawPivot;
+package frc.robot.subsystems.intake.dropDown;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-//Uses feedforward and controller with absolute encoder and Trapezoid Profiling
-public class PivotMotionProfiled extends Pivot {
+public class IntakeDropDownMotionProfiled extends IntakeDropDown {
     public static class Constants {
         public static double MIN_POSITION = Math.toRadians(20);
         public static double MAX_POSITION = Math.toRadians(230);
@@ -15,11 +14,17 @@ public class PivotMotionProfiled extends Pivot {
     protected TrapezoidProfile.State state;
     protected TrapezoidProfile.State goal;
 
-    protected final ShuffleboardValue<Double> goalPositionWriter = ShuffleboardValue.create(0.0, "Goal Position", Pivot.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> goalVelocityWriter = ShuffleboardValue.create(0.0, "Goal Velocity", Pivot.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create(0.0, "Target Velocity", Pivot.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> goalPositionWriter = 
+        ShuffleboardValue.create(0.0, "Goal Position", 
+        IntakeDropDown.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> goalVelocityWriter = 
+        ShuffleboardValue.create(0.0, "Goal Velocity", 
+        IntakeDropDown.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> targetVelocityWriter = 
+        ShuffleboardValue.create(0.0, "Target Velocity", 
+        IntakeDropDown.class.getSimpleName()).build();
     
-    public PivotMotionProfiled(Boolean isEnabled) {
+    public IntakeDropDownMotionProfiled(Boolean isEnabled) {
         super(isEnabled);
 
         controller.setPID(5, 0, 0);//kP=5
@@ -59,6 +64,9 @@ public class PivotMotionProfiled extends Pivot {
         setVoltage(calculateFeedforward(state.position, state.velocity) + calculatePID(state.position));
         getEncoderVelocity();
         
+        if(intakeLimitSwitch.get()){    //NEED to check whether to add !
+            resetEncoder();
+        }
     }
   
     @Override

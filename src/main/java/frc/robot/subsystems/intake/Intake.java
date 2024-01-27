@@ -56,8 +56,6 @@ public class Intake extends SubsystemBase {
         (0.0, "Encoder Velocity", Intake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
         (0.0, "Encoder Velocity Error", Intake.class.getSimpleName()).build();
-    protected final ShuffleboardValue<String> intakeStateWriter = ShuffleboardValue.create
-        ("Test", "Intake State", Intake.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Boolean> isElementInWriter = ShuffleboardValue.create
             (false, "Is Element In", Intake.class.getSimpleName()).build();
@@ -115,15 +113,7 @@ public class Intake extends SubsystemBase {
         isElementInWriter.set(isElementIn());
         
     }
-    private void updateColorSensor(){
-        colorMatcher.addColorMatch(orange);
-        detectedColor = colorSensor.getColor(); 
-        match = colorMatcher.matchClosestColor(detectedColor);
-    }
-    public boolean isElementIn(){
-        return match.color == orange;
-        // return encoderVelocityErrorWriter.get()<-2000;
-    }
+    
     public Command setTargetVelocityCommand(Velocity velocity){
         return new InstantCommand(()->setTargetVelocity(velocity));
     }
@@ -152,8 +142,16 @@ public class Intake extends SubsystemBase {
         intake.getEncoder().setPosition(0);//TODO: Test
     }
 
-    public void setIntakeState(IntakeState state){
-        intakeStateWriter.set(state.name());
+    
+    //Color Sensor Functiona
+    private void updateColorSensor(){
+        colorMatcher.addColorMatch(orange);
+        detectedColor = colorSensor.getColor(); 
+        match = colorMatcher.matchClosestColor(detectedColor);
+    }
+    public boolean isElementIn(){
+        return match.color == orange;
+        // return encoderVelocityErrorWriter.get()<-2000;
     }
 }
 

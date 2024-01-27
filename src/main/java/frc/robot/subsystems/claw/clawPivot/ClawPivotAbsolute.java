@@ -1,32 +1,31 @@
-package frc.robot.subsystems.intake.dropDown;
+package frc.robot.subsystems.claw.clawPivot;
 
 import com.revrobotics.SparkAbsoluteEncoder;
 
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-//Uses feedforward and controller with absolute encoder
-public class DropDownAbsolute extends DropDownMotionProfiled {
-    public static class Consants {
+public class ClawPivotAbsolute extends ClawPivotMotionProfiled {
+    public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
         public static double OFFSET = Math.PI / 2;  //90 Degree
     }
     SparkAbsoluteEncoder absoluteEncoder;
-    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", DropDown.class.getSimpleName())
+    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", ClawPivot.class.getSimpleName())
         .withSize(1, 2)
         .build();
-    public DropDownAbsolute(Boolean isEnabled) {
+    public ClawPivotAbsolute(Boolean isEnabled) {
         super(isEnabled);
         absoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
         absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
         absoluteEncoder.setInverted(true);
-        setTargetPosition(Consants.OFFSET);
+        setTargetPosition(Constants.OFFSET);
     }
     
     
     @Override
     public double getEncoderPosition() {
-        double position = (absoluteEncoder.getPosition() + Consants.OFFSET) % Consants.RADIANS_PER_ROTATION;
+        double position = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
         encoderPositionWriter.write(Math.toDegrees(position));
         getRawEncoderPositions();
         return position;

@@ -4,12 +4,12 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.clawPivot.Pivot;
+import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 public class ManualPivotElevator extends Command {
-    private final Pivot pivot;
+    private final ClawPivot pivot;
     private final Supplier<Double> pivotMove;
     
-    public ManualPivotElevator(Pivot pivot, Supplier<Double> pivotMove) {
+    public ManualPivotElevator(ClawPivot pivot, Supplier<Double> pivotMove) {
         this.pivot = pivot;
         this.pivotMove = pivotMove;
         

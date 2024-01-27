@@ -1,11 +1,11 @@
-package frc.robot.subsystems.intake.dropDown;
+package frc.robot.subsystems.claw.clawPivot;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-//Uses feedforward and controller with absolute encoder and Trapezoid Profiling
-public class DropDownMotionProfiled extends DropDown {
+public class ClawPivotMotionProfiled extends ClawPivot {
     public static class Constants {
         public static double MIN_POSITION = Math.toRadians(20);
         public static double MAX_POSITION = Math.toRadians(230);
@@ -15,17 +15,11 @@ public class DropDownMotionProfiled extends DropDown {
     protected TrapezoidProfile.State state;
     protected TrapezoidProfile.State goal;
 
-    protected final ShuffleboardValue<Double> goalPositionWriter = 
-        ShuffleboardValue.create(0.0, "Goal Position", 
-        DropDown.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> goalVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Goal Velocity", 
-        DropDown.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> targetVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Target Velocity", 
-        DropDown.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> goalPositionWriter = ShuffleboardValue.create(0.0, "Goal Position", ClawPivot.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> goalVelocityWriter = ShuffleboardValue.create(0.0, "Goal Velocity", ClawPivot.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create(0.0, "Target Velocity", ClawPivot.class.getSimpleName()).build();
     
-    public DropDownMotionProfiled(Boolean isEnabled) {
+    public ClawPivotMotionProfiled(Boolean isEnabled) {
         super(isEnabled);
 
         controller.setPID(5, 0, 0);//kP=5
@@ -65,9 +59,6 @@ public class DropDownMotionProfiled extends DropDown {
         setVoltage(calculateFeedforward(state.position, state.velocity) + calculatePID(state.position));
         getEncoderVelocity();
         
-        if(intakeLimitSwitch.get()){    //NEED to check whether to add !
-            resetEncoder();
-        }
     }
   
     @Override
@@ -76,9 +67,9 @@ public class DropDownMotionProfiled extends DropDown {
     }
 
     @Override
-    public void setTargetPosition(double positionRadians) {
+    public Command setTargetPosition(Position target) {
         setMovingManually(false);
-        setTarget(positionRadians, 0);
+        return runOnce(()->setTarget(target.get(), 0));
     }
 
     public void setTargetVelocity(double velocityRadiansPerSecond) {

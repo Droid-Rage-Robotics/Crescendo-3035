@@ -4,12 +4,12 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.elevator.VerticalElevator;
-public class ManualVerticalElevator extends Command {
-    private final VerticalElevator verticalElevator;
+import frc.robot.subsystems.claw.clawElevator.ClawElevator;
+public class ManualClawElevator extends Command {
+    private final ClawElevator verticalElevator;
     private final Supplier<Double> verticalElevatorMove;
     
-    public ManualVerticalElevator(VerticalElevator verticalElevator, Supplier<Double> verticalElevatorMove) {
+    public ManualClawElevator(ClawElevator verticalElevator, Supplier<Double> verticalElevatorMove) {
         this.verticalElevator = verticalElevator;
         this.verticalElevatorMove = verticalElevatorMove;
         
