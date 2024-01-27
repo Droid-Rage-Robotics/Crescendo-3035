@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class LightCommand extends Command {
     public enum IntakeState {
@@ -23,6 +24,9 @@ public class LightCommand extends Command {
     Light light;
     CommandXboxController driver, operator;
     Intake intake;
+    protected final ShuffleboardValue<String> intakeStateWriter = ShuffleboardValue.create
+        ("Test", "Intake State", Intake.class.getSimpleName()).build();
+
 
 
     public LightCommand(Intake intake,
@@ -70,7 +74,7 @@ public class LightCommand extends Command {
                 break;
         }
         
-        intake.setIntakeState(intakeState);
+        setLightState(intakeState);
     }
 
     @Override
@@ -85,5 +89,9 @@ public class LightCommand extends Command {
 
     public double getMatchTime(){//TODO:test
           return DriverStation.getMatchTime();
+    }
+
+    public void setLightState(IntakeState state){
+        intakeStateWriter.set(state.name());
     }
 }
