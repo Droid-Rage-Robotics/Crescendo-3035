@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.Shooter;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class CycleTracker2 {

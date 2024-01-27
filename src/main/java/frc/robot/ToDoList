@@ -14,13 +14,19 @@ TODO:
 - Update Radios: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/radio-programming.html#prerequisites 
 - Does Roborio need updates? Do ON all
 - Heading Direction of Drivetrain after Auto 
+internal issue with print error and tags  - https://docs.wpilib.org/en/stable/docs/yearly-overview/known-issues.html
+PathPlanner; https://www.chiefdelphi.com/t/path-planner-command-help/451743/2
+URGENT TODO BEFORE COMP: Update to latest WPILib
+
 
 Non Urget ToDos:
 FIX the Motors in same file from having hte same shuffle boeard names
 Fix AutoChooser
 Need Long USB Cable
 Make and extended Subsystems to have protected instead of private
-
+Print Spacers for the Thick 2x1 Tubing
+What does the Driver.getGameSpecificMessage()?
+Add lights to have the robot tell us any errors with can, etc.
 
 Test:
 - Limelight AutoAim.java
