@@ -2,22 +2,22 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.vision.Vision;
+import frc.robot.commands.IntakeColorSensor;
+import frc.robot.commands.LightCommand;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Light;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.Intake.Velocity;
-import frc.robot.subsystems.intake.dropDown.DropDown;
-import frc.robot.subsystems.intake.dropDown.DropDown.Position;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.Shooter.ShooterSpeeds;
-import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDown.Position;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class RobotContainer {
@@ -30,55 +30,66 @@ public class RobotContainer {
         .withWidget(BuiltInWidgets.kTextView)
         .build();
     
-    // private final SwerveDrive drive;
+    private final SwerveDrive drive;
     private final Shooter shooter;
-    // private final Intake intake;
-    // private final DropDown dropDown;
-    // private final Vision vision;
-    // private final Light light;
+    private final Intake intake;
+    private final IntakeDropDown dropDown;
+    private final Vision vision;
+    private final Light light;
     public RobotContainer(
-        // SwerveDrive drive,
-        Shooter shooter
+        SwerveDrive drive,
+        Shooter shooter,
         Intake intake,
-        DropDown dropDown
+        IntakeDropDown dropDown,
         Vision vision,
         Light light
         ) {
-            // this.drive = drive;
+            this.drive = drive;
             this.shooter = shooter;
-            // this.intake = intake;
-            // this.dropDown = dropDown;
-            // this.vision = vision;
-            // this.light = light;
+            this.intake = intake;
+            this.dropDown = dropDown;
+            this.vision = vision;
+            this.light = light;
     }
 
     public void configureTeleOpBindings() {
             
         DriverStation.silenceJoystickConnectionWarning(true);
-        // light.setDefaultCommand(new LightCommand(intake, light, driver));
+        light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
+        intake.setDefaultCommand(new IntakeColorSensor(intake, dropDown));
         
-        // drive.setDefaultCommand(
-        //     new SwerveDriveTeleop(
-        //         drive, 
-        //         driver::getLeftX, 
-        //         driver::getLeftY, 
-        //         driver::getRightX,
-        //         driver.rightBumper()
-        //         )
-        //     );
-        // operator.rightTrigger().onTrue(new AutoAim(drive, vision, light)
-        //     .andThen(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER)));
+        drive.setDefaultCommand(
+            new SwerveDriveTeleop(
+                drive, 
+                driver::getLeftX, 
+                driver::getLeftY, 
+                driver::getRightX,
+                driver.rightBumper()
+                )
+            );
+
+        driver.rightTrigger().onTrue(intake.setTargetVelocityCommand(Velocity.INTAKE))
+            .onTrue(dropDown.setTargetCommand(Position.INTAKE))
+            .onTrue(intake.setTargetVelocityCommand(Velocity.STOP))
+            .onTrue(dropDown.setTargetCommand(Position.SHOOTER_TRANSFER));
+        driver.rightTrigger().onTrue(intake.setTargetVelocityCommand(Velocity.OUTTAKE))
+            .onTrue(dropDown.setTargetCommand(Position.OUTTAKE))
+            .onTrue(intake.setTargetVelocityCommand(Velocity.STOP))
+            .onTrue(dropDown.setTargetCommand(Position.SHOOTER_TRANSFER));
+            
+        operator.rightTrigger().onTrue(new AutoAim(drive, vision, light)
+            .andThen(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER))
+            .andThen(intake.setTargetVelocityCommand(Velocity.SHOOTER_TRANSFER)));
+
+            //Trap
+            // Climb
 
 
 
 
 
 
-
-        // driver.rightTrigger().onTrue(intake.setTargetVelocityCommand(Velocity.INTAKE))
-        //     .onTrue(dropDown.setTargetPosCommand(Position.INTAKE))
-        //     .onTrue(intake.setTargetVelocityCommand(Velocity.STOP))
-        //     .onTrue(dropDown.setTargetPosCommand(Position.));
+        
     }
 
     public void configureShooterTestBindings(){

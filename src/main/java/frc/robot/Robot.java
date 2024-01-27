@@ -8,14 +8,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Light;
-import frc.robot.subsystems.clawPivot.PivotAbsolute;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.elevator.VerticalElevator;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.dropDown.DropDown;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
+import frc.robot.subsystems.vision.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,29 +22,26 @@ import frc.robot.subsystems.shooter.Shooter;
  * directory.
  */
 public class Robot extends TimedRobot {
-    // private final SwerveDrive drive = new SwerveDrive(true);
-    // private final VerticalElevator verticalElevator = new VerticalElevator(true, true);
-    // private final PivotAbsolute pivot = new PivotAbsolute(true);
-    
+    private final SwerveDrive drive = new SwerveDrive(true);
     private final Shooter shooter = new Shooter(true);
-    // private final Intake intake = new Intake(false);
-    // private final DropDown dropDown = new DropDown(false);
+    private final Intake intake = new Intake(false);
+    private final IntakeDropDown dropDown = new IntakeDropDown(false);
+    private final Vision vision = new Vision();
+    private final Light light = new Light();
+
+    // private AutoChooser autoChooser = new AutoChooser();
     
     // private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer(
-        // drive,
-        shooter
-        // intake,
-        // dropDown
-        // vision,
-        // light
+        drive,
+        shooter,
+        intake,
+        dropDown,
+        vision,
+        light
         );
-    
-    private final CommandXboxController operator =
-        new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
-    // private AutoChooser autoChooser;
+        
     private Command autonomousCommand;
-    // private Light light = new Light( );
   
   /**
      * This function is run when the robot is first started up and should be used for any
@@ -58,7 +53,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         
         // PathPlannerServer.startServer(5811); // Use to see the Path of the robot on PathPlanner
-    //    PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+        // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
         // autoChooser = new AutoChooser();
     }
     
@@ -75,7 +70,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        
         CommandScheduler.getInstance().run();
     }
 
@@ -91,12 +85,6 @@ public class Robot extends TimedRobot {
         // } else{
         //     light.flashingColors(light.yellow, light.blue);
         // }
-        
-        //TODO: Add lights to have the robot tell us any errors with can, etc.
-        // light.rainbow();
-        // light.orangeAndBlue();
-        // light.switchLeds();
-        // light.chaseLED( 1);
     }
 
     @Override
@@ -138,7 +126,6 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
         // robotContainer.configureTestBindings();
     }
-
     @Override
     public void testPeriodic() {}
 
