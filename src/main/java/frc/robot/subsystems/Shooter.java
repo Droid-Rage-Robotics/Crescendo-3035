@@ -11,12 +11,13 @@ import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-//TODO: Keep in mind this doesn't implement SimpleFeedforward 
 public class Shooter extends SubsystemBase {
     public enum ShooterSpeeds {
-        AMP(1000),//right
-        SPEAKER(20000),//left
+        AMP_SHOOT(1000),
+        SPEAKER_SHOOT(20000),
+        HOLD(SPEAKER_SHOOT.get()*.3),
         STOP(0), 
+        CLAW_TRANSFER(0),
         POSITION_TOLERANCE(5),
 
         ;

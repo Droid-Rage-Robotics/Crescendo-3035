@@ -78,7 +78,7 @@ public class RobotContainer {
             .onTrue(dropDown.setTargetCommand(Position.SHOOTER_TRANSFER));
             
         operator.rightTrigger().onTrue(new AutoAim(drive, vision, light)
-            .andThen(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER))
+            .andThen(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
             .andThen(intake.setTargetVelocityCommand(Velocity.SHOOTER_TRANSFER)));
 
             //Trap
@@ -93,9 +93,9 @@ public class RobotContainer {
     }
 
     public void configureShooterTestBindings(){
-        operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP))
+        operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
             .onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
-        operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER))
+        operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
             .onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
     }
     

@@ -56,9 +56,9 @@ public class CycleTracker2 {
         slowest.set(stat.getLowestValue());
         fastest.set(stat.getHighestValue());
         switch (num){
-            case AMP:
+            case AMP_SHOOT:
                 amp.set(amp.get()+1);
-            case SPEAKER:
+            case SPEAKER_SHOOT:
                 speaker.set(speaker.get()+1);
             case POSITION_TOLERANCE:
             case STOP:
