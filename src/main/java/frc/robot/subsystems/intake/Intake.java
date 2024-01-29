@@ -64,13 +64,6 @@ public class Intake extends SubsystemBase {
     protected final SafeCanSparkMax intake;
     protected final PIDController intakeController;
     protected final SimpleMotorFeedforward intakeFeedforward;
-    
-    //TODO: CHeck this
-    protected final ColorSensorV3 colorSensor;
-    protected final ColorMatch colorMatcher;
-    protected final Color orange = new Color(0.143, 0.427, 0.429);//TODO: Fix Color
-    protected Color detectedColor;
-    protected ColorMatchResult match;
 
     public Intake(Boolean isEnabled) {
         intake = new SafeCanSparkMax(
@@ -93,13 +86,6 @@ public class Intake extends SubsystemBase {
         intakeController.setTolerance(5);
         intakeFeedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
-        colorSensor = new ColorSensorV3(I2C.Port.kOnboard);//Not Sure What This Is
-        colorMatcher = new ColorMatch();
-        colorMatcher.addColorMatch(orange);
-        detectedColor = colorSensor.getColor(); 
-        match = colorMatcher.matchClosestColor(detectedColor);
-
-        
         ComplexWidgetBuilder.create(intakeController, "Intake Controller", Intake.class.getSimpleName());
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetIntakeEncoder)), 
             "Reset Intake Encoder", Intake.class.getSimpleName());
@@ -109,7 +95,6 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         intake.setVoltage(calculateIntakePID(getIntakeTargetVelocity()) + 
             calculateIntakeFeedforward(getIntakeTargetVelocity()));
-        updateColorSensor();
         isElementInWriter.set(isElementIn());
         
     }
@@ -142,16 +127,8 @@ public class Intake extends SubsystemBase {
         intake.getEncoder().setPosition(0);//TODO: Test
     }
 
-    
-    //Color Sensor Functiona
-    private void updateColorSensor(){
-        colorMatcher.addColorMatch(orange);
-        detectedColor = colorSensor.getColor(); 
-        match = colorMatcher.matchClosestColor(detectedColor);
-    }
     public boolean isElementIn(){
-        return match.color == orange;
-        // return encoderVelocityErrorWriter.get()<-2000;
+        return encoderVelocityErrorWriter.get()<-2000;
     }
 }
 

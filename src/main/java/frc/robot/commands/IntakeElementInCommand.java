@@ -7,8 +7,8 @@ import frc.robot.subsystems.intake.Intake.Velocity;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown.Position;
 
-public class IntakeColorSensor extends SequentialCommandGroup {
-    public IntakeColorSensor(Intake intake, IntakeDropDown intakeDropDown) {
+public class IntakeElementInCommand extends SequentialCommandGroup {
+    public IntakeElementInCommand(Intake intake, IntakeDropDown intakeDropDown) {
         addRequirements(intake, intakeDropDown);
         addCommands(
             new ConditionalCommand(
@@ -18,6 +18,6 @@ public class IntakeColorSensor extends SequentialCommandGroup {
                 ),
                 new SequentialCommandGroup(),
                 intake::isElementIn)
-    );
+        );
     }
 }

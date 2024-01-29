@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.IntakeColorSensor;
+import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.LightCommand;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
@@ -56,7 +56,7 @@ public class RobotContainer {
             
         DriverStation.silenceJoystickConnectionWarning(true);
         light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
-        intake.setDefaultCommand(new IntakeColorSensor(intake, dropDown));
+        intake.setDefaultCommand(new IntakeElementInCommand(intake, dropDown));
         
         drive.setDefaultCommand(
             new SwerveDriveTeleop(
