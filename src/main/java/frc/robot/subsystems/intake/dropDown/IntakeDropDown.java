@@ -44,7 +44,6 @@ public class IntakeDropDown extends SubsystemBase {
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
     protected final DigitalInput intakeLimitSwitch;
-    // protected final RelativeEncoder encoder;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
         ShuffleboardValue.create(0.0, "Encoder Position (Radians)", IntakeDropDown.class.getSimpleName())
