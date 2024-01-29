@@ -67,7 +67,7 @@ public class ClawPivotMotionProfiled extends ClawPivot {
     }
 
     @Override
-    public Command setTargetPosition(Position target) {
+    public Command setTargetPositionCommand(Position target) {
         setMovingManually(false);
         return runOnce(()->setTarget(target.get(), 0));
     }

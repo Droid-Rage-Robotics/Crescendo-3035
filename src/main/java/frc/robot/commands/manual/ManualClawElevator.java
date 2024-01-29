@@ -6,14 +6,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.claw.clawElevator.ClawElevator;
 public class ManualClawElevator extends Command {
-    private final ClawElevator verticalElevator;
-    private final Supplier<Double> verticalElevatorMove;
+    private final ClawElevator clawElevator;
+    private final Supplier<Double> move;
     
-    public ManualClawElevator(ClawElevator verticalElevator, Supplier<Double> verticalElevatorMove) {
-        this.verticalElevator = verticalElevator;
-        this.verticalElevatorMove = verticalElevatorMove;
+    public ManualClawElevator(ClawElevator clawElevator, Supplier<Double> move) {
+        this.clawElevator = clawElevator;
+        this.move = move;
         
-        addRequirements(verticalElevator);
+        addRequirements(clawElevator);
     }
 
     @Override
@@ -21,12 +21,12 @@ public class ManualClawElevator extends Command {
 
     @Override
     public void execute() {
-        double move = -verticalElevatorMove.get();
+        double move = -this.move.get();
         move = DroidRageConstants.squareInput(move);
         move = DroidRageConstants.applyDeadBand(move);
-        verticalElevator.setTargetPosition(verticalElevator.getTargetPosition() + move * 0.2);
+        clawElevator.setTargetPositionCommand(clawElevator.getTargetPosition() + move * 0.2);
         // verticalElevator.setTargetPositionCommand(verticalElevator.getTargetPosition() + move * 0.2);
-        verticalElevator.setMovingManually(!(move == 0));
+        clawElevator.setMovingManually(!(move == 0));
     }
 
     @Override

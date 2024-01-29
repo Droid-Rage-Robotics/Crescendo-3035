@@ -23,7 +23,7 @@ public class ClawPivot extends SubsystemBase {
     }
 
      public enum Position implements ShuffleboardValueEnum<Double> {
-        INTAKE(-3000),
+        SHOOTER_TRANSFER(-3000),
         HOME(2300),
         HUMAN_PLAYER (200),
         AMP (200),
@@ -152,10 +152,14 @@ public class ClawPivot extends SubsystemBase {
         return controller.calculate(getEncoderPosition(), positionRadians);
     }
 
-    public Command setTargetPosition(Position target){
-        return runOnce(()->controller.setSetpoint(target.get()));
+    public Command setTargetPositionCommand(Position target){
+        return runOnce(()->setTargetPosition(target.get()));
     }
-    public Command setTargetPosition(double target){
-        return runOnce(()->controller.setSetpoint(target));
+    public Command setTargetPositionCommand(double target){
+        return runOnce(()->setTargetPosition(target));
     }
+    public void setTargetPosition(double target){
+        controller.setSetpoint(target);
+    }
+    
 }  

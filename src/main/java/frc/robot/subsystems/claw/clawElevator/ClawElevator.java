@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -24,22 +25,39 @@ public class ClawElevator extends SubsystemBase {
         public static final double MIN_POSITION = 0;
         public static final double MAX_POSITION = 16.2;
     }
-    private final PIDController controller = new PIDController(2.4, 0, 0);
-    private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.1, 0.2, 0, 0);
-    private final ShuffleboardValue<Double> voltage = ShuffleboardValue.create(0.0, "Voltage", ClawElevator.class.getSimpleName())
-        .build();
-
+    public enum Position{
+        HOME(0),
+        SHOOTER_TRANSFER(0),
+        AMP(0),
+        HUMAN_PLAYER(0),
+        TRAP(0)
+        ;
+        private final ShuffleboardValue<Double>  dropPos;
+        private Position(double dropPos) {
+            this.dropPos = ShuffleboardValue.create(dropPos, Position.class.getSimpleName()+"/"+name()+
+                ": dropPos (RPM)", ClawElevator.class.getSimpleName())
+                .withSize(1, 3)
+                .build();
+        }
+    }
     private final SafeCanSparkMax leftMotor;
     private final SafeCanSparkMax rightMotor;
-
-    protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue.create(0.0, "Encoder Position", ClawElevator.class.getSimpleName())
+    
+    private final PIDController controller = new PIDController(2.4, 0, 0);
+    private final ElevatorFeedforward feedforward = 
+        new ElevatorFeedforward(0.1, 0.2, 0, 0);
+    
+    private final ShuffleboardValue<Double> voltage = ShuffleboardValue
+        .create(0.0, "Voltage", ClawElevator.class.getSimpleName())
+        .build();
+    protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue
+        .create(0.0, "Encoder Position", ClawElevator.class.getSimpleName())
         .withSize(1, 3)
         .build();
-
-    protected final ShuffleboardValue<Boolean> isMovingManually = ShuffleboardValue.create(false, "Moving manually", ClawElevator.class.getSimpleName())
+    protected final ShuffleboardValue<Boolean> isMovingManually = ShuffleboardValue
+        .create(false, "Moving manually", ClawElevator.class.getSimpleName())
         .build();
-
-    // private final RelativeEncoder encoder;
+;
 
     public ClawElevator(Boolean isEnabledLeft, Boolean isEnabledRight) {
         leftMotor = new SafeCanSparkMax(
@@ -50,7 +68,6 @@ public class ClawElevator extends SubsystemBase {
                 .build(),
             voltage
         );
-
         rightMotor = new SafeCanSparkMax(
             15, 
             MotorType.kBrushless,
@@ -64,44 +81,53 @@ public class ClawElevator extends SubsystemBase {
         
         leftMotor.setInverted(false);
         rightMotor.follow(leftMotor, true);
-        
         // rightMotor.setInverted(true);
+        
+        leftMotor.getEncoder().setPositionConversionFactor(Constants.ROT_TO_INCHES);
+        rightMotor.getEncoder().setPositionConversionFactor(Constants.ROT_TO_INCHES);
 
         controller.setTolerance(0.1);
-
-        leftMotor.getEncoder().setPositionConversionFactor(Constants.ROT_TO_INCHES);
 
         ComplexWidgetBuilder.create(controller, " PID Controller", ClawElevator.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 2);
-
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", ClawElevator.class.getSimpleName());
+        ComplexWidgetBuilder.create(
+            DisabledCommand.create(runOnce(this::resetEncoder)),
+            "Reset Encoder", ClawElevator.class.getSimpleName());
     }
 
     @Override
     public void periodic() {
-        setVoltage(calculatePID(getTargetPosition()) + calculateFeedforward(getTargetPosition()));
+        setVoltage(calculatePID(getTargetPosition()) + 
+            calculateFeedforward(getTargetPosition()));
     }
     @Override
     public void simulationPeriodic() {
         periodic();
     }
 
+    
+
+    public Command setTargetPositionCommand(Position target) {
+        return new InstantCommand(()->setTargetPosition(target.dropPos.get()));
+    }
+    public Command setTargetPositionCommand(double target) {
+        return new InstantCommand(()->setTargetPosition(target));
+    }
+    protected void setTargetPosition(double target) {
+        if (target < Constants.MIN_POSITION) return;
+        if (target > Constants.MAX_POSITION) return;
+        controller.setSetpoint(target);
+    }
     protected void setVoltage(double voltage) {
         leftMotor.setVoltage(voltage);
         // rightMotor.setVoltage(voltage);
     }
-
+    public void setMovingManually(boolean value) {
+        getIsMovingManually().set(value);
+    }
     protected ShuffleboardValue<Boolean> getIsMovingManually() {
         return isMovingManually;
-    }
-
-    public double getMaxPosition() {
-        return Constants.MAX_POSITION;
-    }
-
-    public double getMinPosition() {
-        return Constants.MIN_POSITION;
     }
 
     public void resetEncoder() {
@@ -114,20 +140,8 @@ public class ClawElevator extends SubsystemBase {
         return position;
     }
 
-    public Command setTargetPosition(double positionRadians) {
-        return new InstantCommand(()->{
-            if (positionRadians < getMinPosition()) return;
-            if (positionRadians > getMaxPosition()) return;
-            controller.setSetpoint(positionRadians);});
-    }
-
-
-    public double getTargetPosition() {
+    public double getTargetPosition(){
         return controller.getSetpoint();
-    }
-
-    public void setMovingManually(boolean value) {
-        getIsMovingManually().set(value);
     }
 
     public boolean isMovingManually() {
