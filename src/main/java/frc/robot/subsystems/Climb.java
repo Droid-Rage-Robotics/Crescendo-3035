@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.utility.motor.SafeCanSparkMax;
@@ -21,7 +23,18 @@ public class Climb extends SubsystemBase{
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
         public static final double MIN_POSITION = 0;
         public static final double MAX_POSITION = 16.2;
-    }
+    }public enum Position{
+        ;
+
+        private final ShuffleboardValue<Double>  dropPos;
+
+        private Position(double dropPos) {
+            this.dropPos = ShuffleboardValue.create(dropPos, Position.class.getSimpleName()+"/"+name()+
+                ": dropPos (RPM)", Climb.class.getSimpleName())
+                .withSize(1, 3)
+                .build();
+        }
+    } 
     private final PIDController controller = new PIDController(2.4, 0, 0);
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
     private final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
@@ -79,7 +92,13 @@ public class Climb extends SubsystemBase{
     public void periodic() {
         setPower(controller.calculate(getEncoderPosition())+
             feedforward.calculate(getVelocity(), getVelocity()));
+    } public Command setTargetCommand(Position position){
+        return new InstantCommand(()->controller.setSetpoint(position.dropPos.get()));
     }
+    public Command setTargetCommand(double positionRadians){
+        return new InstantCommand(()->controller.setSetpoint(positionRadians));
+    }
+    
     
     private void setPower(double power) {
         // if (!isEnabled.get()) return;

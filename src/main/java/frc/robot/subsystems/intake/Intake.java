@@ -22,12 +22,12 @@ import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
-public class Intake extends SubsystemBase {
-    public static class DropDownConstants {
+    public static class Constants {
         public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
+
     public enum Velocity implements ShuffleboardValueEnum<Double> {
         INTAKE(-3000),
         OUTTAKE(2300),
@@ -50,20 +50,19 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
-        (0.0, "Target Velocity", Intake.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity", Intake.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity Error", Intake.class.getSimpleName()).build();
-
-    private final ShuffleboardValue<Boolean> isElementInWriter = ShuffleboardValue.create
-            (false, "Is Element In", Intake.class.getSimpleName()).build();
-    
-    
     protected final SafeCanSparkMax intake;
     protected final PIDController intakeController;
     protected final SimpleMotorFeedforward intakeFeedforward;
+    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create    
+      (0.0, "Target Velocity", Intake.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
+         (0.0, "Encoder Velocity", Intake.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
+        (0.0, "Encoder Velocity Error", IntakeState.class.getSimpleName()).build();
+
+    private final ShuffleboardValue<Boolean> isElementInWriter = ShuffleboardValue.create
+            (false, "Is Element In", IntakeState.class.getSimpleName()).build();
+
 
     public Intake(Boolean isEnabled) {
         intake = new SafeCanSparkMax(

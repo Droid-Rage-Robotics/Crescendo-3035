@@ -71,7 +71,7 @@ public class ClawPivot extends SubsystemBase {
                 .build()
         );
         motor.setIdleMode(IdleMode.Coast);//TODO: Make it brake 
-
+        motor.setInverted(false);
         // encoder = motor.getEncoder();
         motor.getEncoder().setPositionConversionFactor(Constants.ROTATIONS_TO_RADIANS);
         motor.getEncoder().setVelocityConversionFactor(Constants.ROTATIONS_TO_RADIANS);
@@ -101,6 +101,15 @@ public class ClawPivot extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         periodic();
+    }
+     public Command setTargetPositionCommand(Position target){
+        return runOnce(()->setTargetPosition(target.get()));
+    }
+    public Command setTargetPositionCommand(double target){
+        return runOnce(()->setTargetPosition(target));
+    }
+    public void setTargetPosition(double target){
+        controller.setSetpoint(target);
     }
 
     public void setMovingManually(boolean value) {
@@ -152,14 +161,5 @@ public class ClawPivot extends SubsystemBase {
         return controller.calculate(getEncoderPosition(), positionRadians);
     }
 
-    public Command setTargetPositionCommand(Position target){
-        return runOnce(()->setTargetPosition(target.get()));
-    }
-    public Command setTargetPositionCommand(double target){
-        return runOnce(()->setTargetPosition(target));
-    }
-    public void setTargetPosition(double target){
-        controller.setSetpoint(target);
-    }
-    
+   
 }  
