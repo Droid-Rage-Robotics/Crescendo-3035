@@ -4,10 +4,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.DisabledCommand;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -20,26 +17,26 @@ public class ClawIntake extends SubsystemBase {
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
-    public enum Velocity implements ShuffleboardValueEnum<Double> {
-        OUTTAKE(2300),
-        SHOOTER_TRANSFER(200),
-        HUMAN_PLAYER(200),
-        STOP(0)
-        ;
+    // public enum Velocity implements ShuffleboardValueEnum<Double> {
+    //     OUTTAKE(2300),
+    //     SHOOTER_TRANSFER(200),
+    //     HUMAN_PLAYER(200),
+    //     STOP(0)
+    //     ;
 
-        private final ShuffleboardValue<Double> velocityRPM;
+    //     private final ShuffleboardValue<Double> velocityRPM;
 
-        private Velocity(double velocityRPM) {
-            this.velocityRPM = ShuffleboardValue.create(velocityRPM, Velocity.class.getSimpleName()+"/"+name()+": Velocity (RPM)", ClawIntake.class.getSimpleName())
-                .withSize(1, 3)
-                .build();
-        }
+    //     private Velocity(double velocityRPM) {
+    //         this.velocityRPM = ShuffleboardValue.create(velocityRPM, Velocity.class.getSimpleName()+"/"+name()+": Velocity (RPM)", ClawIntake.class.getSimpleName())
+    //             .withSize(1, 3)
+    //             .build();
+    //     }
 
-        @Override
-        public ShuffleboardValue<Double> getNum() {
-            return velocityRPM;
-        }
-    }
+    //     @Override
+    //     public ShuffleboardValue<Double> getNum() {
+    //         return velocityRPM;
+    //     }
+    // }
 
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
         (0.0, "Target Velocity", ClawIntake.class.getSimpleName()).build();
@@ -83,42 +80,34 @@ public class ClawIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        motor.setVoltage(calculateIntakePID(getIntakeTargetVelocity()) + 
-            calculateIntakeFeedforward(getIntakeTargetVelocity()));
+        motor.setVoltage(controller.calculate(getEncoderVelocity(),getTargetPosition()) + 
+            feedforward.calculate(getTargetPosition()));
         isElementInClawWriter.set(isElementInClaw());
         
     }
     
-    public Command setTargetVelocityCommand(Velocity velocity){
-        return new InstantCommand(()->setTargetVelocity(velocity));
+    // public Command setTargetVelocityCommand(Velocity velocity){
+    //     return new InstantCommand(()->setTargetVelocity(velocity));
+    // }
+    protected void setTargetPosition(double target) {
+        controller.setSetpoint(target);
+        targetVelocityWriter.set(target);
     }
-    protected void setTargetVelocity(Velocity velocity) {
-        controller.setSetpoint(velocity.getNum().get());
-        targetVelocityWriter.set(velocity.getNum().get());
-    }
-    protected double getIntakeEncoderVelocity() {
+    protected double getEncoderVelocity() {
         double velocity = motor.getEncoder().getVelocity();
         encoderVelocityWriter.write(velocity);
-        encoderVelocityErrorWriter.write(getIntakeTargetVelocity() - velocity);
+        encoderVelocityErrorWriter.write(getTargetPosition() - velocity);
         return velocity;
     }
-    protected double getIntakeTargetVelocity() {
-        return controller.getSetpoint();
-    }
-    protected double calculateIntakePID(double targetVelocity) {
-        return controller.calculate(getIntakeEncoderVelocity(), targetVelocity);
-    }
-    protected double calculateIntakeFeedforward(double targetVelocity) {
-        return feedforward.calculate(targetVelocity);
-    }
-
-    
     public void resetEncoder() {
         motor.getEncoder().setPosition(0);//TODO: Test
     }
 
-    public boolean isElementInClaw(){
+    protected boolean isElementInClaw(){
         return encoderVelocityErrorWriter.get()<-2000;
+    }
+    public double getTargetPosition(){
+        return controller.getSetpoint();
     }
 }
 

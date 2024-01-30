@@ -19,7 +19,7 @@ public class ClawPivotAbsolute extends ClawPivotMotionProfiled {
         absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
         absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
         absoluteEncoder.setInverted(true);
-        setTargetPositionCommand(Constants.OFFSET);
+        setTargetPosition(Constants.OFFSET);
     }
     
     

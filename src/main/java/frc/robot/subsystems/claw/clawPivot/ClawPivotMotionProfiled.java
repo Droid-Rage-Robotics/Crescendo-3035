@@ -66,11 +66,11 @@ public class ClawPivotMotionProfiled extends ClawPivot {
         periodic();
     }
 
-    @Override
-    public Command setTargetPositionCommand(Position target) {
-        setMovingManually(false);
-        return runOnce(()->setTarget(target.get(), 0));
-    }
+    // @Override
+    // public Command setTargetPositionCommand(Position target) {
+    //     setMovingManually(false);
+    //     return runOnce(()->setTarget(target.get(), 0));
+    // }
 
     public void setTargetVelocity(double velocityRadiansPerSecond) {
         setMovingManually(true);

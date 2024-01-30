@@ -1,16 +1,11 @@
-package frc.robot.subsystems.claw.clawElevator;
+package frc.robot.subsystems.claw;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -24,21 +19,6 @@ public class ClawElevator extends SubsystemBase {
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
         public static final double MIN_POSITION = 0;
         public static final double MAX_POSITION = 16.2;
-    }
-    public enum Position{
-        HOME(0),
-        SHOOTER_TRANSFER(0),
-        AMP(0),
-        HUMAN_PLAYER(0),
-        TRAP(0)
-        ;
-        private final ShuffleboardValue<Double>  dropPos;
-        private Position(double dropPos) {
-            this.dropPos = ShuffleboardValue.create(dropPos, Position.class.getSimpleName()+"/"+name()+
-                ": dropPos (RPM)", ClawElevator.class.getSimpleName())
-                .withSize(1, 3)
-                .build();
-        }
     }
     private final SafeCanSparkMax leftMotor;
     private final SafeCanSparkMax rightMotor;
@@ -98,23 +78,21 @@ public class ClawElevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setVoltage(calculatePID(getTargetPosition()) + 
-            calculateFeedforward(getTargetPosition()));
+        setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()) + 
+            feedforward.calculate(getTargetPosition()));
     }
     @Override
     public void simulationPeriodic() {
         periodic();
     }
 
-    
-
-    public Command setTargetPositionCommand(Position target) {
-        return new InstantCommand(()->setTargetPosition(target.dropPos.get()));
-    }
-    public Command setTargetPositionCommand(double target) {
-        return new InstantCommand(()->setTargetPosition(target));
-    }
-    protected void setTargetPosition(double target) {
+    // public Command setTargetPositionCommand(Position target) {
+    //     return new InstantCommand(()->setTargetPosition(target.dropPos.get()));
+    // }
+    // public Command setTargetPositionCommand(double target) {
+    //     return new InstantCommand(()->setTargetPosition(target));
+    // }
+    public void setTargetPosition(double target) {
         if (target < Constants.MIN_POSITION) return;
         if (target > Constants.MAX_POSITION) return;
         controller.setSetpoint(target);
@@ -146,13 +124,5 @@ public class ClawElevator extends SubsystemBase {
 
     public boolean isMovingManually() {
         return getIsMovingManually().get();
-    }
-
-    protected double calculateFeedforward(double targetVelocity) {
-        return feedforward.calculate(targetVelocity);
-    }
-
-    protected double calculatePID(double targetVelocity) {
-        return controller.calculate(getEncoderPosition(), targetVelocity);
     }
 }

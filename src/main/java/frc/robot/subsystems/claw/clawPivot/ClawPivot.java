@@ -22,25 +22,25 @@ public class ClawPivot extends SubsystemBase {
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
 
-     public enum Position implements ShuffleboardValueEnum<Double> {
-        SHOOTER_TRANSFER(-3000),
-        HOME(2300),
-        HUMAN_PLAYER (200),
-        AMP (200),
-        TRAP (0)
-        ;
+    //  public enum Position implements ShuffleboardValueEnum<Double> {
+    //     SHOOTER_TRANSFER(-3000),
+    //     HOME(2300),
+    //     HUMAN_PLAYER (200),
+    //     AMP (200),
+    //     TRAP (0)
+    //     ;
 
-        private final ShuffleboardValue<Double> position;
-        private Position(double position) {
-            this.position = ShuffleboardValue.create(position, Position.class.getSimpleName()+"/"+name()+": Velocity (RPM)", Intake.class.getSimpleName())
-                .withSize(1, 3)
-                .build();
-        }
-        @Override
-        public ShuffleboardValue<Double> getNum() {
-            return position;
-        }
-    }
+    //     private final ShuffleboardValue<Double> position;
+    //     private Position(double position) {
+    //         this.position = ShuffleboardValue.create(position, Position.class.getSimpleName()+"/"+name()+": Velocity (RPM)", Intake.class.getSimpleName())
+    //             .withSize(1, 3)
+    //             .build();
+    //     }
+    //     @Override
+    //     public ShuffleboardValue<Double> getNum() {
+    //         return position;
+    //     }
+    // }
 
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
@@ -102,12 +102,10 @@ public class ClawPivot extends SubsystemBase {
     public void simulationPeriodic() {
         periodic();
     }
-     public Command setTargetPositionCommand(Position target){
-        return runOnce(()->setTargetPosition(target.get()));
-    }
-    public Command setTargetPositionCommand(double target){
-        return runOnce(()->setTargetPosition(target));
-    }
+    
+    // public Command setTargetPositionCommand(double target){
+    //     return runOnce(()->setTargetPosition(target));
+    // }
     public void setTargetPosition(double target){
         controller.setSetpoint(target);
     }
