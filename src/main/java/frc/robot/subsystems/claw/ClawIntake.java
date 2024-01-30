@@ -14,7 +14,7 @@ import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
-public class Claw extends SubsystemBase {
+public class ClawIntake extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;
@@ -30,7 +30,7 @@ public class Claw extends SubsystemBase {
         private final ShuffleboardValue<Double> velocityRPM;
 
         private Velocity(double velocityRPM) {
-            this.velocityRPM = ShuffleboardValue.create(velocityRPM, Velocity.class.getSimpleName()+"/"+name()+": Velocity (RPM)", Claw.class.getSimpleName())
+            this.velocityRPM = ShuffleboardValue.create(velocityRPM, Velocity.class.getSimpleName()+"/"+name()+": Velocity (RPM)", ClawIntake.class.getSimpleName())
                 .withSize(1, 3)
                 .build();
         }
@@ -42,28 +42,28 @@ public class Claw extends SubsystemBase {
     }
 
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
-        (0.0, "Target Velocity", Claw.class.getSimpleName()).build();
+        (0.0, "Target Velocity", ClawIntake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity", Claw.class.getSimpleName()).build();
+        (0.0, "Encoder Velocity", ClawIntake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity Error", Claw.class.getSimpleName()).build();
+        (0.0, "Encoder Velocity Error", ClawIntake.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Boolean> isElementInClawWriter = ShuffleboardValue.create
-            (false, "Is Element In", Claw.class.getSimpleName()).build();
+            (false, "Is Element In", ClawIntake.class.getSimpleName()).build();
     
     
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
     protected final SimpleMotorFeedforward feedforward;
 
-    public Claw(Boolean isEnabled) {
+    public ClawIntake(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             19,
             MotorType.kBrushless,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Is Enabled", ClawIntake.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-                ShuffleboardValue.create(0.0, "Voltage", Claw.class.getSimpleName())
+                ShuffleboardValue.create(0.0, "Voltage", ClawIntake.class.getSimpleName())
                     .build()
         );
         motor.setIdleMode(IdleMode.Coast);
@@ -76,7 +76,7 @@ public class Claw extends SubsystemBase {
         controller.setTolerance(5);
         feedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
-        ComplexWidgetBuilder.create(controller, "Claw Controller", Claw.class.getSimpleName());
+        ComplexWidgetBuilder.create(controller, "Claw Controller", ClawIntake.class.getSimpleName());
         // ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetIntakeEncoder)), 
         //     "Reset Claw Encoder", Claw.class.getSimpleName());
     }
