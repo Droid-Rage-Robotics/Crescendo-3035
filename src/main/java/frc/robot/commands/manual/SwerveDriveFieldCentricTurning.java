@@ -16,6 +16,7 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveModule;
 
+@Deprecated
 public class SwerveDriveFieldCentricTurning 
 extends Command {
 //     private final SwerveDrive drive;

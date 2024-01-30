@@ -1,12 +1,8 @@
-Monday:
-Organize Functions
-Combine Intake/Drop Down
-Combine Claws
+
 TODO:
 - Limelight Tracking
         Change Shooter targetVelocity
         Align Drivetrain
-        auto align-Make a button that automatically aligns to 180 degrees with a press of a button; only when held - still leave control of drive to driver except for turning
 - Sophie/Sebastian: Program Teleop Button except for Arm
 - PathPlannerFollow.java and Auto -Lucky
 - Robot Tracking on Field
@@ -43,3 +39,6 @@ Test:
 
 Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38 (kind of)
+
+Extra Ideas:
+- Lights: Add lights to have the robot tell us any errors with can, etc; Make LEDs show Errors
