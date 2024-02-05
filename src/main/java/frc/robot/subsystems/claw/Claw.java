@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SuppliedCommand;
-import frc.robot.commands.manual.ManualClawElevator;
 import frc.robot.subsystems.claw.clawPivot.ClawPivot;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Claw {
@@ -80,18 +78,6 @@ public class Claw {
         public double getPivotDegrees() {
             return pivotAngle.get();
         }
-
-        // public void setVertical(double inches) {
-        //     elevatorInches.set(inches);
-        // }
-
-        // public void setHorizontal(double inches) {
-        //     intakeSpeeds.set(inches);
-        // }
-
-        // public void setPivotDegrees(double degrees) {
-        //     pivotAngle.set(degrees);
-        // }
     }
 
     private final ClawElevator clawElevator;
@@ -172,5 +158,12 @@ public class Claw {
         // addRe
         //how to do addRequirement in here
 
+    }
+
+    public ClawElevator getClawElevator(){
+        return clawElevator;
+    }
+    public ClawIntake getClawIntake(){
+        return clawIntake;
     }
 }
