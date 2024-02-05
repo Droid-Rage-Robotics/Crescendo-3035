@@ -10,8 +10,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.claw.ClawElevator;
+import frc.robot.subsystems.claw.ClawIntake;
+import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.vision.Vision;
 
@@ -22,10 +27,15 @@ import frc.robot.subsystems.vision.Vision;
  * directory.
  */
 public class Robot extends TimedRobot {
-    private final SwerveDrive drive = new SwerveDrive(true);
-    private final Shooter shooter = new Shooter(true);
-    private final Intake intake = new Intake(false);
+    private final SwerveDrive drive = new SwerveDrive(false);
+    private final IntakeWheel intakeWheel = new IntakeWheel(false);
     private final IntakeDropDown dropDown = new IntakeDropDown(false);
+    private final Intake intake = new Intake(dropDown, intakeWheel);
+    private final Shooter shooter = new Shooter(false);
+    private final ClawElevator clawElevator = new ClawElevator(true, true);
+    private final ClawPivot clawPivot = new ClawPivot(false);
+    private final ClawIntake clawIntake = new ClawIntake(false);
+    private final Claw claw = new Claw(clawElevator, clawPivot, clawIntake);
     private final Vision vision = new Vision();
     private final Light light = new Light();
 
@@ -34,9 +44,9 @@ public class Robot extends TimedRobot {
     // private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer(
         drive,
-        shooter,
         intake,
-        dropDown,
+        shooter,
+        claw,
         vision,
         light
         );
