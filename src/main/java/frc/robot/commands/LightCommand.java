@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class LightCommand extends Command {
@@ -25,7 +26,7 @@ public class LightCommand extends Command {
     CommandXboxController driver, operator;
     Intake intake;
     protected final ShuffleboardValue<String> intakeStateWriter = ShuffleboardValue.create
-        ("Test", "Intake State", Intake.class.getSimpleName()).build();
+        ("Test", "Intake State", IntakeWheel.class.getSimpleName()).build();
 
 
 
@@ -49,7 +50,7 @@ public class LightCommand extends Command {
         //List is with Order of Priority
         if(getMatchTime()<20&&getMatchTime()>18){   
             intakeState=IntakeState.END_GAME;
-        } else if ((intake.isElementIn())){
+        } else if ((intake.isElementInClaw())){
             intakeState=IntakeState.ElEMENT_IN;
         } else if(driver.getRightTriggerAxis()>0.5){//If Intaking
             intakeState=IntakeState.INTAKE;

@@ -1,134 +1,128 @@
 package frc.robot.subsystems.intake;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.util.Color;
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.DisabledCommand;
-import frc.robot.commands.LightCommand.IntakeState;
-import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.motor.SafeMotor.IdleMode;
-import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.SuppliedCommand;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
-import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
-public class Intake extends SubsystemBase {
-    public static class Constants {
-        public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
-        public static final double READINGS_PER_REVOLUTION = 1;
-        public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
-    }
+public class Intake {
+    //Can use the Positions to make another Value 
+    //that holds 2 Positions to join together like 
+    //in Charged Up; Allows for you to different 
+    //Position Based on game element
+    public enum Value {
+        START(0,0),
 
-    public enum Velocity implements ShuffleboardValueEnum<Double> {
-        INTAKE(-3000),
-        OUTTAKE(2300),
-        SHOOTER_TRANSFER(200),
-        ELEV_TRANSFER(200),
-        STOP(0)
+        //IntakePos
+        INTAKE_GROUND(0,0),
+        INTAKE_HUMAN(0,0),
+
+        SHOOTER_HOLD(0,0),//Ready to give Note to shooter, but not doing it
+        SHOOTER_TRANSFER(0,0),//Giving Note to Shooter
+       
+
+        HOLD(0, 60),
+        OUTTAKE(0,0)
+        // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
 
-        private final ShuffleboardValue<Double> velocityRPM;
+        private final ShuffleboardValue<Double> pivotAngle;
+        private final ShuffleboardValue<Double> intakeSpeeds;
+        
 
-        private Velocity(double velocityRPM) {
-            this.velocityRPM = ShuffleboardValue.create(velocityRPM, Velocity.class.getSimpleName()+"/"+name()+": Velocity (RPM)", Intake.class.getSimpleName())
+        private Value(double pivotAngle, double intakeSpeeds) {
+            this.pivotAngle = ShuffleboardValue.create(pivotAngle, 
+                IntakeWheel.class.getSimpleName()+"/"+name()+"/Intake Dropdown Angle", "Misc")
+                .withSize(1, 3)
+                .build();
+            this.intakeSpeeds = ShuffleboardValue.create(intakeSpeeds, 
+            IntakeWheel.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
                 .withSize(1, 3)
                 .build();
         }
 
-        @Override
-        public ShuffleboardValue<Double> getNum() {
-            return velocityRPM;
+        // This constructor lets you get it from another value
+        private Value(Value copyValue) {
+            // Value value = copyValue;
+            this.pivotAngle = ShuffleboardValue.create(copyValue.getAngle(), 
+                IntakeWheel.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
+                .withSize(1, 3)
+                .build();
+            this.intakeSpeeds = ShuffleboardValue.create(copyValue.getIntakeSpeeds(), 
+                IntakeWheel.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
+                .withSize(1, 3)
+                .build();
+        }
+
+        public double getAngle() {
+            return pivotAngle.get();
+        }
+        public double getIntakeSpeeds() {
+            return intakeSpeeds.get();
         }
     }
 
-    protected final SafeCanSparkMax intake;
-    protected final PIDController intakeController;
-    protected final SimpleMotorFeedforward intakeFeedforward;
-    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create    
-      (0.0, "Target Velocity", Intake.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-         (0.0, "Encoder Velocity", Intake.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity Error", IntakeState.class.getSimpleName()).build();
-
-    private final ShuffleboardValue<Boolean> isElementInWriter = ShuffleboardValue.create
-            (false, "Is Element In", IntakeState.class.getSimpleName()).build();
-
-
-    public Intake(Boolean isEnabled) {
-        intake = new SafeCanSparkMax(
-            19,
-            MotorType.kBrushless,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", Intake.class.getSimpleName())
-                    .withWidget(BuiltInWidgets.kToggleSwitch)
-                    .build(),
-                ShuffleboardValue.create(0.0, "Voltage", Intake.class.getSimpleName())
-                    .build()
-        );
-        // intakeEncoder = intake.getEncoder();
-        intake.setIdleMode(IdleMode.Coast);
-        intake.setInverted(true);
-
-        intakeController = new PIDController(
-            0.0003,//0.0003 
-            0,
-            0);
-        intakeController.setTolerance(5);
-        intakeFeedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
-
-        ComplexWidgetBuilder.create(intakeController, "Intake Controller", Intake.class.getSimpleName());
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetIntakeEncoder)), 
-            "Reset Intake Encoder", Intake.class.getSimpleName());
-    }
-
-    @Override
-    public void periodic() {
-        intake.setVoltage(calculateIntakePID(getIntakeTargetVelocity()) + 
-            calculateIntakeFeedforward(getIntakeTargetVelocity()));
-        isElementInWriter.set(isElementIn());
-        
-    }
+    private final IntakeDropDown dropDown;
+    private final IntakeWheel intakeWheel;
     
-    public Command setTargetVelocityCommand(Velocity velocity){
-        return new InstantCommand(()->setTargetVelocity(velocity));
-    }
-    protected void setTargetVelocity(Velocity velocity) {
-        intakeController.setSetpoint(velocity.getNum().get());
-        targetVelocityWriter.set(velocity.getNum().get());
-    }
-    protected double getIntakeEncoderVelocity() {
-        double velocity = intake.getEncoder().getVelocity();
-        encoderVelocityWriter.write(velocity);
-        encoderVelocityErrorWriter.write(getIntakeTargetVelocity() - velocity);
-        return velocity;
-    }
-    protected double getIntakeTargetVelocity() {
-        return intakeController.getSetpoint();
-    }
-    protected double calculateIntakePID(double targetVelocity) {
-        return intakeController.calculate(getIntakeEncoderVelocity(), targetVelocity);
-    }
-    protected double calculateIntakeFeedforward(double targetVelocity) {
-        return intakeFeedforward.calculate(targetVelocity);
+    private Value position = Value.START;
+    private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
+        .create(position.name(), "Current Intake Position", "Misc")
+        .withSize(1, 3)
+        .build();
+
+    public Intake(IntakeDropDown dropDown,
+        IntakeWheel intakeWheel) {
+        this.dropDown = dropDown;
+        this.intakeWheel = intakeWheel;
     }
 
-    
-    public void resetIntakeEncoder() {
-        intake.getEncoder().setPosition(0);//TODO: Test
+    private void logPosition(Value targetPosition) {
+        position = targetPosition;
+        positionWriter.write(position.name());
+        // positionWriter.write(targetPosition.name());
     }
 
-    public boolean isElementIn(){
-        return encoderVelocityErrorWriter.get()<-2000;
+    public Value getPosition() {
+        return position;
+    }
+
+    public Command setPositionCommand(Value targetPosition) {
+        return SuppliedCommand.create(() -> Commands.sequence(
+            Commands.runOnce(() -> logPosition(targetPosition)),
+            switch (targetPosition) {
+                case  START ->
+                    new SequentialCommandGroup(
+                    );
+                
+                default -> 
+                    new ParallelCommandGroup(
+                        dropDown.runOnce(() -> dropDown.setTargetPosition(Math.toRadians(targetPosition.getAngle()))),
+                        intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                        
+                    );
+            }
+        ));
+    }
+    public Command lowerPivotCommand(double lowerNum) {
+        return dropDown.runOnce(() -> 
+            dropDown.setTargetPosition(dropDown.getTargetPosition() - lowerNum));
+    }
+    public boolean isElementInClaw(){
+        return intakeWheel.isElementIn();
+
+    }
+
+    public IntakeDropDown getDropDown(){
+        return dropDown;
+    }
+    public IntakeWheel getIntakeWheel(){
+        return intakeWheel;
     }
 }
-

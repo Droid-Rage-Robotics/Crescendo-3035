@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -23,22 +23,22 @@ public class IntakeDropDown extends SubsystemBase {
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
 
-    public enum Position{
-        INTAKE( 0),//Intake Pos
-        OUTTAKE(0),//Where to be when outtaking
-        SHOOTER_TRANSFER(0),//Transfer to  - Position to Reset Encoder
-        ELEV_TRANSFER(0), //transfer to elev4
-        ;
+    // public enum Position{
+    //     INTAKE( 0),//Intake Pos
+    //     OUTTAKE(0),//Where to be when outtaking
+    //     SHOOTER_TRANSFER(0),//Transfer to  - Position to Reset Encoder
+    //     ELEV_TRANSFER(0), //transfer to elev4
+    //     ;
 
-        private final ShuffleboardValue<Double>  dropPos;
+    //     private final ShuffleboardValue<Double>  dropPos;
 
-        private Position(double dropPos) {
-            this.dropPos = ShuffleboardValue.create(dropPos, Position.class.getSimpleName()+"/"+name()+
-                ": dropPos (RPM)", Intake.class.getSimpleName())
-                .withSize(1, 3)
-                .build();
-        }
-    }
+    //     private Position(double dropPos) {
+    //         this.dropPos = ShuffleboardValue.create(dropPos, Position.class.getSimpleName()+"/"+name()+
+    //             ": dropPos (RPM)", IntakeWheel.class.getSimpleName())
+    //             .withSize(1, 3)
+    //             .build();
+    //     }
+    // }
 
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
@@ -106,9 +106,6 @@ public class IntakeDropDown extends SubsystemBase {
         periodic();
     }
 
-    public Command setTargetCommand(Position position){
-        return new InstantCommand(()->controller.setSetpoint(position.dropPos.get()));
-    }
     public Command setTargetCommand(double positionRadians){
         return new InstantCommand(()->controller.setSetpoint(positionRadians));
     }
@@ -120,7 +117,7 @@ public class IntakeDropDown extends SubsystemBase {
     }
 
 
-    protected void setTargetPosition(double positionRadians) {
+    public void setTargetPosition(double positionRadians) {
         controller.setSetpoint(positionRadians);
     }
 
