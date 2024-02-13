@@ -154,14 +154,30 @@ public class Claw {
 
     }
 
-    public void manualClawElevator(Supplier<Double> move){
-        // addRe
-        //how to do addRequirement in here
-
+    public void manualClawElevator(double move){
+        clawElevator.setTargetPosition(move);
+    }
+    public void manualClawPivot(double move){
+        clawPivot.setTargetPosition(move);
+    }
+    public void manualClawIntake(double move){
+        clawIntake.setTargetPosition(move);
+    }
+    public double getClawElevatorTarget(){
+        return clawElevator.getTargetPosition();
+    }
+    public double getClawPivotTarget(){
+        return clawPivot.getTargetPosition();
+    }
+    public double getClawIntakeTarget(){
+        return clawIntake.getTargetPosition();
     }
 
     public ClawElevator getClawElevator(){
         return clawElevator;
+    }
+    public ClawPivot getClawPivot(){
+        return clawPivot;
     }
     public ClawIntake getClawIntake(){
         return clawIntake;

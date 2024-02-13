@@ -4,16 +4,17 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
+import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.claw.ClawElevator;
 public class ManualClawElevator extends Command {
-    private final ClawElevator clawElevator;
+    private final Claw claw;
     private final Supplier<Double> move;
     
-    public ManualClawElevator(ClawElevator clawElevator, Supplier<Double> move) {
-        this.clawElevator = clawElevator;
+    public ManualClawElevator(Claw claw, Supplier<Double> move) {
+        this.claw = claw;
         this.move = move;
         
-        addRequirements(clawElevator);
+        addRequirements(claw.getClawElevator());
     }
 
     @Override
@@ -24,9 +25,9 @@ public class ManualClawElevator extends Command {
         double move = -this.move.get();
         move = DroidRageConstants.squareInput(move);
         move = DroidRageConstants.applyDeadBand(move);
-        clawElevator.setTargetPosition(clawElevator.getTargetPosition() + move * 0.2);
+        claw.manualClawElevator(claw.getClawElevatorTarget() + move * 0.2);
         // verticalElevator.setTargetPositionCommand(verticalElevator.getTargetPosition() + move * 0.2);
-        clawElevator.setMovingManually(!(move == 0));
+        claw.getClawElevator().setMovingManually(!(move == 0));
     }
 
     @Override
