@@ -20,7 +20,8 @@ public class Constants {
 
     public enum ShooterSpeeds {
         AMP_SHOOT(1000),
-        SPEAKER_SHOOT(20000),
+        SPEAKER_SHOOT(10000),
+        //20000
         HOLD(SPEAKER_SHOOT.get()*.3),
         STOP(0), 
         CLAW_TRANSFER(0),
@@ -65,21 +66,21 @@ public class Constants {
                     .build()
         );
         motorR = new SafeCanSparkMax(
-            4,
+            2,
             MotorType.kBrushless,
             this.isEnabled,
                 ShuffleboardValue.create(0.0, "VoltageR", Shooter.class.getSimpleName())
                     .build() 
         );
-        motorL.setInverted(true);
+        motorL.setInverted(false);
         motorR.setInverted(false);
         // motorL.follow(motorR, false);
         shooterController = new PIDController(
             0.00005,//0.000173611    //.00005
             0,
             0);
-        motorL.setIdleMode(IdleMode.Brake);
-        motorR.setIdleMode(IdleMode.Brake);
+        motorL.setIdleMode(IdleMode.Coast);
+        motorR.setIdleMode(IdleMode.Coast);
         feedforward = new SimpleMotorFeedforward(0.000,0,0);
         shooterController.setTolerance(ShooterSpeeds.POSITION_TOLERANCE.get());
     }

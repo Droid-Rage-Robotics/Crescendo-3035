@@ -29,55 +29,56 @@ public class RobotContainer {
 		.withWidget(BuiltInWidgets.kTextView)
 		.build();
 
-	private final SwerveDrive drive;
-	private final Intake intake;
+	// private final SwerveDrive drive;
+	// private final Intake intake;
 	private final Shooter shooter;
-	private final Claw claw;
-	private final Vision vision;
-	private final Light light;
+	// private final Claw claw;
+	// private final Vision vision;
+	// private final Light light;
 	public RobotContainer(
-		SwerveDrive drive,
-		Intake intake,
-		Shooter shooter,
-		Claw claw,
-		Vision vision,
-		Light light
+		// SwerveDrive drive,
+		// Intake intake,
+		Shooter shooter
+		// Claw claw,
+		// Vision vision,
+		// Light light
 		) {
-			this.drive = drive;
-			this.intake = intake;
+			// this.drive = drive;
+			// this.intake = intake;
 			this.shooter = shooter;
-			this.claw = claw;
-			this.vision = vision;
-			this.light = light;
+			// this.claw = claw;
+			// this.vision = vision;
+			// this.light = light;
 	}
 
 	public void configureTeleOpBindings() {
 
-		DriverStation.silenceJoystickConnectionWarning(true);
-		light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
-		intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
+	// 	DriverStation.silenceJoystickConnectionWarning(true);
+	// 	light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
+	// 	intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 
-		drive.setDefaultCommand(
-			new SwerveDriveTeleop(
-				drive,
-				driver::getLeftX,
-				driver::getLeftY,
-				driver::getRightX,
-				driver.rightBumper()
-				)
-			);
+	// 	drive.setDefaultCommand(
+	// 		new SwerveDriveTeleop(
+	// 			drive,
+	// 			driver::getLeftX,
+	// 			driver::getLeftY,
+	// 			driver::getRightX,
+	// 			driver.rightBumper()
+	// 			)
+	// 		);
 
-		driver.rightTrigger().onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
-			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-		driver.rightTrigger().onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
-			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+	// 	driver.rightTrigger().onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+	// 		.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+	// 	driver.rightTrigger().onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
+	// 		.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 
-		operator.rightTrigger().onTrue(new AutoAim(drive, vision, light)
-			.andThen(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-			.andThen(intake.setPositionCommand(Intake.Value.INTAKE_GROUND)));
+	// 	operator.rightTrigger().onTrue(new AutoAim(drive, vision, light)
+	// 		.andThen(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+	// 		.andThen(intake.setPositionCommand(Intake.Value.INTAKE_GROUND)));
 
-			//Trap
-			// Climb
+		
+	// 		//Trap
+	// 		// Climb
 
 	}
 

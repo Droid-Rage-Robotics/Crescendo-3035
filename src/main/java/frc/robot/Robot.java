@@ -27,28 +27,28 @@ import frc.robot.subsystems.vision.Vision;
  * directory.
  */
 public class Robot extends TimedRobot {
-    private final SwerveDrive drive = new SwerveDrive(false);
-    private final IntakeWheel intakeWheel = new IntakeWheel(false);
-    private final IntakeDropDown dropDown = new IntakeDropDown(false);
-    private final Intake intake = new Intake(dropDown, intakeWheel);
-    private final Shooter shooter = new Shooter(false);
-    private final ClawElevator clawElevator = new ClawElevator(true, true);
-    private final ClawPivot clawPivot = new ClawPivot(false);
-    private final ClawIntake clawIntake = new ClawIntake(false);
-    private final Claw claw = new Claw(clawElevator, clawPivot, clawIntake);
-    private final Vision vision = new Vision();
-    private final Light light = new Light();
+    // private final SwerveDrive drive = new SwerveDrive(false);
+    // private final IntakeWheel intakeWheel = new IntakeWheel(false);
+    // private final IntakeDropDown dropDown = new IntakeDropDown(false);
+    // private final Intake intake = new Intake(dropDown, intakeWheel);
+    private final Shooter shooter = new Shooter(true);
+    // private final ClawElevator clawElevator = new ClawElevator(false, false);
+    // private final ClawPivot clawPivot = new ClawPivot(false);
+    // private final ClawIntake clawIntake = new ClawIntake(false);
+    // private final Claw claw = new Claw(clawElevator, clawPivot, clawIntake);
+    // private final Vision vision = new Vision();
+    // private final Light light = new Light();
 
     // private AutoChooser autoChooser = new AutoChooser();
     
     // private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer(
-        drive,
-        intake,
-        shooter,
-        claw,
-        vision,
-        light
+        // drive,
+        // intake,
+        shooter
+        // claw,
+        // vision,
+        // light
         );
         
     private Command autonomousCommand;
