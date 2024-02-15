@@ -29,26 +29,27 @@ public class RobotContainer {
 		.withWidget(BuiltInWidgets.kTextView)
 		.build();
 
-	// private final SwerveDrive drive;
+	private final SwerveDrive drive;
 	// private final Intake intake;
-	private final Shooter shooter;
+	// private final Shooter shooter;
 	// private final Claw claw;
 	// private final Vision vision;
 	// private final Light light;
 	public RobotContainer(
-		// SwerveDrive drive,
+		SwerveDrive drive
 		// Intake intake,
-		Shooter shooter
+		// Shooter shooter
 		// Claw claw,
 		// Vision vision,
 		// Light light
 		) {
-			// this.drive = drive;
+			this.drive = drive;
 			// this.intake = intake;
-			this.shooter = shooter;
+			// this.shooter = shooter;
 			// this.claw = claw;
 			// this.vision = vision;
 			// this.light = light;
+			DriverStation.silenceJoystickConnectionWarning(true);
 	}
 
 	public void configureTeleOpBindings() {
@@ -82,13 +83,25 @@ public class RobotContainer {
 
 	}
 
-	public void configureShooterTestBindings(){
-		operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
-			.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
-		operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
-			.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
-	}
+	// public void configureShooterTestBindings(){
+	// 	operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
+	// 		.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+	// 	operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
+	// 		.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+	// }
 
+	public void configureDriveBindings() {
+
+			drive.setDefaultCommand(
+				new SwerveDriveTeleop(
+					drive,
+					driver::getLeftX,
+					driver::getLeftY,
+					driver::getRightX,
+					driver.rightBumper()
+			));
+				
+	}
 	public void configureTestBindings(){}
 
 	public Command getAutonomousCommand() {

@@ -47,53 +47,55 @@ public class SwerveDrive extends SubsystemBase {
         new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, -SwerveDriveConfig.TRACK_WIDTH.get() / 2)   // Back Right ++
     );
 
-    private final SwerveModule frontLeft = new SwerveModule(
+    
+    
+    private final SwerveModule frontRight = new SwerveModule(
         1,
         2,
 
         false, 
         true,
 
-        11, 
-        SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
+        10, 
+        SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         false
     );
-    private final SwerveModule frontRight = new SwerveModule(
+    private final SwerveModule backRight = new SwerveModule(
         3,
         4,
 
         false, 
         true,
 
-        12, 
-        SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
+        11, 
+        SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         false
     );
     private final SwerveModule backLeft = new SwerveModule(
+        6,
+        5,
+
+        false, 
+        true,
+
+        12, 
+        SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
+        false
+    );
+    private final SwerveModule frontLeft = new SwerveModule(
         7,
         8,
 
         false, 
         true,
 
-        14, 
-        SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        false
-    );
-    private final SwerveModule backRight = new SwerveModule(
-        5,
-        6,
-
-        false, 
-        true,
-
         13, 
-        SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
+        SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         false
     );
     private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
 
-    private final Pigeon2 pigeon2 = new Pigeon2(15);
+    private final Pigeon2 pigeon2 = new Pigeon2(9);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();;
 
     private final SwerveDriveOdometry odometery = new SwerveDriveOdometry (

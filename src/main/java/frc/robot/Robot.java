@@ -27,11 +27,11 @@ import frc.robot.subsystems.vision.Vision;
  * directory.
  */
 public class Robot extends TimedRobot {
-    // private final SwerveDrive drive = new SwerveDrive(false);
+    private final SwerveDrive drive = new SwerveDrive(true);
     // private final IntakeWheel intakeWheel = new IntakeWheel(false);
     // private final IntakeDropDown dropDown = new IntakeDropDown(false);
     // private final Intake intake = new Intake(dropDown, intakeWheel);
-    private final Shooter shooter = new Shooter(true);
+    // private final Shooter shooter = new Shooter(false);
     // private final ClawElevator clawElevator = new ClawElevator(false, false);
     // private final ClawPivot clawPivot = new ClawPivot(false);
     // private final ClawIntake clawIntake = new ClawIntake(false);
@@ -43,9 +43,9 @@ public class Robot extends TimedRobot {
     
     // private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer(
-        // drive,
+        drive
         // intake,
-        shooter
+        // shooter
         // claw,
         // vision,
         // light
@@ -119,7 +119,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
         // robotContainer.configureTeleOpBindings( );
-        robotContainer.configureShooterTestBindings();
+        // robotContainer.configureShooterTestBindings();
+        robotContainer.configureDriveBindings();
         // robotContainer.configureTeleOpDriverOnlyBindings();
     }
 
