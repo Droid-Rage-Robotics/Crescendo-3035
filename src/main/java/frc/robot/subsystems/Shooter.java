@@ -59,14 +59,14 @@ public class Constants {
             .build();
 
         motorL = new SafeCanSparkMax(
-            1,
+            14,
             MotorType.kBrushless,
             this.isEnabled,
                 ShuffleboardValue.create(0.0, "VoltageL", Shooter.class.getSimpleName())
                     .build()
         );
         motorR = new SafeCanSparkMax(
-            2,
+            15,
             MotorType.kBrushless,
             this.isEnabled,
                 ShuffleboardValue.create(0.0, "VoltageR", Shooter.class.getSimpleName())
