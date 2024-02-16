@@ -83,12 +83,12 @@ public class RobotContainer {
 
 	}
 
-	// public void configureShooterTestBindings(){
-	// 	operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
-	// 		.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
-	// 	operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
-	// 		.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
-	// }
+	public void configureShooterTestBindings(){
+		// operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
+		// 	.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+		// operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
+		// 	.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+	}
 
 	public void configureDriveBindings() {
 

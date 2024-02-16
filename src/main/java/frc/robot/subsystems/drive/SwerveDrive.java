@@ -2,7 +2,7 @@ package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
-import com.ctre.phoenix6.configs.Pigeon2Configurator;
+import com.ctre.phoenix6.configs.Pigeon2FeaturesConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 // import com.ctre.phoenix6.hardware.Pigeon2.AxisDirection;
 // import com.ctre.phoenix.sensors.
@@ -154,13 +154,16 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDrive(Boolean isEnabled) {
         //TODO: Make sure IMU RESETS
         for (SwerveModule swerveModule: swerveModules) {
-            swerveModule.brakeMode();
+            // swerveModule.brakeMode();
+            swerveModule.coastMode();
+            // swerveModule.brakeAndCoast^Mode();
         }
         //TODO: Figure Out Mounting Config
-        poseConfigs.MountPosePitch = 90;
-        poseConfigs.MountPoseRoll = 90;
-        poseConfigs.MountPoseYaw = 90;
+        poseConfigs.MountPosePitch = 90;//Up-Down
+        poseConfigs.MountPoseRoll = 90;//Side-Side
+        poseConfigs.MountPoseYaw = 90;//Heading
         pigeon2.getConfigurator().apply(poseConfigs);
+        pigeon2.setYaw(90);
         // pigeon2.configMountPose(AxisDirection.NegativeX, AxisDirection.PositiveZ);
         resetOffset();
 
@@ -392,17 +395,17 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
-    public Command toggleBreakMode() {
-        return runOnce(() -> {
-            if (isBreakMode) {
-                coastMode();
-                isBreakMode = false;
-            } else {
-                breakMode();
-                isBreakMode = true;
-            }
-        });
-    }
+    // public Command toggleBreakMode() {
+    //     return runOnce(() -> {
+    //         if (isBreakMode) {
+    //             coastMode();
+    //             isBreakMode = false;
+    //         } else {
+    //             breakMode();
+    //             isBreakMode = true;
+    //         }
+    //     });
+    // }
 
 
     public Command toggleFieldOriented() {

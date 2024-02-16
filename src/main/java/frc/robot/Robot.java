@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
     // private final IntakeWheel intakeWheel = new IntakeWheel(false);
     // private final IntakeDropDown dropDown = new IntakeDropDown(false);
     // private final Intake intake = new Intake(dropDown, intakeWheel);
-    // private final Shooter shooter = new Shooter(false);
+    // private final Shooter shooter = new Shooter(true);
     // private final ClawElevator clawElevator = new ClawElevator(false, false);
     // private final ClawPivot clawPivot = new ClawPivot(false);
     // private final ClawIntake clawIntake = new ClawIntake(false);
