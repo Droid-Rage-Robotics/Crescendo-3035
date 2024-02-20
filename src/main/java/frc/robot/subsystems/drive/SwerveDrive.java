@@ -159,13 +159,13 @@ public class SwerveDrive extends SubsystemBase {
             // swerveModule.brakeAndCoast^Mode();
         }
         //TODO: Figure Out Mounting Config
-        poseConfigs.MountPosePitch = 90;//Up-Down
-        poseConfigs.MountPoseRoll = 90;//Side-Side
-        poseConfigs.MountPoseYaw = 90;//Heading
+        poseConfigs.MountPosePitch = 0;//Up-Down
+        poseConfigs.MountPoseRoll = 0;//Side-Side
+        poseConfigs.MountPoseYaw = 0;//Heading
         pigeon2.getConfigurator().apply(poseConfigs);
         pigeon2.setYaw(90);
         // pigeon2.configMountPose(AxisDirection.NegativeX, AxisDirection.PositiveZ);
-        resetOffset();
+        setYawCommand(SwerveDriveConfig.DEFAULT_HEADING_OFFSET.get());
 
         ComplexWidgetBuilder.create(field2d, "Field", SwerveDrive.class.getSimpleName());
         this.isEnabled.set(isEnabled);
@@ -227,7 +227,7 @@ public class SwerveDrive extends SubsystemBase {
         return tippingState;
     }
 
-    public double getHeading() {
+    public double getHeading() {//Yaw
         return Math.IEEEremainder(pigeon2.getYaw().getValueAsDouble(), 360);
     }
 
@@ -367,21 +367,25 @@ public class SwerveDrive extends SubsystemBase {
     //         )
     //     );
     // }
-    private void setOffset(double degrees) {
-        pigeon2.setYaw(degrees);
+    // private void setOffset(double degrees) {
+    //     pigeon2.setYaw(degrees);
+    //     // pigeon2.reset();
+    // }
+
+    public Command setYawCommand(double degrees) {
+        return runOnce(
+            () -> pigeon2.setYaw(degrees)
+            // pigeon2.reset()
+        );
     }
 
-    public Command setOffsetCommand(double degrees) {
-        return runOnce(() -> setOffset(degrees));
-    }
+    // private void resetOffset() {
+    //     setOffset(SwerveDriveConfig.DEFAULT_HEADING_OFFSET.get());
+    // }
 
-    private void resetOffset() {
-        setOffset(SwerveDriveConfig.DEFAULT_HEADING_OFFSET.get());
-    }
-
-    public Command resetOffsetCommand() {
-        return runOnce(this::resetOffset);
-    }
+    // public Command resetOffsetCommand() {
+    //     return runOnce(this::resetOffset);
+    // }
 
     private void coastMode() {
         for (SwerveModule swerveModule: swerveModules) {
@@ -458,7 +462,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Command driveAutoReset(){
-        return this.runOnce(()->this.setOffsetCommand(this.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
+        return this.runOnce(()->this.setYawCommand(this.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
     }
     public ChassisSpeeds getSpeeds() {
         return DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());

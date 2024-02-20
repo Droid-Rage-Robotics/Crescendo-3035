@@ -37,7 +37,7 @@ public final class TuningAutos {
                 .setMaxVelocity(0.2)
                 .setAcceleration(0.2)
                 .build(),
-            drive.setOffsetCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180)).getDegrees())//Works
+            drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180)).getDegrees())//Works
         );
 
     }

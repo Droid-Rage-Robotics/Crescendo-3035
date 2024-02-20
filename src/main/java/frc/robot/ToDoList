@@ -3,8 +3,9 @@ TODO:
 - Limelight Tracking
         Change Shooter targetVelocity
         Align Drivetrain
-- Sophie/Sebastian: Program Teleop Button except for Arm
-- PathPlannerFollow.java and Auto -Lucky
+
+- PathPlannerFollow.java and Auto -Lucky: NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
+
 - Robot Tracking on Field
 - Field Centric Turning
 - Lights: Add lights to have the robot tell us any errors with can, etc; Make LEDs show Errors

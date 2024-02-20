@@ -1,30 +1,25 @@
 package frc.robot.commands.manual;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveDriveConstants;
-import frc.robot.subsystems.drive.SwerveModule;
 
 @Deprecated
-public class SwerveDriveFieldCentricTurning 
-extends Command {
-//     private final SwerveDrive drive;
-//     private final Supplier<Double> x, y, turn;
+public class SwerveDriveFieldCentricTurning extends Command {
+    // private final SwerveDrive drive;
+    // private final Supplier<Double> leftX,leftY, rightX, rightY;
+    // private boolean FIELD_CENTRIC_DRIVING;
+    // private boolean FIELD_CENTRIC_TURNING;
 
 //     private volatile double xSpeed, ySpeed, turnSpeed;
-//     CommandXboxController controller;
-//     private Trigger lockTrigger;//for what?
+    CommandXboxController driver;
 //     public static double STRAFE_WEIGHT = 1;//Probably 1 instead of 1.1
 //     public static double MIN_HEADING_P = 0.05;
 //     public static double MAX_HEADING_P = 1.0;
@@ -36,7 +31,7 @@ extends Command {
 //         this.x = controller::getLeftX;
 //         this.y = controller::getLeftY;
 //         this.turn = controller::getRightX;
-//         this.lockTrigger = lockTrigger;
+        // this.lockTrigger = lockTrigger;
 
 
 //         addRequirements(drive);
@@ -116,21 +111,6 @@ extends Command {
 //         leftRear.setPower(backLeftPower);
 //         rightFront.setPower(frontRightPower);
 //         rightRear.setPower(backRightPower);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //         xSpeed = -y.get();
@@ -234,4 +214,122 @@ extends Command {
 //     public boolean isFinished() {
 //         return false;
 //     }
+
+
+/****************************************************************************** */
+
+    //     public SwerveDriveFieldCentricTurning(SwerveDrive drive, CommandXboxController driver) {
+    //     this.drive = drive;
+    //     this.driver = driver;
+    //     // this.leftY = driver;
+    //     this.leftY = driver::getLeftY;//-
+    //     this.leftX = driver::getLeftX;//
+    //     this.rightY = driver::getRightY;//-
+    //     this.rightX = driver::getRightX;//-
+        
+    //     // double leftY = -dr.left_stick_y; // Remember, this is reversed!
+    //     // double leftX = gamepad1.left_stick_x; // Counteract imperfect strafing
+    //     // double rightY = -gamepad1.right_stick_y;
+    //     // double rightX = -gamepad1.right_stick_x; // TODO: Why is this negative?
+    //     FIELD_CENTRIC_DRIVING = true;
+    //     FIELD_CENTRIC_TURNING = true;
+    //     // driver.rightBumper.whileTrue(drive.setSlowSpeed())
+    //     //     .onFalse(drive.setNormalSpeed());
+
+    //     addRequirements(drive);
+    // }
+
+    // @Override
+    // public void initialize() {    }
+
+
+    // @Override
+    // public void execute(){
+    //     driver.a().onTrue(drive.setYawCommand(0));
+    //     driver.leftStick().onTrue(new InstantCommand(()->flipDriving()));
+    //     driver.leftStick().onTrue(new InstantCommand(()->flipTurning()));
+
+        
+
+    //     double botHeading = drive.getHeading(); //Should be in radians, but might be degrees
+    //     // imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+    //     double x;
+    //     double y;
+    //     if (FIELD_CENTRIC_DRIVING) {
+    //         // Rotate the movement direction counter to the bot's rotation
+    //         Pose2d rotated2d = new Pose2d(leftX, leftY).rotated(botHeading);
+    //         x = rotated2d.getX();
+    //         y = rotated2d.getY();
+
+    //         x *= STRAFE_WEIGHT;  // Counteract imperfect strafing
+    //     } else {
+    //         x = leftX.get();
+    //         y = rightY;
+    //     }
+
+    //     double turn;
+    //     if (FIELD_CENTRIC_TURNING) {
+    //         Vector2d turn2d = new Vector2d(rightX, rightY);
+    //         double stickHeading = turn2d
+    //                 .rotated(Math.PI / 2) // Rotate by Pi / 2 Radians (90 degrees)
+    //                 .angle() - Math.PI; // Subtract Pi radians (180 degrees) from final angle
+
+    //         // Find the lowest of the 3 coterminal angles
+    //         double defaultHeadingError = (botHeading - stickHeading); // Default angle
+    //         double lowHeadingError = defaultHeadingError - (Math.PI * 2); // Low coterminal angle (360 degrees off from original)
+    //         double highHeadingError = defaultHeadingError + (Math.PI * 2); // High coterminal angle (360 degrees off from original)
+
+    //         // Create map of the absolute value of each value to the original value
+    //         double headingError = Arrays.stream(new Double[]{
+    //                         defaultHeadingError,
+    //                         lowHeadingError,
+    //                         highHeadingError
+    //                 })
+    //                 .min(Comparator.comparingDouble(Math::abs)).get();
+
+    //         double distance = turn2d.distTo(new Vector2d(0,0));
+
+
+    //         double headingP = MIN_HEADING_P + ((MAX_HEADING_P - MIN_HEADING_P) * distance);
+    //         turn = headingError * -headingP;
+
+    //         if (distance < STICK_THRESHOLD) turn = 0;
+
+    //         // telemetry.addData("heading error", Math.toDegrees(botHeading - stickHeading));
+    //         // telemetry.addData("theta", Math.toDegrees(stickHeading));
+
+    //         // telemetry.addData("low heading error", lowHeadingError);
+    //         // telemetry.addData("default heading error", defaultHeadingError);
+    //         // telemetry.addData("high heading error", highHeadingError);
+    //     } else {
+    //         turn = rightX;
+
+    //         if (rightX < STICK_THRESHOLD) turn = 0;
+    //     }
+
+    //     // Denominator is the largest motor power (absolute value) or 1
+    //     // This ensures all the powers maintain the same ratio, but only when
+    //     // at least one is out of the range [-1, 1]
+    //     double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(turn), 1);
+    //     double frontLeftPower = (y + x + turn) / denominator;
+    //     double backLeftPower = (y - x + turn) / denominator;
+    //     double frontRightPower = (y - x - turn) / denominator;
+    //     double backRightPower = (y + x - turn) / denominator;
+
+
+    //     // leftFront.setPower(frontLeftPower);
+    //     // leftRear.setPower(backLeftPower);
+    //     // rightFront.setPower(frontRightPower);
+    //     // rightRear.setPower(backRightPower);
+    //     // telemetry.addData("heading", Math.toDegrees(botHeading));
+    // }
+
+    // private void flipDriving(){
+    //     FIELD_CENTRIC_DRIVING = !FIELD_CENTRIC_DRIVING;
+    // }
+    // private void flipTurning(){
+    //     FIELD_CENTRIC_TURNING = !FIELD_CENTRIC_TURNING;
+    // }
+
 }
