@@ -7,8 +7,8 @@ import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 public class SwerveDriveConstants {
     public enum SwerveDriveConfig implements ShuffleboardValueEnum<Double> {
         PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(2 * (2 * Math.PI)),
-        TRACK_WIDTH(Units.inchesToMeters(28)),
-        WHEEL_BASE(Units.inchesToMeters(28)),
+        TRACK_WIDTH(Units.inchesToMeters(28.5)),
+        WHEEL_BASE(Units.inchesToMeters(28.5)),
 
         MAX_ACCELERATION_UNITS_PER_SECOND(10),
         MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND(10),
