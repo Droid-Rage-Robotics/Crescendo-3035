@@ -4,7 +4,12 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.hal.AllianceStationID;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -19,6 +24,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -36,6 +43,7 @@ public class Robot extends TimedRobot {
     // private final ClawPivot clawPivot = new ClawPivot(false);
     // private final ClawIntake clawIntake = new ClawIntake(false);
     // private final Claw claw = new Claw(clawElevator, clawPivot, clawIntake);
+    // private final Climb climb = new Climb(true, true);
     // private final Vision vision = new Vision();
     // private final Light light = new Light();
 
@@ -47,6 +55,7 @@ public class Robot extends TimedRobot {
         // intake,
         // shooter
         // claw,
+        // climb
         // vision,
         // light
         );
@@ -118,6 +127,25 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
+        // drive.setYawCommand(
+        //     switch (DriverStation.getRawAllianceStation()) {
+        //         case Unknown -> 0;//180
+        //         case Blue1,Blue2,Blue3 -> 0;
+        //         case Red1,Red2,Red3 -> 0;
+        //     }
+        // );
+
+
+        // robotContainer.configureTestMotorBindings(
+        //     new SafeCanSparkMax(
+        //         2, 
+        //         MotorType.kBrushless,
+        //         ShuffleboardValue.create(true, "Is Enabled", Shooter.class.getSimpleName())
+        //             .withWidget(BuiltInWidgets.kToggleSwitch)
+        //             .build(),
+        //         ShuffleboardValue.create(0.0, "VoltageL", Shooter.class.getSimpleName())
+        //             .build())
+        // );
         // robotContainer.configureTeleOpBindings( );
         // robotContainer.configureShooterTestBindings();
         robotContainer.configureDriveBindings();
@@ -126,6 +154,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+
         // robotContainer.teleopPeriodic();
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
