@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 // import com.ctre.phoenix.sensors.CANCoder;
 // import com.ctre.phoenix.sensors.CANCoderConfiguration;
@@ -35,10 +36,10 @@ public class SwerveModule {
 
         public static final double DRIVE_ENCODER_ROT_2_METER = DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMETER_METERS;
         public static final double DRIVE_ENCODER_RPM_2_METER_PER_SEC = DRIVE_ENCODER_ROT_2_METER / 60;
-        public static final double READINGS_PER_REVOLUTION = 4096;
+        public static final double READINGS_PER_REVOLUTION = 1;//4096
         public static final double TURN_ENCODER_ROT_2_RAD = 2 * Math.PI / READINGS_PER_REVOLUTION;
 
-        public static final double TURN_P = 0.005;//0.5
+        // public static final double TURN_P = 0.0005;//0.5
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
 
@@ -64,29 +65,15 @@ public class SwerveModule {
 
         turnEncoder = new CANcoder(absoluteEncoderId);
         CANcoderConfiguration config = new CANcoderConfiguration();
-        // MagnetSensorConfigs
-        // turnEncoder.setPosition(absoluteEncoderId)
-        // config.MagnetSensor.
-        // config.MagnetSensor. = SensorInitializationStrategy.BootToAbsolutePosition; // TODO: change to absolute eventually
         if(absoluteEncoderReversed){
             config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         } else{
             config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         }
-        config.MagnetSensor.MagnetOffset = absoluteEncoderOffsetRad.get();
-        // config.MagnetSensor. = Constants.TURN_ENCODER_ROT_2_RAD; // cancoder reads in radians
-        // config.unitString = "rad";
-        // config.sensorTimeBase = SensorTimeBase.PerSecond;
+        config.MagnetSensor.MagnetOffset = absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD;
+        config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         turnEncoder.getConfigurator().apply(config);
-
         //TODO: FIGURE Out whether I need to manually change from rotation to radians?
-        //BASIC
-//         CANcoderConfiguration config3 = new CANCoderConfiguration();
-// // set units of the CANCoder to radians, with velocity being radians per second
-// config3.sensorCoefficient = 2 * Math.PI / 4096.0;
-// config3.unitString = "rad";
-// config3.sensorTimeBase = SensorTimeBase.PerSecond;
-// cancoder.configAllSettings(config);
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
         turnMotor = new CANSparkMax(turnMotorId, MotorType.kBrushless);
 
@@ -95,8 +82,8 @@ public class SwerveModule {
 
         driveMotor.getEncoder().setPositionConversionFactor(Constants.DRIVE_ENCODER_ROT_2_METER);
         driveMotor.getEncoder().setVelocityConversionFactor(Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC);
-
-        turningPidController = new PIDController(Constants.TURN_P, 0, 0);
+// Constants.TURN_P
+        turningPidController = new PIDController(0.1, 0.0, 0.0);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         feedforward = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV);
@@ -109,7 +96,7 @@ public class SwerveModule {
     }
 
     public double getTurningPosition() {
-        return turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD;
+        return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);// + absoluteEncoderOffsetRad.get();
         // return turnEncoder.getAbsolutePosition().getValueAsDouble() + absoluteEncoderOffsetRad.get();
     }
 
@@ -138,14 +125,13 @@ public class SwerveModule {
     }
 
     public void setState(SwerveModuleState state) {
-        // new SwerveModuleState(0.0, new Rotation2d(Math.PI))
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
             return;
         }
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
-        turnMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        turnMotor.set((turningPidController.calculate(getTurningPosition(), state.angle.getRadians()))*1);
         SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.toString());
         SmartDashboard.putString("Swerve[" + turnMotor.getDeviceId() + "] state", state.toString());
     }

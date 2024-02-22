@@ -50,26 +50,26 @@ public class SwerveDrive extends SubsystemBase {
     
     
     private final SwerveModule frontRight = new SwerveModule(
-        1,
         2,
+        1,
 
         false, 
         true,
 
         10, 
         SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        false
+        true
     );
     private final SwerveModule backRight = new SwerveModule(
-        3,
         4,
+        3,
 
         false, 
         true,
 
         11, 
         SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        false
+        true
     );
     private final SwerveModule backLeft = new SwerveModule(
         6,
@@ -83,15 +83,15 @@ public class SwerveDrive extends SubsystemBase {
         false
     );
     private final SwerveModule frontLeft = new SwerveModule(
-        7,
         8,
+        7,
 
         false, 
         true,
 
         13, 
         SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        false
+        true
     );
     private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
 
@@ -152,7 +152,6 @@ public class SwerveDrive extends SubsystemBase {
     private final Field2d field2d = new Field2d();
 
     public SwerveDrive(Boolean isEnabled) {
-        //TODO: Make sure IMU RESETS
         for (SwerveModule swerveModule: swerveModules) {
             // swerveModule.brakeMode();
             swerveModule.coastMode();
@@ -161,9 +160,10 @@ public class SwerveDrive extends SubsystemBase {
         //TODO: Figure Out Mounting Config
         poseConfigs.MountPosePitch = 0;//Up-Down
         poseConfigs.MountPoseRoll = 0;//Side-Side
-        poseConfigs.MountPoseYaw = 0;//Heading
+        poseConfigs.MountPoseYaw = -90;//Heading
         pigeon2.getConfigurator().apply(poseConfigs);
-        pigeon2.setYaw(90);
+        pigeon2.setYaw(0);
+        
         // pigeon2.configMountPose(AxisDirection.NegativeX, AxisDirection.PositiveZ);
         setYawCommand(SwerveDriveConfig.DEFAULT_HEADING_OFFSET.get());
 

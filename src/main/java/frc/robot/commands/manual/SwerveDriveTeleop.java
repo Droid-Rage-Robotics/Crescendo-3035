@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
@@ -17,11 +18,10 @@ public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
     private final Supplier<Double> x, y, turn;
     private final SlewRateLimiter xLimiter, yLimiter, turnLimiter;
-    // private static final PIDController autoBalanceY = new PIDController(0.006, 0, 0.0005);
     private volatile double xSpeed, ySpeed, turnSpeed;
 
     public SwerveDriveTeleop(SwerveDrive drive,
-            Supplier<Double> x, Supplier<Double> y, Supplier<Double> turn, Trigger rightBumper) {
+            Supplier<Double> x, Supplier<Double> y, Supplier<Double> turn, Trigger rightBumper, Trigger aResetButton) {
         this.drive = drive;
         this.x = x;
         this.y = y;
@@ -34,6 +34,7 @@ public class SwerveDriveTeleop extends Command {
         //Slow Mode vs Fast
         rightBumper.whileTrue(drive.setSlowSpeed())
             .onFalse(drive.setNormalSpeed());
+        aResetButton.onTrue(new InstantCommand(()->drive.setYawCommand(0)));
 
 
         addRequirements(drive);
@@ -132,7 +133,6 @@ public class SwerveDriveTeleop extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        // autoBalanceY.close();
         drive.stop();
     }
 

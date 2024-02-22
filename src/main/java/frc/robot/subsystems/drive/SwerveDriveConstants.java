@@ -7,8 +7,8 @@ import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 public class SwerveDriveConstants {
     public enum SwerveDriveConfig implements ShuffleboardValueEnum<Double> {
         PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(2 * (2 * Math.PI)),
-        TRACK_WIDTH(Units.inchesToMeters(20.75)),
-        WHEEL_BASE(Units.inchesToMeters(23.75)),
+        TRACK_WIDTH(Units.inchesToMeters(28)),
+        WHEEL_BASE(Units.inchesToMeters(28)),
 
         MAX_ACCELERATION_UNITS_PER_SECOND(10),
         MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND(10),
@@ -26,14 +26,16 @@ public class SwerveDriveConstants {
         THETA_KI(0),
         THETA_KD(0),
 
-        // FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0.088),
-        // FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.088),
-        // BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.1047),
-        // BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.050),
-        FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0.29),
-        FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.405),
-        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0.396),
-        BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.442),
+        // use witth 4096 reading
+        // FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),
+        // FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),
+        // BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),//Change
+        // BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(00),
+
+        FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-4.98),
+        FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.63),
+        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.69),//Change
+        BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.397),
 
         DEFAULT_HEADING_OFFSET(0),
         ;
@@ -46,7 +48,7 @@ public class SwerveDriveConstants {
     }
 
     public enum TeleOpOptions implements ShuffleboardValueEnum<Boolean> { 
-        IS_FIELD_ORIENTED(true),
+        IS_FIELD_ORIENTED(false),
         IS_SQUARED_INPUTS(true),
         ;
         private final ShuffleboardValue<Boolean> shuffleboardValue;
@@ -59,7 +61,7 @@ public class SwerveDriveConstants {
 
     public enum Speed {
         TURBO(1, 1),
-        NORMAL(3.5, 1),
+        NORMAL(0.05, 0.05),//3.5, 1
         SLOW(0.2, 0.2),
         SUPER_SLOW(0.05, 0.05),
         ;
