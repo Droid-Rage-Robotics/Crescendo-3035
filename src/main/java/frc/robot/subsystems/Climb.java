@@ -14,7 +14,7 @@ import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
-@Deprecated
+// @Deprecated
 public class Climb extends SubsystemBase{
     public static class Constants {
         public static final double GEAR_RATIO = 1 / 1;
@@ -24,13 +24,16 @@ public class Climb extends SubsystemBase{
         public static final double MIN_POSITION = 0;
         public static final double MAX_POSITION = 16.2;
     }public enum Position{
+        CLIMB(0),
+        START(0),
+        TRAP(0),
         ;
 
-        private final ShuffleboardValue<Double>  dropPos;
+        private final ShuffleboardValue<Double>  climbPos;
 
-        private Position(double dropPos) {
-            this.dropPos = ShuffleboardValue.create(dropPos, Position.class.getSimpleName()+"/"+name()+
-                ": dropPos (RPM)", Climb.class.getSimpleName())
+        private Position(double climbPos) {
+            this.climbPos = ShuffleboardValue.create(climbPos, Position.class.getSimpleName()+"/"+name()+
+                ": dropPos (Position)", Climb.class.getSimpleName())
                 .withSize(1, 3)
                 .build();
         }
@@ -93,7 +96,7 @@ public class Climb extends SubsystemBase{
         setPower(controller.calculate(getEncoderPosition())+
             feedforward.calculate(getVelocity(), getVelocity()));
     } public Command setTargetCommand(Position position){
-        return new InstantCommand(()->controller.setSetpoint(position.dropPos.get()));
+        return new InstantCommand(()->controller.setSetpoint(position.climbPos.get()));
     }
     public Command setTargetCommand(double positionRadians){
         return new InstantCommand(()->controller.setSetpoint(positionRadians));

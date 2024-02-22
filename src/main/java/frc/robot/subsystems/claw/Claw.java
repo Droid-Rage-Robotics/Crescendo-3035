@@ -120,9 +120,10 @@ public class Claw {
                         clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees())))
                     );
                 case TRAP ->
-                    new ParallelCommandGroup(
-                        clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches())),
+                    new SequentialCommandGroup(
                         clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees()))),
+                        Commands.waitSeconds(.5),
+                        clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches())),
                         clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds()))
                     );
                 
@@ -131,7 +132,6 @@ public class Claw {
                         clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches())),
                         clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees()))),
                         clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds()))
-                        
                     );
             }
         ));
