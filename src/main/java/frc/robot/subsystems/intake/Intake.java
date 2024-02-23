@@ -21,7 +21,7 @@ public class Intake {
 
         //IntakePos
         INTAKE_GROUND(0,20),
-        INTAKE_HUMAN(0,0),
+        INTAKE_HUMAN(0,40),
 
         SHOOTER_HOLD(0,0),//Ready to give Note to shooter, but not doing it
         SHOOTER_TRANSFER(0,0),//Giving Note to Shooter
@@ -94,21 +94,28 @@ public class Intake {
     }
 
     public Command setPositionCommand(Value targetPosition) {
+        logPosition(targetPosition);
+        System.out.println("setting command."+ targetPosition.name());
         return SuppliedCommand.create(() -> Commands.sequence(
-            Commands.runOnce(() -> logPosition(targetPosition)),
+            // Commands.runOnce(() -> logPosition(targetPosition)),
             switch (targetPosition) {
-                case  START ->
-                    new SequentialCommandGroup(
-                    );
+                // case  START ->
+                //     new SequentialCommandGroup(
+                //     );
                 
                 default -> 
                     new ParallelCommandGroup(
                         dropDown.runOnce(() -> dropDown.setTargetPosition(Math.toRadians(targetPosition.getAngle()))),
                         intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
-                        
                     );
             }
         ));
+    }
+    public Command setGround(){
+        return new SequentialCommandGroup(
+            dropDown.runOnce(() -> dropDown.setTargetPosition(Value.INTAKE_GROUND.getAngle())),
+            intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(Value.INTAKE_GROUND.getAngle()))
+        );
     }
     public Command lowerPivotCommand(double lowerNum) {
         return dropDown.runOnce(() -> 

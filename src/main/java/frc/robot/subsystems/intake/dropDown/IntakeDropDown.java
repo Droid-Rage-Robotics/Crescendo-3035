@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
-import frc.robot.subsystems.intake.IntakeWheel;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -23,22 +23,6 @@ public class IntakeDropDown extends SubsystemBase {
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
 
-    // public enum Position{
-    //     INTAKE( 0),//Intake Pos
-    //     OUTTAKE(0),//Where to be when outtaking
-    //     SHOOTER_TRANSFER(0),//Transfer to  - Position to Reset Encoder
-    //     ELEV_TRANSFER(0), //transfer to elev4
-    //     ;
-
-    //     private final ShuffleboardValue<Double>  dropPos;
-
-    //     private Position(double dropPos) {
-    //         this.dropPos = ShuffleboardValue.create(dropPos, Position.class.getSimpleName()+"/"+name()+
-    //             ": dropPos (RPM)", IntakeWheel.class.getSimpleName())
-    //             .withSize(1, 3)
-    //             .build();
-    //     }
-    // }
 
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
@@ -46,26 +30,26 @@ public class IntakeDropDown extends SubsystemBase {
     protected final DigitalInput intakeLimitSwitch;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", IntakeDropDown.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", IntakeDropDown.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Moving manually", IntakeDropDown.class.getSimpleName())
+        ShuffleboardValue.create(false, "Moving manually", Intake.class.getSimpleName())
         .build();
     
     public IntakeDropDown(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            18, 
+            6, //16?
             MotorType.kBrushless,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", IntakeDropDown.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Drop Is Enabled", Intake.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Voltage", IntakeDropDown.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Drop Voltage", Intake.class.getSimpleName())
                 .build()
         );
         motor.setIdleMode(IdleMode.Coast);//TODO:Make it brake 
@@ -75,17 +59,18 @@ public class IntakeDropDown extends SubsystemBase {
         motor.getEncoder().setVelocityConversionFactor(Constants.ROTATIONS_TO_RADIANS);
   
 
-        controller = new PIDController(0.0, 0.0, 0.0);//0.024
+        controller = new PIDController(0.1, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(0.1));//How Much?
 
         // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);
-        // feedforward = new ArmFeedforward(0, 0,0);
+        feedforward = new ArmFeedforward(0, 0,0);
 
-        ComplexWidgetBuilder.create(controller, "PID Controller", IntakeDropDown.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Drop PID Controller", Intake.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset encoder", IntakeDropDown.class.getSimpleName());
+        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Intake Drop Encoder", 
+            Intake.class.getSimpleName());
 
         motor.burnFlash();
         intakeLimitSwitch = new DigitalInput(0);//WHERE is it plugged in

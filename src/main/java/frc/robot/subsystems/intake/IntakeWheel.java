@@ -17,42 +17,20 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class IntakeWheel extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
+        public static final double GEAR_RATIO = 1 / 3;//?????
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
-
-    // public enum Velocity implements ShuffleboardValueEnum<Double> {
-    //     INTAKE(-3000),
-    //     OUTTAKE(2300),
-    //     SHOOTER_TRANSFER(200),
-    //     ELEV_TRANSFER(200),
-    //     STOP(0)
-    //     ;
-
-    //     private final ShuffleboardValue<Double> velocityRPM;
-
-    //     private Velocity(double velocityRPM) {
-    //         this.velocityRPM = ShuffleboardValue.create(velocityRPM, Velocity.class.getSimpleName()+"/"+name()+": Velocity (RPM)", IntakeWheel.class.getSimpleName())
-    //             .withSize(1, 3)
-    //             .build();
-    //     }
-
-    //     @Override
-    //     public ShuffleboardValue<Double> getNum() {
-    //         return velocityRPM;
-    //     }
-    // }
 
     protected final SafeTalonFX intake;
     protected final PIDController intakeController;
     protected final SimpleMotorFeedforward intakeFeedforward;
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create    
-      (0.0, "Target Velocity", IntakeWheel.class.getSimpleName()).build();
+      (0.0, "Target Wheel Velocity", Intake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-         (0.0, "Encoder Velocity", IntakeWheel.class.getSimpleName()).build();
+         (0.0, "Wheel Encoder Velocity", Intake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity Error", IntakeState.class.getSimpleName()).build();
+        (0.0, "Wheel Encoder Velocity Error", IntakeState.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Boolean> isElementInWriter = ShuffleboardValue.create
             (false, "Is Element In", IntakeState.class.getSimpleName()).build();
@@ -63,10 +41,10 @@ public class IntakeWheel extends SubsystemBase {
             15,
             true,
             IdleMode.Coast,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", IntakeWheel.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Is Enabled Wheel", Intake.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-                ShuffleboardValue.create(0.0, "Voltage", IntakeWheel.class.getSimpleName())
+                ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
                     .build()
         );
         // intakeEncoder = intake.getEncoder();
@@ -78,9 +56,9 @@ public class IntakeWheel extends SubsystemBase {
         intakeController.setTolerance(5);
         intakeFeedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
-        ComplexWidgetBuilder.create(intakeController, "Intake Controller", IntakeWheel.class.getSimpleName());
+        ComplexWidgetBuilder.create(intakeController, "Intake Wheel Controller", Intake.class.getSimpleName());
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetIntakeEncoder)), 
-            "Reset Intake Encoder", IntakeWheel.class.getSimpleName());
+            "Reset Intake Wheel Encoder", Intake.class.getSimpleName());
     }
 
     @Override

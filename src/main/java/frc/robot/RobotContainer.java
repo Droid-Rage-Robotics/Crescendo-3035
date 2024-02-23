@@ -33,7 +33,7 @@ public class RobotContainer {
 		(0.0, "Match Time", "Misc")
 		.withWidget(BuiltInWidgets.kTextView)
 		.build();
-		
+
 	public RobotContainer() {
 		DriverStation.silenceJoystickConnectionWarning(true);
 	}
@@ -82,6 +82,8 @@ public class RobotContainer {
 
 	}
 
+
+
 	public void configureDriveBindings(SwerveDrive drive) {
 		drive.setDefaultCommand(
 			new SwerveDriveTeleop(
@@ -93,22 +95,23 @@ public class RobotContainer {
 				driver.start()
 		));
 	}
-
 	public void configureIntakeTestBindings(Intake intake){
+		System.out.println("configure");
 		operator.rightTrigger()
-			.onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER))
+			.onTrue(intake.setGround())
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 		operator.leftTrigger()
-			.onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER))
+			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 	}
-	
 	public void configureShooterTestBindings(Shooter shooter){
 		operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
 			.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
 		operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
 			.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
 	}
+
+
 
 	public void configureSparkMaxMotorBindings(SafeCanSparkMax motor){
 		operator.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(.1)))
@@ -127,6 +130,8 @@ public class RobotContainer {
 		operator.a().onTrue(new InstantCommand(()->motor.playMusic(3)));
 		operator.b().onTrue(new InstantCommand(()->motor.stopMusic()));
 	}
+
+
 
 	public Command getAutonomousCommand(AutoChooser autoChooser) {
 		// return autoChooser.getSelected();
