@@ -50,8 +50,8 @@ public class SwerveDrive extends SubsystemBase {
     
     
     private final SwerveModule frontRight = new SwerveModule(
+        3,
         2,
-        1,
 
         false, 
         true,
@@ -61,8 +61,8 @@ public class SwerveDrive extends SubsystemBase {
         true
     );
     private final SwerveModule backRight = new SwerveModule(
+        5,
         4,
-        3,
 
         false, 
         true,
@@ -72,19 +72,19 @@ public class SwerveDrive extends SubsystemBase {
         true
     );
     private final SwerveModule backLeft = new SwerveModule(
+        7,
         6,
-        5,
 
         false, 
         true,
 
         12, 
         SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        false
+        true
     );
     private final SwerveModule frontLeft = new SwerveModule(
+        9,
         8,
-        7,
 
         false, 
         true,
@@ -95,7 +95,7 @@ public class SwerveDrive extends SubsystemBase {
     );
     private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
 
-    private final Pigeon2 pigeon2 = new Pigeon2(9);
+    private final Pigeon2 pigeon2 = new Pigeon2(14);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();;
 
     private final SwerveDriveOdometry odometery = new SwerveDriveOdometry (
@@ -158,9 +158,10 @@ public class SwerveDrive extends SubsystemBase {
             // swerveModule.brakeAndCoast^Mode();
         }
         //TODO: Figure Out Mounting Config
-        poseConfigs.MountPosePitch = 0;//Up-Down
-        poseConfigs.MountPoseRoll = 0;//Side-Side
-        poseConfigs.MountPoseYaw = -90;//Heading
+        poseConfigs.MountPosePitch = 0;//Up-Down//0
+        poseConfigs.MountPoseRoll = 90;//Side-Side//90
+        poseConfigs.MountPoseYaw = 180;//Heading//180
+        // pigeon2.configMountPose();
         pigeon2.getConfigurator().apply(poseConfigs);
         pigeon2.setYaw(0);
         

@@ -34,7 +34,7 @@ public class SwerveDriveConstants {
 
         FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-4.98),
         FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.63),
-        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.69),//Change
+        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-5.5),
         BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.397),
 
         DEFAULT_HEADING_OFFSET(0),
@@ -48,7 +48,7 @@ public class SwerveDriveConstants {
     }
 
     public enum TeleOpOptions implements ShuffleboardValueEnum<Boolean> { 
-        IS_FIELD_ORIENTED(false),
+        IS_FIELD_ORIENTED(true),
         IS_SQUARED_INPUTS(true),
         ;
         private final ShuffleboardValue<Boolean> shuffleboardValue;
