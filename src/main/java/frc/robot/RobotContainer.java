@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutoChooser;
 import frc.robot.commands.ClimbAndScoreSequence;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.LightCommand;
@@ -32,122 +33,102 @@ public class RobotContainer {
 		(0.0, "Match Time", "Misc")
 		.withWidget(BuiltInWidgets.kTextView)
 		.build();
-
-	// private final SwerveDrive drive;
-	// private final Intake intake;
-	// private final Shooter shooter;
-	// private final Claw claw;
-	// private final Climb climb;
-	// private final Vision vision;
-	// private final Light light;
-	public RobotContainer(
-		// SwerveDrive drive
-		// Intake intake
-		// Shooter shooter
-		// Claw claw,
-		// Climb climb
-		// Vision vision,
-		// Light light
-		) {
-			// this.drive = drive;
-			// this.intake = intake;
-			// this.shooter = shooter;
-			// this.claw = claw;
-			// this.vision = vision;
-			// this.light = light;
-			DriverStation.silenceJoystickConnectionWarning(true);
+		
+	public RobotContainer() {
+		DriverStation.silenceJoystickConnectionWarning(true);
 	}
 
-	public void configureTeleOpBindings() {
+	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
+		Claw claw, Climb climb, Vision vision, Light light){
+		light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
+		intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 
-		// DriverStation.silenceJoystickConnectionWarning(true);
-		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
-		// intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver.rightBumper(),
+				driver.start()
+				)
+			);
 
-		// drive.setDefaultCommand(
-		// 	new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
-		// 		drive,
-		// 		driver::getLeftX,
-		// 		driver::getLeftY,
-		// 		driver::getRightX,
-		// 		driver.rightBumper(),
-		// 		driver.start()
-		// 		)
-		// 	);
-
-		// driver.rightTrigger().onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
-		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-		// driver.leftTrigger().onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
-		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		driver.rightTrigger().onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		driver.leftTrigger().onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 		
 
 		
-		// operator.rightTrigger()
-		// 	.onTrue(new AutoAim(drive, vision, light)
-		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-		// 		.andThen(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)))
-		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
-		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
-		// 		.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
-		// operator.leftTrigger()
-		// 	.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_SHOOTER)
-		// 	.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-		// 	.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
-		// 	);
-
-		// operator.start().onTrue(new ClimbAndScoreSequence(claw, climb, intake));
-
-		
-			//Trap
-			// Climb
-
-	}
-
-	public void configureIntakeTestBindings(){
-		// operator.rightTrigger()
-		// 	.onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER))
-		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-		// operator.leftTrigger()
-		// 	.onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER))
-		// 	.onFalse(intake.setPositionCommand(Intake.Value.START));
-	}
-	public void configureTalonMotorBindings(SafeTalonFX motor){
 		operator.rightTrigger()
-			.onTrue(new InstantCommand(()-> motor.setPower(.5)))
-			.onFalse(new InstantCommand(()-> motor.setPower(0)));
+			.onTrue(new AutoAim(drive, vision, light)
+				.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+				.andThen(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
+				.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
+				.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
 		operator.leftTrigger()
-			.onTrue(new InstantCommand(()-> motor.setPower(-.5)))
-			.onFalse(new InstantCommand(()-> motor.setPower(0)));
+			.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_SHOOTER)
+			.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+			.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+			);
+
+		operator.start().onTrue(new ClimbAndScoreSequence(claw, climb, intake));
+
+		
+		// Trap
+		// Climb
+
 	}
-	public void configureShooterTestBindings(){
-		// operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
-		// 	.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
-		// operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
-		// 	.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+
+	public void configureDriveBindings(SwerveDrive drive) {
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop(
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver.rightBumper(),
+				driver.start()
+		));
 	}
-	public void configureTestMotorBindings(SafeCanSparkMax motor){
+
+	public void configureIntakeTestBindings(Intake intake){
+		operator.rightTrigger()
+			.onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER))
+			.onFalse(intake.setPositionCommand(Intake.Value.START));
+		operator.leftTrigger()
+			.onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER))
+			.onFalse(intake.setPositionCommand(Intake.Value.START));
+	}
+	
+	public void configureShooterTestBindings(Shooter shooter){
+		operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
+			.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+		operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
+			.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+	}
+
+	public void configureSparkMaxMotorBindings(SafeCanSparkMax motor){
 		operator.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(.1)))
 			.onFalse(new InstantCommand(()->motor.setPower(0)));
 		operator.leftTrigger().onTrue(new InstantCommand(()->motor.setPower(-.1)))
 			.onFalse(new InstantCommand(()->motor.setPower(0)));
 	}
+	public void configureTalonMotorBindings(SafeTalonFX motor){
+		operator.rightTrigger()
+			.onTrue(new InstantCommand(()-> motor.setPower(.1)))
+			.onFalse(new InstantCommand(()-> motor.setPower(0)));
+		operator.leftTrigger()
+			.onTrue(new InstantCommand(()-> motor.setPower(-.1)))
+			.onFalse(new InstantCommand(()-> motor.setPower(0)));
 
-	public void configureDriveBindings() {
-
-			// drive.setDefaultCommand(
-			// 	new SwerveDriveTeleop(
-			// 		drive,
-			// 		driver::getLeftX,
-			// 		driver::getLeftY,
-			// 		driver::getRightX,
-			// 		driver.rightBumper(),
-			// 		driver.start()
-			// ));
-				
+		operator.a().onTrue(new InstantCommand(()->motor.playMusic(3)));
+		operator.b().onTrue(new InstantCommand(()->motor.stopMusic()));
 	}
-	// public void configureTestBindings(){}
 
-	public Command getAutonomousCommand() {
+	public Command getAutonomousCommand(AutoChooser autoChooser) {
 		// return autoChooser.getSelected();
 		return new InstantCommand();
 	}
