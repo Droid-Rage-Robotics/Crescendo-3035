@@ -82,4 +82,8 @@ public class Vision extends SubsystemBase {
     public boolean gettV(){
         return tVWriter.get();
     }
+    public double[] getPose(){
+        return LimelightHelpers.getBotPose("");
+    }
+
 }
