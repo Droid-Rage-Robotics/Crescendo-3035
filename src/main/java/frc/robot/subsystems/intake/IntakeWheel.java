@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.commands.LightCommand.IntakeState;
 import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
@@ -43,7 +44,7 @@ public class IntakeWheel extends SubsystemBase {
     //     }
     // }
 
-    protected final SafeCanSparkMax intake;
+    protected final SafeTalonFX intake;
     protected final PIDController intakeController;
     protected final SimpleMotorFeedforward intakeFeedforward;
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create    
@@ -58,9 +59,10 @@ public class IntakeWheel extends SubsystemBase {
 
 
     public IntakeWheel(Boolean isEnabled) {
-        intake = new SafeCanSparkMax(
-            19,
-            MotorType.kBrushless,
+        intake = new SafeTalonFX(
+            15,
+            true,
+            IdleMode.Coast,
             ShuffleboardValue.create(isEnabled, "Is Enabled", IntakeWheel.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
@@ -68,8 +70,6 @@ public class IntakeWheel extends SubsystemBase {
                     .build()
         );
         // intakeEncoder = intake.getEncoder();
-        intake.setIdleMode(IdleMode.Coast);
-        intake.setInverted(true);
 
         intakeController = new PIDController(
             0.0003,//0.0003 
@@ -99,7 +99,7 @@ public class IntakeWheel extends SubsystemBase {
     }
 
     protected double getIntakeEncoderVelocity() {
-        double velocity = intake.getEncoder().getVelocity();
+        double velocity = intake.getVelocity();
         encoderVelocityWriter.write(velocity);
         encoderVelocityErrorWriter.write(getIntakeTargetVelocity() - velocity);
         return velocity;
@@ -116,7 +116,7 @@ public class IntakeWheel extends SubsystemBase {
 
     
     public void resetIntakeEncoder() {
-        intake.getEncoder().setPosition(0);//TODO: Test
+        intake.setPosition(0);//TODO: Test
     }
 
     public boolean isElementIn(){
