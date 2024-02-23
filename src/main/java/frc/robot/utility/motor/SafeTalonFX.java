@@ -3,6 +3,7 @@ package frc.robot.utility.motor;
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.MusicTone;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -13,6 +14,25 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class SafeTalonFX extends SafeMotor{
     private final TalonFX motor;
     private final Orchestra orchestra;
+    private final MusicTone music = new MusicTone(20);
+    private final String[] songs = new String[] {
+        "song1.chrp",
+        "song2.chrp",
+        "song3.chrp",
+        "song4.chrp",
+        "song5.chrp",
+        "song6.chrp",
+        "song7.chrp",
+        "song8.chrp",
+        "song9.chrp", /* the remaining songs play better with three or more FXs */
+        "song10.chrp",
+        "song11.chrp",
+      };
+      /* schedule a play request, after a delay.  
+            This gives the Orchestra service time to parse chirp file.
+            If play() is called immedietely after, you may get an invalid action error code. */
+        private int timeToPlayLoops = 10;
+
 
     public SafeTalonFX(int deviceNumber, boolean isInverted, 
         IdleMode mode, ShuffleboardValue<Boolean> isEnabled, 
@@ -33,10 +53,10 @@ public class SafeTalonFX extends SafeMotor{
         configuration.Audio.AllowMusicDurDisable = false; //true
         // configuration.Feedback.SensorToMechanismRatio = 1;
 
+        motor.getConfigurator().apply(configuration);
+
         orchestra = new Orchestra();
         orchestra.addInstrument(motor);
-        orchestra.loadMusic("Test.chrp"); // Can Load ALL Music in a array
-        motor.getConfigurator().apply(configuration);
     }
 
 
@@ -81,7 +101,17 @@ public class SafeTalonFX extends SafeMotor{
         return motor.getConfigurator();
     }
 
-    public void playMusic(){
+    public void playMusic(int songNum){
+        loadMusic(songNum);
+
+        if (timeToPlayLoops > 0) {
+            --timeToPlayLoops;
+            if (timeToPlayLoops == 0) {
+                /* scheduled play request */
+                System.out.println("Auto-playing song.");
+                orchestra.play();
+            }
+        }
         orchestra.play();
     }
 
@@ -91,5 +121,32 @@ public class SafeTalonFX extends SafeMotor{
 
     public void stopMusic(){
         orchestra.stop();
+    }
+
+    public void playFrequency(){
+        motor.setControl(music);
+    }
+    public void stopFrequency(){
+        motor.stopMotor();
+    }
+
+    private void loadMusic(int songNum)
+    {
+        int _songSelection = 0;
+
+        /* increment song selection */
+        _songSelection += songNum;
+        /* wrap song index in case it exceeds boundary */
+        if (_songSelection >= songs.length) {
+            _songSelection = 0;
+        }
+        if (_songSelection < 0) {
+            _songSelection = songs.length - 1;
+        }
+        /* load the chirp file */
+        orchestra.loadMusic(songs[_songSelection]); 
+
+        /* print to console */
+        // System.out.println("Song selected is: " + songs[_songSelection] + ".  Press left/right on d-pad to change.");
     }
 }
