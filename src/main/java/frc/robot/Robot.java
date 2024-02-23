@@ -7,7 +7,10 @@ package frc.robot;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.hal.AllianceStationID;
+import edu.wpi.first.hal.REVPHFaults;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +28,8 @@ import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.SafeMotor.IdleMode;
+import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 /**
@@ -34,8 +39,8 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
  * directory.
  */
 public class Robot extends TimedRobot {
-    private final SwerveDrive drive = new SwerveDrive(true);
-    // private final IntakeWheel intakeWheel = new IntakeWheel(false);
+    // private final SwerveDrive drive = new SwerveDrive(true);
+    // private final IntakeWheel intakeWheel = new IntakeWheel(true);
     // private final IntakeDropDown dropDown = new IntakeDropDown(false);
     // private final Intake intake = new Intake(dropDown, intakeWheel);
     // private final Shooter shooter = new Shooter(true);
@@ -51,8 +56,8 @@ public class Robot extends TimedRobot {
     
     // private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer(
-        drive
-        // intake,
+        // drive
+        // intake
         // shooter
         // claw,
         // climb
@@ -146,8 +151,21 @@ public class Robot extends TimedRobot {
         //         ShuffleboardValue.create(0.0, "VoltageL", Shooter.class.getSimpleName())
         //             .build())
         // );
+        robotContainer.configureTalonMotorBindings(
+            new SafeTalonFX(
+            15,
+            true,
+            IdleMode.Coast,
+            ShuffleboardValue.create(true, "Is Enabled", IntakeWheel.class.getSimpleName())
+                    .withWidget(BuiltInWidgets.kToggleSwitch)
+                    .build(),
+                ShuffleboardValue.create(0.0, "Voltage", IntakeWheel.class.getSimpleName())
+                    .build()
+        )
+        );
         // robotContainer.configureTeleOpBindings( );
         // robotContainer.configureShooterTestBindings();
+
         robotContainer.configureDriveBindings();
         // robotContainer.configureTeleOpDriverOnlyBindings();
     }

@@ -20,6 +20,7 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class RobotContainer {
@@ -32,7 +33,7 @@ public class RobotContainer {
 		.withWidget(BuiltInWidgets.kTextView)
 		.build();
 
-	private final SwerveDrive drive;
+	// private final SwerveDrive drive;
 	// private final Intake intake;
 	// private final Shooter shooter;
 	// private final Claw claw;
@@ -40,15 +41,15 @@ public class RobotContainer {
 	// private final Vision vision;
 	// private final Light light;
 	public RobotContainer(
-		SwerveDrive drive
-		// Intake intake,
+		// SwerveDrive drive
+		// Intake intake
 		// Shooter shooter
 		// Claw claw,
 		// Climb climb
 		// Vision vision,
 		// Light light
 		) {
-			this.drive = drive;
+			// this.drive = drive;
 			// this.intake = intake;
 			// this.shooter = shooter;
 			// this.claw = claw;
@@ -102,6 +103,22 @@ public class RobotContainer {
 
 	}
 
+	public void configureIntakeTestBindings(){
+		// operator.rightTrigger()
+		// 	.onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER))
+		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		// operator.leftTrigger()
+		// 	.onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER))
+		// 	.onFalse(intake.setPositionCommand(Intake.Value.START));
+	}
+	public void configureTalonMotorBindings(SafeTalonFX motor){
+		operator.rightTrigger()
+			.onTrue(new InstantCommand(()-> motor.setPower(.5)))
+			.onFalse(new InstantCommand(()-> motor.setPower(0)));
+		operator.leftTrigger()
+			.onTrue(new InstantCommand(()-> motor.setPower(-.5)))
+			.onFalse(new InstantCommand(()-> motor.setPower(0)));
+	}
 	public void configureShooterTestBindings(){
 		// operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
 		// 	.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
@@ -117,15 +134,15 @@ public class RobotContainer {
 
 	public void configureDriveBindings() {
 
-			drive.setDefaultCommand(
-				new SwerveDriveTeleop(
-					drive,
-					driver::getLeftX,
-					driver::getLeftY,
-					driver::getRightX,
-					driver.rightBumper(),
-					driver.start()
-			));
+			// drive.setDefaultCommand(
+			// 	new SwerveDriveTeleop(
+			// 		drive,
+			// 		driver::getLeftX,
+			// 		driver::getLeftY,
+			// 		driver::getRightX,
+			// 		driver.rightBumper(),
+			// 		driver.start()
+			// ));
 				
 	}
 	// public void configureTestBindings(){}
