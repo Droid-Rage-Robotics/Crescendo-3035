@@ -40,3 +40,11 @@ April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/
 
 Extra Ideas:
 - Lights: Add lights to have the robot tell us any errors with can, etc; Make LEDs show Errors
+
+
+
+Simple Changes:
+Force Motor Implementation of Direction and coast/brake
+Have subsystems go through to get parameters
+Finish Kraken Drive/Neo Turn
+Test Music
