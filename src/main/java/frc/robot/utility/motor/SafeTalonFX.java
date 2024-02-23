@@ -1,6 +1,10 @@
 package frc.robot.utility.motor;
 
+import com.ctre.phoenix6.Orchestra;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.RobotController;
@@ -8,15 +12,31 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SafeTalonFX extends SafeMotor{
     private final TalonFX motor;
+    private final Orchestra orchestra;
 
-    public SafeTalonFX(int deviceNumber, String canbus, ShuffleboardValue<Boolean> isEnabled, ShuffleboardValue<Double> outputWriter) {
-        super(isEnabled, outputWriter);
-        motor = new TalonFX(deviceNumber, canbus);
-    }
-
-    public SafeTalonFX(int deviceNumber, ShuffleboardValue<Boolean> isEnabled, ShuffleboardValue<Double> outputWriter) {
+    public SafeTalonFX(int deviceNumber, boolean isInverted, 
+        IdleMode mode, ShuffleboardValue<Boolean> isEnabled, 
+        ShuffleboardValue<Double> outputWriter) {
         super(isEnabled, outputWriter);
         motor = new TalonFX(deviceNumber);
+        
+        TalonFXConfiguration configuration = new TalonFXConfiguration();
+        if(isInverted){
+            configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        } else {
+            configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        }
+        motor.setNeutralMode(switch (mode) {
+            case Brake -> NeutralModeValue.Brake;
+            case Coast -> NeutralModeValue.Coast;
+        });
+        configuration.Audio.AllowMusicDurDisable = false; //true
+        // configuration.Feedback.SensorToMechanismRatio = 1;
+
+        orchestra = new Orchestra();
+        orchestra.addInstrument(motor);
+        orchestra.loadMusic("Test.chrp"); // Can Load ALL Music in a array
+        motor.getConfigurator().apply(configuration);
     }
 
 
@@ -39,10 +59,10 @@ public class SafeTalonFX extends SafeMotor{
 
     @Override
     public void setIdleMode(IdleMode mode) {
-        motor.setNeutralMode(switch (mode) {
-            case Brake -> NeutralModeValue.Brake;
-            case Coast -> NeutralModeValue.Coast;
-        });
+        // motor.setNeutralMode(switch (mode) {
+        //     case Brake -> NeutralModeValue.Brake;
+        //     case Coast -> NeutralModeValue.Coast;
+        // });
     }
 
     public double getVelocity() {
@@ -56,5 +76,20 @@ public class SafeTalonFX extends SafeMotor{
     public void setPosition(double position) {
         motor.setPosition(position);
     }
-}
 
+    public TalonFXConfigurator getConfigurator(){
+        return motor.getConfigurator();
+    }
+
+    public void playMusic(){
+        orchestra.play();
+    }
+
+    public void pauseMusic(){
+        orchestra.pause();
+    }
+
+    public void stopMusic(){
+        orchestra.stop();
+    }
+}
