@@ -2,6 +2,7 @@ package frc.robot.subsystems.claw.clawPivot;
 
 import com.revrobotics.SparkAbsoluteEncoder;
 
+import frc.robot.subsystems.claw.Claw;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class ClawPivotAbsolute extends ClawPivotMotionProfiled {
@@ -10,7 +11,8 @@ public class ClawPivotAbsolute extends ClawPivotMotionProfiled {
         public static double OFFSET = Math.PI / 2;  //90 Degree
     }
     SparkAbsoluteEncoder absoluteEncoder;
-    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", ClawPivot.class.getSimpleName())
+    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", 
+        Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
     public ClawPivotAbsolute(Boolean isEnabled) {

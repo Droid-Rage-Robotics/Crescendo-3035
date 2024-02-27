@@ -57,14 +57,16 @@ public class ClawIntake extends SubsystemBase {
         motor = new SafeCanSparkMax(
             19,
             MotorType.kBrushless,
+            true,
+            IdleMode.Coast,
+            1,
+            1,
             ShuffleboardValue.create(isEnabled, "Is Enabled", ClawIntake.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
                 ShuffleboardValue.create(0.0, "Voltage", ClawIntake.class.getSimpleName())
                     .build()
         );
-        motor.setIdleMode(IdleMode.Coast);
-        motor.setInverted(true);
 
         controller = new PIDController(
             0.0003,//0.0003 

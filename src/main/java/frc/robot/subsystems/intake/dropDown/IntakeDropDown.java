@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
@@ -24,7 +25,7 @@ public class IntakeDropDown extends SubsystemBase {
     }
 
 
-    protected final SafeCanSparkMax motor;
+    protected final SafeTalonFX motor;
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
     protected final DigitalInput intakeLimitSwitch;
@@ -43,21 +44,18 @@ public class IntakeDropDown extends SubsystemBase {
         .build();
     
     public IntakeDropDown(Boolean isEnabled) {
-        motor = new SafeCanSparkMax(
+        motor = new SafeTalonFX(
             6, //16?
-            MotorType.kBrushless,
+            true,
+            IdleMode.Coast,
+            Constants.ROTATIONS_TO_RADIANS,
+            Constants.ROTATIONS_TO_RADIANS,
             ShuffleboardValue.create(isEnabled, "Drop Is Enabled", Intake.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             ShuffleboardValue.create(0.0, "Drop Voltage", Intake.class.getSimpleName())
                 .build()
         );
-        motor.setIdleMode(IdleMode.Coast);//TODO:Make it brake 
-
-        // encoder = motor.getEncoder();
-        motor.getEncoder().setPositionConversionFactor(Constants.ROTATIONS_TO_RADIANS);
-        motor.getEncoder().setVelocityConversionFactor(Constants.ROTATIONS_TO_RADIANS);
-  
 
         controller = new PIDController(0.1, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(0.1));//How Much?
@@ -72,7 +70,6 @@ public class IntakeDropDown extends SubsystemBase {
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Intake Drop Encoder", 
             Intake.class.getSimpleName());
 
-        motor.burnFlash();
         intakeLimitSwitch = new DigitalInput(0);//WHERE is it plugged in
     }
 
@@ -111,17 +108,17 @@ public class IntakeDropDown extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        motor.getEncoder().setPosition(0);
+        motor.setPosition(0);
     }
 
     public double getEncoderPosition() {
-        double position = motor.getEncoder().getPosition();
+        double position = motor.getPosition();
         encoderPositionWriter.write(position);
         return position;
     }
 
     public double getEncoderVelocity() {
-        double velocity = motor.getEncoder().getVelocity();
+        double velocity = motor.getVelocity();
         encoderVelocityWriter.write(velocity);
         return velocity;
     }

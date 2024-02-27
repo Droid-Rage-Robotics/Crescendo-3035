@@ -1,6 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -9,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.commands.LightCommand.IntakeState;
-import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -38,14 +36,16 @@ public class IntakeWheel extends SubsystemBase {
 
     public IntakeWheel(Boolean isEnabled) {
         intake = new SafeTalonFX(
-            15,
+            15, //16?
             true,
             IdleMode.Coast,
+            Constants.ROTATIONS_TO_RADIANS,
+            Constants.ROTATIONS_TO_RADIANS,
             ShuffleboardValue.create(isEnabled, "Is Enabled Wheel", Intake.class.getSimpleName())
-                    .withWidget(BuiltInWidgets.kToggleSwitch)
-                    .build(),
-                ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
-                    .build()
+                .withWidget(BuiltInWidgets.kToggleSwitch)
+                .build(),
+            ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
+                .build()
         );
         // intakeEncoder = intake.getEncoder();
 

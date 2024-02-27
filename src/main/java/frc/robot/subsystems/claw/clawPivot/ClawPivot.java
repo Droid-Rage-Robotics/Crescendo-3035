@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
+import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
@@ -22,72 +23,52 @@ public class ClawPivot extends SubsystemBase {
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
 
-    //  public enum Position implements ShuffleboardValueEnum<Double> {
-    //     SHOOTER_TRANSFER(-3000),
-    //     HOME(2300),
-    //     HUMAN_PLAYER (200),
-    //     AMP (200),
-    //     TRAP (0)
-    //     ;
-
-    //     private final ShuffleboardValue<Double> position;
-    //     private Position(double position) {
-    //         this.position = ShuffleboardValue.create(position, Position.class.getSimpleName()+"/"+name()+": Velocity (RPM)", Intake.class.getSimpleName())
-    //             .withSize(1, 3)
-    //             .build();
-    //     }
-    //     @Override
-    //     public ShuffleboardValue<Double> getNum() {
-    //         return position;
-    //     }
-    // }
-
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
-    // protected final RelativeEncoder encoder;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", ClawPivot.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", ClawPivot.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Moving manually", ClawPivot.class.getSimpleName())
+        ShuffleboardValue.create(false, "Moving manually", Claw.class.getSimpleName())
         .build();
     
     public ClawPivot(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             18, 
             MotorType.kBrushless,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", ClawPivot.class.getSimpleName())
+            false,
+            IdleMode.Brake,
+            Constants.ROTATIONS_TO_RADIANS,
+            1.0,
+            ShuffleboardValue.create(isEnabled, "Is Enabled", Claw.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Voltage", ClawPivot.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Voltage", Claw.class.getSimpleName())
                 .build()
         );
-        motor.setIdleMode(IdleMode.Coast);//TODO: Make it brake 
-        motor.setInverted(false);
+
         // encoder = motor.getEncoder();
-        motor.getEncoder().setPositionConversionFactor(Constants.ROTATIONS_TO_RADIANS);
-        motor.getEncoder().setVelocityConversionFactor(Constants.ROTATIONS_TO_RADIANS);
   
 
         controller = new PIDController(0.0, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(0.1));//How Much?
 
-        // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);
+        feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);//Old Values
         // feedforward = new ArmFeedforward(0, 0,0);
 
-        ComplexWidgetBuilder.create(controller, "PID Controller", ClawPivot.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "PID Controller", Claw.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset encoder", ClawPivot.class.getSimpleName());
+        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset encoder", Claw.class.getSimpleName());
 
         motor.burnFlash();
     }

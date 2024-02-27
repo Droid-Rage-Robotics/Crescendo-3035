@@ -43,6 +43,10 @@ public class ClawElevator extends SubsystemBase {
         leftMotor = new SafeCanSparkMax(
             16, 
             MotorType.kBrushless,
+            false,
+            IdleMode.Brake,
+            Constants.ROT_TO_INCHES,
+            1.0,
             ShuffleboardValue.create(isEnabledLeft, "Is Enabled Left", ClawElevator.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
@@ -51,21 +55,16 @@ public class ClawElevator extends SubsystemBase {
         rightMotor = new SafeCanSparkMax(
             15, 
             MotorType.kBrushless,
+            true,
+            IdleMode.Brake,
+            Constants.ROT_TO_INCHES,
+            1.0,
             ShuffleboardValue.create(isEnabledRight, "Is Enabled Right", ClawElevator.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             voltage
         );
-        leftMotor.setIdleMode(IdleMode.Brake);
-        rightMotor.setIdleMode(IdleMode.Brake);
         
-        leftMotor.setInverted(false);
-        rightMotor.follow(leftMotor, true);
-        // rightMotor.setInverted(true);
-        
-        leftMotor.getEncoder().setPositionConversionFactor(Constants.ROT_TO_INCHES);
-        rightMotor.getEncoder().setPositionConversionFactor(Constants.ROT_TO_INCHES);
-
         controller.setTolerance(0.1);
 
         ComplexWidgetBuilder.create(controller, " PID Controller", ClawElevator.class.getSimpleName())

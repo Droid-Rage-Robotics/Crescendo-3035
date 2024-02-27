@@ -49,7 +49,6 @@ public class Constants {
     
     private final PIDController shooterController;
     private final SimpleMotorFeedforward feedforward;
-    // private final RelativeEncoder shooterEncoder, hoodEncoder;
     
     private final ShuffleboardValue<Boolean> isEnabled;
 
@@ -61,6 +60,10 @@ public class Constants {
         motorL = new SafeCanSparkMax(
             14,
             MotorType.kBrushless,
+            false,
+            IdleMode.Coast,
+            1,
+            1,
             this.isEnabled,
                 ShuffleboardValue.create(0.0, "VoltageL", Shooter.class.getSimpleName())
                     .build()
@@ -68,19 +71,19 @@ public class Constants {
         motorR = new SafeCanSparkMax(
             15,
             MotorType.kBrushless,
+            false,
+            IdleMode.Coast,
+            1,
+            1,
             this.isEnabled,
                 ShuffleboardValue.create(0.0, "VoltageR", Shooter.class.getSimpleName())
                     .build() 
         );
-        motorL.setInverted(false);
-        motorR.setInverted(false);
-        // motorL.follow(motorR, false);
+       
         shooterController = new PIDController(
             0.00005,//0.000173611    //.00005
             0,
             0);
-        motorL.setIdleMode(IdleMode.Coast);
-        motorR.setIdleMode(IdleMode.Coast);
         feedforward = new SimpleMotorFeedforward(0.000,0,0);
         shooterController.setTolerance(ShooterSpeeds.POSITION_TOLERANCE.get());
     }

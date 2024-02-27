@@ -52,12 +52,15 @@ public class Climb extends SubsystemBase{
     protected final ShuffleboardValue<Boolean> isMovingManually = ShuffleboardValue.create(false, "Moving manually", Climb.class.getSimpleName())
         .build();
 
-    private final RelativeEncoder encoder;
 
     public Climb(Boolean isEnabledLeft, Boolean isEnabledRight) {
         motorL = new SafeCanSparkMax(
             16, 
             MotorType.kBrushless,
+            false,
+            IdleMode.Brake,
+            Constants.ROT_TO_INCHES,
+            1.0,
             ShuffleboardValue.create(isEnabledLeft, "Is Enabled Left", Climb.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
@@ -67,22 +70,15 @@ public class Climb extends SubsystemBase{
         motorR = new SafeCanSparkMax(
             15, 
             MotorType.kBrushless,
+            true,
+            IdleMode.Brake,
+            Constants.ROT_TO_INCHES,
+            1.0,
             ShuffleboardValue.create(isEnabledRight, "Is Enabled Right", Climb.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             voltageWriter
         );
-        motorL.setIdleMode(IdleMode.Brake);
-        motorR.setIdleMode(IdleMode.Brake);
-        motorL.setInverted(false);
-        motorR.setInverted(true);
-        // motorR.follow(leftMotor, true);
-        
-        controller.setTolerance(0.1);
-
-        encoder = motorL.getEncoder();
-        // encoder = rightMotor.getEncoder();
-        encoder.setPositionConversionFactor(Constants.ROT_TO_INCHES);
 
         ComplexWidgetBuilder.create(controller, " PID Controller", Climb.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
@@ -136,12 +132,12 @@ public class Climb extends SubsystemBase{
 
     
     public void resetEncoder() {
-        encoder.setPosition(0);
+        motorL.getEncoder().setPosition(0);
     }
 
     
     public double getEncoderPosition() {
-        double position = encoder.getPosition();
+        double position = motorL.getPosition(); //If You want to Change what motor is giving the values
         encoderPositionWriter.write(position);
         return position;
     }

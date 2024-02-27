@@ -38,11 +38,11 @@ public class Intake {
 
         private Value(double pivotAngle, double intakeSpeeds) {
             this.pivotAngle = ShuffleboardValue.create(pivotAngle, 
-                IntakeWheel.class.getSimpleName()+"/"+name()+"/Intake Dropdown Angle", "Misc")
+                Intake.class.getSimpleName()+"/"+name()+"/Intake Dropdown Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.intakeSpeeds = ShuffleboardValue.create(intakeSpeeds, 
-            IntakeWheel.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
+            Intake.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
                 .withSize(1, 3)
                 .build();
         }
@@ -51,11 +51,11 @@ public class Intake {
         private Value(Value copyValue) {
             // Value value = copyValue;
             this.pivotAngle = ShuffleboardValue.create(copyValue.getAngle(), 
-                IntakeWheel.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
+                Intake.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.intakeSpeeds = ShuffleboardValue.create(copyValue.getIntakeSpeeds(), 
-                IntakeWheel.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
+                Intake.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
                 .withSize(1, 3)
                 .build();
         }

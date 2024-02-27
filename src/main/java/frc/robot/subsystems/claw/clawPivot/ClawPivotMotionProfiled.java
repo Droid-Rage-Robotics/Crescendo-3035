@@ -3,6 +3,7 @@ package frc.robot.subsystems.claw.clawPivot;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.claw.Claw;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class ClawPivotMotionProfiled extends ClawPivot {
@@ -15,9 +16,9 @@ public class ClawPivotMotionProfiled extends ClawPivot {
     protected TrapezoidProfile.State state;
     protected TrapezoidProfile.State goal;
 
-    protected final ShuffleboardValue<Double> goalPositionWriter = ShuffleboardValue.create(0.0, "Goal Position", ClawPivot.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> goalVelocityWriter = ShuffleboardValue.create(0.0, "Goal Velocity", ClawPivot.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create(0.0, "Target Velocity", ClawPivot.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> goalPositionWriter = ShuffleboardValue.create(0.0, "Goal Position", Claw.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> goalVelocityWriter = ShuffleboardValue.create(0.0, "Goal Velocity", Claw.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create(0.0, "Target Velocity", Claw.class.getSimpleName()).build();
     
     public ClawPivotMotionProfiled(Boolean isEnabled) {
         super(isEnabled);
