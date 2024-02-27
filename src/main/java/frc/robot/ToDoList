@@ -1,50 +1,35 @@
 
 TODO:
-- Limelight Tracking
-        Change Shooter targetVelocity
-        Align Drivetrain
-
-- PathPlannerFollow.java and Auto -Lucky: NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
-
-- Robot Tracking on Field
-- Field Centric Turning
-- Lights: Add lights to have the robot tell us any errors with can, etc; Make LEDs show Errors
-- Extension automatically commit any code when pushing code to bot (added it) - need to see if 
-- SubsystemCheck Command??
-- Fix the PathPlanner Auto Code
 - Update Radios: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/radio-programming.html#prerequisites 
 - Heading Direction of Drivetrain after Auto 
-internal issue with print error and tags  - https://docs.wpilib.org/en/stable/docs/yearly-overview/known-issues.html
-PathPlanner; https://www.chiefdelphi.com/t/path-planner-command-help/451743/2
-URGENT TODO BEFORE COMP: Update to latest WPILib
 On ALL Subsystems:
 - Have the 2 commands and one protected
 - Positions/Velocity
 - Min/Max Position
 - Check FeedForward/PID calculations
 
-Non Urget ToDos:
-FIX the Motors in same file from having hte same shuffle board names
-Fix AutoChooser
-Make and extended Subsystems to have protected instead of private
-What does the Driver.getGameSpecificMessage()?
-Add lights to have the robot tell us any errors with can, etc.
+Non Urgent ToDos:
+- FIX the Motors in same file from having hte same shuffle board names
+- Make and extended Subsystems to have protected instead of private
 
 Test:
-- Limelight AutoAim.java
+- Limelight Tracking AutoAim.java
 - Make all of the writes that are not necessary during a match be in a practice only writers (Helps prevent the likelihood of loop overruns)
 - Limit Switch to the Intake
-
+- does Pathplannerfollow work?
+- Test Software Switch on Shuffleboard to see if it work
+- Test NamedCommands
 Done:
-April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38 (kind of)
+April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
 
 Extra Ideas:
 - Lights: Add lights to have the robot tell us any errors with can, etc; Make LEDs show Errors
+- Driver.getGameSpecificMessage()
+- SubsystemCheck Command??
+- Extension automatically commit any code when pushing code to bot (added it) - need to see if 
+- Robot Tracking on Field
+- Field Centric Turning
 
-
-
-Simple Changes:
-Force Motor Implementation of Direction and coast/brake
-Have subsystems go through to get parameters
-Finish Kraken Drive/Neo Turn
-Test Music
+Non Urgent ToDos:
+- Fix the Motors in same file from having hte same shuffle board names
+- Make and extended Subsystems to have protected instead of private
