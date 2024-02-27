@@ -10,19 +10,35 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SafeCanSparkMax extends SafeMotor {
     private final CANSparkMax motor;
-    public SafeCanSparkMax(int deviceId, MotorType type, 
-        ShuffleboardValue<Boolean> isEnabled, 
-        ShuffleboardValue<Double> outputWriter) {
-        super(isEnabled, outputWriter);
-        motor = new CANSparkMax(deviceId, type);
-    }
-    public SafeCanSparkMax(int deviceId, MotorType type, 
+    public SafeCanSparkMax(
+        int deviceId, 
+        MotorType type, 
         boolean isInverted,
+        IdleMode mode,
+        double positionConversionFactor,
+        double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
         ShuffleboardValue<Double> outputWriter) {
         super(isEnabled, outputWriter);
         motor = new CANSparkMax(deviceId, type);
+        motor.setInverted(isInverted);
+        setIdleMode(mode);
+        motor.getEncoder().setPositionConversionFactor(positionConversionFactor);
+        motor.getEncoder().setVelocityConversionFactor(velocityConversionFactor);
+
+
     }
+    // public SafeCanSparkMax(int deviceId, MotorType type, 
+    //     boolean isInverted
+    //     ,
+    //     IdleMode mode,
+    //     double positionConversionFactor,
+    //     double velocityConversionFactor,
+    //     ShuffleboardValue<Boolean> isEnabled, 
+    //     ShuffleboardValue<Double> outputWriter) {
+    //     super(isEnabled, outputWriter);
+    //     motor = new CANSparkMax(deviceId, type);
+    // }
 
     @Override
     public void setPower(double power) {
@@ -42,13 +58,13 @@ public class SafeCanSparkMax extends SafeMotor {
             else motor.setVoltage(outputVolts);
     }
 
-    @Override
-    public void setInverted(boolean isInverted) {
-        motor.setInverted(isInverted);
-    }
+    // @Override
+    // public void setInverted(boolean isInverted) {
+    //     motor.setInverted(isInverted);
+    // }
 
     @Override
-    public void setIdleMode(IdleMode mode) {
+    public void setIdleMode(SafeMotor.IdleMode mode) {
         motor.setIdleMode(switch (mode) {
             case Brake -> CANSparkMax.IdleMode.kBrake;
             case Coast -> CANSparkMax.IdleMode.kCoast;
@@ -64,9 +80,19 @@ public class SafeCanSparkMax extends SafeMotor {
         return motor.getEncoder();
     }    
 
-    // public double getVelocity() {
-    //     return motor.getEncoder().getVelocity();
-    // }
+    @Override
+    public double getPosition() {
+        return motor.getEncoder().getPosition();
+    }
+
+    // @Override
+    // public void setPositionConversionFactor(double num) {
+    //     motor.getEncoder().setPositionConversionFactor(num);
+    // }    
+
+    public double getVelocity() {
+        return motor.getEncoder().getVelocity();
+    }
 
     public SparkAbsoluteEncoder getAbsoluteEncoder(SparkAbsoluteEncoder.Type encoderType) {
         return motor.getAbsoluteEncoder(encoderType);
@@ -88,4 +114,20 @@ public class SafeCanSparkMax extends SafeMotor {
     //     return motor.getStickyFault(FaultID.kCANRX);
     //     // return motor.getFault(FaultID.kCANTX);
     // }
+
+    @Override
+    public void set(double num){
+        motor.set(num);
+    }
+    @Override
+    public int getDeviceID(){
+        return motor.getDeviceId();
+    }
+
+    
+    // @Override
+    // public void setVelocityConversionFactor(double num) {
+    //     motor.getEncoder().setVelocityConversionFactor(num);
+    // }
 }
+

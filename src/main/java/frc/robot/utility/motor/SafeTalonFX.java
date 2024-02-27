@@ -5,13 +5,14 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MusicTone;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SafeTalonFX extends SafeMotor{
+    //Can use in relative and Absolute Encoder
+    private double velocityConversionFactor;
     private final TalonFX motor;
     private final Orchestra orchestra;
     private final MusicTone music = new MusicTone(20);
@@ -32,26 +33,21 @@ public class SafeTalonFX extends SafeMotor{
             This gives the Orchestra service time to parse chirp file.
             If play() is called immedietely after, you may get an invalid action error code. */
         private int timeToPlayLoops = 10;
-
+        private TalonFXConfiguration configuration = new TalonFXConfiguration();
 
     public SafeTalonFX(int deviceNumber, boolean isInverted, 
-        IdleMode mode, ShuffleboardValue<Boolean> isEnabled, 
+        IdleMode mode, double positionConversionFactor,
+        double velocityConversionFactor,
+        ShuffleboardValue<Boolean> isEnabled, 
         ShuffleboardValue<Double> outputWriter) {
         super(isEnabled, outputWriter);
         motor = new TalonFX(deviceNumber);
         
-        TalonFXConfiguration configuration = new TalonFXConfiguration();
-        if(isInverted){
-            configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        } else {
-            configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        }
-        motor.setNeutralMode(switch (mode) {
-            case Brake -> NeutralModeValue.Brake;
-            case Coast -> NeutralModeValue.Coast;
-        });
+        motor.setInverted(isInverted);
+        setIdleMode(mode);
         configuration.Audio.AllowMusicDurDisable = false; //true
-        // configuration.Feedback.SensorToMechanismRatio = 1;
+        configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
+        this.velocityConversionFactor = velocityConversionFactor;
 
         motor.getConfigurator().apply(configuration);
 
@@ -72,21 +68,21 @@ public class SafeTalonFX extends SafeMotor{
             else motor.set(outputVolts / RobotController.getBatteryVoltage());
     }
 
-    @Override
-    public void setInverted(boolean isInverted) {
-        motor.setInverted(isInverted);;
-    }
+    // @Override
+    // public void setInverted(boolean isInverted) {
+    //     motor.setInverted(isInverted);
+    // }
 
     @Override
     public void setIdleMode(IdleMode mode) {
-        // motor.setNeutralMode(switch (mode) {
-        //     case Brake -> NeutralModeValue.Brake;
-        //     case Coast -> NeutralModeValue.Coast;
-        // });
+        motor.setNeutralMode(switch (mode) {
+            case Brake -> NeutralModeValue.Brake;
+            case Coast -> NeutralModeValue.Coast;
+        });
     }
 
     public double getVelocity() {
-        return motor.getVelocity().getValueAsDouble();
+        return motor.getVelocity().getValueAsDouble()*velocityConversionFactor;
     }
 
     public double getPosition() {
@@ -148,5 +144,27 @@ public class SafeTalonFX extends SafeMotor{
 
         /* print to console */
         // System.out.println("Song selected is: " + songs[_songSelection] + ".  Press left/right on d-pad to change.");
+    }
+
+
+    // @Override
+    // public void setPositionConversionFactor(double num) {
+    //     configuration.Feedback.SensorToMechanismRatio = num;
+    //     //TODO:Test
+    // }
+    // @Override
+    // public void setVelocityConversionFactor(double num) {
+    //     velocityConversionFactor = num;
+    //     //TODO:Test
+    // }
+
+    @Override
+    public void set(double num){
+        motor.set(num);
+    }
+
+    @Override
+    public int getDeviceID(){
+        return motor.getDeviceID();
     }
 }
