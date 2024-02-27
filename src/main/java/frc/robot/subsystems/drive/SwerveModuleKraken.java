@@ -183,4 +183,8 @@ public class SwerveModuleKraken {
         driveMotor.setIdleMode(IdleMode.Brake);
         turnMotor.setIdleMode(IdleMode.Coast);
     }
+
+    public void playMusic(int num){
+        driveMotor.playMusic(num);
+    }
 }

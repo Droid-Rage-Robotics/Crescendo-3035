@@ -324,27 +324,11 @@ public class SwerveDrive extends SubsystemBase {
         tippingStateWriter.set(tippingState.name());
     }
 
-    private Command setSpeed(Speed speed) {
+    public Command setSpeed(Speed speed) {
         return runOnce(() -> {
             this.speed = speed;
             speedStateWriter.set(speed.name());
         });
-    }
-
-    public Command setTurboSpeed() {
-        return setSpeed(Speed.TURBO);
-    }
-
-    public Command setNormalSpeed() {
-        return setSpeed(Speed.NORMAL);
-    }
-
-    public Command setSlowSpeed() {
-        return setSpeed(Speed.SLOW);
-    }
-
-    public Command setSupserSlowSpeed() {
-        return setSpeed(Speed.SUPER_SLOW);
     }
 
 
@@ -451,5 +435,11 @@ public class SwerveDrive extends SubsystemBase {
             states[i] = swerveModules[i].getState();
         }
         return states;
+    }
+    public void playMusic(int num){
+        for (SwerveModuleKraken swerveModule: swerveModules) {
+            // swerveModule.brakeMode();
+            swerveModule.playMusic(num);
+        }
     }
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
+import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveModuleKraken;
 
 public class SwerveDriveTeleop extends Command {
@@ -32,8 +33,8 @@ public class SwerveDriveTeleop extends Command {
         this.turnLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND.get());
 
         //Slow Mode vs Fast
-        rightBumper.whileTrue(drive.setSlowSpeed())
-            .onFalse(drive.setNormalSpeed());
+        rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
+            .onFalse(drive.setSpeed(Speed.NORMAL));
         aResetButton.onTrue(new InstantCommand(()->drive.setYawCommand(0)));
 
 
