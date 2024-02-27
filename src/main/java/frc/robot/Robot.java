@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
@@ -35,7 +38,9 @@ public class Robot extends TimedRobot {
     // private final Climb climb = new Climb(true, true);
     // private final Vision vision = new Vision();
     // private final Light light = new Light();
-    // private AutoChooser autoChooser = new AutoChooser();
+    // private AutoChooser autoChooser = new AutoChooser(
+    //     drive, intake, shooter, claw, climb, vision, light
+    // );
     
     // private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer();
@@ -52,7 +57,6 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // PathPlannerServer.startServer(5811); // Use to see the Path of the robot on PathPlanner
         // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-        // autoChooser = new AutoChooser();
     }
     
     /**
@@ -69,6 +73,9 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        // if(DriverStation.isEStopped()){ //Robot Estopped
+        //     light.flashingColors(light.red, light.white);
+        // }
     }
 
     @Override
@@ -78,11 +85,12 @@ public class Robot extends TimedRobot {
     
     @Override
     public void disabledPeriodic() {
-        // if(RobotController.getBatteryVoltage()<11.5){
-        //     light.setAllColor(light.batteryBlue);
-        // } else{
-        //     light.flashingColors(light.yellow, light.blue);
-        // }
+        if(RobotController.getBatteryVoltage()<11.5){
+            // light.setAllColor(light.batteryBlue);
+            // drive.playMusic(2);
+        } else{
+            // light.flashingColors(light.yellow, light.blue);
+        }
     }
 
     @Override
@@ -145,17 +153,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-
         // robotContainer.teleopPeriodic();
-        // if(DriverStation.isEStopped()){ //Robot Estopped
-        //     light.flashingColors(light.red, light.white);
-        // }
     }
     
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
-        // robotContainer.configureTestBindings();
     }
     @Override
     public void testPeriodic() {}
