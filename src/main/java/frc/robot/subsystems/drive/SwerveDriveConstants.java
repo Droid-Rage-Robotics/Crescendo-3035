@@ -13,7 +13,7 @@ public class SwerveDriveConstants {
         MAX_ACCELERATION_UNITS_PER_SECOND(10),
         MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND(10),
 
-        MAX_SPEED_METERS_PER_SECOND(SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 4),
+        MAX_SPEED_METERS_PER_SECOND(SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 4),
         MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() / 10),
         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED(1),
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
@@ -47,13 +47,14 @@ public class SwerveDriveConstants {
         public ShuffleboardValue<Double> getNum() { return shuffleboardValue; }
     }
 
-    public enum TeleOpOptions implements ShuffleboardValueEnum<Boolean> { 
+    public enum DriveOptions implements ShuffleboardValueEnum<Boolean> { 
         IS_FIELD_ORIENTED(true),
         IS_SQUARED_INPUTS(true),
+        IS_ENABLED(true)
         ;
         private final ShuffleboardValue<Boolean> shuffleboardValue;
-        private TeleOpOptions(boolean value) {
-            shuffleboardValue = ShuffleboardValue.create(value, TeleOpOptions.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName()).build();
+        private DriveOptions(boolean value) {
+            shuffleboardValue = ShuffleboardValue.create(value, DriveOptions.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName()).build();
         } 
         @Override 
         public ShuffleboardValue<Boolean> getNum() { return shuffleboardValue; }

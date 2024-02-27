@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
-import frc.robot.subsystems.drive.SwerveModule;
+import frc.robot.subsystems.drive.SwerveModuleKraken;
 
 public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
@@ -112,12 +112,12 @@ public class SwerveDriveTeleop extends Command {
         xSpeed = 
             // xLimiter.calculate(xSpeed) * 
             xSpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+            SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
             drive.getTranslationalSpeed();
         ySpeed = 
             // yLimiter.calculate(ySpeed) *
             ySpeed *
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+            SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
             drive.getTranslationalSpeed();
         turnSpeed = 
             // turnLimiter.calculate(turnSpeed) * 

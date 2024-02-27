@@ -2,22 +2,14 @@ package frc.robot.subsystems.drive;
 
 import java.util.function.Supplier;
 
+import javax.management.DescriptorKey;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-// import com.ctre.phoenix.sensors.CANCoder;
-// import com.ctre.phoenix.sensors.CANCoderConfiguration;
-// import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-// import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.revrobotics.CANSparkMax;
-// import com.ctre.phoenix6.configs.CANcoderConfiguration;
-// import com.ctre.phoenix6.configs.CANcoderConfigurator;
-// import com.ctre.phoenix6.hardware.CANcoder;
-// import com.ctre.phoenix6.signals.MagnetHealthValue;
-// import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -26,9 +18,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.SafeMotor.IdleMode;
+import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class SwerveModule {
+public class SwerveModuleNeo {
+    @Deprecated
     public static class Constants {
         public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
         public static final double DRIVE_MOTOR_GEAR_RATIO = 1 / 6.75;
@@ -39,7 +36,7 @@ public class SwerveModule {
         public static final double READINGS_PER_REVOLUTION = 1;//4096
         public static final double TURN_ENCODER_ROT_2_RAD = 2 * Math.PI / READINGS_PER_REVOLUTION;
 
-        // public static final double TURN_P = 0.0005;//0.5
+        public static final double TURN_P = 0.001;//0.5
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
 
@@ -48,20 +45,17 @@ public class SwerveModule {
         private static final double DRIVE_KS = 0.18966; //this value is the voltage that iwll be constantly applied
     }
 
-    private final CANSparkMax driveMotor;
-    private final CANSparkMax turnMotor;
+    private final SafeCanSparkMax driveMotor,turnMotor;
 
-    private final Supplier<Double> absoluteEncoderOffsetRad;
     private final CANcoder turnEncoder;
     private final PIDController turningPidController;
     private final SimpleMotorFeedforward feedforward;
 
     // private final double driveSpeedMultiplier;
-
-    public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
-            int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad, boolean absoluteEncoderReversed) {
+    @Deprecated
+    public SwerveModuleNeo(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
+            int absoluteEncoderId, Supplier<Double> absoluteEncoderOffsetRad, boolean absoluteEncoderReversed, boolean isEnabled) {
         
-        this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
 
         turnEncoder = new CANcoder(absoluteEncoderId);
         CANcoderConfiguration config = new CANcoderConfiguration();
@@ -74,17 +68,30 @@ public class SwerveModule {
         config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         turnEncoder.getConfigurator().apply(config);
         //TODO: FIGURE Out whether I need to manually change from rotation to radians?
-        driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
-        turnMotor = new CANSparkMax(turnMotorId, MotorType.kBrushless);
+        driveMotor = new SafeCanSparkMax(turnMotorId, MotorType.kBrushless,
+             driveMotorReversed,
+            IdleMode.Coast,
+            Constants.DRIVE_ENCODER_ROT_2_METER,
+            1.0,
+            ShuffleboardValue.create(isEnabled, "Drive Is Enabled", SwerveDrive.class.getSimpleName())
+                    .withWidget(BuiltInWidgets.kToggleSwitch)
+                    .build(),
+            ShuffleboardValue.create(0.0, "Turn Voltage", SwerveDrive.class.getSimpleName())
+                .build());
+        turnMotor = new SafeCanSparkMax(turnMotorId, MotorType.kBrushless,
+            turningMotorReversed,
+            IdleMode.Coast,
+            Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC,
+            1.0,
+            ShuffleboardValue.create(isEnabled, "Turn Is Enabled", SwerveDrive.class.getSimpleName())
+                    .withWidget(BuiltInWidgets.kToggleSwitch)
+                    .build(),
+            ShuffleboardValue.create(0.0, "Turn Voltage", SwerveDrive.class.getSimpleName())
+                .build());
 
-        driveMotor.setInverted(driveMotorReversed);
-        turnMotor.setInverted(turningMotorReversed);
-
-        driveMotor.getEncoder().setPositionConversionFactor(Constants.DRIVE_ENCODER_ROT_2_METER);
-        driveMotor.getEncoder().setVelocityConversionFactor(Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC);
-// Constants.TURN_P
-        turningPidController = new PIDController(0.1, 0.0, 0.0);
-        turningPidController.enableContinuousInput(-Math.PI, Math.PI);
+        
+        turningPidController = new PIDController(Constants.TURN_P, 0.0, 0.0);
+        turningPidController.enableContinuousInput(0, 2*Math.PI);//Was  -Math.PI, Math.PI but changed to 0 and 2PI
 
         feedforward = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV);
 
@@ -96,8 +103,7 @@ public class SwerveModule {
     }
 
     public double getTurningPosition() {
-        return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);// + absoluteEncoderOffsetRad.get();
-        // return turnEncoder.getAbsolutePosition().getValueAsDouble() + absoluteEncoderOffsetRad.get();
+        return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
     }
 
     public double getDriveVelocity(){
@@ -133,7 +139,7 @@ public class SwerveModule {
         driveMotor.set(state.speedMetersPerSecond / Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
         turnMotor.set((turningPidController.calculate(getTurningPosition(), state.angle.getRadians()))*1);
         SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.toString());
-        SmartDashboard.putString("Swerve[" + turnMotor.getDeviceId() + "] state", state.toString());
+        SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", state.toString());
     }
 
     public void setFeedforwardState(SwerveModuleState state) {
@@ -145,7 +151,7 @@ public class SwerveModule {
         driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
         turnMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.toString());
-        SmartDashboard.putString("Swerve[" + turnMotor.getDeviceId() + "] state", state.toString());
+        SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", state.toString());
     }
 
     public void stop(){
@@ -154,17 +160,18 @@ public class SwerveModule {
     }
 
     public void coastMode() {
-        driveMotor.setIdleMode(IdleMode.kCoast);
-        turnMotor.setIdleMode(IdleMode.kCoast);
+        driveMotor.setIdleMode(IdleMode.Coast);
+        turnMotor.setIdleMode(IdleMode.Coast);
     }
 
     public void brakeMode() {
-        driveMotor.setIdleMode(IdleMode.kBrake);
-        turnMotor.setIdleMode(IdleMode.kBrake);
+        driveMotor.setIdleMode(IdleMode.Brake);
+        turnMotor.setIdleMode(IdleMode.Brake);
     }
 
     public void brakeAndCoastMode() {
-        driveMotor.setIdleMode(IdleMode.kBrake);
-        turnMotor.setIdleMode(IdleMode.kCoast);
+        driveMotor.setIdleMode(IdleMode.Brake);
+        turnMotor.setIdleMode(IdleMode.Coast);
     }
 }
+

@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.subsystems.drive.SwerveDriveConstants.TeleOpOptions;
+import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -49,7 +49,7 @@ public class SwerveDrive extends SubsystemBase {
 
     
     
-    private final SwerveModule frontRight = new SwerveModule(
+    private final SwerveModuleKraken frontRight = new SwerveModuleKraken(
         3,
         2,
 
@@ -58,9 +58,10 @@ public class SwerveDrive extends SubsystemBase {
 
         10, 
         SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        true
+        true,
+        DriveOptions.IS_ENABLED.get()
     );
-    private final SwerveModule backRight = new SwerveModule(
+    private final SwerveModuleKraken backRight = new SwerveModuleKraken(
         5,
         4,
 
@@ -69,9 +70,10 @@ public class SwerveDrive extends SubsystemBase {
 
         11, 
         SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        true
+        true,
+        DriveOptions.IS_ENABLED.get()
     );
-    private final SwerveModule backLeft = new SwerveModule(
+    private final SwerveModuleKraken backLeft = new SwerveModuleKraken(
         7,
         6,
 
@@ -80,9 +82,10 @@ public class SwerveDrive extends SubsystemBase {
 
         12, 
         SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        true
+        true,
+        DriveOptions.IS_ENABLED.get()
     );
-    private final SwerveModule frontLeft = new SwerveModule(
+    private final SwerveModuleKraken frontLeft = new SwerveModuleKraken(
         9,
         8,
 
@@ -91,9 +94,10 @@ public class SwerveDrive extends SubsystemBase {
 
         13, 
         SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        true
+        true,
+        DriveOptions.IS_ENABLED.get()
     );
-    private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
+    private final SwerveModuleKraken[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
 
     private final Pigeon2 pigeon2 = new Pigeon2(14);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();;
@@ -152,7 +156,7 @@ public class SwerveDrive extends SubsystemBase {
     private final Field2d field2d = new Field2d();
 
     public SwerveDrive(Boolean isEnabled) {
-        for (SwerveModule swerveModule: swerveModules) {
+        for (SwerveModuleKraken swerveModule: swerveModules) {
             // swerveModule.brakeMode();
             swerveModule.coastMode();
             // swerveModule.brakeAndCoast^Mode();
@@ -170,8 +174,6 @@ public class SwerveDrive extends SubsystemBase {
 
         ComplexWidgetBuilder.create(field2d, "Field", SwerveDrive.class.getSimpleName());
         this.isEnabled.set(isEnabled);
-
-        
         
     }
 
@@ -250,11 +252,11 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public boolean isFieldOriented() {
-        return TeleOpOptions.IS_FIELD_ORIENTED.get();
+        return DriveOptions.IS_FIELD_ORIENTED.get();
     }
 
     public boolean isSquaredInputs() {
-        return TeleOpOptions.IS_SQUARED_INPUTS.get();
+        return DriveOptions.IS_SQUARED_INPUTS.get();
     }
 
     public double getTranslationalSpeed() {
@@ -291,7 +293,7 @@ public class SwerveDrive extends SubsystemBase {
         if (!isEnabled.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
+            SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
         );
 
         for (int i = 0; i < 4; i++) {
@@ -303,7 +305,7 @@ public class SwerveDrive extends SubsystemBase {
         if (!isEnabled.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
+            SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
         );
 
         for (int i = 0; i < 4; i++) {
@@ -312,7 +314,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void stop() {
-        for (SwerveModule swerveModule: swerveModules) {
+        for (SwerveModuleKraken swerveModule: swerveModules) {
             swerveModule.stop();
         }
     }
@@ -348,30 +350,13 @@ public class SwerveDrive extends SubsystemBase {
 
     public Command resetEncoders() {
         return runOnce(() -> {
-            for (SwerveModule swerveModule: swerveModules) {
+            for (SwerveModuleKraken swerveModule: swerveModules) {
                 swerveModule.resetDriveEncoder();
                 // pigeon2.setYaw(getAngularSpeed())
             }
         });
     }
 
-    // public Command resetHeading() {
-    //     return runOnce(() -> SwerveConfig.HEADING_OFFSET.value.set(
-    //             getHeadingOffset() + getHeading()
-    //         )
-    //     );
-    // }
-
-    // public Command resetHeading(double target) {
-    //     return runOnce(() -> SwerveConfig.HEADING_OFFSET.value.set(
-    //             target + getHeading()
-    //         )
-    //     );
-    // }
-    // private void setOffset(double degrees) {
-    //     pigeon2.setYaw(degrees);
-    //     // pigeon2.reset();
-    // }
 
     public Command setYawCommand(double degrees) {
         return runOnce(
@@ -380,22 +365,14 @@ public class SwerveDrive extends SubsystemBase {
         );
     }
 
-    // private void resetOffset() {
-    //     setOffset(SwerveDriveConfig.DEFAULT_HEADING_OFFSET.get());
-    // }
-
-    // public Command resetOffsetCommand() {
-    //     return runOnce(this::resetOffset);
-    // }
-
     private void coastMode() {
-        for (SwerveModule swerveModule: swerveModules) {
+        for (SwerveModuleKraken swerveModule: swerveModules) {
             swerveModule.coastMode();
         }
     }
 
     private void breakMode() {
-        for (SwerveModule swerveModule: swerveModules) {
+        for (SwerveModuleKraken swerveModule: swerveModules) {
             swerveModule.brakeMode();
         }
     }
@@ -414,14 +391,14 @@ public class SwerveDrive extends SubsystemBase {
 
 
     public Command toggleFieldOriented() {
-        return runOnce(() -> TeleOpOptions.IS_FIELD_ORIENTED.set(
+        return runOnce(() -> DriveOptions.IS_FIELD_ORIENTED.set(
                 !isFieldOriented()
             )
         );
     }
 
     public Command toggleSquareInputs() {
-        return runOnce(() -> TeleOpOptions.IS_SQUARED_INPUTS.set(
+        return runOnce(() -> DriveOptions.IS_SQUARED_INPUTS.set(
                 !isSquaredInputs()
             )
         );
