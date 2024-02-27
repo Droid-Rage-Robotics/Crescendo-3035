@@ -1,5 +1,6 @@
 package frc.robot.commands.autos;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -26,6 +27,7 @@ public class AutoChooser {
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
         autoChooser.setDefaultOption("NothingAuto", new InstantCommand());
+        // autoChooser = AutoBuilder.buildAutoChooser();
         addCloseAuto();
         addFarAuto();
         addTuningAuto(drive);
