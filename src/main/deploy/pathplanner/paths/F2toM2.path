@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9260417769493865,
-        "y": 4.0
+        "x": 2.329626083753592,
+        "y": 5.531335051274091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9260417769493865,
-        "y": 5.027997762614488
+        "x": 4.329326493410821,
+        "y": 4.806297475842816
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.93,
-        "y": 7.0
+        "x": 7.334724185117885,
+        "y": 4.081259900411539
       },
       "prevControl": {
-        "x": 1.9153143176769358,
-        "y": 6.221658836877602
+        "x": 3.1716052036092677,
+        "y": 4.876462402497455
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,18 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -50,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 1.245364266768407,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "TuningPaths",
+  "folder": "1+2",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
