@@ -29,6 +29,7 @@ Extra Ideas:
 - Extension automatically commit any code when pushing code to bot (added it) - need to see if 
 - Robot Tracking on Field
 - Field Centric Turning
+- Changing Shooter Speed According to Distance: InterpolatingMatrixTreeMap
 
 Non Urgent ToDos:
 - Fix the Motors in same file from having hte same shuffle board names

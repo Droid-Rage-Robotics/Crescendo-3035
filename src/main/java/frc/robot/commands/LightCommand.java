@@ -57,7 +57,9 @@ public class LightCommand extends Command {
         } else if(true){//How to recognize that the robot is aimed to the shooter
             intakeState=IntakeState.READY_TO_SHOOT;
         } else if(operator.getRightTriggerAxis()>0.5){//Whatever Button that will be used for shooting
-            intakeState=IntakeState.ALIGN_TO_SHOOT;
+            intakeState=IntakeState .ALIGN_TO_SHOOT;
+        } else{
+            //stuff
         }
 
         switch(intakeState){
