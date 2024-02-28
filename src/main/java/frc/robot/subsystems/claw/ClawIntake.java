@@ -88,9 +88,7 @@ public class ClawIntake extends SubsystemBase {
         
     }
     
-    // public Command setTargetVelocityCommand(Velocity velocity){
-    //     return new InstantCommand(()->setTargetVelocity(velocity));
-    // }
+    
     protected void setTargetPosition(double target) {
         controller.setSetpoint(target);
         targetVelocityWriter.set(target);

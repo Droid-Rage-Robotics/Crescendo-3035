@@ -12,11 +12,11 @@ public class ClimbAndScoreSequence extends SequentialCommandGroup {
     public ClimbAndScoreSequence (Claw claw, Climb climb, Intake intake){
         addCommands(
             new ParallelCommandGroup(
-                climb.setTargetCommand(Climb.Position.CLIMB)
+                climb.runOnce(()->climb.setTargetCommand(Climb.Position.CLIMB))
             ),
             
             Commands.waitSeconds(1),
-            climb.setTargetCommand(Climb.Position.TRAP)
+            climb.runOnce(()->climb.setTargetCommand(Climb.Position.TRAP))
         );
     }
     

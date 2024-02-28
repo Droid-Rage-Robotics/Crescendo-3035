@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -19,7 +20,7 @@ public class Constants {
     }
 
     public enum ShooterSpeeds {
-        AMP_SHOOT(1000),
+        AMP_SHOOT(5000),
         SPEAKER_SHOOT(10000),
         //20000
         HOLD(SPEAKER_SHOOT.get()*.3),
@@ -39,7 +40,7 @@ public class Constants {
             return velocityRPM.get();
         }
     }
-    protected final SafeCanSparkMax motorL, motorR;
+    protected final SafeTalonFX motorL, motorR;
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
         (0.0, "Target Velocity", Shooter.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
@@ -57,9 +58,8 @@ public class Constants {
             .withWidget(BuiltInWidgets.kToggleSwitch)
             .build();
 
-        motorL = new SafeCanSparkMax(
-            14,
-            MotorType.kBrushless,
+        motorL = new SafeTalonFX(
+            19,
             false,
             IdleMode.Coast,
             1,
@@ -68,9 +68,8 @@ public class Constants {
                 ShuffleboardValue.create(0.0, "VoltageL", Shooter.class.getSimpleName())
                     .build()
         );
-        motorR = new SafeCanSparkMax(
-            15,
-            MotorType.kBrushless,
+        motorR = new SafeTalonFX(
+            18,
             false,
             IdleMode.Coast,
             1,
@@ -97,15 +96,15 @@ public class Constants {
     @Override
     public void simulationPeriodic() {}
 
-    public Command setTargetVelocity(ShooterSpeeds velocity) {
-        return runOnce(() -> {
+    public void setTargetVelocity(ShooterSpeeds velocity) {
+        // return runOnce(() -> {
             shooterController.setSetpoint(velocity.get());
             targetVelocityWriter.set(velocity.get());
-        });
+        // });
     }
 
     public double getVelocity() {
-        return motorL.getEncoder().getVelocity();
+        return motorL.getVelocity();
         // return motorR.getEncoder().getVelocity();
     }
       

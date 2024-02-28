@@ -15,7 +15,7 @@ public class ShooterToClaw extends SequentialCommandGroup {
             claw.setPositionCommand(Value.INTAKE_SHOOTER),
             new WaitCommand(100),
             intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
-            shooter.setTargetVelocity(Shooter.ShooterSpeeds.CLAW_TRANSFER),
+            shooter.runOnce(()->shooter.setTargetVelocity(Shooter.ShooterSpeeds.CLAW_TRANSFER)),
             new WaitUntilCommand(()->claw.isElementInClaw()),
             //^^Wait Until it shows that it is in to continue
             claw.setPositionCommand(Value.HOLD)

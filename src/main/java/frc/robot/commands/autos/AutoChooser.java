@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
@@ -23,6 +24,9 @@ public class AutoChooser {
     ) {
         //Put Named Commands HERE
         NamedCommands.registerCommand("test", intake.setPositionCommand(Intake.Value.HOLD));
+        // NamedCommands.registerCommand("shoot", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));
+        NamedCommands.registerCommand("intake", intake.setPositionCommand(Intake.Value.HOLD));
+        NamedCommands.registerCommand("transfer", intake.setPositionCommand(Intake.Value.HOLD));
 
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);

@@ -91,11 +91,11 @@ public class Climb extends SubsystemBase{
     public void periodic() {
         setPower(controller.calculate(getEncoderPosition())+
             feedforward.calculate(getVelocity(), getVelocity()));
-    } public Command setTargetCommand(Position position){
-        return new InstantCommand(()->controller.setSetpoint(position.climbPos.get()));
+    } public void setTargetCommand(Position position){
+        controller.setSetpoint(position.climbPos.get());
     }
-    public Command setTargetCommand(double positionRadians){
-        return new InstantCommand(()->controller.setSetpoint(positionRadians));
+    public void setTargetCommand(double positionRadians){
+        controller.setSetpoint(positionRadians);
     }
     
     

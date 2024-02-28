@@ -85,12 +85,7 @@ public class ClawElevator extends SubsystemBase {
         periodic();
     }
 
-    // public Command setTargetPositionCommand(Position target) {
-    //     return new InstantCommand(()->setTargetPosition(target.dropPos.get()));
-    // }
-    // public Command setTargetPositionCommand(double target) {
-    //     return new InstantCommand(()->setTargetPosition(target));
-    // }
+    
     public void setTargetPosition(double target) {
         if (target < Constants.MIN_POSITION) return;
         if (target > Constants.MAX_POSITION) return;

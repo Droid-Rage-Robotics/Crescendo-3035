@@ -15,7 +15,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class IntakeWheel extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 3;//?????
+        public static final double GEAR_RATIO = 1 / 3;
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
@@ -36,8 +36,8 @@ public class IntakeWheel extends SubsystemBase {
 
     public IntakeWheel(Boolean isEnabled) {
         intake = new SafeTalonFX(
-            15, //16?
-            true,
+            16, //16?
+            false,
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             Constants.ROTATIONS_TO_RADIANS,
@@ -69,11 +69,9 @@ public class IntakeWheel extends SubsystemBase {
         
     }
     
-    public Command setTargetPosition(double  target){
-        return new InstantCommand(()->{
-            intakeController.setSetpoint(target);
-            targetVelocityWriter.set(target);
-        });
+    public void setTargetPosition(double  target){
+        intakeController.setSetpoint(target);
+        targetVelocityWriter.set(target);
     }
 
     protected double getIntakeEncoderVelocity() {
@@ -99,6 +97,11 @@ public class IntakeWheel extends SubsystemBase {
 
     public boolean isElementIn(){
         return encoderVelocityErrorWriter.get()<-2000;
+    }
+    public Command setPower(double  power){
+        return new InstantCommand(()->{
+            intake.setPower(power);
+        });
     }
 }
 

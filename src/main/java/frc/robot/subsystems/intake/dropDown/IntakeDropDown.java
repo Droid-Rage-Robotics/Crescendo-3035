@@ -45,7 +45,7 @@ public class IntakeDropDown extends SubsystemBase {
     
     public IntakeDropDown(Boolean isEnabled) {
         motor = new SafeTalonFX(
-            6, //16?
+            17,
             true,
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
@@ -88,9 +88,7 @@ public class IntakeDropDown extends SubsystemBase {
         periodic();
     }
 
-    public Command setTargetCommand(double positionRadians){
-        return new InstantCommand(()->controller.setSetpoint(positionRadians));
-    }
+    
     public void setMovingManually(boolean value) {
         isMovingManually.set(value);
     }
