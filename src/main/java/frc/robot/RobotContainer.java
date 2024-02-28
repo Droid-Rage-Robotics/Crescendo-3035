@@ -60,18 +60,18 @@ public class RobotContainer {
 		
 
 		
-		operator.rightTrigger()
-			.onTrue(new AutoAim(drive, vision, light)
-				.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-				.andThen(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)))
-			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
-				.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
-				.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
-		operator.leftTrigger()
-			.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_SHOOTER)
-			.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-			.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
-			);
+		// operator.rightTrigger()
+		// 	.onTrue(new AutoAim(drive, vision, light)
+		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+		// 		.andThen(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)))
+		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
+		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
+		// 		.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
+		// operator.leftTrigger()
+		// 	.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_SHOOTER)
+		// 	.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+		// 	.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+		// 	);
 
 		operator.start().onTrue(new ClimbAndScoreSequence(claw, climb, intake));
 
@@ -95,19 +95,34 @@ public class RobotContainer {
 		));
 	}
 	public void configureIntakeTestBindings(Intake intake){
-		System.out.println("configure");
+		// operator.rightTrigger()
+		// 	.onTrue(new InstantCommand(()->intake.getIntakeWheel().setPower(.6)))
+		// 	.onFalse(new InstantCommand(()->intake.getIntakeWheel().setPower(0)));
 		operator.rightTrigger()
-			.onTrue(intake.setGround())
+			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 		operator.leftTrigger()
 			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 	}
 	public void configureShooterTestBindings(Shooter shooter){
-		operator.rightTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT))
-			.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
-		operator.leftTrigger().onTrue(shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT))
-			.onFalse(shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP));
+		operator.rightTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT)))
+			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
+		operator.leftTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT)))
+			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
+	}
+
+	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter){
+		operator.rightBumper()
+			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+			.onFalse(intake.setPositionCommand(Intake.Value.START));
+			operator.leftBumper()
+			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
+			.onFalse(intake.setPositionCommand(Intake.Value.START));
+		operator.rightTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT)))
+			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
+		operator.leftTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT)))
+			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 	}
 
 
@@ -120,10 +135,10 @@ public class RobotContainer {
 	}
 	public void configureTalonMotorBindings(SafeTalonFX motor){
 		operator.rightTrigger()
-			.onTrue(new InstantCommand(()-> motor.setPower(.1)))
+			.onTrue(new InstantCommand(()-> motor.setPower(.4)))
 			.onFalse(new InstantCommand(()-> motor.setPower(0)));
 		operator.leftTrigger()
-			.onTrue(new InstantCommand(()-> motor.setPower(-.1)))
+			.onTrue(new InstantCommand(()-> motor.setPower(-.3)))
 			.onFalse(new InstantCommand(()-> motor.setPower(0)));
 
 		operator.a().onTrue(new InstantCommand(()->motor.playMusic(3)));

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.autos.AutoChooser;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
@@ -30,7 +31,7 @@ public class Robot extends TimedRobot {
     private final IntakeWheel intakeWheel = new IntakeWheel(true);
     private final IntakeDropDown dropDown = new IntakeDropDown(false);
     private final Intake intake = new Intake(dropDown, intakeWheel);
-    // private final Shooter shooter = new Shooter(true);
+    private final Shooter shooter = new Shooter(true);
     // private final ClawElevator clawElevator = new ClawElevator(false, false);
     // private final ClawPivot clawPivot = new ClawPivot(false);
     // private final ClawIntake clawIntake = new ClawIntake(false);
@@ -135,19 +136,22 @@ public class Robot extends TimedRobot {
         // );
         // robotContainer.configureTalonMotorBindings(
         //     new SafeTalonFX(
-        //     54,
+        //     16,
         //     true,
         //     IdleMode.Coast,
-        //     ShuffleboardValue.create(true, "Is Enabled", IntakeWheel.class.getSimpleName())
-        //             .withWidget(BuiltInWidgets.kToggleSwitch)
-        //             .build(),
-        //         ShuffleboardValue.create(0.0, "Voltage", IntakeWheel.class.getSimpleName())
-        //             .build()
+        //     1,
+        //     1,
+        //     ShuffleboardValue.create(true, "Is Enabled Wheel", Intake.class.getSimpleName())
+        //         .withWidget(BuiltInWidgets.kToggleSwitch)
+        //         .build(),
+        //     ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
+        //         .build()
         // )
         // );
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light);
-        robotContainer.configureIntakeTestBindings(intake);
-        // robotContainer.configureShooterTestBindings(shooter);
+        // robotContainer.configureIntakeTestBindings(intake);
+        robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
+        robotContainer.configureShooterTestBindings(shooter);
         // robotContainer.configureDriveBindings(drive);
     }
 
