@@ -97,6 +97,7 @@ public class IntakeWheel extends SubsystemBase {
 
     public boolean isElementIn(){
         return encoderVelocityErrorWriter.get()<-2000;
+        //or color sensor 
     }
     public Command setPower(double  power){
         return new InstantCommand(()->{

@@ -60,6 +60,7 @@ public class IntakeDropDownMotionProfiled extends IntakeDropDown {
             return;
         } 
         profile = new TrapezoidProfile(constraints, goal, state);
+        state = new TrapezoidProfile.State();
         state = profile.calculate(0.02); // 0.02 taken from TrapezoidProfileSubsystem measured in seconds
         setVoltage(calculateFeedforward(state.position, state.velocity) + calculatePID(state.position));
         getEncoderVelocity();

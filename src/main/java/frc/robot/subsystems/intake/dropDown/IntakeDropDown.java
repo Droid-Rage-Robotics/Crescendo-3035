@@ -28,7 +28,7 @@ public class IntakeDropDown extends SubsystemBase {
     protected final SafeTalonFX motor;
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
-    protected final DigitalInput intakeLimitSwitch;
+    protected final DigitalInput intakeLimitSwitch; //Limit Switch?
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
         ShuffleboardValue.create(0.0, "Encoder Position (Radians)", Intake.class.getSimpleName())
@@ -58,7 +58,7 @@ public class IntakeDropDown extends SubsystemBase {
         );
 
         controller = new PIDController(0.1, 0.0, 0.0);//0.024
-        controller.setTolerance(Math.toRadians(0.1));//How Much?
+        controller.setTolerance(Math.toRadians(0.1));
 
         // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);
         feedforward = new ArmFeedforward(0, 0,0);
@@ -70,7 +70,7 @@ public class IntakeDropDown extends SubsystemBase {
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Intake Drop Encoder", 
             Intake.class.getSimpleName());
 
-        intakeLimitSwitch = new DigitalInput(0);//WHERE is it plugged in
+        intakeLimitSwitch = new DigitalInput(5);//WHERE is it plugged in
     }
 
     @Override
