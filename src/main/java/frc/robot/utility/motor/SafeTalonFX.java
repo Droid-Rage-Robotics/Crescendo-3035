@@ -158,10 +158,10 @@ public class SafeTalonFX extends SafeMotor{
     //     //TODO:Test
     // }
 
-    @Override
-    public void set(double num){
-        motor.set(num);
-    }
+    // @Override
+    // public void set(double num){
+    //     setPower(num);
+    // }
 
     @Override
     public int getDeviceID(){

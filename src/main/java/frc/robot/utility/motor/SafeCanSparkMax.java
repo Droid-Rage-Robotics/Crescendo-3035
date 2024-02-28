@@ -115,10 +115,10 @@ public class SafeCanSparkMax extends SafeMotor {
     //     // return motor.getFault(FaultID.kCANTX);
     // }
 
-    @Override
-    public void set(double num){
-        motor.set(num);
-    }
+    // @Override
+    // public void set(double num){
+    //     motor.set(num);
+    // }
     @Override
     public int getDeviceID(){
         return motor.getDeviceId();

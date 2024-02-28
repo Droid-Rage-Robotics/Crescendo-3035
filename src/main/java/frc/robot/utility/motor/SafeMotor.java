@@ -23,7 +23,7 @@ public abstract class SafeMotor {
 
     // public abstract void setPositionConversionFactor(double num);
     public abstract double getPosition();
-    public abstract void set(double num);
+    // public abstract void set(double num);
     public abstract int getDeviceID();
     public void stop() {
         setPower(0);
