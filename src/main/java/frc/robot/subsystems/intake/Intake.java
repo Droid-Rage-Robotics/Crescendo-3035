@@ -20,11 +20,11 @@ public class Intake {
         START(0,0),
 
         //IntakePos
-        INTAKE_GROUND(0,20),
-        INTAKE_HUMAN(0,40),
+        INTAKE_GROUND(0,-15000),
+        INTAKE_HUMAN(INTAKE_GROUND),
 
         SHOOTER_HOLD(0,0),//Ready to give Note to shooter, but not doing it
-        SHOOTER_TRANSFER(0,0),//Giving Note to Shooter
+        SHOOTER_TRANSFER(0,10000),//Giving Note to Shooter
        
 
         HOLD(0, 60),
@@ -96,25 +96,34 @@ public class Intake {
     public Command setPositionCommand(Value targetPosition) {
         logPosition(targetPosition);
         System.out.println("setting command."+ targetPosition.name());
-        return SuppliedCommand.create(() -> Commands.sequence(
-            // Commands.runOnce(() -> logPosition(targetPosition)),
+        return Commands.sequence(
             switch (targetPosition) {
-                // case  START ->
-                //     new SequentialCommandGroup(
-                //     );
-                
                 default -> 
                     new ParallelCommandGroup(
                         dropDown.runOnce(() -> dropDown.setTargetPosition(Math.toRadians(targetPosition.getAngle()))),
                         intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
                     );
             }
-        ));
+        );
+        // return SuppliedCommand.create(() -> Commands.sequence(
+        //     // Commands.runOnce(() -> logPosition(targetPosition)),
+        //     switch (targetPosition) {
+        //         // case  START ->
+        //         //     new SequentialCommandGroup(
+        //         //     );
+                
+        //         default -> 
+        //             new ParallelCommandGroup(
+        //                 dropDown.runOnce(() -> dropDown.setTargetPosition(Math.toRadians(targetPosition.getAngle()))),
+        //                 intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
+        //             );
+        //     }
+        // ));
     }
     public Command setGround(){
         return new SequentialCommandGroup(
             dropDown.runOnce(() -> dropDown.setTargetPosition(Value.INTAKE_GROUND.getAngle())),
-            intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(Value.INTAKE_GROUND.getAngle()))
+            intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(Value.INTAKE_GROUND.getIntakeSpeeds()))
         );
     }
     public Command lowerPivotCommand(double lowerNum) {
