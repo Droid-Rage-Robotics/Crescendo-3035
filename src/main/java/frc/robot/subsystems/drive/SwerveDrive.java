@@ -112,9 +112,9 @@ public class SwerveDrive extends SubsystemBase {
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
 
     private final ShuffleboardValue<String> tippingStateWriter = 
-        ShuffleboardValue.create(tippingState.name(), "Tipping State", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(tippingState.name(), "State/Tipping State", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<String> speedStateWriter = 
-        ShuffleboardValue.create(speed.name(), "Speed/State", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(speed.name(), "State/Speed", SwerveDrive.class.getSimpleName()).build();
     
     private final ShuffleboardValue<Double> headingWriter = 
         ShuffleboardValue.create(0.0, "Gyro/Heading (Degrees)", SwerveDrive.class.getSimpleName()).build();

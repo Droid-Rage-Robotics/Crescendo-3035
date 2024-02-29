@@ -36,7 +36,7 @@ public class SwerveModuleKraken {
         public static final double READINGS_PER_REVOLUTION = 1;//4096
         public static final double TURN_ENCODER_ROT_2_RAD = 2 * Math.PI / READINGS_PER_REVOLUTION;
 
-        public static final double TURN_P = 0.01;//0.5
+        public static final double TURN_P = 0.05;//0.5
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
 
@@ -52,7 +52,7 @@ public class SwerveModuleKraken {
     private final CANcoder turnEncoder;
     private final PIDController turningPidController;
     private final SimpleMotorFeedforward feedforward;
-
+    private static int num = 1;
     // private final double driveSpeedMultiplier;
 
     public SwerveModuleKraken(int driveMotorId, 
@@ -62,6 +62,7 @@ public class SwerveModuleKraken {
         boolean absoluteEncoderReversed, boolean isEnabled) {
         
         this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
+        
 
         turnEncoder = new CANcoder(absoluteEncoderId);
         CANcoderConfiguration config = new CANcoderConfiguration();
@@ -79,20 +80,20 @@ public class SwerveModuleKraken {
             SafeMotor.IdleMode.Brake,
             Constants.DRIVE_ENCODER_ROT_2_METER,
             Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC,
-            ShuffleboardValue.create(isEnabled, "Drive Is Enabled", SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Module" + num + "Drive Is Enabled "+driveMotorId, SwerveDrive.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-            ShuffleboardValue.create(0.0, "Drive Voltage", SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Module" + num + "Drive Voltage "+driveMotorId, SwerveDrive.class.getSimpleName())
                 .build());
         turnMotor = new SafeCanSparkMax(turnMotorId, MotorType.kBrushless,
             turningMotorReversed,
             IdleMode.Coast,
             Constants.TURN_ENCODER_ROT_2_RAD,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Turn Is Enabled", SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Module" + num + "Turn Is Enabled "+turnMotorId, SwerveDrive.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-            ShuffleboardValue.create(0.0, "Turn Voltage", SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Module" + num + "Turn Voltage "+turnMotorId, SwerveDrive.class.getSimpleName())
                 .build());
 
         // driveMotor.setPositionConversionFactor(Constants.DRIVE_ENCODER_ROT_2_METER);
@@ -104,6 +105,7 @@ public class SwerveModuleKraken {
         feedforward = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV);
 
         resetDriveEncoder();
+        num++;
     }
 
     public double getDrivePos() {
