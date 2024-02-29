@@ -36,7 +36,7 @@ public class IntakeWheel extends SubsystemBase {
 
     public IntakeWheel(Boolean isEnabled) {
         intake = new SafeTalonFX(
-            16, //16?
+            16,
             false,
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,

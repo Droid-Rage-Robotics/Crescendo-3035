@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
@@ -26,16 +27,17 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
  * the package after creating this project, you must also update the manifest file in the resource
  * directory.
  */
+//CAN 15 is skipped
 public class Robot extends TimedRobot {
     // private final SwerveDrive drive = new SwerveDrive(true);
-    private final IntakeWheel intakeWheel = new IntakeWheel(true);
+    private final IntakeWheel intakeWheel = new IntakeWheel(false);
     private final IntakeDropDown dropDown = new IntakeDropDown(false);
     private final Intake intake = new Intake(dropDown, intakeWheel);
-    private final Shooter shooter = new Shooter(true);
+    // private final Shooter shooter = new Shooter(false);
     // private final ClawElevator clawElevator = new ClawElevator(false, false);
     // private final ClawPivot clawPivot = new ClawPivot(false);
     // private final ClawIntake clawIntake = new ClawIntake(false);
-    // private final Claw claw = new Claw(clawElevator, clawPivot, clawIntake);
+    // private final Claw claw = new Claw(clawElevator, clawP\.ivot, clawIntake);
     // private final Climb climb = new Climb(true, true);
     // private final Vision vision = new Vision();
     // private final Light light = new Light();
@@ -149,9 +151,9 @@ public class Robot extends TimedRobot {
         // )
         // );
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light);
-        // robotContainer.configureIntakeTestBindings(intake);
-        robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
-        robotContainer.configureShooterTestBindings(shooter);
+        robotContainer.configureIntakeTestBindings(intake);
+        // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
+        // robotContainer.configureShooterTestBindings(shooter);
         // robotContainer.configureDriveBindings(drive);
     }
 
