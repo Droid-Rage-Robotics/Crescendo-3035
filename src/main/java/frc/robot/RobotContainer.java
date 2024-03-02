@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.SysID.SysID;
 import frc.robot.commands.ClimbAndScoreSequence;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.LightCommand;
@@ -117,7 +119,7 @@ public class RobotContainer {
 		operator.rightBumper()
 			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
-			operator.leftBumper()
+		operator.leftBumper()
 			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 		operator.rightTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT)))
@@ -156,5 +158,13 @@ public class RobotContainer {
 	public void teleopPeriodic() {
 		matchTime.set(DriverStation.getMatchTime());
 		// vision.periodic();
+	}
+
+	public void configureSysIDBindings(SysID sysID){
+		operator.x().onTrue(sysID.sysIdDynamic(Direction.kForward));
+		operator.a().onTrue(sysID.sysIdDynamic(Direction.kReverse));
+		operator.b().onTrue(sysID.sysIdQuasistatic(Direction.kForward));
+		operator.y().onTrue(sysID.sysIdQuasistatic(Direction.kReverse));
+		//	ONFALSE NO WORK, REMOVE ASAP @LUCKY
 	}
 }

@@ -4,13 +4,22 @@
 
 package frc.robot;
 
+import java.util.logging.Logger;
+
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.SysID.SysID;
+import frc.robot.SysID.SysID.Measurement;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.SwerveDrive;
@@ -29,11 +38,11 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
  */
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
-    // private final SwerveDrive drive = new SwerveDrive(true);
-    private final IntakeWheel intakeWheel = new IntakeWheel(false);
+    // private final SwerveDrive drive = new SwerveDrive(false);
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);
     private final IntakeDropDown dropDown = new IntakeDropDown(false);
     private final Intake intake = new Intake(dropDown, intakeWheel);
-    // private final Shooter shooter = new Shooter(false);
+    // private final Shooter shooter = new Shooter(true);
     // private final ClawElevator clawElevator = new ClawElevator(false, false);
     // private final ClawPivot clawPivot = new ClawPivot(false);
     // private final ClawIntake clawIntake = new ClawIntake(false);
@@ -44,7 +53,7 @@ public class Robot extends TimedRobot {
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive, intake, shooter, claw, climb, vision, light
     // );
-    
+    private final SysID sysID = new SysID(intake.getIntakeWheel().getMotor(), Measurement.DISTANCE);
     // private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer();
         
@@ -151,10 +160,11 @@ public class Robot extends TimedRobot {
         // )
         // );
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light);
-        robotContainer.configureIntakeTestBindings(intake);
+        // robotContainer.configureIntakeTestBindings(intake);
         // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
         // robotContainer.configureShooterTestBindings(shooter);
         // robotContainer.configureDriveBindings(drive);
+        robotContainer.configureSysIDBindings(sysID);
     }
 
     @Override

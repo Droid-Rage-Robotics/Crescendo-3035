@@ -2,12 +2,13 @@
 TODO:
 - Update Radios: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/radio-programming.html#prerequisites 
 - Heading Direction of Drivetrain after Auto 
+- Trapezoid Profile: https://github.com/wpilibsuite/allwpilib/blob/main/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/elevatortrapezoidprofile/Robot.java
+- MAKE ALL HARDWARE INCLUSIN CANCODERS/THORUGH BORE BE DR HARDWARE to force implementation
 On ALL Subsystems:
 - Have the 2 commands and one protected
 - Positions/Velocity
 - Min/Max Position
 - Check FeedForward/PID calculations
-
 Non Urgent ToDos:
 - FIX the Motors in same file from having hte same shuffle board names
 - Make and extended Subsystems to have protected instead of private
@@ -34,3 +35,10 @@ Extra Ideas:
 Non Urgent ToDos:
 - Fix the Motors in same file from having hte same shuffle board names
 - Make and extended Subsystems to have protected instead of private
+
+Connecting to Roboro using FileZilla
+Host: sftp://roboRIO-3035-frc.local
+Username:lvuser
+Port:22
+Location of SysID Logs: /home/lvuser/logs 
+//	ONFALSE NO WORK, REMOVE ASAP @LUCKY on sysid vuttons
