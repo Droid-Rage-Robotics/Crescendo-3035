@@ -20,8 +20,7 @@ public class ClawElevator extends SubsystemBase {
         public static final double MIN_POSITION = 0;
         public static final double MAX_POSITION = 16.2;
     }
-    private final SafeCanSparkMax leftMotor;
-    private final SafeCanSparkMax rightMotor;
+    private final SafeCanSparkMax motor;
     
     private final PIDController controller = new PIDController(2.4, 0, 0);
     private final ElevatorFeedforward feedforward = 
@@ -40,26 +39,14 @@ public class ClawElevator extends SubsystemBase {
 ;
 
     public ClawElevator(Boolean isEnabledLeft, Boolean isEnabledRight) {
-        leftMotor = new SafeCanSparkMax(
-            16, 
+        motor = new SafeCanSparkMax(
+            23, 
             MotorType.kBrushless,
             false,
             IdleMode.Brake,
             Constants.ROT_TO_INCHES,
             1.0,
-            ShuffleboardValue.create(isEnabledLeft, "Is Enabled Left", ClawElevator.class.getSimpleName())
-                .withWidget(BuiltInWidgets.kToggleSwitch)
-                .build(),
-            voltage
-        );
-        rightMotor = new SafeCanSparkMax(
-            15, 
-            MotorType.kBrushless,
-            true,
-            IdleMode.Brake,
-            Constants.ROT_TO_INCHES,
-            1.0,
-            ShuffleboardValue.create(isEnabledRight, "Is Enabled Right", ClawElevator.class.getSimpleName())
+            ShuffleboardValue.create(isEnabledLeft, "Is Enabled", ClawElevator.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             voltage
@@ -92,7 +79,7 @@ public class ClawElevator extends SubsystemBase {
         controller.setSetpoint(target);
     }
     protected void setVoltage(double voltage) {
-        leftMotor.setVoltage(voltage);
+        motor.setVoltage(voltage);
         // rightMotor.setVoltage(voltage);
     }
     public void setMovingManually(boolean value) {
@@ -103,11 +90,11 @@ public class ClawElevator extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        leftMotor.getEncoder().setPosition(0);
+        motor.getEncoder().setPosition(0);
     }
 
     public double getEncoderPosition() {
-        double position = leftMotor.getEncoder().getPosition();
+        double position = motor.getEncoder().getPosition();
         encoderPositionWriter.write(position);
         return position;
     }
@@ -118,5 +105,9 @@ public class ClawElevator extends SubsystemBase {
 
     public boolean isMovingManually() {
         return getIsMovingManually().get();
+    }
+
+    public SafeCanSparkMax getMotor(){
+        return motor;
     }
 }
