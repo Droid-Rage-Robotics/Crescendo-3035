@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SuppliedCommand;
+import frc.robot.subsystems.claw.clawArm.ClawArm;
 import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -17,27 +18,32 @@ public class Claw {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
-        START(0,0,0),
+        START(0,0,0,0),
 
-        INTAKE_SHOOTER(0,0,0),
-        INTAKE_HUMAN(0,0,0),
+        INTAKE_SHOOTER(0,0,0,0),
+        INTAKE_HUMAN(0,0,0,0),
        
-        AUTO_AMP(0,0,0),
-        AMP(0,0,0),
-        TRAP(0,0,0),
+        AUTO_AMP(0,0,0,0),
+        AMP(0,0,0,0),
+        TRAP(0,0,0,0),
 
-        HOLD(0,0, 60),
+        HOLD(0,0,0, 60),
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
 
         private final ShuffleboardValue<Double> elevatorInches;
         private final ShuffleboardValue<Double> pivotAngle;
+        private final ShuffleboardValue<Double> armAngle;
         private final ShuffleboardValue<Double> intakeSpeeds;
         
 
-        private Value(double elevatorInches, double pivotAngle, double intakeSpeeds) {
+        private Value(double elevatorInches, double armAngle, double pivotAngle, double intakeSpeeds) {
             this.elevatorInches = ShuffleboardValue.create(elevatorInches, 
                 ClawElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
+                .withSize(1, 3)
+                .build();
+            this.armAngle = ShuffleboardValue.create(armAngle, 
+                ClawElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.pivotAngle = ShuffleboardValue.create(pivotAngle, 
@@ -55,6 +61,10 @@ public class Claw {
             // Value value = copyValue;
             this.elevatorInches = ShuffleboardValue.create(copyValue.getElevatorInches(), 
                 ClawElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
+                .withSize(1, 3)
+                .build();
+                this.armAngle = ShuffleboardValue.create(copyValue.getArmDegrees(), 
+                ClawElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.pivotAngle = ShuffleboardValue.create(copyValue.getPivotDegrees(), 
@@ -78,11 +88,15 @@ public class Claw {
         public double getPivotDegrees() {
             return pivotAngle.get();
         }
+        public double getArmDegrees() {
+            return armAngle.get();
+        }
     }
 
     private final ClawElevator clawElevator;
-    private final ClawIntake clawIntake;
+    private final ClawArm clawArm;
     private final ClawPivot clawPivot;
+    private final ClawIntake clawIntake;
     private Value position = Value.START;
     private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
         .create(position.name(), "Current Arm Position", "Misc")
@@ -90,9 +104,11 @@ public class Claw {
         .build();
 
     public Claw(ClawElevator clawElevator,
+        ClawArm clawArm,
         ClawPivot clawPivot,
         ClawIntake clawIntake) {
         this.clawElevator = clawElevator;
+        this.clawArm = clawArm;
         this.clawPivot = clawPivot;
         this.clawIntake = clawIntake;
     }
@@ -111,27 +127,22 @@ public class Claw {
         return SuppliedCommand.create(() -> Commands.sequence(
             Commands.runOnce(() -> logPosition(targetPosition)),
             switch (targetPosition) {
-                case  AMP ->
+                case  AMP,TRAP ->
                     new SequentialCommandGroup(
-                        clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches())),
+                        new ParallelCommandGroup(
+                            clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees()))),
+                            clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                        ),
                         Commands.waitSeconds(0.5),
-                        clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds())),
-                        // Commands.waitSeconds(0.3),
-                        clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees())))
-                    );
-                case TRAP ->
-                    new SequentialCommandGroup(
-                        clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees()))),
-                        Commands.waitSeconds(.5),
-                        clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches())),
-                        clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                        clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches()))
                     );
                 
                 default -> 
                     new ParallelCommandGroup(
                         clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches())),
                         clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees()))),
-                        clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                        clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds())),
+                        clawArm.runOnce(()->clawArm.setTargetPosition(targetPosition.getArmDegrees()))
                     );
             }
         ));
