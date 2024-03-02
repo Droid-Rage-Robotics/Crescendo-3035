@@ -26,6 +26,12 @@ import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SwerveModuleKraken {
+    public enum POD{
+        FL,
+        BL,
+        FR,
+        BR
+    }
     public static class Constants {
         public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
         public static final double DRIVE_MOTOR_GEAR_RATIO = 1 / 6.75;
@@ -36,7 +42,7 @@ public class SwerveModuleKraken {
         public static final double READINGS_PER_REVOLUTION = 1;//4096
         public static final double TURN_ENCODER_ROT_2_RAD = 2 * Math.PI / READINGS_PER_REVOLUTION;
 
-        public static final double TURN_P = 0.05;//0.5
+        public static final double TURN_P = 0.11;//0.5
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
 
@@ -74,26 +80,25 @@ public class SwerveModuleKraken {
         config.MagnetSensor.MagnetOffset = absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD;
         config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         turnEncoder.getConfigurator().apply(config);
-        //TODO: FIGURE Out whether I need to manually change from rotation to radians?
         driveMotor = new SafeTalonFX(driveMotorId,
             driveMotorReversed,
             SafeMotor.IdleMode.Brake,
             Constants.DRIVE_ENCODER_ROT_2_METER,
             Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC,
-            ShuffleboardValue.create(isEnabled, "Module" + num + "Drive Is Enabled "+driveMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Module/Module" + num + "/Drive Is Enabled "+ driveMotorId, SwerveDrive.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-            ShuffleboardValue.create(0.0, "Module" + num + "Drive Voltage "+driveMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Module/Module" + num + "/Drive Voltage "+ driveMotorId, SwerveDrive.class.getSimpleName())
                 .build());
         turnMotor = new SafeCanSparkMax(turnMotorId, MotorType.kBrushless,
             turningMotorReversed,
             IdleMode.Coast,
             Constants.TURN_ENCODER_ROT_2_RAD,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Module" + num + "Turn Is Enabled "+turnMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Module/Module" + num + "/Turn Is Enabled "+ turnMotorId, SwerveDrive.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-            ShuffleboardValue.create(0.0, "Module" + num + "Turn Voltage "+turnMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Module/Module" + num + "/Turn Voltage "+ turnMotorId, SwerveDrive.class.getSimpleName())
                 .build());
 
         // driveMotor.setPositionConversionFactor(Constants.DRIVE_ENCODER_ROT_2_METER);
