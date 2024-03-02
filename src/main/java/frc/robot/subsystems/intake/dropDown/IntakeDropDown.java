@@ -60,11 +60,12 @@ public class IntakeDropDown extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(0.1, 0.0, 0.0);//0.024
+        controller = new PIDController(0.4, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(0.1));
 
         // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);
-        feedforward = new ArmFeedforward(0, 0,0);
+        // feedforward = new ArmFeedforward(0.079, 0.1,0.1);
+        feedforward = new ArmFeedforward(0,0,0);
 
         ComplexWidgetBuilder.create(controller, "Drop PID Controller", Intake.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)

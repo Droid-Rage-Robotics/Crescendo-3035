@@ -1,13 +1,10 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.utility.motor.SafeCanSparkMax;
@@ -55,10 +52,10 @@ public class Climb extends SubsystemBase{
 
     public Climb(Boolean isEnabledLeft, Boolean isEnabledRight) {
         motorL = new SafeCanSparkMax(
-            16, 
+            21, 
             MotorType.kBrushless,
             false,
-            IdleMode.Brake,
+            IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
             ShuffleboardValue.create(isEnabledLeft, "Is Enabled Left", Climb.class.getSimpleName())
@@ -68,10 +65,10 @@ public class Climb extends SubsystemBase{
         );
 
         motorR = new SafeCanSparkMax(
-            15, 
+            20, 
             MotorType.kBrushless,
             true,
-            IdleMode.Brake,
+            IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
             ShuffleboardValue.create(isEnabledRight, "Is Enabled Right", Climb.class.getSimpleName())
@@ -91,10 +88,12 @@ public class Climb extends SubsystemBase{
     public void periodic() {
         setPower(controller.calculate(getEncoderPosition())+
             feedforward.calculate(getVelocity(), getVelocity()));
-    } public void setTargetCommand(Position position){
-        controller.setSetpoint(position.climbPos.get());
+    } 
+    public void setTargetPosition(Position position){
+        setTargetPosition(position.climbPos.get());
+        // controller.setSetpoint(position.climbPos.get());
     }
-    public void setTargetCommand(double positionRadians){
+    public void setTargetPosition(double positionRadians){
         controller.setSetpoint(positionRadians);
     }
     
@@ -142,11 +141,11 @@ public class Climb extends SubsystemBase{
         return position;
     }
 
-    public void setTargetPosition(double positionRadians) {
-        if (positionRadians < getMinPosition()) return;
-        if (positionRadians > getMaxPosition()) return;
-        controller.setSetpoint(positionRadians);
-    }
+    // public void setTargetPosition(double positionRadians) {
+    //     if (positionRadians < getMinPosition()) return;
+    //     if (positionRadians > getMaxPosition()) return;
+    //     controller.setSetpoint(positionRadians);
+    // }
 
     public double getTargetPosition() {
         return controller.getSetpoint();
@@ -166,5 +165,12 @@ public class Climb extends SubsystemBase{
 
     protected double calculatePID(double targetVelocity) {
         return controller.calculate(getEncoderPosition(), targetVelocity);
+    }
+
+    public SafeCanSparkMax getMotorL(){
+        return motorL;
+    }
+    public SafeCanSparkMax getMotorR(){
+        return motorR;
     }
 }

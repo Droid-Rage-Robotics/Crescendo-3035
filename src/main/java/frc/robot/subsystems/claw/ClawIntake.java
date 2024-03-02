@@ -17,26 +17,6 @@ public class ClawIntake extends SubsystemBase {
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
-    // public enum Velocity implements ShuffleboardValueEnum<Double> {
-    //     OUTTAKE(2300),
-    //     SHOOTER_TRANSFER(200),
-    //     HUMAN_PLAYER(200),
-    //     STOP(0)
-    //     ;
-
-    //     private final ShuffleboardValue<Double> velocityRPM;
-
-    //     private Velocity(double velocityRPM) {
-    //         this.velocityRPM = ShuffleboardValue.create(velocityRPM, Velocity.class.getSimpleName()+"/"+name()+": Velocity (RPM)", ClawIntake.class.getSimpleName())
-    //             .withSize(1, 3)
-    //             .build();
-    //     }
-
-    //     @Override
-    //     public ShuffleboardValue<Double> getNum() {
-    //         return velocityRPM;
-    //     }
-    // }
 
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
         (0.0, "Target Velocity", ClawIntake.class.getSimpleName()).build();
@@ -55,7 +35,7 @@ public class ClawIntake extends SubsystemBase {
 
     public ClawIntake(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            19,
+            25,
             MotorType.kBrushless,
             true,
             IdleMode.Coast,
@@ -108,6 +88,10 @@ public class ClawIntake extends SubsystemBase {
     }
     public double getTargetPosition(){
         return controller.getSetpoint();
+    }
+
+    public SafeCanSparkMax getMotor(){
+        return motor;
     }
 }
 

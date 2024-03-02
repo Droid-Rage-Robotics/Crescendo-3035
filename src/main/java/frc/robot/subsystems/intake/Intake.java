@@ -20,8 +20,8 @@ public class Intake {
         START(0,0),
 
         //IntakePos
-        INTAKE_GROUND((0),-15000),
-        INTAKE_HUMAN((1),200),//INTAKE_GROUND
+        INTAKE_GROUND((90),-10000),
+        INTAKE_HUMAN((70),1000),//INTAKE_GROUND
 
         SHOOTER_HOLD(0,0),//Ready to give Note to shooter, but not doing it
         SHOOTER_TRANSFER(0,10000),//Giving Note to Shooter

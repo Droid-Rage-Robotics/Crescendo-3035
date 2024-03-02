@@ -54,6 +54,7 @@ public class IntakeWheel extends SubsystemBase {
             0,
             0);
         intakeController.setTolerance(5);
+        // intakeFeedforward = new SimpleMotorFeedforward(0, 0, 0);
         intakeFeedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
         ComplexWidgetBuilder.create(intakeController, "Intake Wheel Controller", Intake.class.getSimpleName());

@@ -42,7 +42,7 @@ public class ClawPivot extends SubsystemBase {
     
     public ClawPivot(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            18, 
+            24, 
             MotorType.kBrushless,
             false,
             IdleMode.Brake,
@@ -141,4 +141,7 @@ public class ClawPivot extends SubsystemBase {
     }
 
    
+    public SafeCanSparkMax getMotor(){
+        return motor;
+    }
 }  
