@@ -65,9 +65,9 @@ public class IntakeDropDownMotionProfiled extends IntakeDropDown {
         setVoltage(calculateFeedforward(state.position, state.velocity) + calculatePID(state.position));
         getEncoderVelocity();
         
-        if(intakeLimitSwitch.get()){    //NEED to check whether to add !
-            resetEncoder();
-        }
+        // if(intakeLimitSwitch.get()){    //NEED to check whether to add !
+        //     resetEncoder();
+        // }
     }
   
     @Override

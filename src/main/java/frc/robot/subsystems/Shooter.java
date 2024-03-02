@@ -10,6 +10,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Shooter extends SubsystemBase {
 public class Constants {
+    // (out)4/3 (input)
         public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
@@ -17,7 +18,7 @@ public class Constants {
 
     public enum ShooterSpeeds {
         //15000+
-        AMP_SHOOT(5000),
+        AMP_SHOOT(200),
         SPEAKER_SHOOT(10000),
         HOLD(SPEAKER_SHOOT.get()*.3),
         STOP(0), 
@@ -80,6 +81,7 @@ public class Constants {
             0,
             0);
         feedforward = new SimpleMotorFeedforward(0.000,0,0);
+        // feedforward = new SimpleMotorFeedforward(5.24, 5.7, 1);
         shooterController.setTolerance(ShooterSpeeds.POSITION_TOLERANCE.get());
     }
 
@@ -109,4 +111,17 @@ public class Constants {
         motorL.setPower(power);
         motorR.setPower(power);
     }
+
+    public SafeTalonFX getMotorL(){
+        return motorL;
+    }
+    public SafeTalonFX getMotorR(){
+        return motorR;
+    }
+    // public void setMotorLVoltage(double voltage) {
+    //     motorL.setVoltage(voltage);
+    // }
+    // public void setMotorRVoltage(double voltage) {
+    //     motorR.setVoltage(voltage);
+    // }
 }

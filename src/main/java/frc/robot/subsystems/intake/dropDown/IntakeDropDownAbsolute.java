@@ -24,6 +24,7 @@ public class IntakeDropDownAbsolute extends IntakeDropDownMotionProfiled {
         absoluteEncoder.setInverted(true);*/
         absoluteEncoder = new DutyCycleEncoder(2); //What chnnel is it plugged into
         absoluteEncoder.setDistancePerRotation(Constants.RADIANS_PER_ROTATION); //Not sure if it is the right //#
+        //Can't put a velocity conversionfactor
         absoluteEncoder.setPositionOffset(getTargetPosition());
 
         

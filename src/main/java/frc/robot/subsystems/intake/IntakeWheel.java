@@ -20,7 +20,7 @@ public class IntakeWheel extends SubsystemBase {
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
 
-    protected final SafeTalonFX intake;
+    protected final SafeTalonFX motor;
     protected final PIDController intakeController;
     protected final SimpleMotorFeedforward intakeFeedforward;
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create    
@@ -35,7 +35,7 @@ public class IntakeWheel extends SubsystemBase {
 
 
     public IntakeWheel(Boolean isEnabled) {
-        intake = new SafeTalonFX(
+        motor = new SafeTalonFX(
             16,
             false,
             IdleMode.Coast,
@@ -63,7 +63,7 @@ public class IntakeWheel extends SubsystemBase {
 
     @Override
     public void periodic() {
-        intake.setVoltage(calculateIntakePID(getIntakeTargetVelocity()) + 
+        motor.setVoltage(calculateIntakePID(getIntakeTargetVelocity()) + 
             calculateIntakeFeedforward(getIntakeTargetVelocity()));
         isElementInWriter.set(isElementIn());
         
@@ -75,7 +75,7 @@ public class IntakeWheel extends SubsystemBase {
     }
 
     protected double getIntakeEncoderVelocity() {
-        double velocity = intake.getVelocity();
+        double velocity = motor.getVelocity();
         encoderVelocityWriter.write(velocity);
         encoderVelocityErrorWriter.write(getIntakeTargetVelocity() - velocity);
         return velocity;
@@ -92,7 +92,7 @@ public class IntakeWheel extends SubsystemBase {
 
     
     public void resetIntakeEncoder() {
-        intake.setPosition(0);//TODO: Test
+        motor.setPosition(0);//TODO: Test
     }
 
     public boolean isElementIn(){
@@ -101,8 +101,11 @@ public class IntakeWheel extends SubsystemBase {
     }
     public Command setPower(double  power){
         return new InstantCommand(()->{
-            intake.setPower(power);
+            motor.setPower(power);
         });
+    }
+    public SafeTalonFX getMotor(){
+        return motor;
     }
 }
 

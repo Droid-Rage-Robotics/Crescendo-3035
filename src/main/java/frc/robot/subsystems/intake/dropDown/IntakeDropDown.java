@@ -19,16 +19,19 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class IntakeDropDown extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
-        public static final double READINGS_PER_REVOLUTION = 1;
-        public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
+        public static final double GEAR_RATIO = 1 / 2;//Old One is 240 // New is 180 (I think)
+        public static final double READINGS_PER_REVOLUTION = 1;//4089
+        public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK
+        // (2 * Math.PI / READINGS_PER_REVOLUTION)/(GEAR_RATIO);
+        //  (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
+        //  (Math.PI * 2)/(GEAR_RATIO * READINGS_PER_REVOLUTION);
     }
 
 
     protected final SafeTalonFX motor;
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
-    protected final DigitalInput intakeLimitSwitch; //Limit Switch?
+    // protected final DigitalInput intakeLimitSwitch; //Limit Switch?
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
         ShuffleboardValue.create(0.0, "Encoder Position (Radians)", Intake.class.getSimpleName())
@@ -70,7 +73,7 @@ public class IntakeDropDown extends SubsystemBase {
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Intake Drop Encoder", 
             Intake.class.getSimpleName());
 
-        intakeLimitSwitch = new DigitalInput(5);//WHERE is it plugged in
+        // intakeLimitSwitch = new DigitalInput(5);//WHERE is it plugged in
     }
 
     @Override
@@ -78,9 +81,9 @@ public class IntakeDropDown extends SubsystemBase {
         // motor.set(calculateFeedforward(getTargetPosition(), 0.) + calculatePID(getTargetPosition()));
         setVoltage(calculateFeedforward(getTargetPosition(), 2.3793) + calculatePID(getTargetPosition()));
     
-        if(intakeLimitSwitch.get()){    //NEED to check whether to add !
-            resetEncoder();
-        }
+        // if(intakeLimitSwitch.get()){    //NEED to check whether to add !
+        //     resetEncoder();
+        // }
     }
   
     @Override
@@ -121,7 +124,7 @@ public class IntakeDropDown extends SubsystemBase {
         return velocity;
     }
 
-    protected void setVoltage(double voltage) {
+    public void setVoltage(double voltage) {
         motor.setVoltage(voltage);
     }
 
@@ -137,4 +140,13 @@ public class IntakeDropDown extends SubsystemBase {
         return controller.calculate(getEncoderPosition(), positionRadians);
     }
    
+    public double getSpeed(){
+        return motor.getSpeed();
+    }
+    public SafeTalonFX getMotor(){
+        return motor;
+    }
+    // public double getDistance(){
+    //     return motor.getPosition()
+    // }
 }  
