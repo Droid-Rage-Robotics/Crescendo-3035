@@ -90,6 +90,7 @@ public class SafeCanSparkMax extends SafeMotor {
     //     motor.getEncoder().setPositionConversionFactor(num);
     // }    
 
+    @Override
     public double getVelocity() {
         return motor.getEncoder().getVelocity();
     }
@@ -129,5 +130,10 @@ public class SafeCanSparkMax extends SafeMotor {
     // public void setVelocityConversionFactor(double num) {
     //     motor.getEncoder().setVelocityConversionFactor(num);
     // }
+
+    @Override
+    public double getSpeed(){
+        return motor.get();
+    }
 }
 

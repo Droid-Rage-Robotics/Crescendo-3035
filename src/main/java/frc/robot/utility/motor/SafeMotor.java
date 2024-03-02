@@ -19,6 +19,7 @@ public abstract class SafeMotor {
     public abstract void setVoltage(double outputVolts);
     // public abstract void setInverted(boolean isInverted);
     public abstract void setIdleMode(IdleMode mode);
+    public abstract double getVelocity();
     
 
     // public abstract void setPositionConversionFactor(double num);
@@ -28,6 +29,7 @@ public abstract class SafeMotor {
     public void stop() {
         setPower(0);
     }
+    public abstract double getSpeed();
     // public abstract void setVelocityConversionFactor(double num);
     // public abstract boolean getMotorFault();
 }

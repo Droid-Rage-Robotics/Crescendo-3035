@@ -81,8 +81,13 @@ public class SafeTalonFX extends SafeMotor{
         });
     }
 
+    @Override
     public double getVelocity() {
         return motor.getVelocity().getValueAsDouble()*velocityConversionFactor;
+    }
+    @Override
+    public double getSpeed() {
+        return motor.get();
     }
 
     public double getPosition() {
@@ -167,4 +172,5 @@ public class SafeTalonFX extends SafeMotor{
     public int getDeviceID(){
         return motor.getDeviceID();
     }
+
 }
