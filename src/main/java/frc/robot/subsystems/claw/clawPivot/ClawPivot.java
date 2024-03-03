@@ -28,16 +28,16 @@ public class ClawPivot extends SubsystemBase {
     protected ArmFeedforward feedforward;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Pivot Encoder Position (Radians)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Pivot Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Moving manually", Claw.class.getSimpleName())
+        ShuffleboardValue.create(false, " PivotMoving manually", Claw.class.getSimpleName())
         .build();
     
     public ClawPivot(Boolean isEnabled) {
@@ -48,10 +48,10 @@ public class ClawPivot extends SubsystemBase {
             IdleMode.Brake,
             Constants.ROTATIONS_TO_RADIANS,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Pivot Is Enabled", Claw.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Voltage", Claw.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Pivot Voltage", Claw.class.getSimpleName())
                 .build()
         );
 
@@ -64,11 +64,11 @@ public class ClawPivot extends SubsystemBase {
         feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);//Old Values
         // feedforward = new ArmFeedforward(0, 0,0);
 
-        ComplexWidgetBuilder.create(controller, "PID Controller", Claw.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Pivot PID Controller", Claw.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset encoder", Claw.class.getSimpleName());
+        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Pivot Reset encoder", Claw.class.getSimpleName());
 
         motor.burnFlash();
     }

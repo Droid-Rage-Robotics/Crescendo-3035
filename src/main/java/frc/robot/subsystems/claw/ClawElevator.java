@@ -23,22 +23,23 @@ public class ClawElevator extends SubsystemBase {
     private final SafeCanSparkMax motor;
     
     private final PIDController controller = new PIDController(2.4, 0, 0);
-    private final ElevatorFeedforward feedforward = 
-        new ElevatorFeedforward(0.1, 0.2, 0, 0);
+    private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
+    // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.1, 0.2, 0, 0);
+
     
     private final ShuffleboardValue<Double> voltage = ShuffleboardValue
-        .create(0.0, "Voltage", ClawElevator.class.getSimpleName())
+        .create(0.0, "Voltage", Claw.class.getSimpleName())
         .build();
     protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue
-        .create(0.0, "Encoder Position", ClawElevator.class.getSimpleName())
+        .create(0.0, "Encoder Position", Claw.class.getSimpleName())
         .withSize(1, 3)
         .build();
     protected final ShuffleboardValue<Boolean> isMovingManually = ShuffleboardValue
-        .create(false, "Moving manually", ClawElevator.class.getSimpleName())
+        .create(false, "Moving manually", Claw.class.getSimpleName())
         .build();
 ;
 
-    public ClawElevator(Boolean isEnabledLeft, Boolean isEnabledRight) {
+    public ClawElevator(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             23, 
             MotorType.kBrushless,
@@ -46,7 +47,7 @@ public class ClawElevator extends SubsystemBase {
             IdleMode.Brake,
             Constants.ROT_TO_INCHES,
             1.0,
-            ShuffleboardValue.create(isEnabledLeft, "Is Enabled", ClawElevator.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Elev Is Enabled", Claw.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             voltage
@@ -54,12 +55,12 @@ public class ClawElevator extends SubsystemBase {
         
         controller.setTolerance(0.1);
 
-        ComplexWidgetBuilder.create(controller, " PID Controller", ClawElevator.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Elev PID Controller", Claw.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 2);
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
-            "Reset Encoder", ClawElevator.class.getSimpleName());
+            "Reset Encoder", Claw.class.getSimpleName());
     }
 
     @Override

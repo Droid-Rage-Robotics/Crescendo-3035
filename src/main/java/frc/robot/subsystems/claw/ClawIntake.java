@@ -9,7 +9,6 @@ import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
-import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
 public class ClawIntake extends SubsystemBase {
     public static class Constants {
@@ -19,14 +18,14 @@ public class ClawIntake extends SubsystemBase {
     }
 
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
-        (0.0, "Target Velocity", ClawIntake.class.getSimpleName()).build();
+        (0.0, "Claw Intake Target Velocity", Claw.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity", ClawIntake.class.getSimpleName()).build();
+        (0.0, "Claw Intake Encoder Velocity", Claw.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity Error", ClawIntake.class.getSimpleName()).build();
+        (0.0, "Claw Intake Encoder Velocity Error", Claw.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Boolean> isElementInClawWriter = ShuffleboardValue.create
-            (false, "Is Element In", ClawIntake.class.getSimpleName()).build();
+            (false, "Claw Intake Is Element In", Claw.class.getSimpleName()).build();
     
     
     protected final SafeCanSparkMax motor;
@@ -37,14 +36,14 @@ public class ClawIntake extends SubsystemBase {
         motor = new SafeCanSparkMax(
             25,
             MotorType.kBrushless,
-            true,
+            false,
             IdleMode.Coast,
             1,
             1,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", ClawIntake.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Claw Intake Is Enabled", Claw.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-                ShuffleboardValue.create(0.0, "Voltage", ClawIntake.class.getSimpleName())
+                ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
                     .build()
         );
 
@@ -53,9 +52,11 @@ public class ClawIntake extends SubsystemBase {
             0,
             0);
         controller.setTolerance(5);
-        feedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
+        feedforward = new SimpleMotorFeedforward(0, 0, 0);
+        // feedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
-        ComplexWidgetBuilder.create(controller, "Claw Controller", ClawIntake.class.getSimpleName());
+
+        ComplexWidgetBuilder.create(controller, "Claw Intake Controller", Claw.class.getSimpleName());
         // ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetIntakeEncoder)), 
         //     "Reset Claw Encoder", Claw.class.getSimpleName());
     }

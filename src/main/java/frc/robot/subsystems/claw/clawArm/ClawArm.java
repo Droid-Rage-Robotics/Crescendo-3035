@@ -28,30 +28,30 @@ public class ClawArm extends SubsystemBase {
     protected ArmFeedforward feedforward;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm Encoder Position (Radians)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Moving manually", Claw.class.getSimpleName())
+        ShuffleboardValue.create(false, "Arm Moving manually", Claw.class.getSimpleName())
         .build();
     
     public ClawArm(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            23, 
+            60, 
             MotorType.kBrushless,
             false,
             IdleMode.Brake,
             Constants.ROTATIONS_TO_RADIANS,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Arm Is Enabled", Claw.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Voltage", Claw.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Arm Voltage", Claw.class.getSimpleName())
                 .build()
         );
 
