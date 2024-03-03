@@ -10,11 +10,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 @Deprecated
 public class ColorSensor extends SubsystemBase {
-    public static class DropDownConstants {
-        public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
-        public static final double READINGS_PER_REVOLUTION = 1;
-        public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
-    }
     //TODO: Check this
     protected final ColorSensorV3 colorSensor;
     protected final ColorMatch colorMatcher;
@@ -35,12 +30,14 @@ public class ColorSensor extends SubsystemBase {
         updateColorSensor();
         
     }
+
     //Color Sensor Functions
     private void updateColorSensor(){
         colorMatcher.addColorMatch(orange);
         detectedColor = colorSensor.getColor(); 
         match = colorMatcher.matchClosestColor(detectedColor);
     }
+    
     public boolean isElementIn(){
         return match.color == orange;
         // return encoderVelocityErrorWriter.get()<-2000;
