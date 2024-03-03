@@ -9,11 +9,9 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.motor.SafeMotor;
 import frc.robot.utility.motor.SafeTalonFX;
 
 public class SysID extends SubsystemBase {
@@ -31,12 +29,14 @@ public class SysID extends SubsystemBase {
   // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
   private final MutableMeasure<Velocity<Distance>> distanceVelocity = MutableMeasure.mutable(Units.InchesPerSecond.of(0));
   private final MutableMeasure<Velocity<Angle>> angularVelocity = MutableMeasure.mutable(Units.RadiansPerSecond.of(0));
+  // private final MutableMeasure<Velocity<Angle>> angularVelocity = MutableMeasure.mutable(Units.RPM.of(0));
+
   private SysIdRoutine routine;
-  private final SafeMotor motor;
+  // private final SafeMotor motor;
 
   
   public SysID(SafeTalonFX motor, Measurement unit){
-    this.motor = motor;
+    // this.motor = motor;
     switch(unit){
       case ANGLE:
         routine = new SysIdRoutine(
@@ -82,7 +82,7 @@ public class SysID extends SubsystemBase {
   }
 
   public SysID(SafeCanSparkMax motor, Measurement unit){
-    this.motor = motor;
+    // this.motor = motor;
     switch(unit){
       case ANGLE:
         routine = new SysIdRoutine(
@@ -120,6 +120,128 @@ public class SysID extends SubsystemBase {
               .linearPosition(distance.mut_replace(motor.getPosition(), Units.Inches))//Meters Degrees, etc?
               .linearVelocity(
                   distanceVelocity.mut_replace(motor.getVelocity(), Units.InchesPerSecond));//Meters Degrees, etc?
+          }, 
+          this)
+        );
+        break;   
+    }
+  }
+
+  public SysID(SafeTalonFX motor, SafeTalonFX motor2, Measurement unit){
+    // this.motor = motor;
+    // this.motor2 = motor2;
+    switch(unit){
+      case ANGLE:
+        routine = new SysIdRoutine(
+          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+          // new SysIdRoutine.Config(null, null, null, (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+          new SysIdRoutine.Config(null, null, null),
+          new SysIdRoutine.Mechanism((Measure<Voltage> volts) -> {
+            motor.setVoltage(volts.in(Units.Volts));
+          }, 
+          (log)->{ 
+            log.motor(motor.toString())
+              .voltage(
+                  appliedVoltage.mut_replace(
+                    motor.getSpeed() * RobotController.getBatteryVoltage(), Units.Volts))
+              .angularPosition(angle.mut_replace(motor.getPosition(), Units.Rotations))
+              .angularVelocity(
+                  angularVelocity.mut_replace(motor.getVelocity(), Units.RotationsPerSecond));
+            log.motor(motor2.toString())
+              .voltage(
+                  appliedVoltage.mut_replace(
+                    motor2.getSpeed() * RobotController.getBatteryVoltage(), Units.Volts))
+              .angularPosition(angle.mut_replace(motor2.getPosition(), Units.Rotations))
+              .angularVelocity(
+                  angularVelocity.mut_replace(motor2.getVelocity(), Units.RotationsPerSecond));
+          }, 
+          this)
+        );
+        break;
+      case DISTANCE:
+        routine = new SysIdRoutine(
+          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+          // new SysIdRoutine.Config(null, null, null, (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+          new SysIdRoutine.Config(null, null, null),
+          new SysIdRoutine.Mechanism((Measure<Voltage> volts) -> {
+            motor.setVoltage(volts.in(Units.Volts));
+            motor2.setVoltage(volts.in(Units.Volts));
+          }, 
+          (log)->{ 
+            log.motor(motor.toString())
+              .voltage(
+                  appliedVoltage.mut_replace(
+                    motor.getSpeed() * RobotController.getBatteryVoltage(), Units.Volts))
+              .linearPosition(distance.mut_replace(motor.getPosition(), Units.Inches))
+              .linearVelocity(
+                  distanceVelocity.mut_replace(motor.getVelocity(), Units.InchesPerSecond));
+            log.motor(motor2.toString())
+              .voltage(
+                  appliedVoltage.mut_replace(
+                    motor2.getSpeed() * RobotController.getBatteryVoltage(), Units.Volts))
+              .linearPosition(distance.mut_replace(motor2.getPosition(), Units.Inches))
+              .linearVelocity(
+                  distanceVelocity.mut_replace(motor2.getVelocity(), Units.InchesPerSecond));
+          }, 
+          this)
+        );
+        break;   
+    }
+  }
+
+  public SysID(SafeCanSparkMax motor, SafeCanSparkMax motor2, Measurement unit){
+    // this.motor = motor;
+    switch(unit){
+      case ANGLE:
+        routine = new SysIdRoutine(
+          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+          // new SysIdRoutine.Config(null, null, null, (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+          new SysIdRoutine.Config(null, null, null),
+          new SysIdRoutine.Mechanism((Measure<Voltage> volts) -> {
+            motor.setVoltage(volts.in(Units.Volts));
+          }, 
+          (log)->{ 
+            log.motor(motor.toString())
+              .voltage(
+                  appliedVoltage.mut_replace(
+                    motor.getSpeed() * RobotController.getBatteryVoltage(), Units.Volts))
+              .angularPosition(angle.mut_replace(motor.getPosition(), Units.Rotations))
+              .angularVelocity(
+                  angularVelocity.mut_replace(motor.getVelocity(), Units.RotationsPerSecond));
+            log.motor(motor2.toString())
+              .voltage(
+                  appliedVoltage.mut_replace(
+                    motor2.getSpeed() * RobotController.getBatteryVoltage(), Units.Volts))
+              .angularPosition(angle.mut_replace(motor2.getPosition(), Units.Rotations))
+              .angularVelocity(
+                  angularVelocity.mut_replace(motor2.getVelocity(), Units.RotationsPerSecond));
+          },
+          this)
+        );
+        break;
+      case DISTANCE:
+        routine = new SysIdRoutine(
+          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+          // new SysIdRoutine.Config(null, null, null, (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+          new SysIdRoutine.Config(null, null, null),
+          new SysIdRoutine.Mechanism((Measure<Voltage> volts) -> {
+            motor.setVoltage(volts.in(Units.Volts));
+          }, 
+          (log)->{ 
+            log.motor(motor.toString())
+              .voltage(
+                  appliedVoltage.mut_replace(
+                    motor.getSpeed() * RobotController.getBatteryVoltage(), Units.Volts))
+              .linearPosition(distance.mut_replace(motor.getPosition(), Units.Inches))//Meters Degrees, etc?
+              .linearVelocity(
+                  distanceVelocity.mut_replace(motor.getVelocity(), Units.InchesPerSecond));//Meters Degrees, etc?
+            log.motor(motor2.toString())
+              .voltage(
+                  appliedVoltage.mut_replace(
+                    motor2.getSpeed() * RobotController.getBatteryVoltage(), Units.Volts))
+              .linearPosition(distance.mut_replace(motor2.getPosition(), Units.Inches))
+              .linearVelocity(
+                  distanceVelocity.mut_replace(motor2.getVelocity(), Units.InchesPerSecond));
           }, 
           this)
         );
@@ -261,8 +383,8 @@ public class SysID extends SubsystemBase {
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
       return routine.dynamic(direction);
     }
-    public Command stop(){
-      return new InstantCommand(()->motor.setPower(0));
-    }
+    // public Command stop(){
+    //   return new InstantCommand(()->motor.setPower(0));
+    // }
 }
 
