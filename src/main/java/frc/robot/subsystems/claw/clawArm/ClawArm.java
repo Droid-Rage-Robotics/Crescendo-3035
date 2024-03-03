@@ -28,16 +28,16 @@ public class ClawArm extends SubsystemBase {
     protected ArmFeedforward feedforward;
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Arm Encoder Position (Radians)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm/Arm Encoder Position (Radians)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Arm Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm/Arm Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Arm Moving manually", Claw.class.getSimpleName())
+        ShuffleboardValue.create(false, "Arm/Arm Moving manually", Claw.class.getSimpleName())
         .build();
     
     public ClawArm(Boolean isEnabled) {
@@ -48,10 +48,10 @@ public class ClawArm extends SubsystemBase {
             IdleMode.Brake,
             Constants.ROTATIONS_TO_RADIANS,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Arm Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Arm/Arm Is Enabled", Claw.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Arm Voltage", Claw.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Arm/Arm Voltage", Claw.class.getSimpleName())
                 .build()
         );
 
@@ -64,11 +64,12 @@ public class ClawArm extends SubsystemBase {
         feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);//Old Values
         // feedforward = new ArmFeedforward(0, 0,0);
 
-        ComplexWidgetBuilder.create(controller, "PID Controller", Claw.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Arm PID Controller", Claw.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset encoder", Claw.class.getSimpleName());
+        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), 
+            "Arm Reset encoder", Claw.class.getSimpleName());
 
         motor.burnFlash();
     }

@@ -40,11 +40,14 @@ public class Constants {
     }
     protected final SafeTalonFX motorL, motorR;
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
-        (0.0, "Target Velocity", Shooter.class.getSimpleName()).build();
+        (0.0, "Shooter/Target Velocity", 
+        Shooter.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity", Shooter.class.getSimpleName()).build();
+        (0.0, "Shooter/Encoder Velocity", 
+        Shooter.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Encoder Velocity Error", Shooter.class.getSimpleName()).build();
+        (0.0, "Shooter/Encoder Velocity Error", 
+        Shooter.class.getSimpleName()).build();
     
     private final PIDController shooterController;
     private final SimpleMotorFeedforward feedforward;
@@ -52,7 +55,8 @@ public class Constants {
     private final ShuffleboardValue<Boolean> isEnabled;
 
     public Shooter(Boolean isEnabled) {
-        this.isEnabled = ShuffleboardValue.create(isEnabled, "Is Enabled", Shooter.class.getSimpleName())
+        this.isEnabled = ShuffleboardValue.create(isEnabled, "Is Enabled", 
+            Shooter.class.getSimpleName())
             .withWidget(BuiltInWidgets.kToggleSwitch)
             .build();
 
@@ -63,7 +67,8 @@ public class Constants {
             Constants.ROTATIONS_TO_RADIANS,
             Constants.ROTATIONS_TO_RADIANS,
             this.isEnabled,
-                ShuffleboardValue.create(0.0, "VoltageL", Shooter.class.getSimpleName())
+                ShuffleboardValue.create(0.0, "Shooter/VoltageL", 
+                Shooter.class.getSimpleName())
                     .build()
         );
         motorR = new SafeTalonFX(
@@ -73,7 +78,8 @@ public class Constants {
             Constants.ROTATIONS_TO_RADIANS,
             Constants.ROTATIONS_TO_RADIANS,
             this.isEnabled,
-                ShuffleboardValue.create(0.0, "VoltageR", Shooter.class.getSimpleName())
+                ShuffleboardValue.create(0.0, "Shooter/VoltageR", 
+                Shooter.class.getSimpleName())
                     .build() 
         );
        

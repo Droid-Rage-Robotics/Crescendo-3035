@@ -34,16 +34,16 @@ public class IntakeDropDown extends SubsystemBase {
     // protected final DigitalInput intakeLimitSwitch; //Limit Switch?
 
     protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Position (Radians)", Intake.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Drop Down/ Encoder Position (Radians)", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Encoder Velocity (Radians per Second)", Intake.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Drop Down/ Encoder Velocity (Radians per Second)", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Moving manually", Intake.class.getSimpleName())
+        ShuffleboardValue.create(false, "Drop Down/ Moving manually", Intake.class.getSimpleName())
         .build();
     
     public IntakeDropDown(Boolean isEnabled) {
@@ -53,10 +53,10 @@ public class IntakeDropDown extends SubsystemBase {
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             Constants.ROTATIONS_TO_RADIANS,
-            ShuffleboardValue.create(isEnabled, "Drop Is Enabled", Intake.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Drop Down/ Drop Is Enabled", Intake.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Drop Voltage", Intake.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Drop Down/ Drop Voltage", Intake.class.getSimpleName())
                 .build()
         );
 
@@ -71,8 +71,9 @@ public class IntakeDropDown extends SubsystemBase {
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Intake Drop Encoder", 
-            Intake.class.getSimpleName());
+        ComplexWidgetBuilder.create(
+            DisabledCommand.create(runOnce(this::resetEncoder)),
+             "Reset Intake Drop Encoder", Intake.class.getSimpleName());
 
         // intakeLimitSwitch = new DigitalInput(5);//WHERE is it plugged in
     }

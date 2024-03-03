@@ -24,14 +24,14 @@ public class IntakeWheel extends SubsystemBase {
     protected final PIDController intakeController;
     protected final SimpleMotorFeedforward intakeFeedforward;
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create    
-      (0.0, "Target Wheel Velocity", Intake.class.getSimpleName()).build();
+      (0.0, "Intake/Target Wheel Velocity", Intake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-         (0.0, "Wheel Encoder Velocity", Intake.class.getSimpleName()).build();
+         (0.0, "Intake/Wheel Encoder Velocity", Intake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Wheel Encoder Velocity Error", IntakeState.class.getSimpleName()).build();
+        (0.0, "Intake/Wheel Encoder Velocity Error", Intake.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Boolean> isElementInWriter = ShuffleboardValue.create
-            (false, "Is Element In", IntakeState.class.getSimpleName()).build();
+            (false, "Is Element In", Intake.class.getSimpleName()).build();
 
 
     public IntakeWheel(Boolean isEnabled) {
@@ -41,10 +41,10 @@ public class IntakeWheel extends SubsystemBase {
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             Constants.ROTATIONS_TO_RADIANS,
-            ShuffleboardValue.create(isEnabled, "Is Enabled Wheel", Intake.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Intake/Is Enabled Wheel", Intake.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Intake/Voltage Wheel", Intake.class.getSimpleName())
                 .build()
         );
         // intakeEncoder = intake.getEncoder();

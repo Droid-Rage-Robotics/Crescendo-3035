@@ -38,15 +38,16 @@ public class Climb extends SubsystemBase{
     private final PIDController controller = new PIDController(2.4, 0, 0);
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
     private final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
-        (0.0, "Voltage", Climb.class.getSimpleName())
+        (0.0, "Climb/Voltage", Climb.class.getSimpleName())
         .build();
 
     private final SafeCanSparkMax motorL, motorR;
-
-    protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue.create(0.0, "Encoder Position", Climb.class.getSimpleName())
+    protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue
+        .create(0.0, "Climb/Encoder Position", Climb.class.getSimpleName())
         .withSize(1, 3)
         .build();
-    protected final ShuffleboardValue<Boolean> isMovingManually = ShuffleboardValue.create(false, "Moving manually", Climb.class.getSimpleName())
+    protected final ShuffleboardValue<Boolean> isMovingManually = ShuffleboardValue
+        .create(false, "Climb/Moving manually", Climb.class.getSimpleName())
         .build();
 
 
@@ -58,7 +59,8 @@ public class Climb extends SubsystemBase{
             IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
-            ShuffleboardValue.create(isEnabledLeft, "Is Enabled Left", Climb.class.getSimpleName())
+            ShuffleboardValue.create(isEnabledLeft, "Climb/Is Enabled Left", 
+                Climb.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             voltageWriter
@@ -71,17 +73,21 @@ public class Climb extends SubsystemBase{
             IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
-            ShuffleboardValue.create(isEnabledRight, "Is Enabled Right", Climb.class.getSimpleName())
+            ShuffleboardValue.create(isEnabledRight, "Climb/Is Enabled Right", 
+                Climb.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             voltageWriter
         );
 
-        ComplexWidgetBuilder.create(controller, " PID Controller", Climb.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "PID Controller", 
+            Climb.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 2);
 
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), "Reset Encoder", Climb.class.getSimpleName());
+        ComplexWidgetBuilder.create(DisabledCommand
+            .create(runOnce(this::resetEncoder)), 
+            "Reset Encoder", Climb.class.getSimpleName());
     }
 
     @Override
