@@ -115,6 +115,19 @@ public class RobotContainer {
 			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 	}
 
+	public void configureClimbTestBindings(Climb climb){
+		operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
+			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+		operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
+			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+	}
+	public void configureClawTestBindings(Claw claw){
+		// operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
+		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+		// operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
+		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+	}
+
 	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter){
 		operator.rightBumper()
 			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
@@ -131,11 +144,12 @@ public class RobotContainer {
 
 
 	public void configureSparkMaxMotorBindings(SafeCanSparkMax motor){
-		operator.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(.1)))
+		operator.rightTrigger().onTrue(new InstantCommand(()->motor.setPower(.6)))
 			.onFalse(new InstantCommand(()->motor.setPower(0)));
-		operator.leftTrigger().onTrue(new InstantCommand(()->motor.setPower(-.1)))
+		operator.leftTrigger().onTrue(new InstantCommand(()->motor.setPower(-.6)))
 			.onFalse(new InstantCommand(()->motor.setPower(0)));
 	}
+	
 	public void configureTalonMotorBindings(SafeTalonFX motor){
 		operator.rightTrigger()
 			.onTrue(new InstantCommand(()-> motor.setPower(.4)))

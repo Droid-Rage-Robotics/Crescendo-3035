@@ -7,6 +7,7 @@ package frc.robot;
 import java.util.logging.Logger;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -21,12 +22,19 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.SysID.SysID;
 import frc.robot.SysID.SysID.Measurement;
 import frc.robot.commands.autos.AutoChooser;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.claw.ClawElevator;
+import frc.robot.subsystems.claw.ClawIntake;
+import frc.robot.subsystems.claw.clawArm.ClawArm;
+import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
+import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -38,22 +46,30 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
  */
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
-    // private final SwerveDrive drive = new SwerveDrive(false);
-    private final IntakeWheel intakeWheel = new IntakeWheel(true);
-    private final IntakeDropDown dropDown = new IntakeDropDown(false);
-    private final Intake intake = new Intake(dropDown, intakeWheel);
-    // private final Shooter shooter = new Shooter(true);
-    // private final ClawElevator clawElevator = new ClawElevator(false, false);
-    // private final ClawPivot clawPivot = new ClawPivot(false);
-    // private final ClawIntake clawIntake = new ClawIntake(false);
-    // private final Claw claw = new Claw(clawElevator, clawP\.ivot, clawIntake);
-    // private final Climb climb = new Climb(true, true);
+    //15 missing
+    // private final SwerveDrive drive = new SwerveDrive(false);//2-10ew
+    // private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    // private final IntakeDropDown dropDown = new IntakeDropDown(false);//17
+    // private final Intake intake = new Intake(dropDown, intakeWheel);
+    // private final Shooter shooter = new Shooter(false);//18.19
+    // private final Climb climb = new Climb(false, false);//20,21
+    // private final ClawElevator clawElevator = new ClawElevator(true);//22
+    // private final ClawArm clawArm = new ClawArm(false);//23 - not connected: temp is 60
+    // private final ClawPivot clawPivot = new ClawPivot(false);//24 - not connected
+    private final ClawIntake clawIntake = new ClawIntake(true);//25       
+    // private final Claw claw = new Claw(clawElevator, clawArm, clawPivot, clawIntake);
+    
     // private final Vision vision = new Vision();
     // private final Light light = new Light();
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive, intake, shooter, claw, climb, vision, light
     // );
-    private final SysID sysID = new SysID(intake.getIntakeWheel().getMotor(), Measurement.DISTANCE);
+    // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
+    // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
+    // private final SysID sysID = new SysID(clawElevator.getMotor(), Measurement.DISTANCE);
+    private final SysID sysID = new SysID(clawIntake.getMotor(), Measurement.DISTANCE);
+
+
     // private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer();
         
@@ -135,16 +151,22 @@ public class Robot extends TimedRobot {
         // );
 
 
-        // robotContainer.configureTestMotorBindings(
+        // robotContainer.configureSparkMaxMotorBindings(
         //     new SafeCanSparkMax(
-        //         2, 
-        //         MotorType.kBrushless,
-        //         ShuffleboardValue.create(true, "Is Enabled", Shooter.class.getSimpleName())
-        //             .withWidget(BuiltInWidgets.kToggleSwitch)
-        //             .build(),
-        //         ShuffleboardValue.create(0.0, "VoltageL", Shooter.class.getSimpleName())
-        //             .build())
+        //             25,
+        //             MotorType.kBrushless,
+        //             true,
+        //             IdleMode.Coast,
+        //             1,
+        //             1,
+        //             ShuffleboardValue.create(true, "Claw Intake Is Enabled", Claw.class.getSimpleName())
+        //                     .withWidget(BuiltInWidgets.kToggleSwitch)
+        //                     .build(),
+        //                 ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
+        //                     .build()
+        //         )
         // );
+
         // robotContainer.configureTalonMotorBindings(
         //     new SafeTalonFX(
         //     16,
@@ -159,8 +181,10 @@ public class Robot extends TimedRobot {
         //         .build()
         // )
         // );
+
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light);
         // robotContainer.configureIntakeTestBindings(intake);
+        // robotContainer.configureClimbTestBindings(climb);
         // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
         // robotContainer.configureShooterTestBindings(shooter);
         // robotContainer.configureDriveBindings(drive);
