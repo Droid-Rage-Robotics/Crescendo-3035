@@ -11,16 +11,16 @@ import frc.robot.commands.ClimbAndScoreSequence;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.LightCommand;
 import frc.robot.commands.autos.AutoChooser;
-import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.utility.InfoTracker.CycleTracker;
+import frc.robot.utility.InfoTracker.CycleTracker3;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
@@ -39,8 +39,10 @@ public class RobotContainer {
 		DriverStation.silenceJoystickConnectionWarning(true);
 	}
 
+	//Add Reset encoder buttons
+	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
-		Claw claw, Climb climb, Vision vision, Light light){
+		Claw claw, Climb climb, Vision vision, Light light, CycleTracker cycleTracker){
 		light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
 		intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 
@@ -108,6 +110,7 @@ public class RobotContainer {
 			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 	}
+	
 	public void configureShooterTestBindings(Shooter shooter){
 		operator.rightTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT)))
 			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
@@ -120,12 +123,6 @@ public class RobotContainer {
 			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
 		operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
 			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
-	}
-	public void configureClawTestBindings(Claw claw){
-		// operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
-		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
-		// operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
-		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
 	}
 
 	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter){
@@ -140,6 +137,12 @@ public class RobotContainer {
 		operator.leftTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT)))
 			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 	}
+	public void configureClawTestBindings(Claw claw){
+		operator.rightBumper()
+			.onTrue(claw.setPositionCommand(Claw.Value.START));
+		operator.leftBumper()
+			.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_HUMAN));
+	}
 
 
 
@@ -148,6 +151,12 @@ public class RobotContainer {
 			.onFalse(new InstantCommand(()->motor.setPower(0)));
 		operator.leftTrigger().onTrue(new InstantCommand(()->motor.setPower(-.6)))
 			.onFalse(new InstantCommand(()->motor.setPower(0)));
+	}
+
+	public void configureCycleTrackerBindings(CycleTracker3 cycleTracker){
+		operator.rightTrigger().onTrue(new InstantCommand(()->cycleTracker.trackCycle(Shooter.ShooterSpeeds.AMP_SHOOT)));
+		operator.leftTrigger()
+			.onTrue(new InstantCommand(()->cycleTracker.trackCycle(Shooter.ShooterSpeeds.HOLD)));
 	}
 	
 	public void configureTalonMotorBindings(SafeTalonFX motor){

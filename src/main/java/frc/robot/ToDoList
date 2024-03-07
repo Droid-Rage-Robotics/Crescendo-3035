@@ -13,16 +13,6 @@ Non Urgent ToDos:
 - FIX the Motors in same file from having hte same shuffle board names
 - Make and extended Subsystems to have protected instead of private
 
-Test:
-- Limelight Tracking AutoAim.java
-- Make all of the writes that are not necessary during a match be in a practice only writers (Helps prevent the likelihood of loop overruns)
-- Limit Switch to the Intake
-- does Pathplannerfollow work?
-- Test Software Switch on Shuffleboard to see if it work
-- Test NamedCommands
-Done:
-April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
-
 Extra Ideas:
 - Lights: Add lights to have the robot tell us any errors with can, etc; Make LEDs show Errors
 - Driver.getGameSpecificMessage()
@@ -32,13 +22,22 @@ Extra Ideas:
 - Field Centric Turning
 - Changing Shooter Speed According to Distance: InterpolatingMatrixTreeMap
 
-Non Urgent ToDos:
-- Fix the Motors in same file from having hte same shuffle board names
-- Make and extended Subsystems to have protected instead of private
+Test:
+- Limelight Tracking AutoAim.java
+- Make all of the writes that are not necessary during a match be in a practice only writers (Helps prevent the likelihood of loop overruns)
+- Limit Switch to the Intake
+- does Pathplannerfollow work?
+- Test Software Switch on Shuffleboard to see if it work
+- Test NamedCommands
+- Test CycleTracker: https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html; https://www.chiefdelphi.com/t/roborio-wpilib-logging/159434/17
+Done:
+April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
 
-Connecting to Roboro using FileZilla
+
+
+Notes:
+Connecting to Roborio using FileZilla
 Host: sftp://roboRIO-3035-frc.local
 Username:lvuser
 Port:22
 Location of SysID Logs: /home/lvuser/logs 
-//	ONFALSE NO WORK, REMOVE ASAP @LUCKY on sysid vuttons

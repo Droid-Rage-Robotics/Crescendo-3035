@@ -26,14 +26,17 @@ import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.claw.ClawElevator;
-import frc.robot.subsystems.claw.ClawIntake;
+import frc.robot.subsystems.claw.PowerClawIntake;
 import frc.robot.subsystems.claw.clawArm.ClawArm;
 import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbs;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
+import frc.robot.utility.InfoTracker.CycleTracker;
+import frc.robot.utility.InfoTracker.CycleTracker3;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
@@ -48,15 +51,15 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     //15 missing
     // private final SwerveDrive drive = new SwerveDrive(false);//2-10ew
-    // private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
-    // private final IntakeDropDown dropDown = new IntakeDropDown(false);//17
+    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
+    private final IntakeDropDownAbs dropDown = new IntakeDropDownAbs(true);//17
     // private final Intake intake = new Intake(dropDown, intakeWheel);
     // private final Shooter shooter = new Shooter(false);//18.19
     // private final Climb climb = new Climb(false, false);//20,21
     // private final ClawElevator clawElevator = new ClawElevator(true);//22
     // private final ClawArm clawArm = new ClawArm(false);//23 - not connected: temp is 60
     // private final ClawPivot clawPivot = new ClawPivot(false);//24 - not connected
-    private final ClawIntake clawIntake = new ClawIntake(true);//25       
+    // private final PowerClawIntake clawIntake = new PowerClawIntake(false);//25       
     // private final Claw claw = new Claw(clawElevator, clawArm, clawPivot, clawIntake);
     
     // private final Vision vision = new Vision();
@@ -64,10 +67,14 @@ public class Robot extends TimedRobot {
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive, intake, shooter, claw, climb, vision, light
     // );
+    // private final CycleTracker3 cycleTracker = new CycleTracker3();
+
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
     // private final SysID sysID = new SysID(clawElevator.getMotor(), Measurement.DISTANCE);
-    private final SysID sysID = new SysID(clawIntake.getMotor(), Measurement.DISTANCE);
+    // private final SysID sysID = new SysID(clawIntake.getMotor(), Measurement.DISTANCE);
+    private final SysID sysID = new SysID(dropDown.getMotor(), Measurement.ANGLE);
+
 
 
     // private Field2d field = new Field2d(); //TODO:How does this work
@@ -108,6 +115,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        // cycleTracker.printAllData();
 
     }
     
@@ -182,11 +190,14 @@ public class Robot extends TimedRobot {
         // )
         // );
 
-        // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light);
+        // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light, cycleTracker);
         // robotContainer.configureIntakeTestBindings(intake);
+        // robotContainer.configureCycleTrackerBindings(cycleTracker);
+
         // robotContainer.configureClimbTestBindings(climb);
         // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
         // robotContainer.configureShooterTestBindings(shooter);
+        // robotContainer.configureClawTestBindings(claw);
         // robotContainer.configureDriveBindings(drive);
         robotContainer.configureSysIDBindings(sysID);
     }
@@ -208,4 +219,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationPeriodic() {}
+
+    @Override
+    public void teleopExit(){
+        // cycleTracker.printAllData();
+    }
 }
