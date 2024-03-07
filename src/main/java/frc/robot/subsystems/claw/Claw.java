@@ -96,7 +96,7 @@ public class Claw {
     private final ClawElevator clawElevator;
     private final ClawArm clawArm;
     private final ClawPivot clawPivot;
-    private final ClawIntake clawIntake;
+    private final PowerClawIntake clawIntake;
     private Value position = Value.START;
     private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
         .create(position.name(), "Current Arm Position", "Misc")
@@ -106,7 +106,7 @@ public class Claw {
     public Claw(ClawElevator clawElevator,
         ClawArm clawArm,
         ClawPivot clawPivot,
-        ClawIntake clawIntake) {
+        PowerClawIntake clawIntake) {
         this.clawElevator = clawElevator;
         this.clawArm = clawArm;
         this.clawPivot = clawPivot;
@@ -190,7 +190,7 @@ public class Claw {
     public ClawPivot getClawPivot(){
         return clawPivot;
     }
-    public ClawIntake getClawIntake(){
+    public PowerClawIntake getClawIntake(){
         return clawIntake;
     }
 }

@@ -42,7 +42,7 @@ public class ClawArm extends SubsystemBase {
     
     public ClawArm(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            60, 
+            23, 
             MotorType.kBrushless,
             false,
             IdleMode.Brake,

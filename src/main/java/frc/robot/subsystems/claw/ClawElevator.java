@@ -41,7 +41,7 @@ public class ClawElevator extends SubsystemBase {
 
     public ClawElevator(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            23, 
+            22, 
             MotorType.kBrushless,
             false,
             IdleMode.Brake,
