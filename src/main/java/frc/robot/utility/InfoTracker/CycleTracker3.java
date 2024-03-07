@@ -1,20 +1,22 @@
 package frc.robot.utility.InfoTracker;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class CycleTracker2 {
+public class CycleTracker3 {
     //TODO:Test
     protected StatCalculator stat = new StatCalculator();
     protected Timer timer = new Timer();
-    private final File file = new File("/home/lvuser/logs");
-    //Add in data like time of match, what type it is from DRIVER STATION
-    private final PrintStream stream;
+
+    BooleanLogEntry myBooleanLog;
+DoubleLogEntry myDoubleLog;
+StringLogEntry myStringLog;
 /* SIngleton - {@link CommandScheduler} {@link Sendable}*/ 
     
     // private HashMap<String, Double> data;
@@ -43,9 +45,9 @@ public class CycleTracker2 {
             .withSize(1, 2)
             .build();
 
-    public CycleTracker2 () throws FileNotFoundException{
+    public CycleTracker3 (){
         timer.start();
-        stream = new PrintStream(file); 
+        DataLogManager.start("", "tet4"); //https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html
     }
     
     public void trackCycle(Shooter.ShooterSpeeds num){
@@ -67,8 +69,7 @@ public class CycleTracker2 {
     }
 
     public void printOut(String string, double num){
-        // data.put(string, num);
-        stream.print(string+num);
+        DataLogManager.log(string);
     }
     public void printAllData(){
         printOut(DriverStation.getMatchType().toString(), DriverStation.getMatchNumber());
