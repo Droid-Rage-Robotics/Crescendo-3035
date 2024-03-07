@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbs;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Intake {
@@ -16,12 +17,13 @@ public class Intake {
     //that holds 2 Positions to join together like 
     //in Charged Up; Allows for you to different 
     //Position Based on game element
+    //170-340
     public enum Value {
-        START(0,0),
+        START(330,0),
 
         //IntakePos
-        INTAKE_GROUND((90),-10000),
-        INTAKE_HUMAN((70),1000),//INTAKE_GROUND
+        INTAKE_GROUND((300),-10000),
+        INTAKE_HUMAN((280),1000),//INTAKE_GROUND
 
         SHOOTER_HOLD(0,0),//Ready to give Note to shooter, but not doing it
         SHOOTER_TRANSFER(0,10000),//Giving Note to Shooter
@@ -68,7 +70,7 @@ public class Intake {
         }
     }
 
-    private final IntakeDropDown dropDown;
+    private final IntakeDropDownAbs dropDown;
     private final IntakeWheel intakeWheel;
     
     private Value position = Value.START;
@@ -77,7 +79,7 @@ public class Intake {
         .withSize(1, 3)
         .build();
 
-    public Intake(IntakeDropDown dropDown,
+    public Intake(IntakeDropDownAbs dropDown,
         IntakeWheel intakeWheel) {
         this.dropDown = dropDown;
         this.intakeWheel = intakeWheel;
@@ -100,7 +102,7 @@ public class Intake {
             switch (targetPosition) {
                 default -> 
                     new ParallelCommandGroup(
-                        dropDown.runOnce(() -> dropDown.setTargetPosition(Math.toRadians(targetPosition.getAngle()))),
+                        dropDown.runOnce(() -> dropDown.setTargetPosition((targetPosition.getAngle()))),
                         intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
                     );
             }
@@ -132,7 +134,6 @@ public class Intake {
     }
     public boolean isElementInClaw(){
         return intakeWheel.isElementIn();
-
     }
 
     public IntakeDropDown getDropDown(){

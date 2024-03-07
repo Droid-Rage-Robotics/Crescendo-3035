@@ -1,17 +1,12 @@
 package frc.robot.subsystems.intake.dropDown;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -21,7 +16,7 @@ public class IntakeDropDown extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1 / 2;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;//4089
-        public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK
+        public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK; cause gear ratio: (2*Math.PI)/Constants.GEAR_RATIO
         // (2 * Math.PI / READINGS_PER_REVOLUTION)/(GEAR_RATIO);
         //  (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
         //  (Math.PI * 2)/(GEAR_RATIO * READINGS_PER_REVOLUTION);
@@ -60,9 +55,10 @@ public class IntakeDropDown extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(0.4, 0.0, 0.0);//0.024
+        controller = new PIDController(0.05, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(0.1));
 
+        // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);
         // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);
         // feedforward = new ArmFeedforward(0.079, 0.1,0.1);
         feedforward = new ArmFeedforward(0,0,0);
@@ -103,7 +99,7 @@ public class IntakeDropDown extends SubsystemBase {
 
 
     public void setTargetPosition(double positionRadians) {
-        controller.setSetpoint(positionRadians);
+        controller.setSetpoint(positionRadians);//Makes the 
     }
 
     public double getTargetPosition() {
