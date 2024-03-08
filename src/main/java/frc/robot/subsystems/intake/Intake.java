@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbs;
+import frc.robot.subsystems.intake.dropDown.newdrop.IntakeDropDownAbsNEW;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Intake {
@@ -19,11 +20,11 @@ public class Intake {
     //Position Based on game element
     //170-340
     public enum Value {
-        START(330,0),
+        START(260,0),
 
         //IntakePos
-        INTAKE_GROUND((300),-10000),
-        INTAKE_HUMAN((280),1000),//INTAKE_GROUND
+        INTAKE_GROUND((200),-10000),
+        INTAKE_HUMAN((230),1000),//INTAKE_GROUND
 
         SHOOTER_HOLD(0,0),//Ready to give Note to shooter, but not doing it
         SHOOTER_TRANSFER(0,10000),//Giving Note to Shooter
@@ -70,7 +71,7 @@ public class Intake {
         }
     }
 
-    private final IntakeDropDownAbs dropDown;
+    private final IntakeDropDownAbsNEW dropDown;
     private final IntakeWheel intakeWheel;
     
     private Value position = Value.START;
@@ -79,10 +80,11 @@ public class Intake {
         .withSize(1, 3)
         .build();
 
-    public Intake(IntakeDropDownAbs dropDown,
+    public Intake(IntakeDropDownAbsNEW dropDown,
         IntakeWheel intakeWheel) {
         this.dropDown = dropDown;
         this.intakeWheel = intakeWheel;
+        setPositionCommand(Value.START);
     }
 
     private void logPosition(Value targetPosition) {
@@ -136,7 +138,7 @@ public class Intake {
         return intakeWheel.isElementIn();
     }
 
-    public IntakeDropDown getDropDown(){
+    public IntakeDropDownAbsNEW getDropDown(){
         return dropDown;
     }
     public IntakeWheel getIntakeWheel(){

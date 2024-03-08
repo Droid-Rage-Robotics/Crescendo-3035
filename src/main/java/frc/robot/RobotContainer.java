@@ -57,9 +57,9 @@ public class RobotContainer {
 				)
 			);
 
-		driver.rightTrigger().onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-		driver.leftTrigger().onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
+		driver.leftTrigger().whileTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 		
 
@@ -104,10 +104,10 @@ public class RobotContainer {
 		// 	.onTrue(new InstantCommand(()->intake.getIntakeWheel().setPower(.6)))
 		// 	.onFalse(new InstantCommand(()->intake.getIntakeWheel().setPower(0)));
 		operator.rightTrigger()
-			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 		operator.leftTrigger()
-			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
+			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 	}
 	

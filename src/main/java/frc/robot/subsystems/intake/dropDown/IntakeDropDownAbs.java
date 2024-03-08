@@ -10,6 +10,10 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class IntakeDropDownAbs extends IntakeDropDown {
+    public enum Thing{
+        DEGREE,
+        RADIAN
+    }
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI*2;
         public static double DEGREES_PER_ROTATION = 360;
@@ -30,6 +34,7 @@ public class IntakeDropDownAbs extends IntakeDropDown {
         .create(0.0, "Encoder  Position (Degrees)", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
+
     public IntakeDropDownAbs(Boolean isEnabled) {
         super(isEnabled);
         /*//If It is connected to a Spark Max
@@ -44,8 +49,11 @@ public class IntakeDropDownAbs extends IntakeDropDown {
     
     @Override
     public void periodic(){
-        super.periodic();
         getEncoderPosition();
+        setVoltage( calculatePID(getTargetPosition()));
+        // setVoltage( calculatePID(getTargetPosition()));
+
+        
     }
 
     @Override
@@ -57,6 +65,7 @@ public class IntakeDropDownAbs extends IntakeDropDown {
 
         getRawEncoderPositions();
         return radianPos;
+        // return degreePos;
     }
 
     public void getRawEncoderPositions() {
@@ -84,5 +93,13 @@ public class IntakeDropDownAbs extends IntakeDropDown {
         // controller.setSetpoint(posDegrees/(Constants.DEGREES_PER_ROTATION));
 
         controller.setSetpoint(Math.toRadians(posDegrees));
+        // controller.setSetpoint(posDegrees);
+    }
+
+    @Override
+    protected double calculatePID(double positionDegree) {
+        // return controller.calculate(getEncoderPosition(),Math.toRadians(positionDegree));
+        return controller.calculate(getEncoderPosition(),(positionDegree));
+
     }
 }

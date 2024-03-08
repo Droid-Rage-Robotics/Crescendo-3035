@@ -15,7 +15,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class IntakeWheel extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 3;
+        public static final double GEAR_RATIO = 1 / 3;//1/1
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
