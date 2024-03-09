@@ -18,7 +18,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
 public class ClawPivot extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
+        public static final double GEAR_RATIO = 1 / 180;
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
@@ -45,7 +45,7 @@ public class ClawPivot extends SubsystemBase {
             24, 
             MotorType.kBrushless,
             false,
-            IdleMode.Brake,
+            IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             1.0,
             ShuffleboardValue.create(isEnabled, "Pivot/Pivot Is Enabled", Claw.class.getSimpleName())
@@ -58,13 +58,13 @@ public class ClawPivot extends SubsystemBase {
         // encoder = motor.getEncoder();
   
 
-        controller = new PIDController(0.0, 0.0, 0.0);//0.024
+        controller = new PIDController(0.4, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(0.1));//How Much?
 
-        feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);//Old Values
-        // feedforward = new ArmFeedforward(0, 0,0);
+        // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);//Old Values
+        feedforward = new ArmFeedforward(0, 0,0);
 
-        ComplexWidgetBuilder.create(controller, "Pivot PID Controller", Claw.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Pivot PID", Claw.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 

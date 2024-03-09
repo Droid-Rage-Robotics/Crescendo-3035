@@ -13,18 +13,18 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class ClawElevator extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 1;
-        public static final double GEAR_DIAMETER_INCHES = 1.88;
+        public static final double GEAR_RATIO = 1/1;//1/15
+        public static final double GEAR_DIAMETER_INCHES = 2.058;//2.058
         public static final double COUNTS_PER_PULSE = 1; // 2048 bc rev through bore
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
-        public static final double MIN_POSITION = 0;
-        public static final double MAX_POSITION = 16.2;
+        // public static final double MIN_POSITION = 0;
+        // public static final double MAX_POSITION = 16.2;
     }
     private final SafeCanSparkMax motor;
     
-    private final PIDController controller = new PIDController(2.4, 0, 0);
-    private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
-    // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.1, 0.2, 0, 0);
+    private final PIDController controller = new PIDController(2, 0, 0);//2.4
+    // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
+    private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.1, 0.25, 0, 0);
 
     
     private final ShuffleboardValue<Double> voltage = ShuffleboardValue
@@ -44,7 +44,7 @@ public class ClawElevator extends SubsystemBase {
             22, 
             MotorType.kBrushless,
             false,
-            IdleMode.Brake,
+            IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
             ShuffleboardValue.create(isEnabled, "Elevator/ Elevator Is Enabled", Claw.class.getSimpleName())
@@ -55,9 +55,9 @@ public class ClawElevator extends SubsystemBase {
         
         controller.setTolerance(0.1);
 
-        ComplexWidgetBuilder.create(controller, "Elevator PID Controller", Claw.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Elevator PID", Claw.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
-            .withSize(2, 2);
+            .withSize(2, 1);
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
             "Elevator Reset Encoder", Claw.class.getSimpleName());
@@ -75,8 +75,8 @@ public class ClawElevator extends SubsystemBase {
 
     
     public void setTargetPosition(double target) {
-        if (target < Constants.MIN_POSITION) return;
-        if (target > Constants.MAX_POSITION) return;
+        // if (target < Constants.MIN_POSITION) return;
+        // if (target > Constants.MAX_POSITION) return;
         controller.setSetpoint(target);
     }
     protected void setVoltage(double voltage) {
@@ -95,7 +95,7 @@ public class ClawElevator extends SubsystemBase {
     }
 
     public double getEncoderPosition() {
-        double position = motor.getEncoder().getPosition();
+        double position = motor.getPosition();
         encoderPositionWriter.write(position);
         return position;
     }

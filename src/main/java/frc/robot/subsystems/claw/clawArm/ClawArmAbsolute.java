@@ -11,7 +11,8 @@ public class ClawArmAbsolute extends ClawArmMotionProfiled {
         public static double OFFSET = Math.PI / 2;  //90 Degree
     }
     SparkAbsoluteEncoder absoluteEncoder;
-    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", 
+    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = 
+        ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", 
         Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
@@ -35,7 +36,7 @@ public class ClawArmAbsolute extends ClawArmMotionProfiled {
 
     public void getRawEncoderPositions() {
         double position = (absoluteEncoder.getPosition());
-        rawEncoderPositionWriter.write(Math.toDegrees(position));
+        rawEncoderPositionWriter.write((position));
     }
 
     @Override

@@ -58,7 +58,7 @@ public class ClawIntake extends SubsystemBase {
         // feedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
 
-        ComplexWidgetBuilder.create(controller, "Claw Intake Controller", Claw.class.getSimpleName());
+        ComplexWidgetBuilder.create(controller, "Claw Intake", Claw.class.getSimpleName());
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
             "Claw Intake Reset Claw Encoder", Claw.class.getSimpleName());
