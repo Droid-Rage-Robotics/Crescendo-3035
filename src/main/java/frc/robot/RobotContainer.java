@@ -138,9 +138,9 @@ public class RobotContainer {
 			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 	}
 	public void configureClawTestBindings(Claw claw){
-		operator.rightBumper()
+		operator.rightTrigger()
 			.onTrue(claw.setPositionCommand(Claw.Value.START));
-		operator.leftBumper()
+		operator.leftTrigger()
 			.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_HUMAN));
 	}
 
