@@ -5,20 +5,17 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.subsystems.claw.Claw;
-import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
-import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
 public class ClawArm extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
+        public static final double GEAR_RATIO = 1 / 3;
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
@@ -27,25 +24,40 @@ public class ClawArm extends SubsystemBase {
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
 
-    protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Arm Encoder Position (Radians)", Claw.class.getSimpleName())
+    protected final ShuffleboardValue<Double> radianPosWriter = 
+        ShuffleboardValue.create(0.0, "Arm/Encoder/Arm Encoder Position (Radians)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Arm Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm/Encoder/Arm Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> degreePosWriter = 
+        ShuffleboardValue.create(0.0, "Arm/Encoder/Arm Encoder Position (Degree)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
 
+    protected final ShuffleboardValue<Double> radianTargetPosWriter = 
+        ShuffleboardValue.create(0.0, "Arm/Target/ targetRadian", Claw.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+        protected final ShuffleboardValue<Double> degreePosTargetWriter = 
+        ShuffleboardValue.create(0.0, "Arm/Target/ targetDegree", Claw.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
     protected final ShuffleboardValue<Boolean> isMovingManually = 
         ShuffleboardValue.create(false, "Arm/Arm Moving manually", Claw.class.getSimpleName())
         .build();
-    
+    protected final ShuffleboardValue<Double> encoderPositionWriter = 
+        ShuffleboardValue.create(0.0, "Arm/Encoder/ motorPos", Claw.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
     public ClawArm(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             23, 
             MotorType.kBrushless,
             false,
-            IdleMode.Brake,
+            IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             1.0,
             ShuffleboardValue.create(isEnabled, "Arm/Arm Is Enabled", Claw.class.getSimpleName())
@@ -55,14 +67,12 @@ public class ClawArm extends SubsystemBase {
                 .build()
         );
 
-        // encoder = motor.getEncoder();
-  
 
-        controller = new PIDController(0.0, 0.0, 0.0);//0.024
+        controller = new PIDController(0.5, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(0.1));//How Much?
 
-        feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);//Old Values
-        // feedforward = new ArmFeedforward(0, 0,0);
+        // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);//Old Values
+        feedforward = new ArmFeedforward(0, 0,0);
 
         ComplexWidgetBuilder.create(controller, "Arm PID Controller", Claw.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
@@ -77,7 +87,9 @@ public class ClawArm extends SubsystemBase {
     @Override
     public void periodic() {
         // motor.set(calculateFeedforward(getTargetPosition(), 0.) + calculatePID(getTargetPosition()));
-        setVoltage(calculateFeedforward(getTargetPosition(), 2.3793) + calculatePID(getTargetPosition()));
+        // setVoltage(calculateFeedforward(getTargetPosition(), 2.3793) + calculatePID(getTargetPosition()));
+        setVoltage( calculatePID(getTargetPosition()));
+
     }
   
     @Override
@@ -89,7 +101,9 @@ public class ClawArm extends SubsystemBase {
     //     return runOnce(()->setTargetPosition(target));
     // }
     public void setTargetPosition(double target){
-        controller.setSetpoint(target);
+        degreePosTargetWriter.write(target);
+        radianTargetPosWriter.write(Math.toRadians(target));
+        controller.setSetpoint(Math.toRadians(target));
     }
 
     public void setMovingManually(boolean value) {
@@ -99,12 +113,7 @@ public class ClawArm extends SubsystemBase {
     public boolean isMovingManually() {
         return isMovingManually.get();
     }
-
-
-    // public void setTargetPosition(double positionRadians) {
-    //     controller.setSetpoint(positionRadians);
-    // }
-
+    
     public double getTargetPosition() {
         return controller.getSetpoint();
     }
