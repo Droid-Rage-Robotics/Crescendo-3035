@@ -36,7 +36,7 @@ public class SwerveDriveTeleop extends Command {
         rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
             .onFalse(drive.setSpeed(Speed.NORMAL));
         aResetButton.onTrue(new InstantCommand(()->drive.setYawCommand(0)));
-
+        
 
         addRequirements(drive);
     }
