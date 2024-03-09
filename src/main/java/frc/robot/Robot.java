@@ -32,7 +32,7 @@ import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
-import frc.robot.subsystems.intake.dropDown.newdrop.IntakeDropDownAbsolute;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.InfoTracker.CycleTracker;
 import frc.robot.utility.InfoTracker.CycleTracker3;
@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
     //                     ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
     //                         .build()
     //             ));//17
+    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17
     // private final Intake intake = new Intake(dropDown, intakeWheel);
     // private final Shooter shooter = new Shooter(false);//18.19
     // private final Climb climb = new Climb(false, false);//20,21^
