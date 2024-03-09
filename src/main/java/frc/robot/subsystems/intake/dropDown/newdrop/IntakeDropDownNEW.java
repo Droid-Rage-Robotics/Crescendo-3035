@@ -77,9 +77,9 @@ public class IntakeDropDownNEW extends SubsystemBase {
         controller = new PIDController(0.5, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(1));
 
-        // feedforward = new ArmFeedforward(0.45276,.60679,.085861,.0035872); //SysID
+        feedforward = new ArmFeedforward(0.45276,.60679,.085861,.0035872); //SysID with just motor - may 
         // feedforward = new ArmFeedforward(0.,.60679,.085861,.0);//Make some 0 testing
-        feedforward = new ArmFeedforward(0,0,0);
+        // feedforward = new ArmFeedforward(0,0,0);
 
 
         ComplexWidgetBuilder.create(controller, "Drop PID Controller", Intake.class.getSimpleName())
@@ -159,5 +159,11 @@ public class IntakeDropDownNEW extends SubsystemBase {
     }
     public SafeTalonFX getMotor(){
         return motor;
+    }
+
+    public double getEncoderPosition() {
+        double position = motor.getPosition();
+        rawPosWriter.write(position);
+        return position;
     }
 }  
