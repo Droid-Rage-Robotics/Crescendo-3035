@@ -6,7 +6,7 @@ import frc.robot.subsystems.claw.Claw;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class IntakeDropDownAbsolute extends IntakeDropDownNEW {
+public class IntakeDropDownAbsolute extends IntakeDropDown {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
         public static double OFFSET = Math.PI / 2;  //90 Degree

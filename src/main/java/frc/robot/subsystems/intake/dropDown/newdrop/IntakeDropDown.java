@@ -11,7 +11,7 @@ import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class IntakeDropDownNEW extends SubsystemBase {
+public class IntakeDropDown extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1 / 2;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;//4089
@@ -60,7 +60,7 @@ public class IntakeDropDownNEW extends SubsystemBase {
         ShuffleboardValue.create(false, "Drop Down/ Moving manually", Intake.class.getSimpleName())
         .build();
     
-    public IntakeDropDownNEW(Boolean isEnabled) {
+    public IntakeDropDown(Boolean isEnabled) {
         motor = new SafeTalonFX(
             17,
             true,

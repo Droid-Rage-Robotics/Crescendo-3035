@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class IntakeDropDownMotionProfiled extends IntakeDropDownNEW {
+public class IntakeDropDownMotionProfiled extends IntakeDropDown {
     public static class Constants {
         public static double MIN_POSITION = Math.toRadians(20);
         public static double MAX_POSITION = Math.toRadians(230);
