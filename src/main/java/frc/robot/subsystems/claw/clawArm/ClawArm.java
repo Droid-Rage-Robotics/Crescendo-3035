@@ -68,7 +68,7 @@ public class ClawArm extends SubsystemBase {
         motor = new SafeCanSparkMax(
             23, 
             MotorType.kBrushless,
-            false,
+            true,
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             1.0,
@@ -79,7 +79,7 @@ public class ClawArm extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(1.1, 0.0, 0.0);//0.024
+        controller = new PIDController(1.9, 0.0, 0.0);//1.1
         // controller = new PIDController(0, 0.0, 0.0);
 
         controller.setTolerance(Math.toRadians(1));
@@ -87,7 +87,7 @@ public class ClawArm extends SubsystemBase {
         // feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - may 
 
         // feedforward = new ArmFeedforward(0.,.60679,.085861,.0035872);//Make some 0 testing
-        // feedforward = new ArmFeedforward(0,0,0);
+        feedforward = new ArmFeedforward(0,0,0);
 
 
         ComplexWidgetBuilder.create(controller, "Arm PID", Claw.class.getSimpleName())
@@ -149,7 +149,7 @@ public class ClawArm extends SubsystemBase {
     }
 
     public void setVoltage(double voltage) {
-        motor.setVoltage(voltage); //TODO: FIx this to be better
+        motor.setVoltage(-voltage); //TODO: FIx this to be better
     }
 
     protected void stop() {

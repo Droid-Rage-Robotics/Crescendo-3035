@@ -20,7 +20,7 @@ public class ClawArmAbsolute extends ClawArm {
 
     public void periodic(){
         // setVoltage(calculatePID(getEncoderPosition()));
-        setVoltage(calculatePID(getEncoderPosition())+(Math.cos(getEncoderPosition())*(.175)));
+        setVoltage(calculatePID(getEncoderPosition())+(Math.cos(getEncoderPosition())*(.2)));//.175
 
         // setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(getEncoderPosition(), 0));
     }
