@@ -2,41 +2,38 @@ package frc.robot.subsystems.claw.clawArm;
 
 import com.revrobotics.SparkAbsoluteEncoder;
 
-import frc.robot.subsystems.claw.Claw;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
-
-public class ClawArmAbsolute extends ClawArmMotionProfiled {
+public class ClawArmAbsolute extends ClawArm {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
         public static double OFFSET = Math.PI / 2;  //90 Degree
     }
     SparkAbsoluteEncoder absoluteEncoder;
-    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", 
-        Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
     public ClawArmAbsolute(Boolean isEnabled) {
         super(isEnabled);
         absoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        
         absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
         absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
-        absoluteEncoder.setInverted(true);
+        absoluteEncoder.setInverted(false);
         setTargetPosition(Constants.OFFSET);
     }
-    
+
+    public void periodic(){
+        // setVoltage(calculatePID(getEncoderPosition()));
+        setVoltage(calculatePID(getEncoderPosition())+(Math.cos(getEncoderPosition())*(.175)));
+
+        // setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(getEncoderPosition(), 0));
+    }
     
     @Override
     public double getEncoderPosition() {
-        double position = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
-        encoderPositionWriter.write(Math.toDegrees(position));
-        getRawEncoderPositions();
-        return position;
-    }
-
-    public void getRawEncoderPositions() {
-        double position = (absoluteEncoder.getPosition());
-        rawEncoderPositionWriter.write((position));
+        double radianPos = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
+        // double radianPos = (absoluteEncoder.getPosition());
+        radianPosWriter.write(radianPos);
+        degreePosWriter.write(Math.toDegrees(radianPos));
+        double raw = (absoluteEncoder.getPosition());
+        rawPosWriter.write((raw));
+        return radianPos;
     }
 
     @Override
@@ -46,9 +43,8 @@ public class ClawArmAbsolute extends ClawArmMotionProfiled {
         return velocity;
     }
 
-    @Override
-    public void resetEncoder() {
-        absoluteEncoder.setZeroOffset(0);
-        motor.burnFlash();
-    }
+    // @Override
+    // public void resetEncoder() {
+    //     absoluteEncoder.setZeroOffset(0);
+    // }
 }

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
+@Deprecated
 public class ClawArmMotionProfiled extends ClawArm {
     public static class Constants {
         public static double MIN_POSITION = Math.toRadians(20);

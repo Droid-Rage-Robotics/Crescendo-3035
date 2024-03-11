@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.SuppliedCommand;
-import frc.robot.subsystems.claw.clawArm.ClawArmAbs;
+import frc.robot.subsystems.claw.clawArm.ClawArmAbsolute;
 import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -93,7 +93,7 @@ public class Claw {
     }
 
     private final ClawElevator clawElevator;
-    private final ClawArmAbs clawArm;
+    private final ClawArmAbsolute clawArm;
     private final ClawPivot clawPivot;
     private final PowerClawIntake clawIntake;
     private Value position = Value.START;
@@ -103,7 +103,7 @@ public class Claw {
         .build();
 
     public Claw(ClawElevator clawElevator,
-        ClawArmAbs clawArm,
+        ClawArmAbsolute clawArm,
         ClawPivot clawPivot,
         PowerClawIntake clawIntake) {
         this.clawElevator = clawElevator;
@@ -192,7 +192,7 @@ public class Claw {
     public PowerClawIntake getClawIntake(){
         return clawIntake;
     }
-    public ClawArmAbs getClawArmAbs(){
+    public ClawArmAbsolute getClawArmAbs(){
         return clawArm;
     }
 }

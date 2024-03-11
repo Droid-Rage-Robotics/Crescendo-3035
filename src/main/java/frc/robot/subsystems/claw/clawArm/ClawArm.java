@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -15,43 +17,53 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class ClawArm extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 3;
-        public static final double READINGS_PER_REVOLUTION = 1;
-        public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
+        public static final double GEAR_RATIO = 1 / 2;//Old One is 240 // New is 180 (I think)
+        public static final double READINGS_PER_REVOLUTION = 1;//4089
+        public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK; cause gear ratio: (2*Math.PI)/Constants.GEAR_RATIO
+    
     }
+
 
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
 
+    protected final ShuffleboardValue<Double> rawPosWriter = ShuffleboardValue
+        .create(0.0, "Arm/Pos/Raw", Claw.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
     protected final ShuffleboardValue<Double> radianPosWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Encoder/Arm Encoder Position (Radians)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm/Pos/Radian", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
-    protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Encoder/Arm Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
+    protected final ShuffleboardValue<Double> degreePosWriter = ShuffleboardValue
+        .create(0.0, "Arm/Pos/Degree", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
-    protected final ShuffleboardValue<Double> degreePosWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Encoder/Arm Encoder Position (Degree)", Claw.class.getSimpleName())
+    
+        protected final ShuffleboardValue<Double> encoderVelocityWriter = 
+        ShuffleboardValue.create(0.0, "Arm/ Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
+    
+    protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Arm/Target/Degree", Claw.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Arm/Target/Radian", Claw.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Arm/Target/Raw", Claw.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    
 
-    protected final ShuffleboardValue<Double> radianTargetPosWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Target/ targetRadian", Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
-        protected final ShuffleboardValue<Double> degreePosTargetWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Target/ targetDegree", Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Arm/Arm Moving manually", Claw.class.getSimpleName())
+        ShuffleboardValue.create(false, "Arm/ Moving manually", Claw.class.getSimpleName())
         .build();
-    protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Encoder/ motorPos", Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
+    
     public ClawArm(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             23, 
@@ -67,45 +79,38 @@ public class ClawArm extends SubsystemBase {
                 .build()
         );
 
+        controller = new PIDController(1.1, 0.0, 0.0);//0.024
+        // controller = new PIDController(0, 0.0, 0.0);
 
-        controller = new PIDController(0.5, 0.0, 0.0);//0.024
-        controller.setTolerance(Math.toRadians(0.1));//How Much?
+        controller.setTolerance(Math.toRadians(1));
 
-        // feedforward = new ArmFeedforward(0.079284, 0.12603, 2.3793, 0.052763);//Old Values
-        feedforward = new ArmFeedforward(0, 0,0);
+        // feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - may 
 
-        ComplexWidgetBuilder.create(controller, "Arm PID Controller", Claw.class.getSimpleName())
+        // feedforward = new ArmFeedforward(0.,.60679,.085861,.0035872);//Make some 0 testing
+        // feedforward = new ArmFeedforward(0,0,0);
+
+
+        ComplexWidgetBuilder.create(controller, "Arm PID", Claw.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
-        ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetEncoder)), 
-            "Arm Reset encoder", Claw.class.getSimpleName());
-
-        motor.burnFlash();
+        ComplexWidgetBuilder.create(
+            DisabledCommand.create(runOnce(this::resetEncoder)),
+             "Reset Arm Encoder", Claw.class.getSimpleName());
     }
 
     @Override
     public void periodic() {
-        // motor.set(calculateFeedforward(getTargetPosition(), 0.) + calculatePID(getTargetPosition()));
-        // setVoltage(calculateFeedforward(getTargetPosition(), 2.3793) + calculatePID(getTargetPosition()));
-        setVoltage( calculatePID(getTargetPosition()));
-
+        getEncoderPosition();
+        // setVoltage(calculatePID(getEncoderPosition()));
     }
   
     @Override
     public void simulationPeriodic() {
         periodic();
     }
-    
-    // public Command setTargetPositionCommand(double target){
-    //     return runOnce(()->setTargetPosition(target));
-    // }
-    public void setTargetPosition(double target){
-        degreePosTargetWriter.write(target);
-        radianTargetPosWriter.write(Math.toRadians(target));
-        controller.setSetpoint(Math.toRadians(target));
-    }
 
+    
     public void setMovingManually(boolean value) {
         isMovingManually.set(value);
     }
@@ -113,29 +118,38 @@ public class ClawArm extends SubsystemBase {
     public boolean isMovingManually() {
         return isMovingManually.get();
     }
-    
+
+
+    public void setTargetPosition(double posDegree) {
+        radianTargetPosWriter.set(Math.toRadians(posDegree));
+        degreeTargetPosWriter.set(posDegree);
+        rawTargetPosWriter.set(posDegree);
+        // rawTargetPosWriter.set(posDegree/Constants.DEGREES_PER_ROTATION) // Not for motor encoder???
+        controller.setSetpoint(Math.toRadians(posDegree));
+    }
+
     public double getTargetPosition() {
         return controller.getSetpoint();
     }
 
     public void resetEncoder() {
-        motor.getEncoder().setPosition(0);
+        // motor.setPosition(0);
     }
 
-    public double getEncoderPosition() {
-        double position = motor.getEncoder().getPosition();
-        encoderPositionWriter.write(position);
+    public double getMotorPos() {
+        double position = motor.getPosition();
+        rawPosWriter.write(position);
         return position;
     }
 
     public double getEncoderVelocity() {
-        double velocity = motor.getEncoder().getVelocity();
+        double velocity = motor.getVelocity();
         encoderVelocityWriter.write(velocity);
         return velocity;
     }
 
-    protected void setVoltage(double voltage) {
-        motor.setVoltage(voltage);
+    public void setVoltage(double voltage) {
+        motor.setVoltage(voltage); //TODO: FIx this to be better
     }
 
     protected void stop() {
@@ -146,12 +160,20 @@ public class ClawArm extends SubsystemBase {
         return feedforward.calculate(positionRadians, velocity);
     }
 
-    protected double calculatePID(double positionRadians) {
-        return controller.calculate(getEncoderPosition(), positionRadians);
+    protected double calculatePID(double pos) {
+        return controller.calculate(pos);
     }
-
    
+    public double getSpeed(){
+        return motor.getSpeed();
+    }
     public SafeCanSparkMax getMotor(){
         return motor;
+    }
+
+    public double getEncoderPosition() {
+        double position = motor.getPosition();
+        rawPosWriter.write(position);
+        return position;
     }
 }  
