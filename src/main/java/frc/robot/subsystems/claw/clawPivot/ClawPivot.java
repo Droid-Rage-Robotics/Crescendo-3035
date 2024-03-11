@@ -15,8 +15,8 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class ClawPivot extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 2;//Old One is 240 // New is 180 (I think)
-        public static final double READINGS_PER_REVOLUTION = 1;//4089
+        public static final double GEAR_RATIO = 1.55;//12/1/24;//Old One is 240 // New is 180 (I think)
+        public static final double READINGS_PER_REVOLUTION = 40;//4089
         public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK; cause gear ratio: (2*Math.PI)/Constants.GEAR_RATIO
     
     }
@@ -30,28 +30,28 @@ public class ClawPivot extends SubsystemBase {
         .create(0.0, "Pivot/Pos/Raw", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
-    protected final ShuffleboardValue<Double> radianPosWriter = 
-        ShuffleboardValue.create(0.0, "Pivot/Pos/Radian", Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
-    protected final ShuffleboardValue<Double> degreePosWriter = ShuffleboardValue
-        .create(0.0, "Pivot/Pos/Degree", Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
+    // protected final ShuffleboardValue<Double> radianPosWriter = 
+    //     ShuffleboardValue.create(0.0, "Pivot/Pos/Radian", Claw.class.getSimpleName())
+    //     .withSize(1, 2)
+    //     .build();
+    // protected final ShuffleboardValue<Double> degreePosWriter = ShuffleboardValue
+    //     .create(0.0, "Pivot/Pos/Degree", Claw.class.getSimpleName())
+    //     .withSize(1, 2)
+    //     .build();
     
-        protected final ShuffleboardValue<Double> encoderVelocityWriter = 
+    protected final ShuffleboardValue<Double> encoderVelocityWriter = 
         ShuffleboardValue.create(0.0, "Pivot/ Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
-    protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Pivot/Target/Degree", Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
-    protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Pivot/Target/Radian", Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
+    // protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
+    //     .create(0.0, "Pivot/Target/Degree", Claw.class.getSimpleName())
+    //     .withSize(1, 2)
+    //     .build();
+    // protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
+    //     .create(0.0, "Pivot/Target/Radian", Claw.class.getSimpleName())
+    //     .withSize(1, 2)
+    //     .build();
     protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
         .create(0.0, "Pivot/Target/Raw", Claw.class.getSimpleName())
         .withSize(1, 2)
@@ -64,12 +64,12 @@ public class ClawPivot extends SubsystemBase {
     
     public ClawPivot(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            23, 
+            24, 
             MotorType.kBrushless,
             true,
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
-            1.0,
+            Constants.ROTATIONS_TO_RADIANS/60,
             ShuffleboardValue.create(isEnabled, "Pivot/Pivot Is Enabled", Claw.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
@@ -77,10 +77,10 @@ public class ClawPivot extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(1.9, 0.0, 0.0);//1.1
+        controller = new PIDController(.5, 0.0, 0.0);
         // controller = new PIDController(0, 0.0, 0.0);
 
-        controller.setTolerance(Math.toRadians(1));
+        controller.setTolerance(.25);
 
         // feedforward = new ArmFeedforward(0,0,0);
 
@@ -96,8 +96,8 @@ public class ClawPivot extends SubsystemBase {
 
     @Override
     public void periodic() {
-        getEncoderPosition();
-        // setVoltage(calculatePID(getEncoderPosition()));
+        // getEncoderPosition();
+        setVoltage(calculatePID(getEncoderPosition()));
     }
   
     @Override
@@ -115,12 +115,12 @@ public class ClawPivot extends SubsystemBase {
     }
 
 
-    public void setTargetPosition(double posDegree) {
-        radianTargetPosWriter.set(Math.toRadians(posDegree));
-        degreeTargetPosWriter.set(posDegree);
-        rawTargetPosWriter.set(posDegree);
+    public void setTargetPosition(double pos) {
+        // radianTargetPosWriter.set(Math.toRadians(posDegree));
+        // degreeTargetPosWriter.set(posDegree);
+        rawTargetPosWriter.set(pos);
         // rawTargetPosWriter.set(posDegree/Constants.DEGREES_PER_ROTATION) // Not for motor encoder???
-        controller.setSetpoint(Math.toRadians(posDegree));
+        controller.setSetpoint(pos);
     }
 
     public double getTargetPosition() {

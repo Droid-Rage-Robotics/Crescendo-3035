@@ -19,8 +19,8 @@ public class Claw {
     public enum Value {
         START(0.,235,0,0),
 
-        INTAKE_SHOOTER(0,70,0,0),
-        INTAKE_HUMAN(.8,160,0,0),
+        INTAKE_SHOOTER(0,70,2,0),
+        INTAKE_HUMAN(.8,160,-2,0),
        
         AUTO_AMP(0,90,0,0),
         AMP(0,90,0,0),

@@ -29,9 +29,8 @@ public class ClawPivotAbsolute extends ClawPivot {
     @Override
     public double getEncoderPosition() {
         double radianPos = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
-        // double radianPos = (absoluteEncoder.getPosition());
-        radianPosWriter.write(radianPos);
-        degreePosWriter.write(Math.toDegrees(radianPos));
+        // radianPosWriter.write(radianPos);
+        // degreePosWriter.write(Math.toDegrees(radianPos));
         double raw = (absoluteEncoder.getPosition());
         rawPosWriter.write((raw));
         return radianPos;
