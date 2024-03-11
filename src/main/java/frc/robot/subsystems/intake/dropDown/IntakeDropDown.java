@@ -25,39 +25,39 @@ public class IntakeDropDown extends SubsystemBase {
     protected ArmFeedforward feedforward;
 
     protected final ShuffleboardValue<Double> rawPosWriter = ShuffleboardValue
-        .create(0.0, "Raw Encoder Position ()", Intake.class.getSimpleName())
+        .create(0.0, "DropDown/Pos/Raw", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> radianPosWriter = 
-        ShuffleboardValue.create(0.0, "Radian Position", Intake.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "DropDown/Pos/Radian", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> degreePosWriter = ShuffleboardValue
-        .create(0.0, "Degree Position", Intake.class.getSimpleName())
+        .create(0.0, "DropDown/Pos/Degree", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
         protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Drop Down/ Encoder Velocity (Radians per Second)", Intake.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "DropDown/ Encoder Velocity (Radians per Second)", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
     protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Degree Target Pos ()", Intake.class.getSimpleName())
+        .create(0.0, "DropDown/Target/Degree", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Radian Target Pos ()", Intake.class.getSimpleName())
+        .create(0.0, "DropDown/Target/Radian", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Raw Target Pos ()", Intake.class.getSimpleName())
+        .create(0.0, "DropDown/Target/Raw", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Drop Down/ Moving manually", Intake.class.getSimpleName())
+        ShuffleboardValue.create(false, "DropDown/ Moving manually", Intake.class.getSimpleName())
         .build();
     
     public IntakeDropDown(Boolean isEnabled) {
@@ -67,22 +67,24 @@ public class IntakeDropDown extends SubsystemBase {
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             Constants.ROTATIONS_TO_RADIANS,
-            ShuffleboardValue.create(isEnabled, "Drop Down/ Drop Is Enabled", Intake.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "DropDown/Motor/Drop Is Enabled", Intake.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Drop Down/ Drop Voltage", Intake.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "DropDown/Motor/Drop Voltage", Intake.class.getSimpleName())
                 .build()
         );
 
-        controller = new PIDController(0.5, 0.0, 0.0);//0.024
+        // controller = new PIDController(0.5, 0.0, 0.0);//0.024
+        controller = new PIDController(0, 0.0, 0.0);
+
         controller.setTolerance(Math.toRadians(1));
 
-        feedforward = new ArmFeedforward(0.45276,.60679,.085861,.0035872); //SysID with just motor - may 
-        // feedforward = new ArmFeedforward(0.,.60679,.085861,.0);//Make some 0 testing
+        feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - may 
+        // feedforward = new ArmFeedforward(0.,.60679,.085861,.0035872);//Make some 0 testing
         // feedforward = new ArmFeedforward(0,0,0);
 
 
-        ComplexWidgetBuilder.create(controller, "Drop PID Controller", Intake.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Drop PID", Intake.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
@@ -93,6 +95,7 @@ public class IntakeDropDown extends SubsystemBase {
 
     @Override
     public void periodic() {
+        getEncoderPosition();
         setVoltage(calculatePID(getTargetPosition()));
     }
   
@@ -114,7 +117,7 @@ public class IntakeDropDown extends SubsystemBase {
         radianTargetPosWriter.set(Math.toRadians(posDegree));
         degreeTargetPosWriter.set(posDegree);
         rawTargetPosWriter.set(posDegree);
-        // rawTargetPosWriter.set(posDegree/Constants.DEGREES_PER_ROTATION) // Not for motor encoder
+        // rawTargetPosWriter.set(posDegree/Constants.DEGREES_PER_ROTATION) // Not for motor encoder???
         controller.setSetpoint(Math.toRadians(posDegree));
     }
 
@@ -126,7 +129,7 @@ public class IntakeDropDown extends SubsystemBase {
         motor.setPosition(0);
     }
 
-    public double getRadianPos() {
+    public double getMotorPos() {
         double position = motor.getPosition();
         rawPosWriter.write(position);
         return position;
@@ -147,11 +150,11 @@ public class IntakeDropDown extends SubsystemBase {
     }
 
     protected double calculateFeedforward(double positionRadians, double velocity) {
-        return feedforward.calculate(getRadianPos(), velocity);
+        return feedforward.calculate(getMotorPos(), velocity);
     }
 
     protected double calculatePID(double positionRadians) {
-        return controller.calculate(getRadianPos(), positionRadians);
+        return controller.calculate(getMotorPos(), positionRadians);
     }
    
     public double getSpeed(){

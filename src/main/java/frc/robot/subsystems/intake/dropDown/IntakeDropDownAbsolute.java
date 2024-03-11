@@ -20,24 +20,29 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
     public IntakeDropDownAbsolute(Boolean isEnabled, SafeCanSparkMax sparkMax) {
         super(isEnabled);
         absoluteEncoder = sparkMax.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        
         absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
         absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
-        absoluteEncoder.setInverted(true);
+        absoluteEncoder.setInverted(false);
         setTargetPosition(Constants.OFFSET);
+    }
+
+    public void periodic(){
+        getEncoderPosition();
+        // setVoltage(calculatePID(getTargetPosition()));
+        setVoltage(calculatePID(getTargetPosition())+calculateFeedforward(getEncoderPosition(), getEncoderVelocity()));
     }
     
     
     @Override
     public double getEncoderPosition() {
-        double position = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
-        degreePosWriter.write(Math.toDegrees(position));
-        getRawEncoderPositions();
-        return position;
-    }
-
-    public void getRawEncoderPositions() {
-        double position = (absoluteEncoder.getPosition());
-        rawEncoderPositionWriter.write((position));
+        double radianPos = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
+        // double radianPos = (absoluteEncoder.getPosition());
+        radianPosWriter.write(radianPos);
+        degreePosWriter.write(Math.toDegrees(radianPos));
+        double raw = (absoluteEncoder.getPosition());
+        rawEncoderPositionWriter.write((raw));
+        return radianPos;
     }
 
     @Override

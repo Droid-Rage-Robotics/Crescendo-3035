@@ -32,6 +32,7 @@ import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.InfoTracker.CycleTracker;
@@ -49,32 +50,19 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    // private final SwerveDrive drive = new SwerveDrive(false);//2-10ew
-    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    // private final IntakeDropDown dropDown = new IntakeDropDown(true);//17
-    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, new SafeCanSparkMax(
-    //                 25,
-    //                 MotorType.kBrushless,
-    //                 true,
-    //                 IdleMode.Coast,
-    //                 1,
-    //                 1,
-    //                 ShuffleboardValue.create(true, "Claw Intake Is Enabled", Claw.class.getSimpleName())
-    //                         .withWidget(BuiltInWidgets.kToggleSwitch)
-    //                         .build(),
-    //                     ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
-    //                         .build()
-    //             ));//17
-    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17
-    // private final Intake intake = new Intake(dropDown, intakeWheel);
+    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
+    
+    
     // private final Shooter shooter = new Shooter(false);//18.19
-    // private final Climb climb = new Climb(false, false);//20,21^
+    private final Climb climb = new Climb(false, false);//20,21^
     // private final ClawElevator clawElevator = new ClawElevator(true);//22
     // private final ClawArm clawArm = new ClawArm(false);//23 - not connected: temp is 60
     // private final ClawPivot clawPivot = new ClawPivot(false);//24 - not connected
     // private final PowerClawIntake clawIntake = new PowerClawIntake(false);//25       
     // private final Claw claw = new Claw(clawElevator, clawArm, clawPivot, clawIntake);
+    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorL());//17
+    private final Intake intake = new Intake(dropDown, intakeWheel);
     
     // private final Vision vision = new Vision();
     // private final Light light = new Light();
@@ -205,7 +193,7 @@ public class Robot extends TimedRobot {
         // );
 
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light, cycleTracker);
-        // robotContainer.configureIntakeTestBindings(intake);
+        robotContainer.configureIntakeTestBindings(intake);
         // robotContainer.configureCycleTrackerBindings(cycleTracker);
 
         // robotContainer.configureClimbTestBindings(climb);
