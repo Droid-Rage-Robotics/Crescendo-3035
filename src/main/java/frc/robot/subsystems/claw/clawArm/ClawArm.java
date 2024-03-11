@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
 import frc.robot.subsystems.claw.Claw;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -17,7 +15,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class ClawArm extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 2;//Old One is 240 // New is 180 (I think)
+        public static final double GEAR_RATIO = 1 / 2;//not right
         public static final double READINGS_PER_REVOLUTION = 1;//4089
         public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK; cause gear ratio: (2*Math.PI)/Constants.GEAR_RATIO
     
