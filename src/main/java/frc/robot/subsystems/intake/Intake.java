@@ -18,7 +18,7 @@ public class Intake {
     //Position Based on game element
     //170-340
     public enum Value {
-        START(80,0),
+        START(15,0),
 
         //IntakePos
         INTAKE_GROUND((100),-10000),
@@ -85,19 +85,20 @@ public class Intake {
         setPositionCommand(Value.START);
     }
 
-    private void logPosition(Value targetPosition) {
-        position = targetPosition;
-        positionWriter.write(position.name());
-        // positionWriter.write(targetPosition.name());
-    }
+    // private void logPosition(Value targetPosition) {
+    //     position = targetPosition;
+    //     positionWriter.write(position.name());
+    //     // positionWriter.write(targetPosition.name());
+    // }
 
     public Value getPosition() {
         return position;
     }
 
     public Command setPositionCommand(Value targetPosition) {
-        logPosition(targetPosition);
-        System.out.println("setting command."+ targetPosition.name());
+        position = targetPosition;
+        positionWriter.write(position.name());
+        // System.out.println("setting command."+ targetPosition.name());
         return Commands.sequence(
             switch (targetPosition) {
                 default -> 

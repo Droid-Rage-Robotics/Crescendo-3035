@@ -12,11 +12,11 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
         public static double OFFSET = Math.PI / 2;  //90 Degree
     }
     SparkAbsoluteEncoder absoluteEncoder;
-    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", 
-        Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
+    // protected final ShuffleboardValue<Double> rawEncoderPositionWriter = 
+    //     ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", 
+    //     Claw.class.getSimpleName())
+    //     .withSize(1, 2)
+    //     .build();
     public IntakeDropDownAbsolute(Boolean isEnabled, SafeCanSparkMax sparkMax) {
         super(isEnabled);
         absoluteEncoder = sparkMax.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
@@ -28,11 +28,11 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
     }
 
     public void periodic(){
-        getEncoderPosition();
-        // setVoltage(calculatePID(getTargetPosition()));
-        setVoltage(calculatePID(getTargetPosition())+calculateFeedforward(getEncoderPosition(), getEncoderVelocity()));
+        // setVoltage(calculatePID(getEncoderPosition()));
+        setVoltage(calculatePID(getEncoderPosition())+(Math.cos(getEncoderPosition())*(.175)));
+
+        // setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(getEncoderPosition(), 0));
     }
-    
     
     @Override
     public double getEncoderPosition() {
@@ -41,7 +41,7 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
         radianPosWriter.write(radianPos);
         degreePosWriter.write(Math.toDegrees(radianPos));
         double raw = (absoluteEncoder.getPosition());
-        rawEncoderPositionWriter.write((raw));
+        rawPosWriter.write((raw));
         return radianPos;
     }
 

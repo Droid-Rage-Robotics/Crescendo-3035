@@ -74,12 +74,13 @@ public class IntakeDropDown extends SubsystemBase {
                 .build()
         );
 
-        // controller = new PIDController(0.5, 0.0, 0.0);//0.024
-        controller = new PIDController(0, 0.0, 0.0);
+        controller = new PIDController(1.1, 0.0, 0.0);//0.024
+        // controller = new PIDController(0, 0.0, 0.0);
 
         controller.setTolerance(Math.toRadians(1));
 
-        feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - may 
+        // feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - may 
+
         // feedforward = new ArmFeedforward(0.,.60679,.085861,.0035872);//Make some 0 testing
         // feedforward = new ArmFeedforward(0,0,0);
 
@@ -96,7 +97,7 @@ public class IntakeDropDown extends SubsystemBase {
     @Override
     public void periodic() {
         getEncoderPosition();
-        setVoltage(calculatePID(getTargetPosition()));
+        // setVoltage(calculatePID(getEncoderPosition()));
     }
   
     @Override
@@ -142,7 +143,7 @@ public class IntakeDropDown extends SubsystemBase {
     }
 
     public void setVoltage(double voltage) {
-        motor.setVoltage(voltage);
+        motor.setVoltage(-voltage); //TODO: FIx this to be better
     }
 
     protected void stop() {
@@ -150,11 +151,11 @@ public class IntakeDropDown extends SubsystemBase {
     }
 
     protected double calculateFeedforward(double positionRadians, double velocity) {
-        return feedforward.calculate(getMotorPos(), velocity);
+        return feedforward.calculate(positionRadians, velocity);
     }
 
-    protected double calculatePID(double positionRadians) {
-        return controller.calculate(getMotorPos(), positionRadians);
+    protected double calculatePID(double pos) {
+        return controller.calculate(pos);
     }
    
     public double getSpeed(){
