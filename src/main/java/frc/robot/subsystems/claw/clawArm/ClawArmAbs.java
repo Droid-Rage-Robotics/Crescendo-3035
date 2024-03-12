@@ -1,43 +1,44 @@
-package frc.robot.subsystems.intake.dropDown;
+package frc.robot.subsystems.claw.clawArm;
 
 import com.revrobotics.SparkAbsoluteEncoder;
 
-import frc.robot.subsystems.claw.Claw;
-import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class IntakeDropDownAbsolute extends IntakeDropDown {
+public class ClawArmAbs extends ClawArm {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
-        public static double OFFSET = Math.PI / 2;  //90 Degree
+        public static double OFFSET = Math.PI / 2;  //340 Degree didied by 1 rotaiton
+        //Is 90 so the top is 90 instead of 0
     }
     SparkAbsoluteEncoder absoluteEncoder;
-    protected final ShuffleboardValue<Double> rawEncoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", 
-        Claw.class.getSimpleName())
-        .withSize(1, 2)
-        .build();
-    public IntakeDropDownAbsolute(Boolean isEnabled, SafeCanSparkMax sparkMax) {
+    public ClawArmAbs(Boolean isEnabled) {
         super(isEnabled);
-        absoluteEncoder = sparkMax.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
-        absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
-        absoluteEncoder.setInverted(true);
+        absoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        absoluteEncoder.setPositionConversionFactor(Constants.RADIANS_PER_ROTATION);
+        absoluteEncoder.setVelocityConversionFactor(Constants.RADIANS_PER_ROTATION/ 60);
+        absoluteEncoder.setInverted(false);
+        // absoluteEncoder.setZeroOffset(Constants.OFFSET);
         setTargetPosition(Constants.OFFSET);
     }
     
+    @Override
+    public void periodic() {
+        getEncoderVelocity();
+        getEncoderPosition();
+        setVoltage(calculatePID(getTargetPosition()));
+    }
     
     @Override
     public double getEncoderPosition() {
         double position = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
         degreePosWriter.write(Math.toDegrees(position));
+        radianPosWriter.write(position);
         getRawEncoderPositions();
         return position;
     }
 
     public void getRawEncoderPositions() {
         double position = (absoluteEncoder.getPosition());
-        rawEncoderPositionWriter.write((position));
+        encoderPositionWriter.write(Math.toDegrees(position));
     }
 
     @Override
@@ -50,5 +51,6 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
     // @Override
     // public void resetEncoder() {
     //     absoluteEncoder.setZeroOffset(0);
+    //     motor.burnFlash();
     // }
 }

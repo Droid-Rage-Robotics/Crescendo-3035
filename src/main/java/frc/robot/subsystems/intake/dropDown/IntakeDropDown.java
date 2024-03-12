@@ -2,7 +2,6 @@ package frc.robot.subsystems.intake.dropDown;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
@@ -17,25 +16,45 @@ public class IntakeDropDown extends SubsystemBase {
         public static final double GEAR_RATIO = 1 / 2;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;//4089
         public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK; cause gear ratio: (2*Math.PI)/Constants.GEAR_RATIO
-        // (2 * Math.PI / READINGS_PER_REVOLUTION)/(GEAR_RATIO);
-        //  (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
-        //  (Math.PI * 2)/(GEAR_RATIO * READINGS_PER_REVOLUTION);
+    
     }
 
 
     protected final SafeTalonFX motor;
     protected final PIDController controller;
     protected ArmFeedforward feedforward;
-    // protected final DigitalInput intakeLimitSwitch; //Limit Switch?
 
-    protected final ShuffleboardValue<Double> encoderPositionWriter = 
-        ShuffleboardValue.create(0.0, "Drop Down/ Encoder Position (Radians)", Intake.class.getSimpleName())
+    protected final ShuffleboardValue<Double> rawPosWriter = ShuffleboardValue
+        .create(0.0, "Raw Encoder Position ()", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
-    protected final ShuffleboardValue<Double> encoderVelocityWriter = 
+    protected final ShuffleboardValue<Double> radianPosWriter = 
+        ShuffleboardValue.create(0.0, "Radian Position", Intake.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> degreePosWriter = ShuffleboardValue
+        .create(0.0, "Degree Position", Intake.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    
+        protected final ShuffleboardValue<Double> encoderVelocityWriter = 
         ShuffleboardValue.create(0.0, "Drop Down/ Encoder Velocity (Radians per Second)", Intake.class.getSimpleName())
         .withSize(1, 2)
         .build();
+    
+    protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Degree Target Pos ()", Intake.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Radian Target Pos ()", Intake.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Raw Target Pos ()", Intake.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
         ShuffleboardValue.create(false, "Drop Down/ Moving manually", Intake.class.getSimpleName())
@@ -55,12 +74,12 @@ public class IntakeDropDown extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(0.05, 0.0, 0.0);//0.024
+        controller = new PIDController(0.5, 0.0, 0.0);//0.024
         controller.setTolerance(Math.toRadians(1));
 
-        // feedforward = new ArmFeedforward(0.45276,.60679,.085861,.0035872); //SysID
-        // feedforward = new ArmFeedforward(0.,.60679,.085861,.0);//Make some 0
-        feedforward = new ArmFeedforward(0,0,0);
+        feedforward = new ArmFeedforward(0.45276,.60679,.085861,.0035872); //SysID with just motor - may 
+        // feedforward = new ArmFeedforward(0.,.60679,.085861,.0);//Make some 0 testing
+        // feedforward = new ArmFeedforward(0,0,0);
 
 
         ComplexWidgetBuilder.create(controller, "Drop PID Controller", Intake.class.getSimpleName())
@@ -70,19 +89,11 @@ public class IntakeDropDown extends SubsystemBase {
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
              "Reset Intake Drop Encoder", Intake.class.getSimpleName());
-
-        // intakeLimitSwitch = new DigitalInput(5);//WHERE is it plugged in
     }
 
     @Override
     public void periodic() {
-        // motor.set(calculateFeedforward(getTargetPosition(), 0.) + calculatePID(getTargetPosition()));
-        // setVoltage(calculateFeedforward(getTargetPosition(), 2.3793) + calculatePID(getTargetPosition()));
-        setVoltage( calculatePID(getTargetPosition()));
-    
-        // if(intakeLimitSwitch.get()){    //NEED to check whether to add !
-        //     resetEncoder();
-        // }
+        setVoltage(calculatePID(getTargetPosition()));
     }
   
     @Override
@@ -100,7 +111,11 @@ public class IntakeDropDown extends SubsystemBase {
 
 
     public void setTargetPosition(double posDegree) {
-        controller.setSetpoint(Math.toRadians(posDegree));//Makes the 
+        radianTargetPosWriter.set(Math.toRadians(posDegree));
+        degreeTargetPosWriter.set(posDegree);
+        rawTargetPosWriter.set(posDegree);
+        // rawTargetPosWriter.set(posDegree/Constants.DEGREES_PER_ROTATION) // Not for motor encoder
+        controller.setSetpoint(Math.toRadians(posDegree));
     }
 
     public double getTargetPosition() {
@@ -111,9 +126,9 @@ public class IntakeDropDown extends SubsystemBase {
         motor.setPosition(0);
     }
 
-    public double getEncoderPosition() {
+    public double getRadianPos() {
         double position = motor.getPosition();
-        encoderPositionWriter.write(position);
+        rawPosWriter.write(position);
         return position;
     }
 
@@ -132,11 +147,11 @@ public class IntakeDropDown extends SubsystemBase {
     }
 
     protected double calculateFeedforward(double positionRadians, double velocity) {
-        return feedforward.calculate(positionRadians, velocity);
+        return feedforward.calculate(getRadianPos(), velocity);
     }
 
     protected double calculatePID(double positionRadians) {
-        return controller.calculate(getEncoderPosition(), positionRadians);
+        return controller.calculate(getRadianPos(), positionRadians);
     }
    
     public double getSpeed(){
@@ -145,7 +160,10 @@ public class IntakeDropDown extends SubsystemBase {
     public SafeTalonFX getMotor(){
         return motor;
     }
-    // public double getDistance(){
-    //     return motor.getPosition()
-    // }
+
+    public double getEncoderPosition() {
+        double position = motor.getPosition();
+        rawPosWriter.write(position);
+        return position;
+    }
 }  

@@ -41,3 +41,11 @@ Host: sftp://roboRIO-3035-frc.local
 Username:lvuser
 Port:22
 Location of SysID Logs: /home/lvuser/logs 
+
+make all teh pid only say name and PId, not controller
+make a framework to make all of the arms to be implemented similairly
+make a DroidRagelib - search how to do it
+test claw to be faster
+redo the claw arm 0 pos to be down
+
+Without any PID, the arm shoudl stay upright, basically sayign that the kg is good

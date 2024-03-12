@@ -6,9 +6,8 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SuppliedCommand;
-import frc.robot.subsystems.claw.clawArm.ClawArm;
+import frc.robot.subsystems.claw.clawArm.ClawArmAbs;
 import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -18,10 +17,10 @@ public class Claw {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
-        START(0,0,0,0),
+        START(0.,235,0,0),
 
         INTAKE_SHOOTER(0,0,0,0),
-        INTAKE_HUMAN(0,0,0,0),
+        INTAKE_HUMAN(.8,160,0,0),
        
         AUTO_AMP(0,0,0,0),
         AMP(0,0,0,0),
@@ -94,7 +93,7 @@ public class Claw {
     }
 
     private final ClawElevator clawElevator;
-    private final ClawArm clawArm;
+    private final ClawArmAbs clawArm;
     private final ClawPivot clawPivot;
     private final PowerClawIntake clawIntake;
     private Value position = Value.START;
@@ -104,7 +103,7 @@ public class Claw {
         .build();
 
     public Claw(ClawElevator clawElevator,
-        ClawArm clawArm,
+        ClawArmAbs clawArm,
         ClawPivot clawPivot,
         PowerClawIntake clawIntake) {
         this.clawElevator = clawElevator;
@@ -127,20 +126,20 @@ public class Claw {
         return SuppliedCommand.create(() -> Commands.sequence(
             Commands.runOnce(() -> logPosition(targetPosition)),
             switch (targetPosition) {
-                case  AMP,TRAP ->
-                    new SequentialCommandGroup(
-                        new ParallelCommandGroup(
-                            clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees()))),
-                            clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds()))
-                        ),
-                        Commands.waitSeconds(0.5),
-                        clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches()))
-                    );
+                // case  AMP,TRAP ->
+                //     new SequentialCommandGroup(
+                //         new ParallelCommandGroup(
+                //             clawPivot.runOnce(() -> clawPivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                //             clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                //         ),
+                //         Commands.waitSeconds(0.5),
+                //         clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches()))
+                //     );
                 
                 default -> 
                     new ParallelCommandGroup(
                         clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches())),
-                        clawPivot.runOnce(() -> clawPivot.setTargetPosition(Math.toRadians(targetPosition.getPivotDegrees()))),
+                        clawPivot.runOnce(() -> clawPivot.setTargetPosition((targetPosition.getPivotDegrees()))),
                         clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds())),
                         clawArm.runOnce(()->clawArm.setTargetPosition(targetPosition.getArmDegrees()))
                     );
@@ -192,5 +191,8 @@ public class Claw {
     }
     public PowerClawIntake getClawIntake(){
         return clawIntake;
+    }
+    public ClawArmAbs getClawArmAbs(){
+        return clawArm;
     }
 }
