@@ -57,7 +57,7 @@ public class IntakeWheel extends SubsystemBase {
         // intakeFeedforward = new SimpleMotorFeedforward(0, 0, 0);
         intakeFeedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
-        ComplexWidgetBuilder.create(intakeController, "Intake Wheel", Intake.class.getSimpleName());
+        ComplexWidgetBuilder.create(intakeController, "Wheel PID", Intake.class.getSimpleName());
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetIntakeEncoder)), 
             "Reset Intake Wheel Encoder", Intake.class.getSimpleName());
     }

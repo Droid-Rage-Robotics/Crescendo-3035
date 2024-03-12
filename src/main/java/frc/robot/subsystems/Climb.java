@@ -80,7 +80,7 @@ public class Climb extends SubsystemBase{
             voltageWriter
         );
 
-        ComplexWidgetBuilder.create(controller, "PID Controller", 
+        ComplexWidgetBuilder.create(controller, "PID", 
             Climb.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 2);
