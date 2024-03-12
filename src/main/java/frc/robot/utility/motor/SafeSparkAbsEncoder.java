@@ -13,7 +13,6 @@ public class SafeSparkAbsEncoder {
         encoder.setInverted(isInverted);
         encoder.setPositionConversionFactor(positionConversionFactor);
         encoder.setVelocityConversionFactor(velocityConversionFactor);
-        
     } 
     public double getPosition() {
         return encoder.getPosition();
