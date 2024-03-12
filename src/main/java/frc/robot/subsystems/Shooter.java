@@ -48,7 +48,8 @@ public class Constants {
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
         (0.0, "Shooter/Encoder Velocity Error", 
         Shooter.class.getSimpleName()).build();
-    
+    protected final ShuffleboardValue<Double> addShooterWriter = ShuffleboardValue.create
+        (0.0, "ShooterAddPower", Shooter.class.getSimpleName()).build();
     private final PIDController shooterController;
     private final SimpleMotorFeedforward feedforward;
     
@@ -109,10 +110,13 @@ public class Constants {
     public void simulationPeriodic() {}
 
     public void setTargetVelocity(ShooterSpeeds velocity) {
-        // return runOnce(() -> {
+        if (velocity==ShooterSpeeds.SPEAKER_SHOOT){
+            shooterController.setSetpoint(velocity.get()+addShooterWriter.get());
+            targetVelocityWriter.set(velocity.get()+addShooterWriter.get());
+        } else{
             shooterController.setSetpoint(velocity.get());
             targetVelocityWriter.set(velocity.get());
-        // });
+        }
     }
 
     public double getVelocity() {
@@ -138,4 +142,8 @@ public class Constants {
     // public void setMotorRVoltage(double voltage) {
     //     motorR.setVoltage(voltage);
     // }
+
+    public void addShooterSpeed(double num){
+        addShooterWriter.set(addShooterWriter.get()+num);
+    }
 }
