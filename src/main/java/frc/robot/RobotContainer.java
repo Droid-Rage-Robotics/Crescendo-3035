@@ -1,9 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.SysID.SysID;
@@ -34,6 +38,9 @@ public class RobotContainer {
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
 	private final CommandXboxController operator =
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
+	// PS4Controller controller = new PS4Controller(0);
+	// CommandPS5Controller;
+	// CommandStadiaController
 	private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
 		.withWidget(BuiltInWidgets.kTextView)
@@ -141,24 +148,40 @@ public class RobotContainer {
 			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 	}
 
-	public void configureClimbTestBindings(Climb climb){
-		operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
-			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
-		operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
-			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+	public void configureClimbTestBindings(Climb climb, Intake intake){
+		// operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
+		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+		// operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
+		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+
+		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+		
 	}
 
 	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter){
-		operator.rightBumper()
-			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
-			.onFalse(intake.setPositionCommand(Intake.Value.START));
-		operator.leftBumper()
-			.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
-			.onFalse(intake.setPositionCommand(Intake.Value.START));
-		operator.rightTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT)))
-			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
-		operator.leftTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT)))
-			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
+		// operator.rightBumper()
+		// 	.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+		// 	.onFalse(intake.setPositionCommand(Intake.Value.START));
+		// operator.leftBumper()
+		// 	.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
+		// 	.onFalse(intake.setPositionCommand(Intake.Value.START));
+		// operator.rightTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.AMP_SHOOT)))
+		// 	.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
+		// operator.leftTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT)))
+		// 	.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
+
+		operator.rightBumper().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		operator.leftBumper().whileTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		
+
+		operator.rightTrigger()
+			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT))
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+		operator.leftTrigger()
+			// .onTrue(new TransferToAmpMech(intake, shooter, claw))
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 	}
 	public void configureClawTestBindings(Claw claw){
 		claw.setPositionCommand(Claw.Value.START);

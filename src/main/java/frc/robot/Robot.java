@@ -54,13 +54,13 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10
-    // private final Shooter shooter = new Shooter(false);//18.19
+    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
+    // private final Shooter shooter = new Shooter(true);//18.19
 
-    // private final Climb climb = new Climb(false, false);//20,21^
-    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorL());//17-could use drive motor instead
-    // private final Intake intake = new Intake(dropDown, intakeWheel);
+    private final Climb climb = new Climb(false, false);//20,21^
+    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorL());//17-could use drive motor instead
+    private final Intake intake = new Intake(dropDown, intakeWheel);
     
     // private final ClawElevator clawElevator = new ClawElevator(false);//22
     // private final ClawArmAbsolute clawArm = new ClawArmAbsolute(false);//23 - not connected: temp is 60
@@ -71,9 +71,9 @@ public class Robot extends TimedRobot {
     
     // private final Vision vision = new Vision();
     // private final Light light = new Light();
-    private AutoChooser autoChooser = new AutoChooser(
-        drive//, intake, shooter, claw, climb, vision, light
-    );
+    // private AutoChooser autoChooser = new AutoChooser(
+    //     drive//, intake, shooter, claw, climb, vision, light
+    // );
     // private final CycleTracker3 cycleTracker = new CycleTracker3();
 
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
@@ -103,6 +103,7 @@ public class Robot extends TimedRobot {
             // Do whatever you want with the pose here
             field.setRobotPose(pose);
         });
+        PathPlannerLogging.logCurrentPose(field.getRobotPose()); 
     }
     
     /**
@@ -143,8 +144,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        autonomousCommand = autoChooser.getAutonomousCommand();
-        // autonomousCommand = new InstantCommand();
+        // autonomousCommand = autoChooser.getAutonomousCommand();
+        autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -206,7 +207,7 @@ public class Robot extends TimedRobot {
         // robotContainer.configureIntakeTestBindings(intake);
         // robotContainer.configureCycleTrackerBindings(cycleTracker);
 
-        // robotContainer.configureClimbTestBindings(climb);
+        robotContainer.configureClimbTestBindings(climb, intake);
         // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
         // robotContainer.configureShooterTestBindings(shooter);
         // robotContainer.configureClawTestBindings(claw);
