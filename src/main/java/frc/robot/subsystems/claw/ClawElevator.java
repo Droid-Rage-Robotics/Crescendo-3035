@@ -45,7 +45,7 @@ public class ClawElevator extends SubsystemBase {
             MotorType.kBrushless,
             false,
             IdleMode.Coast,
-            Constants.ROT_TO_INCHES,
+            1,
             1.0,
             ShuffleboardValue.create(isEnabled, "Elevator/ Elevator Is Enabled", Claw.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
