@@ -23,16 +23,17 @@ public class AutoChooser {
         createAutoBuilder(drive);
 
         //Put Named Commands HERE
-        // NamedCommands.registerCommand("test", intake.setPositionCommand(Intake.Value.START));
-        // // NamedCommands.registerCommand("shoot", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));
+        // NamedCommands.registerCommand("shoot", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));
         // NamedCommands.registerCommand("intake", intake.setPositionCommand(Intake.Value.START));
+        // NamedCommands.registerCommand("shootPreload", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));
+
         // NamedCommands.registerCommand("transfer", intake.setPositionCommand(Intake.Value.START));
 
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
         autoChooser.setDefaultOption("NothingAuto", new InstantCommand());
         // autoChooser = AutoBuilder.buildAutoChooser();
-        addCloseAuto();
+        addCloseAuto(drive);
         addFarAuto();
         addTuningAuto(drive);
 
@@ -42,9 +43,9 @@ public class AutoChooser {
         return autoChooser.getSelected();
     }
 
-    public static void addCloseAuto(){
-        
-
+    public static void addCloseAuto(SwerveDrive drive){
+        autoChooser.addOption("R1+F1+ParkBlue", Autos.onePlusF1PlusParkRBlue(drive));
+        autoChooser.addOption("L1+F3+ParkRed", Autos.onePlusF3PlusParkLRed(drive));
     }
     
     public static void addFarAuto(){

@@ -3,10 +3,11 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "1+F1+F2",
     "1+F2+1",
-    "shoot+F_",
-    "TuningPaths"
+    "L1+F3+park",
+    "R1+F1+park",
+    "TuningPaths",
+    "shoot+F_"
   ],
   "autoFolders": [
     "Tuning"

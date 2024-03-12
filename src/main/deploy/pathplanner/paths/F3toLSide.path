@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7392210795817603,
-        "y": 6.677362186633205
+        "x": 2.4,
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5695060449949958,
-        "y": 7.0398809743488435
+        "x": 1.7332242071894561,
+        "y": 4.186507290386194
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.294543620426272,
-        "y": 6.993104356579084
+        "x": 0.7,
+        "y": 4.4
       },
       "prevControl": {
-        "x": 1.5812001994374358,
-        "y": 7.016492665463964
+        "x": 1.214542795467357,
+        "y": 4.306446764460481
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "shootPreload",
+      "name": "pickUp",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -42,8 +42,8 @@
       }
     },
     {
-      "name": "intake",
-      "waypointRelativePos": 0.2,
+      "name": "shoot",
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -60,13 +60,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -60.57254359681028,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "1+F1+park",
+  "folder": "L1+F3+park",
   "previewStartingState": {
-    "rotation": 59.74356283647072,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

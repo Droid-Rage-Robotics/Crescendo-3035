@@ -127,7 +127,7 @@ public class RobotContainer {
 				driver::getLeftY,
 				driver::getRightX,
 				driver.rightBumper(),
-				driver.start()
+				driver.a()
 		));
 	}
 	
@@ -158,7 +158,7 @@ public class RobotContainer {
 		
 	}
 
-	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter){
+	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter, SwerveDrive drive){
 		// operator.rightBumper()
 		// 	.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 		// 	.onFalse(intake.setPositionCommand(Intake.Value.START));
@@ -169,6 +169,9 @@ public class RobotContainer {
 		// 	.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 		// operator.leftTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT)))
 		// 	.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
+
+	drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver::getLeftX, 
+		driver::getLeftY, driver::getRightX, driver.rightBumper(), driver.a()));
 
 		operator.rightBumper().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
