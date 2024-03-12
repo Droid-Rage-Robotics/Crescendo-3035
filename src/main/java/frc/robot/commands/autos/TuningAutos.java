@@ -1,19 +1,11 @@
 package frc.robot.commands.autos;
 
-import frc.robot.commands.drive.PathPlannerFollow;
 import frc.robot.subsystems.drive.SwerveDrive;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public final class TuningAutos {
-    // public static Command forwardThenTurnTest(SwerveDrive drive) {
-    //     return PathPlannerFollow.create(drive, "ForwardThenTurnTest")
-    //         .setMaxVelocity(1)
-    //         .setAcceleration(1)
-    //         .addMarker("test", new InstantCommand())//ToDo:Test
-    //         .build();
-    // }
+    
     public static Command forwardTest(SwerveDrive drive) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "ForwardTest")
@@ -48,14 +40,7 @@ public final class TuningAutos {
                 .build()
         );
     }
-    public static Command lineToLinearTest(SwerveDrive drive) {
-        return new SequentialCommandGroup(
-            PathPlannerFollow.create(drive, "LineToTest")
-                .setMaxVelocity(0.2)
-                .setAcceleration(0.2)
-                .build()
-        );
-    }
+    
     public static Command strafeRight(SwerveDrive drive) {
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "StrafeRightTest")
@@ -68,11 +53,26 @@ public final class TuningAutos {
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "StrafeLeftTest")
                 .setMaxVelocity(0.2)
-                .setAcceleration(0.2)
                 .build()
         );
     }
-
+    
+    // public static Command lineToLinearTest(SwerveDrive drive) {
+    //     return new SequentialCommandGroup(
+    //         PathPlannerFollow.create(drive, "LineToTest")
+    //             .setMaxVelocity(0.2)
+    //             .setAcceleration(0.2)
+    //             .build()
+    //     );
+    // }
+    
+    // public static Command forwardThenTurnTest(SwerveDrive drive) {
+    //     return PathPlannerFollow.create(drive, "ForwardThenTurnTest")
+    //         .setMaxVelocity(1)
+    //         .setAcceleration(1)
+    //         .addMarker("test", new InstantCommand())//ToDo:Test
+    //         .build();
+    // }
 
     private TuningAutos() {}
 }

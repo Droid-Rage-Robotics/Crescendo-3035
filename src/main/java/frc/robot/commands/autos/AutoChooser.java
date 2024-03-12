@@ -2,31 +2,31 @@ package frc.robot.commands.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Climb;
-import frc.robot.subsystems.Light;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.ShooterSpeeds;
-import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 
 public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
     public AutoChooser(
-        SwerveDrive drive, Intake intake, Shooter shooter, Claw claw, Climb climb, Vision vision, Light light
+        SwerveDrive drive//, Intake intake, Shooter shooter, Claw claw, Climb climb, Vision vision, Light light
     ) {
+        createAutoBuilder(drive);
+
         //Put Named Commands HERE
-        NamedCommands.registerCommand("test", intake.setPositionCommand(Intake.Value.HOLD));
-        // NamedCommands.registerCommand("shoot", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));
-        NamedCommands.registerCommand("intake", intake.setPositionCommand(Intake.Value.HOLD));
-        NamedCommands.registerCommand("transfer", intake.setPositionCommand(Intake.Value.HOLD));
+        // NamedCommands.registerCommand("test", intake.setPositionCommand(Intake.Value.START));
+        // // NamedCommands.registerCommand("shoot", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));
+        // NamedCommands.registerCommand("intake", intake.setPositionCommand(Intake.Value.START));
+        // NamedCommands.registerCommand("transfer", intake.setPositionCommand(Intake.Value.START));
 
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
@@ -35,27 +35,61 @@ public class AutoChooser {
         addCloseAuto();
         addFarAuto();
         addTuningAuto(drive);
+
+        
     }
-    public Command getAutonomousCommand() {
+    public static Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
 
-    public void addCloseAuto(){
+    public static void addCloseAuto(){
         
 
     }
     
-    public void addFarAuto(){
+    public static void addFarAuto(){
 
     }
-    public void addTuningAuto(SwerveDrive drive){
-        autoChooser.addOption("BackTest", TuningAutos.backTest(drive));
+    public static void addTuningAuto(SwerveDrive drive){
+        autoChooser.addOption("BackwardTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
         autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
-        autoChooser.addOption("LineToLinearTest", TuningAutos.lineToLinearTest(drive));
+        // autoChooser.addOption("LineToLinearTest", TuningAutos.lineToLinearTest(drive));
         autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
         autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
+    }
+
+    public void createAutoBuilder(SwerveDrive drive){
+        AutoBuilder.configureHolonomic(
+            drive::getPose, // Robot pose supplier
+                drive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                drive::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                drive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                //TODO:Test WILL THIS WORK? IS IT ROBOT RELATIVE OR FIELD CENTRIC
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.get(), 
+                        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.get(), 
+                        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.get()),  // Translation PID constants
+                    new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.get(), 
+                        SwerveDriveConstants.SwerveDriveConfig.THETA_KI.get(), 
+                        SwerveDriveConstants.SwerveDriveConfig.THETA_KD.get()),  // Rotation PID constants
+                    4.5, // Max module speed, in m/s
+                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here; Ba
+                ),
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                drive // Reference to this subsystem to set requirements\
+            );
     }
 }
