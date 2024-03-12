@@ -1,4 +1,4 @@
-package frc.robot.subsystems.claw.clawArm;
+package frc.robot.subsystems.ampMech.ampMechArm;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -7,13 +7,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
-import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class ClawArm extends SubsystemBase {
+public class AmpMechArm extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1 / 2;//not right
         public static final double READINGS_PER_REVOLUTION = 1;//4089
@@ -27,42 +27,42 @@ public class ClawArm extends SubsystemBase {
     protected ArmFeedforward feedforward;
 
     protected final ShuffleboardValue<Double> rawPosWriter = ShuffleboardValue
-        .create(0.0, "Arm/Pos/Raw", Claw.class.getSimpleName())
+        .create(0.0, "Arm/Pos/Raw", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> radianPosWriter = 
-        ShuffleboardValue.create(0.0, "Arm/Pos/Radian", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm/Pos/Radian", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> degreePosWriter = ShuffleboardValue
-        .create(0.0, "Arm/Pos/Degree", Claw.class.getSimpleName())
+        .create(0.0, "Arm/Pos/Degree", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
         protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Arm/ Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm/ Encoder Velocity (Radians per Second)", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
     protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Arm/Target/Degree", Claw.class.getSimpleName())
+        .create(0.0, "Arm/Target/Degree", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Arm/Target/Radian", Claw.class.getSimpleName())
+        .create(0.0, "Arm/Target/Radian", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Arm/Target/Raw", Claw.class.getSimpleName())
+        .create(0.0, "Arm/Target/Raw", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Arm/ Moving manually", Claw.class.getSimpleName())
+        ShuffleboardValue.create(false, "Arm/ Moving manually", AmpMech.class.getSimpleName())
         .build();
     
-    public ClawArm(Boolean isEnabled) {
+    public AmpMechArm(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             23, 
             MotorType.kBrushless,
@@ -70,10 +70,10 @@ public class ClawArm extends SubsystemBase {
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Arm/Arm Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Arm/Arm Is Enabled", AmpMech.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Arm/Arm Voltage", Claw.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Arm/Arm Voltage", AmpMech.class.getSimpleName())
                 .build()
         );
 
@@ -88,13 +88,13 @@ public class ClawArm extends SubsystemBase {
         feedforward = new ArmFeedforward(0,0,0);
 
 
-        ComplexWidgetBuilder.create(controller, "Arm PID", Claw.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Arm PID", AmpMech.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
-             "Reset Arm Encoder", Claw.class.getSimpleName());
+             "Reset Arm Encoder", AmpMech.class.getSimpleName());
     }
 
     @Override

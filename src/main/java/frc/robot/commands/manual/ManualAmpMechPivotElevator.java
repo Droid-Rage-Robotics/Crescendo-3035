@@ -4,17 +4,16 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
-import frc.robot.subsystems.claw.Claw;
-import frc.robot.subsystems.claw.clawPivot.ClawPivot;
-public class ManualClawPivotElevator extends Command {
-    private final Claw claw;
+import frc.robot.subsystems.ampMech.AmpMech;
+public class ManualAmpMechPivotElevator extends Command {
+    private final AmpMech claw;
     private final Supplier<Double> pivotMove;
     
-    public ManualClawPivotElevator(Claw claw, Supplier<Double> pivotMove) {
+    public ManualAmpMechPivotElevator(AmpMech claw, Supplier<Double> pivotMove) {
         this.claw = claw;
         this.pivotMove = pivotMove;
         
-        addRequirements(claw.getClawPivot());
+        addRequirements(claw.getPivot());
     }
 
     @Override
@@ -25,8 +24,8 @@ public class ManualClawPivotElevator extends Command {
         double move = -pivotMove.get();
         move = DroidRageConstants.squareInput(move);
         move = DroidRageConstants.applyDeadBand(move);
-        claw.manualClawPivot(claw.getClawPivotTarget() + move * 0.2);
-        claw.getClawPivot().setMovingManually(!(move == 0));
+        claw.manualAmpMechPivot(claw.getAmpMechPivotTarget() + move * 0.2);
+        claw.getPivot().setMovingManually(!(move == 0));
     }
 
     @Override

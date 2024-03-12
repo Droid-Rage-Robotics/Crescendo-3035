@@ -23,7 +23,7 @@ import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
-import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
@@ -53,7 +53,7 @@ public class RobotContainer {
 	//Add Reset encoder buttons
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
-		Claw claw, Climb climb, Vision vision, Light light, CycleTracker cycleTracker){
+		AmpMech claw, Climb climb, Vision vision, Light light, CycleTracker cycleTracker){
 		// intake.setPositionCommand(Intake.Value.START);
 		// claw.setPositionCommand(Claw.Value.START);//No work
 		new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
@@ -88,7 +88,7 @@ public class RobotContainer {
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 		
 		operator.a()
-			.onTrue(claw.setPositionCommand(Claw.Value.AMP));
+			.onTrue(claw.setPositionCommand(AmpMech.Value.AMP));
 		
 		operator.povUp()
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
@@ -186,14 +186,14 @@ public class RobotContainer {
 			// .onTrue(new TransferToAmpMech(intake, shooter, claw))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 	}
-	public void configureClawTestBindings(Claw claw){
-		claw.setPositionCommand(Claw.Value.START);
+	public void configureClawTestBindings(AmpMech claw){
+		claw.setPositionCommand(AmpMech.Value.START);
 		operator.rightTrigger()
-		.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_SHOOTER))
-			.onFalse(claw.setPositionCommand(Claw.Value.START));
+		.onTrue(claw.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER))
+			.onFalse(claw.setPositionCommand(AmpMech.Value.START));
 		operator.leftTrigger()
-			.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_HUMAN))
-			.onFalse(claw.setPositionCommand(Claw.Value.START));
+			.onTrue(claw.setPositionCommand(AmpMech.Value.INTAKE_HUMAN))
+			.onFalse(claw.setPositionCommand(AmpMech.Value.START));
 
 	}
 

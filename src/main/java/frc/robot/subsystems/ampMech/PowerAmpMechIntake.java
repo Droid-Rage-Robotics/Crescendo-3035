@@ -1,4 +1,4 @@
-package frc.robot.subsystems.claw;
+package frc.robot.subsystems.ampMech;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -7,16 +7,16 @@ import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class PowerClawIntake extends SubsystemBase {
+public class PowerAmpMechIntake extends SubsystemBase {
     protected final ShuffleboardValue<Double> targetPowerWriter = ShuffleboardValue.create
-        (0.0, "Intake/ Claw Intake Target Power", Claw.class.getSimpleName()).build();
+        (0.0, "Intake/ Claw Intake Target Power", AmpMech.class.getSimpleName()).build();
     private final ShuffleboardValue<Boolean> isElementInClawWriter = ShuffleboardValue.create
-            (false, "Intake/ Claw Intake Is Element In", Claw.class.getSimpleName()).build();
+            (false, "Intake/ Claw Intake Is Element In", AmpMech.class.getSimpleName()).build();
     
     
     protected final SafeCanSparkMax motor;
 
-    public PowerClawIntake(Boolean isEnabled) {
+    public PowerAmpMechIntake(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             25,
             MotorType.kBrushless,
@@ -24,10 +24,10 @@ public class PowerClawIntake extends SubsystemBase {
             IdleMode.Coast,
             1,
             1,
-            ShuffleboardValue.create(isEnabled, "Intake/ Claw Intake Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Intake/ Claw Intake Is Enabled", AmpMech.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-                ShuffleboardValue.create(0.0, "Intake/ Claw Intake Voltage", Claw.class.getSimpleName())
+                ShuffleboardValue.create(0.0, "Intake/ Claw Intake Voltage", AmpMech.class.getSimpleName())
                     .build()
         );
     }

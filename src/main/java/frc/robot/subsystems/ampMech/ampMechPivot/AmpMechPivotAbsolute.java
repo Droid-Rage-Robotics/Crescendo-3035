@@ -1,14 +1,15 @@
-package frc.robot.subsystems.claw.clawArm;
+package frc.robot.subsystems.ampMech.ampMechPivot;
+
 
 import com.revrobotics.SparkAbsoluteEncoder;
-
-public class ClawArmAbsolute extends ClawArm {
+@Deprecated
+public class AmpMechPivotAbsolute extends AmpMechPivot {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
         public static double OFFSET = Math.PI / 2;  //90 Degree
     }
     SparkAbsoluteEncoder absoluteEncoder;
-    public ClawArmAbsolute(Boolean isEnabled) {
+    public AmpMechPivotAbsolute(Boolean isEnabled) {
         super(isEnabled);
         absoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         
@@ -28,9 +29,8 @@ public class ClawArmAbsolute extends ClawArm {
     @Override
     public double getEncoderPosition() {
         double radianPos = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
-        // double radianPos = (absoluteEncoder.getPosition());
-        radianPosWriter.write(radianPos);
-        degreePosWriter.write(Math.toDegrees(radianPos));
+        // radianPosWriter.write(radianPos);
+        // degreePosWriter.write(Math.toDegrees(radianPos));
         double raw = (absoluteEncoder.getPosition());
         rawPosWriter.write((raw));
         return radianPos;

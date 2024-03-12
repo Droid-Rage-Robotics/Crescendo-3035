@@ -1,14 +1,14 @@
-package frc.robot.subsystems.claw.clawPivot;
+package frc.robot.subsystems.ampMech.ampMechPivot;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 @Deprecated
-public class ClawPivotMotionProfiled extends ClawPivot {
+public class AmpMechPivotMotionProfiled extends AmpMechPivot {
 
-    public ClawPivotMotionProfiled(Boolean isEnabled) {
+    public AmpMechPivotMotionProfiled(Boolean isEnabled) {
         super(isEnabled);
         //TODO Auto-generated constructor stub
     }

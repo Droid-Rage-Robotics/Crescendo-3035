@@ -3,7 +3,7 @@ package frc.robot.subsystems.intake.dropDown;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 @Deprecated
 public class IntakeDropDownMotionProfiled extends IntakeDropDown {
@@ -17,11 +17,11 @@ public class IntakeDropDownMotionProfiled extends IntakeDropDown {
     protected TrapezoidProfile.State goal;
 
     protected final ShuffleboardValue<Double> goalPositionWriter = ShuffleboardValue
-        .create(0.0, "Goal Position", Claw.class.getSimpleName()).build();
+        .create(0.0, "Goal Position", AmpMech.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> goalVelocityWriter = ShuffleboardValue
-        .create(0.0, "Goal Velocity", Claw.class.getSimpleName()).build();
+        .create(0.0, "Goal Velocity", AmpMech.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue
-        .create(0.0, "Target Velocity", Claw.class.getSimpleName()).build();
+        .create(0.0, "Target Velocity", AmpMech.class.getSimpleName()).build();
     
     public IntakeDropDownMotionProfiled(Boolean isEnabled) {
         super(isEnabled);

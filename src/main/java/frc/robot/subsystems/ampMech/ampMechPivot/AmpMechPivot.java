@@ -1,4 +1,4 @@
-package frc.robot.subsystems.claw.clawPivot;
+package frc.robot.subsystems.ampMech.ampMechPivot;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -7,13 +7,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DisabledCommand;
-import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class ClawPivot extends SubsystemBase {
+public class AmpMechPivot extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1.55;//12/1/24;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 40;//4089
@@ -27,7 +27,7 @@ public class ClawPivot extends SubsystemBase {
     // protected ArmFeedforward feedforward;
 
     protected final ShuffleboardValue<Double> rawPosWriter = ShuffleboardValue
-        .create(0.0, "Pivot/Pos/Raw", Claw.class.getSimpleName())
+        .create(0.0, "Pivot/Pos/Raw", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     // protected final ShuffleboardValue<Double> radianPosWriter = 
@@ -40,7 +40,7 @@ public class ClawPivot extends SubsystemBase {
     //     .build();
     
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Pivot/ Encoder Velocity (Radians per Second)", Claw.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Pivot/ Encoder Velocity (Radians per Second)", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
@@ -53,16 +53,16 @@ public class ClawPivot extends SubsystemBase {
     //     .withSize(1, 2)
     //     .build();
     protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Pivot/Target/Raw", Claw.class.getSimpleName())
+        .create(0.0, "Pivot/Target/Raw", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Pivot/ Moving manually", Claw.class.getSimpleName())
+        ShuffleboardValue.create(false, "Pivot/ Moving manually", AmpMech.class.getSimpleName())
         .build();
     
-    public ClawPivot(Boolean isEnabled) {
+    public AmpMechPivot(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             24, 
             MotorType.kBrushless,
@@ -70,10 +70,10 @@ public class ClawPivot extends SubsystemBase {
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
             Constants.ROTATIONS_TO_RADIANS/60,
-            ShuffleboardValue.create(isEnabled, "Pivot/Pivot Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Pivot/Pivot Is Enabled", AmpMech.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Pivot/Pivot Voltage", Claw.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Pivot/Pivot Voltage", AmpMech.class.getSimpleName())
                 .build()
         );
 
@@ -85,13 +85,13 @@ public class ClawPivot extends SubsystemBase {
         // feedforward = new ArmFeedforward(0,0,0);
 
 
-        ComplexWidgetBuilder.create(controller, "Pivot PID", Claw.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Pivot PID", AmpMech.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
 
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
-             "Reset Pivot Encoder", Claw.class.getSimpleName());
+             "Reset Pivot Encoder", AmpMech.class.getSimpleName());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.claw;
+package frc.robot.subsystems.ampMech;
 
 
 import java.util.function.Supplier;
@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.SuppliedCommand;
-import frc.robot.subsystems.claw.clawArm.ClawArmAbsolute;
-import frc.robot.subsystems.claw.clawPivot.ClawPivot;
+import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
+import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivot;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class Claw {
+public class AmpMech {
     //Can use the Positions to make another Value 
     //that holds 2 Positions to join together like 
     //in Charged Up; Allows for you to different 
@@ -38,19 +38,19 @@ public class Claw {
 
         private Value(double elevatorInches, double armAngle, double pivotAngle, double intakeSpeeds) {
             this.elevatorInches = ShuffleboardValue.create(elevatorInches, 
-                ClawElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
                 .withSize(1, 3)
                 .build();
             this.armAngle = ShuffleboardValue.create(armAngle, 
-                ClawElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.pivotAngle = ShuffleboardValue.create(pivotAngle, 
-                ClawElevator.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.intakeSpeeds = ShuffleboardValue.create(intakeSpeeds, 
-                ClawElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
                 .withSize(1, 3)
                 .build();
         }
@@ -59,19 +59,19 @@ public class Claw {
         private Value(Value copyValue) {
             // Value value = copyValue;
             this.elevatorInches = ShuffleboardValue.create(copyValue.getElevatorInches(), 
-                ClawElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
                 .withSize(1, 3)
                 .build();
                 this.armAngle = ShuffleboardValue.create(copyValue.getArmDegrees(), 
-                ClawElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.pivotAngle = ShuffleboardValue.create(copyValue.getPivotDegrees(), 
-                ClawElevator.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.intakeSpeeds = ShuffleboardValue.create(copyValue.getIntakeSpeeds(), 
-                ClawElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
                 .withSize(1, 3)
                 .build();
         }
@@ -92,24 +92,24 @@ public class Claw {
         }
     }
 
-    private final ClawElevator clawElevator;
-    private final ClawArmAbsolute clawArm;
-    private final ClawPivot clawPivot;
-    private final PowerClawIntake clawIntake;
+    private final AmpMechElevator elevator;
+    private final AmpMechArmAbsolute arm;
+    private final AmpMechPivot pivot;
+    private final PowerAmpMechIntake intake;
     private Value position = Value.START;
     private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
         .create(position.name(), "Current Arm Position", "Misc")
         .withSize(1, 3)
         .build();
 
-    public Claw(ClawElevator clawElevator,
-        ClawArmAbsolute clawArm,
-        ClawPivot clawPivot,
-        PowerClawIntake clawIntake) {
-        this.clawElevator = clawElevator;
-        this.clawArm = clawArm;
-        this.clawPivot = clawPivot;
-        this.clawIntake = clawIntake;
+    public AmpMech(AmpMechElevator elevator,
+        AmpMechArmAbsolute arm,
+        AmpMechPivot pivot,
+        PowerAmpMechIntake intake) {
+        this.elevator = elevator;
+        this.arm = arm;
+        this.pivot = pivot;
+        this.intake = intake;
     }
 
     private void logPosition(Value targetPosition) {
@@ -138,61 +138,61 @@ public class Claw {
                 
                 default -> 
                     new ParallelCommandGroup(
-                        clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches())),
-                        clawPivot.runOnce(() -> clawPivot.setTargetPosition((targetPosition.getPivotDegrees()))),
-                        clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds())),
-                        clawArm.runOnce(()->clawArm.setTargetPosition(targetPosition.getArmDegrees()))
+                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
+                        pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                        intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
+                        arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                     );
             }
         ));
     }
 
     public Command lowerElevatorCommand() {
-        return clawElevator.runOnce(() -> 
-            clawElevator.setTargetPosition(clawElevator.getTargetPosition() - 3));
+        return elevator.runOnce(() -> 
+            elevator.setTargetPosition(elevator.getTargetPosition() - 3));
     }
     public Command lowerPivotCommand(double lowerNum) {
-        return clawPivot.runOnce(() -> 
-            clawPivot.setTargetPosition(clawPivot.getTargetPosition() - lowerNum));
+        return pivot.runOnce(() -> 
+            pivot.setTargetPosition(pivot.getTargetPosition() - lowerNum));
     }
     // public Command pushChargeDownCommand() {
     //     return clawPivot.runOnce(() -> 
     //         clawPivot.setTargetPosition(Value.INTAKE_LOW_CUBE.getPivotDegrees()));
     // }
     public boolean isElementInClaw(){
-        return clawIntake.isElementInClaw();
+        return intake.isElementInClaw();
 
     }
 
-    public void manualClawElevator(double move){
-        clawElevator.setTargetPosition(move);
+    public void manualAmpMechElevator(double move){
+        elevator.setTargetPosition(move);
     }
-    public void manualClawPivot(double move){
-        clawPivot.setTargetPosition(move);
+    public void manualAmpMechPivot(double move){
+        pivot.setTargetPosition(move);
     }
-    public void manualClawIntake(double move){
-        clawIntake.setTargetPosition(move);
+    public void manualAmpMechIntake(double move){
+        intake.setTargetPosition(move);
     }
-    public double getClawElevatorTarget(){
-        return clawElevator.getTargetPosition();
+    public double getAmpMechElevatorTarget(){
+        return elevator.getTargetPosition();
     }
-    public double getClawPivotTarget(){
-        return clawPivot.getTargetPosition();
+    public double getAmpMechPivotTarget(){
+        return pivot.getTargetPosition();
     }
-    public double getClawIntakeTarget(){
-        return clawIntake.getTargetPosition();
+    public double getAmpMechIntakeTarget(){
+        return intake.getTargetPosition();
     }
 
-    public ClawElevator getClawElevator(){
-        return clawElevator;
+    public AmpMechElevator getElevator(){
+        return elevator;
     }
-    public ClawPivot getClawPivot(){
-        return clawPivot;
+    public AmpMechPivot getPivot(){
+        return pivot;
     }
-    public PowerClawIntake getClawIntake(){
-        return clawIntake;
+    public PowerAmpMechIntake getIntake(){
+        return intake;
     }
-    public ClawArmAbsolute getClawArmAbs(){
-        return clawArm;
+    public AmpMechArmAbsolute getClawArmAbs(){
+        return arm;
     }
 }

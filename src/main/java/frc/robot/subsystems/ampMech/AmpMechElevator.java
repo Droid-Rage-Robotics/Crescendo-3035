@@ -1,4 +1,4 @@
-package frc.robot.subsystems.claw;
+package frc.robot.subsystems.ampMech;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -11,7 +11,7 @@ import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class ClawElevator extends SubsystemBase {
+public class AmpMechElevator extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1/1;//1/15
         public static final double GEAR_DIAMETER_INCHES = 2.058;//2.058
@@ -28,18 +28,18 @@ public class ClawElevator extends SubsystemBase {
 
     
     private final ShuffleboardValue<Double> voltage = ShuffleboardValue
-        .create(0.0, "Elevator/ Elevator Voltage", Claw.class.getSimpleName())
+        .create(0.0, "Elevator/ Elevator Voltage", AmpMech.class.getSimpleName())
         .build();
     protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue
-        .create(0.0, "Elevator/ Elevator Encoder Position", Claw.class.getSimpleName())
+        .create(0.0, "Elevator/ Elevator Encoder Position", AmpMech.class.getSimpleName())
         .withSize(1, 3)
         .build();
     protected final ShuffleboardValue<Boolean> isMovingManually = ShuffleboardValue
-        .create(false, "Elevator/ Elevator Moving manually", Claw.class.getSimpleName())
+        .create(false, "Elevator/ Elevator Moving manually", AmpMech.class.getSimpleName())
         .build();
 ;
 
-    public ClawElevator(Boolean isEnabled) {
+    public AmpMechElevator(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             22, 
             MotorType.kBrushless,
@@ -47,7 +47,7 @@ public class ClawElevator extends SubsystemBase {
             IdleMode.Coast,
             1,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Elevator/ Elevator Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Elevator/ Elevator Is Enabled", AmpMech.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             voltage
@@ -55,12 +55,12 @@ public class ClawElevator extends SubsystemBase {
         
         controller.setTolerance(0.1);
 
-        ComplexWidgetBuilder.create(controller, "Elevator PID", Claw.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Elevator PID", AmpMech.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
-            "Elevator Reset Encoder", Claw.class.getSimpleName());
+            "Elevator Reset Encoder", AmpMech.class.getSimpleName());
     }
 
     @Override

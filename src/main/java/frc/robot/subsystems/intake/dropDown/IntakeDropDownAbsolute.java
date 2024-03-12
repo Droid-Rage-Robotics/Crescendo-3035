@@ -2,7 +2,7 @@ package frc.robot.subsystems.intake.dropDown;
 
 import com.revrobotics.SparkAbsoluteEncoder;
 
-import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 

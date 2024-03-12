@@ -1,4 +1,4 @@
-package frc.robot.subsystems.claw;
+package frc.robot.subsystems.ampMech;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
@@ -12,7 +12,7 @@ import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 @Deprecated
-public class ClawIntake extends SubsystemBase {
+public class AmpMechIntake extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
         public static final double READINGS_PER_REVOLUTION = 1;
@@ -20,21 +20,21 @@ public class ClawIntake extends SubsystemBase {
     }
 
     protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
-        (0.0, "Intake/ Claw Intake Target Velocity", Claw.class.getSimpleName()).build();
+        (0.0, "Intake/ Claw Intake Target Velocity", AmpMech.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-        (0.0, "Intake/ Claw Intake Encoder Velocity", Claw.class.getSimpleName()).build();
+        (0.0, "Intake/ Claw Intake Encoder Velocity", AmpMech.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Intake/ Claw Intake Encoder Velocity Error", Claw.class.getSimpleName()).build();
+        (0.0, "Intake/ Claw Intake Encoder Velocity Error", AmpMech.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Boolean> isElementInClawWriter = ShuffleboardValue.create
-            (false, "Intake/ Claw Intake Is Element In", Claw.class.getSimpleName()).build();
+            (false, "Intake/ Claw Intake Is Element In", AmpMech.class.getSimpleName()).build();
     
     
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
     protected final SimpleMotorFeedforward feedforward;
 
-    public ClawIntake(Boolean isEnabled) {
+    public AmpMechIntake(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
             25,
             MotorType.kBrushless,
@@ -42,10 +42,10 @@ public class ClawIntake extends SubsystemBase {
             IdleMode.Coast,
             1,
             1,
-            ShuffleboardValue.create(isEnabled, "Intake/ Claw Intake Is Enabled", Claw.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Intake/ Claw Intake Is Enabled", AmpMech.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-                ShuffleboardValue.create(0.0, "Intake/ Claw Intake Voltage", Claw.class.getSimpleName())
+                ShuffleboardValue.create(0.0, "Intake/ Claw Intake Voltage", AmpMech.class.getSimpleName())
                     .build()
         );
 
@@ -58,10 +58,10 @@ public class ClawIntake extends SubsystemBase {
         // feedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
 
-        ComplexWidgetBuilder.create(controller, "Claw Intake", Claw.class.getSimpleName());
+        ComplexWidgetBuilder.create(controller, "Claw Intake", AmpMech.class.getSimpleName());
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
-            "Claw Intake Reset Claw Encoder", Claw.class.getSimpleName());
+            "Claw Intake Reset Claw Encoder", AmpMech.class.getSimpleName());
     }
 
     @Override
