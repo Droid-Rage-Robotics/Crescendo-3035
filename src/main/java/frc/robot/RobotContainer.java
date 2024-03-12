@@ -10,11 +10,15 @@ import frc.robot.SysID.SysID;
 import frc.robot.commands.ClimbAndScoreSequence;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.LightCommand;
+import frc.robot.commands.SetIntakeAndShooter;
+import frc.robot.commands.TransferToAmpMech;
 import frc.robot.commands.autos.AutoChooser;
+import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
@@ -43,8 +47,14 @@ public class RobotContainer {
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
 		Claw claw, Climb climb, Vision vision, Light light, CycleTracker cycleTracker){
-		light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
-		intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
+		// intake.setPositionCommand(Intake.Value.START);
+		// claw.setPositionCommand(Claw.Value.START);//No work
+		new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
+		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+
+		
+		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
+		// intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 
 		drive.setDefaultCommand(
 			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
@@ -53,7 +63,7 @@ public class RobotContainer {
 				driver::getLeftY,
 				driver::getRightX,
 				driver.rightBumper(),
-				driver.start()
+				driver.a()
 				)
 			);
 
@@ -63,6 +73,21 @@ public class RobotContainer {
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 		
 
+		operator.rightTrigger()
+			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT))
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+		operator.leftTrigger()
+			.onTrue(new TransferToAmpMech(intake, shooter, claw))
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+		
+		operator.a()
+			.onTrue(claw.setPositionCommand(Claw.Value.AMP));
+		
+		operator.povUp()
+			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
+		operator.povDown()
+			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
+		
 		
 		// operator.rightTrigger()
 		// 	.onTrue(new AutoAim(drive, vision, light)
@@ -77,7 +102,7 @@ public class RobotContainer {
 		// 	.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 		// 	);
 
-		operator.start().onTrue(new ClimbAndScoreSequence(claw, climb, intake));
+		// operator.start().onTrue(new ClimbAndScoreSequence(claw, climb, intake));
 
 		
 		// Trap
@@ -100,9 +125,7 @@ public class RobotContainer {
 	}
 	
 	public void configureIntakeTestBindings(Intake intake){
-		// operator.rightTrigger()
-		// 	.onTrue(new InstantCommand(()->intake.getIntakeWheel().setPower(.6)))
-		// 	.onFalse(new InstantCommand(()->intake.getIntakeWheel().setPower(0)));
+		intake.setPositionCommand(Intake.Value.START);
 		operator.rightTrigger()
 			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
@@ -138,10 +161,14 @@ public class RobotContainer {
 			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 	}
 	public void configureClawTestBindings(Claw claw){
+		claw.setPositionCommand(Claw.Value.START);
 		operator.rightTrigger()
-			.onTrue(claw.setPositionCommand(Claw.Value.START));
+		.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_SHOOTER))
+			.onFalse(claw.setPositionCommand(Claw.Value.START));
 		operator.leftTrigger()
-			.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_HUMAN));
+			.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_HUMAN))
+			.onFalse(claw.setPositionCommand(Claw.Value.START));
+
 	}
 
 

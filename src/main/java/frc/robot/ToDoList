@@ -21,11 +21,11 @@ Extra Ideas:
 - Robot Tracking on Field
 - Field Centric Turning
 - Changing Shooter Speed According to Distance: InterpolatingMatrixTreeMap
+- Limit Switch to the Intake
 
 Test:
 - Limelight Tracking AutoAim.java
 - Make all of the writes that are not necessary during a match be in a practice only writers (Helps prevent the likelihood of loop overruns)
-- Limit Switch to the Intake
 - does Pathplannerfollow work?
 - Test Software Switch on Shuffleboard to see if it work
 - Test NamedCommands
@@ -43,9 +43,19 @@ Port:22
 Location of SysID Logs: /home/lvuser/logs 
 
 make all teh pid only say name and PId, not controller
-make a framework to make all of the arms to be implemented similairly
+make a framework to make all of the arms to be implemented similairly 
 make a DroidRagelib - search how to do it
 test claw to be faster
 redo the claw arm 0 pos to be down
 
+3-11
+Make a function that forces all of the subsystems to set a start position in configure telopbuttons
+Make the claw be called trap/amp mech
+write out which direction the -/+ is on all arms
+Download Pathplanner wiht Windows
+Seeif you put multiple Commands in one file called Commands that is static like TransferToAmpMech
+
+
 Without any PID, the arm shoudl stay upright, basically sayign that the kg is good
+System.out.println("setting command."+ targetPosition.name()); <-- Use this to troubleshoot>
+Connect in Pathplanner with Robot: 10.30.35.2

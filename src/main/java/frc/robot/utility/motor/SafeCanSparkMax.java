@@ -11,23 +11,22 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class SafeCanSparkMax extends SafeMotor {
     private final CANSparkMax motor;
     public SafeCanSparkMax(
-        int deviceId, 
-        MotorType type, 
-        boolean isInverted,
-        IdleMode mode,
+        int deviceId, MotorType type, 
+        boolean isInverted, IdleMode mode,
         double positionConversionFactor,
         double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
         ShuffleboardValue<Double> outputWriter) {
+
         super(isEnabled, outputWriter);
         motor = new CANSparkMax(deviceId, type);
         motor.setInverted(isInverted);
         setIdleMode(mode);
         motor.getEncoder().setPositionConversionFactor(positionConversionFactor);
         motor.getEncoder().setVelocityConversionFactor(velocityConversionFactor);
-
-
-    }
+ 
+        motor.burnFlash();
+    }   
     // public SafeCanSparkMax(int deviceId, MotorType type, 
     //     boolean isInverted
     //     ,

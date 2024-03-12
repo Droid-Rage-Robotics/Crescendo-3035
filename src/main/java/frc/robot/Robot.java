@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.logging.Logger;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -28,6 +31,7 @@ import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.claw.ClawElevator;
 import frc.robot.subsystems.claw.PowerClawIntake;
 import frc.robot.subsystems.claw.clawArm.ClawArm;
+import frc.robot.subsystems.claw.clawArm.ClawArmAbsolute;
 import frc.robot.subsystems.claw.clawPivot.ClawPivot;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
@@ -50,25 +54,26 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
-    
-    
+    private final SwerveDrive drive = new SwerveDrive(true);//2-10
     // private final Shooter shooter = new Shooter(false);//18.19
-    private final Climb climb = new Climb(false, false);//20,21^
-    // private final ClawElevator clawElevator = new ClawElevator(true);//22
-    // private final ClawArm clawArm = new ClawArm(false);//23 - not connected: temp is 60
+
+    // private final Climb climb = new Climb(false, false);//20,21^
+    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
+    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorL());//17-could use drive motor instead
+    // private final Intake intake = new Intake(dropDown, intakeWheel);
+    
+    // private final ClawElevator clawElevator = new ClawElevator(false);//22
+    // private final ClawArmAbsolute clawArm = new ClawArmAbsolute(false);//23 - not connected: temp is 60
     // private final ClawPivot clawPivot = new ClawPivot(false);//24 - not connected
     // private final PowerClawIntake clawIntake = new PowerClawIntake(false);//25       
     // private final Claw claw = new Claw(clawElevator, clawArm, clawPivot, clawIntake);
-    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorL());//17
-    private final Intake intake = new Intake(dropDown, intakeWheel);
+    
     
     // private final Vision vision = new Vision();
     // private final Light light = new Light();
-    // private AutoChooser autoChooser = new AutoChooser(
-    //     drive, intake, shooter, claw, climb, vision, light
-    // );
+    private AutoChooser autoChooser = new AutoChooser(
+        drive//, intake, shooter, claw, climb, vision, light
+    );
     // private final CycleTracker3 cycleTracker = new CycleTracker3();
 
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
@@ -79,7 +84,7 @@ public class Robot extends TimedRobot {
 
 
 
-    // private Field2d field = new Field2d(); //TODO:How does this work
+    private Field2d field = new Field2d(); //TODO:How does this work
     private RobotContainer robotContainer = new RobotContainer();
         
     private Command autonomousCommand;
@@ -94,6 +99,10 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // PathPlannerServer.startServer(5811); // Use to see the Path of the robot on PathPlanner
         // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+            // Do whatever you want with the pose here
+            field.setRobotPose(pose);
+        });
     }
     
     /**
@@ -134,8 +143,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        // autonomousCommand = autoChooser.getAutonomousCommand();
-        autonomousCommand = new InstantCommand();
+        autonomousCommand = autoChooser.getAutonomousCommand();
+        // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -152,6 +161,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
+        // claw.setPositionCommand(Claw.Value.START);
         // drive.setYawCommand(
         //     switch (DriverStation.getRawAllianceStation()) {
         //         case Unknown -> 0;//180
@@ -193,13 +203,18 @@ public class Robot extends TimedRobot {
         // );
 
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light, cycleTracker);
-        robotContainer.configureIntakeTestBindings(intake);
+        // robotContainer.configureIntakeTestBindings(intake);
         // robotContainer.configureCycleTrackerBindings(cycleTracker);
 
         // robotContainer.configureClimbTestBindings(climb);
         // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
         // robotContainer.configureShooterTestBindings(shooter);
         // robotContainer.configureClawTestBindings(claw);
+
+		// new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
+		// new InstantCommand(()->claw.setPositionCommand(Claw.Value.START));//no work
+
+
         // robotContainer.configureDriveBindings(drive);
         // robotContainer.configureSysIDBindings(sysID);
     }
