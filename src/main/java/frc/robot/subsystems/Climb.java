@@ -35,8 +35,8 @@ public class Climb extends SubsystemBase{
                 .build();
         }
     } 
-    private final PIDController controller = new PIDController(2.4, 0, 0);
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
+    private final PIDController controller = new PIDController(2., 0, 0);
+    // private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
     private final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
         (0.0, "Climb/Voltage", Climb.class.getSimpleName())
         .build();
@@ -92,8 +92,9 @@ public class Climb extends SubsystemBase{
 
     @Override
     public void periodic() {
-        setPower(controller.calculate(getEncoderPosition())+
-            feedforward.calculate(getVelocity(), getVelocity()));
+        // setPower(controller.calculate(getEncoderPosition()));
+        // setPower(controller.calculate(getEncoderPosition())+
+        //     feedforward.calculate(getVelocity(), getVelocity()));
     } 
     public void setTargetPosition(Position position){
         setTargetPosition(position.climbPos.get());
@@ -104,7 +105,7 @@ public class Climb extends SubsystemBase{
     }
     
     
-    private void setPower(double power) {
+    public void setPower(double power) {
         // if (!isEnabled.get()) return;
         motorL.setPower(power);
         motorR.setPower(power);
@@ -165,9 +166,9 @@ public class Climb extends SubsystemBase{
         return getIsMovingManually().get();
     }
 
-    protected double calculateFeedforward(double targetVelocity) {
-        return feedforward.calculate(targetVelocity);
-    }
+    // protected double calculateFeedforward(double targetVelocity) {
+    //     return feedforward.calculate(targetVelocity);
+    // }
 
     protected double calculatePID(double targetVelocity) {
         return controller.calculate(getEncoderPosition(), targetVelocity);

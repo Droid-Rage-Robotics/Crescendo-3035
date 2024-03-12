@@ -36,8 +36,9 @@ public class ManualClimb extends Command {
         double move = -climbMove.get();
         move = DroidRageConstants.squareInput(move);
         move = DroidRageConstants.applyDeadBand(move);
-        climb.setTargetPosition(climb.getTargetPosition() + move * 0.2);
-        climb.setMovingManually(!(move == 0));
+        climb.setPower(move*0.8);
+        // climb.setTargetPosition(climb.getTargetPosition() + move * 0.2);
+        // climb.setMovingManually(!(move == 0));
     }
 
     @Override
