@@ -21,15 +21,15 @@ public class Intake {
         START(15,0),
 
         //IntakePos
-        INTAKE_GROUND(170,10000),
+        INTAKE_GROUND(195,-10000),
         INTAKE_HUMAN(100,-INTAKE_GROUND.getIntakeSpeeds()),//INTAKE_GROUND
 
         SHOOTER_HOLD(START.getAngle(), 0),//Ready to give Note to shooter, but not doing it
-        SHOOTER_TRANSFER(START.getAngle(), -1000),//Giving Note to Shooter
+        SHOOTER_TRANSFER(START.getAngle(), 1000),//Giving Note to Shooter
        
 
         // HOLD(0, 0),
-        OUTTAKE(130,-1500),
+        OUTTAKE(130,1500),
         CLIMB(INTAKE_GROUND.getAngle(), 0)
         ;
 
