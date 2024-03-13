@@ -89,6 +89,7 @@ public class SwerveModuleNeo {
             ShuffleboardValue.create(0.0, "Turn Voltage", SwerveDrive.class.getSimpleName())
                 .build());
 
+        turnMotor.setSmartCurrentLimit(30);
         
         turningPidController = new PIDController(Constants.TURN_P, 0.0, 0.0);
         turningPidController.enableContinuousInput(0, 2*Math.PI);//Was  -Math.PI, Math.PI but changed to 0 and 2PI
