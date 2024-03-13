@@ -15,8 +15,8 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class AmpMechPivot extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1.55;//12/1/24;//Old One is 240 // New is 180 (I think)
-        public static final double READINGS_PER_REVOLUTION = 40;//4089
+        public static final double GEAR_RATIO = 1 / 2;//not right
+        public static final double READINGS_PER_REVOLUTION = 1;//4089
         public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK; cause gear ratio: (2*Math.PI)/Constants.GEAR_RATIO
     
     }
@@ -24,34 +24,34 @@ public class AmpMechPivot extends SubsystemBase {
 
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
-    // protected ArmFeedforward feedforward;
+    protected ArmFeedforward feedforward;
 
     protected final ShuffleboardValue<Double> rawPosWriter = ShuffleboardValue
         .create(0.0, "Pivot/Pos/Raw", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
-    // protected final ShuffleboardValue<Double> radianPosWriter = 
-    //     ShuffleboardValue.create(0.0, "Pivot/Pos/Radian", Claw.class.getSimpleName())
-    //     .withSize(1, 2)
-    //     .build();
-    // protected final ShuffleboardValue<Double> degreePosWriter = ShuffleboardValue
-    //     .create(0.0, "Pivot/Pos/Degree", Claw.class.getSimpleName())
-    //     .withSize(1, 2)
-    //     .build();
+    protected final ShuffleboardValue<Double> radianPosWriter = 
+        ShuffleboardValue.create(0.0, "Pivot/Pos/Radian", AmpMech.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> degreePosWriter = ShuffleboardValue
+        .create(0.0, "Pivot/Pos/Degree", AmpMech.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
     
-    protected final ShuffleboardValue<Double> encoderVelocityWriter = 
+        protected final ShuffleboardValue<Double> encoderVelocityWriter = 
         ShuffleboardValue.create(0.0, "Pivot/ Encoder Velocity (Radians per Second)", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
-    // protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
-    //     .create(0.0, "Pivot/Target/Degree", Claw.class.getSimpleName())
-    //     .withSize(1, 2)
-    //     .build();
-    // protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
-    //     .create(0.0, "Pivot/Target/Radian", Claw.class.getSimpleName())
-    //     .withSize(1, 2)
-    //     .build();
+    protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Pivot/Target/Degree", AmpMech.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Pivot/Target/Radian", AmpMech.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
     protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
         .create(0.0, "Pivot/Target/Raw", AmpMech.class.getSimpleName())
         .withSize(1, 2)
@@ -69,19 +69,21 @@ public class AmpMechPivot extends SubsystemBase {
             true,
             IdleMode.Coast,
             Constants.ROTATIONS_TO_RADIANS,
-            Constants.ROTATIONS_TO_RADIANS/60,
-            ShuffleboardValue.create(isEnabled, "Pivot/Pivot Is Enabled", AmpMech.class.getSimpleName())
+            1.0,
+            ShuffleboardValue.create(isEnabled, "Pivot/Is Enabled", AmpMech.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             ShuffleboardValue.create(0.0, "Pivot/Pivot Voltage", AmpMech.class.getSimpleName())
                 .build()
         );
 
-        controller = new PIDController(.5, 0.0, 0.0);
+        controller = new PIDController(.33, 0.0, 0.0);//1.9
         // controller = new PIDController(0, 0.0, 0.0);
 
-        controller.setTolerance(.25);
+        controller.setTolerance(Math.toRadians(1));
 
+        // feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - may 
+        // feedforward = new ArmFeedforward(0.,.60679,.085861,.0035872);//Make some 0 testing
         // feedforward = new ArmFeedforward(0,0,0);
 
 
@@ -96,8 +98,8 @@ public class AmpMechPivot extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // getEncoderPosition();
-        setVoltage(calculatePID(getEncoderPosition()));
+        getEncoderPosition();
+        // setVoltage(calculatePID(getEncoderPosition()));
     }
   
     @Override
@@ -115,12 +117,12 @@ public class AmpMechPivot extends SubsystemBase {
     }
 
 
-    public void setTargetPosition(double pos) {
-        // radianTargetPosWriter.set(Math.toRadians(posDegree));
-        // degreeTargetPosWriter.set(posDegree);
-        rawTargetPosWriter.set(pos);
+    public void setTargetPosition(double posDegree) {
+        radianTargetPosWriter.set(Math.toRadians(posDegree));
+        degreeTargetPosWriter.set(posDegree);
+        // rawTargetPosWriter.set(posDegree);
         // rawTargetPosWriter.set(posDegree/Constants.DEGREES_PER_ROTATION) // Not for motor encoder???
-        controller.setSetpoint(pos);
+        controller.setSetpoint(Math.toRadians(posDegree));
     }
 
     public double getTargetPosition() {
@@ -151,9 +153,9 @@ public class AmpMechPivot extends SubsystemBase {
         motor.stop();
     }
 
-    // protected double calculateFeedforward(double positionRadians, double velocity) {
-    //     return feedforward.calculate(positionRadians, velocity);
-    // }
+    protected double calculateFeedforward(double positionRadians, double velocity) {
+        return feedforward.calculate(positionRadians, velocity);
+    }
 
     protected double calculatePID(double pos) {
         return controller.calculate(pos);
