@@ -45,7 +45,8 @@ public class IntakeWheel extends SubsystemBase {
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             ShuffleboardValue.create(0.0, "Intake/Voltage Wheel", Intake.class.getSimpleName())
-                .build()
+                .build(),
+            5
         );
         // intakeEncoder = intake.getEncoder();
 
@@ -60,6 +61,7 @@ public class IntakeWheel extends SubsystemBase {
         ComplexWidgetBuilder.create(intakeController, "Wheel PID", Intake.class.getSimpleName());
         ComplexWidgetBuilder.create(DisabledCommand.create(runOnce(this::resetIntakeEncoder)), 
             "Reset Intake Wheel Encoder", Intake.class.getSimpleName());
+        
     }
 
     @Override

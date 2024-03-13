@@ -24,12 +24,12 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
         absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
         absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
         absoluteEncoder.setInverted(false);
-        setTargetPosition(Constants.OFFSET);
+        // setTargetPosition(Constants.OFFSET);
     }
 
     public void periodic(){
         // setVoltage(calculatePID(getEncoderPosition()));
-        setVoltage(calculatePID(getEncoderPosition())+(Math.cos(getEncoderPosition())*(.175)));
+        setVoltage((calculatePID(getEncoderPosition())*2.5)+(Math.cos(getEncoderPosition())*(.175)));
 
         // setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(getEncoderPosition(), 0));
     }
