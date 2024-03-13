@@ -13,7 +13,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class AmpMechElevator extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1/1;//1/15
+        public static final double GEAR_RATIO = 15/1;//1/15
         public static final double GEAR_DIAMETER_INCHES = 2.058;//2.058
         public static final double COUNTS_PER_PULSE = 1; // 2048 bc rev through bore
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
@@ -22,11 +22,23 @@ public class AmpMechElevator extends SubsystemBase {
     }
     private final SafeCanSparkMax motor;
     
-    private final PIDController controller = new PIDController(2, 0, 0);//2.4
-    // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
-    private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.1, 0.25, 0, 0);
+    private final PIDController controller = new PIDController(.15, 0, 0);//2.4
+    // private final PIDController controller = new PIDController(0, 0, 0);//2.4
+    private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
+    // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.1, 0.25, 0, 0);
 
-    
+    protected final ShuffleboardValue<Double> rawPosWriter = ShuffleboardValue
+        .create(0.0, "Elevator/Pos/Raw", AmpMech.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> encoderVelocityWriter = 
+        ShuffleboardValue.create(0.0, "Elevator/ Encoder Velocity (Radians per Second)", AmpMech.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
+    protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
+        .create(0.0, "Elevator/Target/Raw", AmpMech.class.getSimpleName())
+        .withSize(1, 2)
+        .build();
     private final ShuffleboardValue<Double> voltage = ShuffleboardValue
         .create(0.0, "Elevator/ Elevator Voltage", AmpMech.class.getSimpleName())
         .build();
@@ -67,6 +79,9 @@ public class AmpMechElevator extends SubsystemBase {
     public void periodic() {
         setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()) + 
             feedforward.calculate(getTargetPosition()));
+        // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()) + 
+        //     .2);
+        // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()));
     }
     @Override
     public void simulationPeriodic() {
@@ -78,6 +93,9 @@ public class AmpMechElevator extends SubsystemBase {
         // if (target < Constants.MIN_POSITION) return;
         // if (target > Constants.MAX_POSITION) return;
         controller.setSetpoint(target);
+        rawTargetPosWriter.set(target);
+        rawTargetPosWriter.set(target);
+
     }
     protected void setVoltage(double voltage) {
         motor.setVoltage(voltage);
@@ -97,6 +115,7 @@ public class AmpMechElevator extends SubsystemBase {
     public double getEncoderPosition() {
         double position = motor.getPosition();
         encoderPositionWriter.write(position);
+        rawPosWriter.write(position);
         return position;
     }
 
