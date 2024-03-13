@@ -8,14 +8,14 @@ import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.intake.Intake;
 
 public class TransferToAmpMech extends SequentialCommandGroup {
-    public TransferToAmpMech (Intake intake, Shooter shooter, AmpMech claw){
+    public TransferToAmpMech (Intake intake, Shooter shooter, AmpMech ampMech){
         addCommands(
-            claw.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER),
+            ampMech.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER),
             new WaitCommand(2),
             shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.CLAW_TRANSFER)),
             intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
             new WaitCommand(3), //Time For it to transfer
-            claw.setPositionCommand(AmpMech.Value.HOLD),
+            ampMech.setPositionCommand(AmpMech.Value.HOLD),
             shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.HOLD)),
             intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
         );
