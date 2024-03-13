@@ -18,16 +18,16 @@ public class AmpMech {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
-        START(3,235,180,0),
+        START(0,298,305,0),
 
-        INTAKE_SHOOTER(14,70,105,0),
-        INTAKE_HUMAN(22,160,210,0),
+        INTAKE_SHOOTER(0,62,292,0.5),
+        INTAKE_HUMAN(0,132,164,.5),
        
-        AUTO_AMP(0,90,0,0),
-        AMP(0,90,0,0),
+        AUTO_AMP(0,37,103,0),
+        AMP(0,224,229,0),
         TRAP(0,90,0,0),
 
-        HOLD(0,90,0, 60),
+        HOLD(0,65,70, 60),
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
 
@@ -111,6 +111,9 @@ public class AmpMech {
         this.arm = arm;
         this.pivot = pivot;
         this.intake = intake;
+
+        // setPositionCommand(Value.START);
+        setStartPos(Value.START);
     }
 
     private void logPosition(Value targetPosition) {
@@ -121,6 +124,13 @@ public class AmpMech {
 
     public Value getPosition() {
         return position;
+    }
+
+    public void setStartPos(Value pos) {
+        elevator.setTargetPosition(pos.getElevatorInches());
+        pivot.setTargetPosition(pos.getPivotDegrees());
+        intake.setTargetPosition(pos.getIntakeSpeeds());
+        arm.setTargetPosition(pos.getArmDegrees());
     }
 
     public Command setPositionCommand(Value targetPosition) {
