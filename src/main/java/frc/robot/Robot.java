@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.opMode;
+package frc.robot;
 
 import java.util.logging.Logger;
 
@@ -26,6 +26,7 @@ import frc.robot.SysID.SysID;
 import frc.robot.SysID.SysID.Measurement;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.ampMech.AmpMechElevator;
@@ -63,11 +64,11 @@ public class Robot extends TimedRobot {
     // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17-could use drive motor instead
     // private final Intake intake = new Intake(dropDown, intakeWheel);
     
-    private final AmpMechElevator elevator = new AmpMechElevator(false);//22
-    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false);//23
-    private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
-    private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute(false, clawIntake.getMotor());//24
-    private final AmpMech ampMech = new AmpMech(elevator, arm, pivot, clawIntake);
+    // private final AmpMechElevator elevator = new AmpMechElevator(false);//22
+    // private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false);//23
+    // private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
+    // private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute(false, clawIntake.getMotor());//24
+    // private final AmpMech ampMech = new AmpMech(elevator, arm, pivot, clawIntake);
     
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive//, intake, shooter, claw, climb, vision, light
@@ -76,7 +77,7 @@ public class Robot extends TimedRobot {
 
 
     // private final Vision vision = new Vision();
-    // private final Light light = new Light();
+    private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
     // private final SysID sysID = new SysID(clawElevator.getMotor(), Measurement.DISTANCE);
@@ -85,9 +86,14 @@ public class Robot extends TimedRobot {
 
 
 
-    private Field2d field = new Field2d(); //TODO:How does this work
-    private RobotContainer robotContainer = new RobotContainer();
-        
+    // private Field2d field = new Field2d(); //TODO:How does this work
+    // private RobotContainer robotContainer = new RobotContainer();
+    // private TestButton testButton = new TestButton();
+
+    private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
+		(0.0, "Match Time", "Misc")
+		.withWidget(BuiltInWidgets.kTextView)
+		.build();
     private Command autonomousCommand;
   
   /**
@@ -134,8 +140,10 @@ public class Robot extends TimedRobot {
     
     @Override
     public void disabledPeriodic() {
+        light.setAllColor(light.green);
+
         if(RobotController.getBatteryVoltage()<11.5){
-            // light.setAllColor(light.batteryBlue);
+            light.setAllColor(light.batteryBlue);
             // drive.playMusic(2);
         } else{
             // light.flashingColors(light.yellow, light.blue);
@@ -162,6 +170,8 @@ public class Robot extends TimedRobot {
     
     @Override
     public void teleopInit() {
+        light.setAllColor(light.green);
+
         CommandScheduler.getInstance().cancelAll();
         // claw.setPositionCommand(Claw.Value.START);
         // drive.setYawCommand(
@@ -212,8 +222,8 @@ public class Robot extends TimedRobot {
         // robotContainer.configureClimbTestBindings(climb, intake);
         // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
         // robotContainer.configureShooterTestBindings(shooter);
-        ampMech.setPositionCommand(Value.AMP);
-        robotContainer.configureAmpMechTestBindings(ampMech);
+        // ampMech.setPositionCommand(Value.AMP);
+        // testButtons.configureAmpMechTestBindings(ampMech);
 
 		// new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
 		// new InstantCommand(()->claw.setPositionCommand(Claw.Value.START));//no work
@@ -226,6 +236,9 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         // robotContainer.teleopPeriodic();
+        light.setAllColor(light.green);
+
+        matchTime.set(DriverStation.getMatchTime());
     }
     
     @Override
