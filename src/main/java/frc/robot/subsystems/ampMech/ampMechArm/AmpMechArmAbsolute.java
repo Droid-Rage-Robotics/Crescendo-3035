@@ -15,20 +15,18 @@ public class AmpMechArmAbsolute extends AmpMechArm {
         absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
         absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
         absoluteEncoder.setInverted(false);
-        setTargetPosition(Constants.OFFSET);
+        // setTargetPosition(Constants.OFFSET);
     }
 
     public void periodic(){
         // setVoltage(calculatePID(getEncoderPosition()));
         setVoltage(calculatePID(getEncoderPosition())+(Math.cos(getEncoderPosition())*(.2)));//.175
-
         // setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(getEncoderPosition(), 0));
     }
     
     @Override
     public double getEncoderPosition() {
         double radianPos = (absoluteEncoder.getPosition() + Constants.OFFSET) % Constants.RADIANS_PER_ROTATION;
-        // double radianPos = (absoluteEncoder.getPosition());
         radianPosWriter.write(radianPos);
         degreePosWriter.write(Math.toDegrees(radianPos));
         double raw = (absoluteEncoder.getPosition());

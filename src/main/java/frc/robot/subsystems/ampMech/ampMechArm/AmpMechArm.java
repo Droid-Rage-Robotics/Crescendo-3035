@@ -77,13 +77,12 @@ public class AmpMechArm extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(1.9, 0.0, 0.0);//1.1
+        controller = new PIDController(1.9, 0.0, 0.0);
         // controller = new PIDController(0, 0.0, 0.0);
 
         controller.setTolerance(Math.toRadians(1));
 
         // feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - may 
-
         // feedforward = new ArmFeedforward(0.,.60679,.085861,.0035872);//Make some 0 testing
         feedforward = new ArmFeedforward(0,0,0);
 
