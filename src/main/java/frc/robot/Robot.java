@@ -30,6 +30,9 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.ampMech.AmpMechElevator;
 import frc.robot.subsystems.ampMech.PowerAmpMechIntake;
+import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
+import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivot;
+import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivotAbsolute;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
@@ -51,28 +54,28 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
-    // private final Shooter shooter = new Shooter(true);//18.19
+    private final SwerveDrive drive = new SwerveDrive(true);//2-10
+    // private final Shooter shooter = new Shooter(false);//18.19
 
     private final Climb climb = new Climb(false, false);//20,21^
-    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorL());//17-could use drive motor instead
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17-could use drive motor instead
     private final Intake intake = new Intake(dropDown, intakeWheel);
     
-    // private final ClawElevator clawElevator = new ClawElevator(false);//22
-    // private final ClawArmAbsolute clawArm = new ClawArmAbsolute(false);//23 - not connected: temp is 60
-    // private final ClawPivot clawPivot = new ClawPivot(false);//24 - not connected
-    // private final PowerClawIntake clawIntake = new PowerClawIntake(false);//25       
-    // private final Claw claw = new Claw(clawElevator, clawArm, clawPivot, clawIntake);
+    // private final AmpMechElevator elevator = new AmpMechElevator(false);//22
+    // private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false);//23
+    // private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
+    // private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute(false, clawIntake.getMotor());//24
+    // private final AmpMech ampMech = new AmpMech(elevator, arm, pivot, clawIntake);
     
-    
-    // private final Vision vision = new Vision();
-    // private final Light light = new Light();
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive//, intake, shooter, claw, climb, vision, light
     // );
     // private final CycleTracker3 cycleTracker = new CycleTracker3();
 
+
+    // private final Vision vision = new Vision();
+    // private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
     // private final SysID sysID = new SysID(clawElevator.getMotor(), Measurement.DISTANCE);
@@ -96,11 +99,11 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // PathPlannerServer.startServer(5811); // Use to see the Path of the robot on PathPlanner
         // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.setRobotPose(pose);
-        });
-        PathPlannerLogging.logCurrentPose(field.getRobotPose()); 
+        // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+        //     // Do whatever you want with the pose here
+        //     field.setRobotPose(pose);
+        // });
+        // PathPlannerLogging.logCurrentPose(field.getRobotPose()); 
     }
     
     /**
@@ -202,12 +205,14 @@ public class Robot extends TimedRobot {
 
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light, cycleTracker);
         // robotContainer.configureIntakeTestBindings(intake);
+        robotContainer.configureDriverOperatorBindings(drive,intake);
         // robotContainer.configureCycleTrackerBindings(cycleTracker);
 
-        robotContainer.configureClimbTestBindings(climb, intake);
+        // robotContainer.configureClimbTestBindings(climb, intake);
         // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
         // robotContainer.configureShooterTestBindings(shooter);
-        // robotContainer.configureClawTestBindings(claw);
+        
+        // robotContainer.configureAmpMechTestBindings(ampMech);
 
 		// new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
 		// new InstantCommand(()->claw.setPositionCommand(Claw.Value.START));//no work

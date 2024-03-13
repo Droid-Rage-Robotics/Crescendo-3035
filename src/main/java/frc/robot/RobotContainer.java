@@ -130,6 +130,23 @@ public class RobotContainer {
 				driver.a()
 		));
 	}
+
+	public void configureDriverOperatorBindings(SwerveDrive drive, Intake intake) {
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop(
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver.rightBumper(),
+				driver.a()
+		));
+
+		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		driver.leftTrigger().whileTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+	}
 	
 	public void configureIntakeTestBindings(Intake intake){
 		intake.setPositionCommand(Intake.Value.START);
@@ -146,6 +163,11 @@ public class RobotContainer {
 			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 		operator.leftTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT)))
 			.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
+		
+		operator.povUp()
+			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
+		operator.povDown()
+			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
 	}
 
 	public void configureClimbTestBindings(Climb climb, Intake intake){
@@ -158,7 +180,8 @@ public class RobotContainer {
 		
 	}
 
-	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter, SwerveDrive drive){
+	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter//, SwerveDrive drive
+	){
 		// operator.rightBumper()
 		// 	.onTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 		// 	.onFalse(intake.setPositionCommand(Intake.Value.START));
@@ -170,8 +193,8 @@ public class RobotContainer {
 		// operator.leftTrigger().onTrue(shooter.runOnce(() -> shooter.setTargetVelocity(Shooter.ShooterSpeeds.SPEAKER_SHOOT)))
 		// 	.onFalse(shooter.runOnce(() ->shooter.setTargetVelocity(Shooter.ShooterSpeeds.STOP)));
 
-	drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver::getLeftX, 
-		driver::getLeftY, driver::getRightX, driver.rightBumper(), driver.a()));
+	// drive.setDefaultCommand(new SwerveDriveTeleop(drive, driver::getLeftX, 
+	// 	driver::getLeftY, driver::getRightX, driver.rightBumper(), driver.a()));
 
 		operator.rightBumper().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
@@ -185,15 +208,21 @@ public class RobotContainer {
 		operator.leftTrigger()
 			// .onTrue(new TransferToAmpMech(intake, shooter, claw))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+
+			operator.povUp()
+			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
+		operator.povDown()
+			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
 	}
-	public void configureClawTestBindings(AmpMech claw){
-		claw.setPositionCommand(AmpMech.Value.START);
+
+	public void configureAmpMechTestBindings(AmpMech ampMech){
+		ampMech.setPositionCommand(AmpMech.Value.START);
 		operator.rightTrigger()
-		.onTrue(claw.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER))
-			.onFalse(claw.setPositionCommand(AmpMech.Value.START));
+		.onTrue(ampMech.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER))
+			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
 		operator.leftTrigger()
-			.onTrue(claw.setPositionCommand(AmpMech.Value.INTAKE_HUMAN))
-			.onFalse(claw.setPositionCommand(AmpMech.Value.START));
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.INTAKE_HUMAN))
+			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
 
 	}
 
@@ -226,10 +255,10 @@ public class RobotContainer {
 
 
 
-	public Command getAutonomousCommand(AutoChooser autoChooser) {
-		// return autoChooser.getSelected();
-		return new InstantCommand();
-	}
+	// public Command getAutonomousCommand(AutoChooser autoChooser) {
+	// 	// return autoChooser.getSelected();
+	// 	return new InstantCommand();
+	// }
 
 	public void teleopPeriodic() {
 		matchTime.set(DriverStation.getMatchTime());
