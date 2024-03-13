@@ -47,6 +47,9 @@ public class SafeTalonFX extends SafeMotor{
         setIdleMode(mode);
         configuration.Audio.AllowMusicDurDisable = false; //true
         configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
+        // configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
+        // configuration.CurrentLimits.SupplyCurrentLimit =5;
+
         this.velocityConversionFactor = velocityConversionFactor;
 
         motor.getConfigurator().apply(configuration);
@@ -55,6 +58,28 @@ public class SafeTalonFX extends SafeMotor{
         orchestra.addInstrument(motor);
     }
 
+    public SafeTalonFX(int deviceNumber, boolean isInverted, 
+        IdleMode mode, double positionConversionFactor,
+        double velocityConversionFactor,
+        ShuffleboardValue<Boolean> isEnabled, 
+        ShuffleboardValue<Double> outputWriter, double supplyCurrentLimit) {
+        super(isEnabled, outputWriter);
+        motor = new TalonFX(deviceNumber);
+        
+        motor.setInverted(isInverted);
+        setIdleMode(mode);
+        configuration.Audio.AllowMusicDurDisable = false; //true
+        configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
+        configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
+        configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+
+        this.velocityConversionFactor = velocityConversionFactor;
+
+        motor.getConfigurator().apply(configuration);
+
+        orchestra = new Orchestra();
+        orchestra.addInstrument(motor);
+    }
 
     public void setPower(double power) {
         outputWriter.write(power);
@@ -172,5 +197,9 @@ public class SafeTalonFX extends SafeMotor{
     public int getDeviceID(){
         return motor.getDeviceID();
     }
+
+    // public void setSmartCurrentLimit(int num){
+    //     motor.Smart
+    // }
 
 }
