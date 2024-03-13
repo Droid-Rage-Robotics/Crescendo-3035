@@ -8,10 +8,14 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Light extends SubsystemBase {
-    private final AddressableLED led;
-    private final AddressableLEDBuffer buffer;
+    private final AddressableLED ledOne;
+    // private final AddressableLED ledTwo;
+    private final AddressableLEDBuffer bufferOne;
+    // private final AddressableLEDBuffer bufferTwo;
+
     
-    private int LED_COUNT = 47;   //Number of LEDS on Strip (Can have multiple strips)
+    private int LED_COUNT_ONE = 26;   //Number of LEDS on Strip (Can have multiple strips)
+    // private int LED_COUNT_TWO = 39;   //Number of LEDS on Strip (Can have multiple strips)
     public final Color red = Color.kRed, 
                       batteryBlue = Color.kMidnightBlue,
                       orange = Color.kOrange, //Has Ring 
@@ -37,17 +41,20 @@ public class Light extends SubsystemBase {
     private Rainbow rainbow;
     
     public Light() {
-        led = new AddressableLED(0);
-        buffer = new AddressableLEDBuffer(LED_COUNT);
+        ledOne = new AddressableLED(1);
+        // ledTwo = new AddressableLED(1);
+        bufferOne = new AddressableLEDBuffer(LED_COUNT_ONE);
+        // bufferTwo = new AddressableLEDBuffer(LED_COUNT_TWO);
 
-        led.setLength(buffer.getLength());
-        led.setData(buffer);
-        led.start();
+        ledOne.setLength(bufferOne.getLength());
+        ledOne.setData(bufferOne);
+        ledOne.start();
     }
 
     @Override
     public void periodic() {
-      led.setData(buffer);
+      ledOne.setData(bufferOne);
+      // ledTwo.setData(bufferTwo);
     }
   
     @Override
@@ -57,17 +64,29 @@ public class Light extends SubsystemBase {
   
     public void rainbow() {
         // For every pixel
-        for (int i = 0; i < buffer.getLength(); i++) {
+        for (int i = 0; i < bufferOne.getLength(); i++) {
           // Calculate the hue - hue is easier for rainbows because the color
           // shape is a circle so only one value needs to precess
-          final var hue = (rainbow.rainbowFirstPixelHue + (i * 180 / buffer.getLength())) % 180;
+          final var hue = (rainbow.rainbowFirstPixelHue + (i * 180 / bufferOne.getLength())) % 180;
           // Set the value
-          buffer.setHSV(i, hue, 255, 128);
+          bufferOne.setHSV(i, hue, 255, 128);
         }
         // Increase by to make the rainbow "move"
         rainbow.rainbowFirstPixelHue += 3;
         // Check bounds
         rainbow.rainbowFirstPixelHue %= 180;
+
+        // for (int i = 0; i < bufferTwo.getLength(); i++) {
+        //   // Calculate the hue - hue is easier for rainbows because the color
+        //   // shape is a circle so only one value needs to precess
+        //   final var hue = (rainbow.rainbowFirstPixelHue + (i * 180 / bufferTwo.getLength())) % 180;
+        //   // Set the value
+        //   bufferTwo.setHSV(i, hue, 255, 128);
+        // }
+        // // Increase by to make the rainbow "move"
+        // rainbow.rainbowFirstPixelHue += 3;
+        // // Check bounds
+        // rainbow.rainbowFirstPixelHue %= 180;
     }
 
     // private void rainbow2() {
@@ -99,27 +118,27 @@ public class Light extends SubsystemBase {
 
 
   public void setAlternatingColor(Color colorOne, Color colorTwo) {
-    for (int i = 0; i < buffer.getLength(); i++) {
-      if(i%2==0) {buffer.setLED(i, colorOne);} 
+    for (int i = 0; i < bufferOne.getLength(); i++) {
+      if(i%2==0) {bufferOne.setLED(i, colorOne);} 
     }
   }
 
     public void setAllColor(Color color) {
-      for (int i = 0; i < buffer.getLength(); i++) {
-        buffer.setLED(i, color);
+      for (int i = 0; i < bufferOne.getLength(); i++) {
+        bufferOne.setLED(i, color);
       }
     }
     public void setAllColor(int r, int g, int b) {
-      for (int i = 0; i < buffer.getLength(); i++) {
+      for (int i = 0; i < bufferOne.getLength(); i++) {
         setColor(i, r, g, b);
       }
     }
 
     public void setColor(int i,int r, int g, int b) {
-        buffer.setRGB(i, r, g, b);
+        bufferOne.setRGB(i, r, g, b);
     }
     public void setColor(int i, Color color) {
-      buffer.setLED(i, color);
+      bufferOne.setLED(i, color);
     }
 
     public void switchLeds() {
@@ -137,7 +156,7 @@ public class Light extends SubsystemBase {
 
     public void flashingColors(Color colorOne, Color colorTwo){
       if (System.currentTimeMillis() - flashingColor.startTime >= flashingColor.waitTime) {
-        for (int i = 0; i < buffer.getLength(); i++) {
+        for (int i = 0; i < bufferOne.getLength(); i++) {
             if (i % 3 == flashingColor.stage) {
                 setColor(i, colorOne);
                 continue;
