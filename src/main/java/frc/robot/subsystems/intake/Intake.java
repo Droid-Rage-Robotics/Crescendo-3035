@@ -83,7 +83,7 @@ public class Intake {
         IntakeWheel intakeWheel) {
         this.dropDown = dropDown;
         this.intakeWheel = intakeWheel;
-        setPositionCommand(Value.START);
+        setStartPos(Value.START);
     }
 
     // private void logPosition(Value targetPosition) {
@@ -96,6 +96,12 @@ public class Intake {
         return position;
     }
 
+       private void setStartPos(Value pos){
+        dropDown.setTargetPosition(pos.getAngle());
+        intakeWheel.setTargetPosition(pos.getIntakeSpeeds());
+       }
+
+    
     public Command setPositionCommand(Value targetPosition) {
         position = targetPosition;
         positionWriter.write(position.name());

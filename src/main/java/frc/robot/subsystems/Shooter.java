@@ -94,6 +94,8 @@ public class Constants {
 
         // feedforward = new SimpleMotorFeedforward(5.24, 5.7, 1);
         shooterController.setTolerance(ShooterSpeeds.POSITION_TOLERANCE.get());
+
+        setTargetVelocity(ShooterSpeeds.STOP);
     }
 
     @Override
