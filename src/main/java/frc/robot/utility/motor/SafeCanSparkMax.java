@@ -134,5 +134,10 @@ public class SafeCanSparkMax extends SafeMotor {
     public double getSpeed(){
         return motor.get();
     }
+
+    public void setSmartCurrentLimit(int num){
+        motor.setSmartCurrentLimit(num);
+
+    }
 }
 
