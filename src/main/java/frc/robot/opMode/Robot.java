@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package frc.robot.opMode;
 
 import java.util.logging.Logger;
 
@@ -30,6 +30,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.ampMech.AmpMechElevator;
 import frc.robot.subsystems.ampMech.PowerAmpMechIntake;
+import frc.robot.subsystems.ampMech.AmpMech.Value;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivot;
 import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivotAbsolute;
@@ -54,19 +55,19 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10
+    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
     // private final Shooter shooter = new Shooter(false);//18.19
 
-    private final Climb climb = new Climb(false, false);//20,21^
-    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
-    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17-could use drive motor instead
-    private final Intake intake = new Intake(dropDown, intakeWheel);
+    // private final Climb climb = new Climb(false, false);//20,21^
+    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
+    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17-could use drive motor instead
+    // private final Intake intake = new Intake(dropDown, intakeWheel);
     
-    // private final AmpMechElevator elevator = new AmpMechElevator(false);//22
-    // private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false);//23
-    // private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
-    // private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute(false, clawIntake.getMotor());//24
-    // private final AmpMech ampMech = new AmpMech(elevator, arm, pivot, clawIntake);
+    private final AmpMechElevator elevator = new AmpMechElevator(false);//22
+    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false);//23
+    private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
+    private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute(false, clawIntake.getMotor());//24
+    private final AmpMech ampMech = new AmpMech(elevator, arm, pivot, clawIntake);
     
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive//, intake, shooter, claw, climb, vision, light
@@ -205,14 +206,14 @@ public class Robot extends TimedRobot {
 
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light, cycleTracker);
         // robotContainer.configureIntakeTestBindings(intake);
-        robotContainer.configureDriverOperatorBindings(drive,intake);
+        // robotContainer.configureDriverOperatorBindings(drive,intake);
         // robotContainer.configureCycleTrackerBindings(cycleTracker);
 
         // robotContainer.configureClimbTestBindings(climb, intake);
         // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
         // robotContainer.configureShooterTestBindings(shooter);
-        
-        // robotContainer.configureAmpMechTestBindings(ampMech);
+        ampMech.setPositionCommand(Value.AMP);
+        robotContainer.configureAmpMechTestBindings(ampMech);
 
 		// new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
 		// new InstantCommand(()->claw.setPositionCommand(Claw.Value.START));//no work

@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.opMode;
 
 import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.DroidRageConstants;
+import frc.robot.DroidRageConstants.Gamepad;
 import frc.robot.SysID.SysID;
 import frc.robot.commands.ClimbAndScoreSequence;
 import frc.robot.commands.IntakeElementInCommand;
@@ -53,9 +55,9 @@ public class RobotContainer {
 	//Add Reset encoder buttons
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
-		AmpMech claw, Climb climb, Vision vision, Light light, CycleTracker cycleTracker){
+		AmpMech ampMech, Climb climb, Vision vision, Light light, CycleTracker cycleTracker){
 		// intake.setPositionCommand(Intake.Value.START);
-		// claw.setPositionCommand(Claw.Value.START);//No work
+		// ampMech.setPositionCommand(AmpMech.Value.START);//No work
 		new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 
@@ -84,11 +86,15 @@ public class RobotContainer {
 			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger()
-			.onTrue(new TransferToAmpMech(intake, shooter, claw))
-			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
+			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
+		
 		
 		operator.a()
-			.onTrue(claw.setPositionCommand(AmpMech.Value.AMP));
+			.onTrue(new TransferToAmpMech(intake, shooter, ampMech))
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+		
+		
 		
 		operator.povUp()
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
@@ -104,12 +110,12 @@ public class RobotContainer {
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
 		// 		.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
 		// operator.leftTrigger()
-		// 	.onTrue(claw.setPositionCommand(Claw.Value.INTAKE_SHOOTER)
+		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER)
 		// 	.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
 		// 	.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 		// 	);
 
-		// operator.start().onTrue(new ClimbAndScoreSequence(claw, climb, intake));
+		// operator.start().onTrue(new ClimbAndScoreSequence(ampMech, climb, intake));
 
 		
 		// Trap
@@ -206,7 +212,7 @@ public class RobotContainer {
 			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger()
-			// .onTrue(new TransferToAmpMech(intake, shooter, claw))
+			// .onTrue(new TransferToAmpMech(intake, shooter, ampMech))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 
 			operator.povUp()
@@ -216,7 +222,7 @@ public class RobotContainer {
 	}
 
 	public void configureAmpMechTestBindings(AmpMech ampMech){
-		ampMech.setPositionCommand(AmpMech.Value.START);
+		// ampMech.setPositionCommand(AmpMech.Value.START);
 		operator.rightTrigger()
 		.onTrue(ampMech.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER))
 			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
