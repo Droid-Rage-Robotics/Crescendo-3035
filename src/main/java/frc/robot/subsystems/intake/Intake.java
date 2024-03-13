@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
@@ -18,10 +19,10 @@ public class Intake {
     //Position Based on game element
     //170-340
     public enum Value {
-        START(15,0),
+        START(16,0),//15
 
         //IntakePos
-        INTAKE_GROUND(195,-10000),
+        INTAKE_GROUND(196.5,-15000),
         INTAKE_HUMAN(100,-INTAKE_GROUND.getIntakeSpeeds()),//INTAKE_GROUND
 
         SHOOTER_HOLD(START.getAngle(), 0),//Ready to give Note to shooter, but not doing it
@@ -101,6 +102,12 @@ public class Intake {
         // System.out.println("setting command."+ targetPosition.name());
         return Commands.sequence(
             switch (targetPosition) {
+                case OUTTAKE -> 
+                    new SequentialCommandGroup(
+                        dropDown.runOnce(() -> dropDown.setTargetPosition((targetPosition.getAngle()))),
+                        new WaitCommand(1),
+                        intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                    );
                 default -> 
                     new ParallelCommandGroup(
                         dropDown.runOnce(() -> dropDown.setTargetPosition((targetPosition.getAngle()))),

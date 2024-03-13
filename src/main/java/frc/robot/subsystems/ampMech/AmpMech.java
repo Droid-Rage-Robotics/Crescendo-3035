@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivot;
+import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivotAbsolute;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class AmpMech {
@@ -17,10 +18,10 @@ public class AmpMech {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
-        START(0.,235,0,0),
+        START(3,235,180,0),
 
-        INTAKE_SHOOTER(0,70,2,0),
-        INTAKE_HUMAN(.8,160,-2,0),
+        INTAKE_SHOOTER(14,70,105,0),
+        INTAKE_HUMAN(22,160,210,0),
        
         AUTO_AMP(0,90,0,0),
         AMP(0,90,0,0),
@@ -94,7 +95,7 @@ public class AmpMech {
 
     private final AmpMechElevator elevator;
     private final AmpMechArmAbsolute arm;
-    private final AmpMechPivot pivot;
+    private final AmpMechPivotAbsolute pivot;
     private final PowerAmpMechIntake intake;
     private Value position = Value.START;
     private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
@@ -104,7 +105,7 @@ public class AmpMech {
 
     public AmpMech(AmpMechElevator elevator,
         AmpMechArmAbsolute arm,
-        AmpMechPivot pivot,
+        AmpMechPivotAbsolute pivot,
         PowerAmpMechIntake intake) {
         this.elevator = elevator;
         this.arm = arm;

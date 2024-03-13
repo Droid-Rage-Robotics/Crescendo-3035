@@ -20,8 +20,8 @@ public class Constants {
     public enum ShooterSpeeds {
         //15000+
         AMP_SHOOT(5000),//200
-        SPEAKER_SHOOT(12000),//10000
-        HOLD(SPEAKER_SHOOT.get()*.3),
+        SPEAKER_SHOOT(15000),//10000
+        HOLD(1000),
         STOP(0), 
         CLAW_TRANSFER(4000),//4000
         POSITION_TOLERANCE(5),
