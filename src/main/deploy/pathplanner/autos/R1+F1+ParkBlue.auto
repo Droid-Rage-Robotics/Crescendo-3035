@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.328428690111538,
-      "y": 5.557362183607978
+      "x": 1.289429657244114,
+      "y": 6.493338972426163
     },
     "rotation": 0
   },
@@ -12,26 +12,13 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "shoot+F2"
+                  "pathName": "rSidetoF1"
                 }
               },
               {
@@ -48,28 +35,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
                 "type": "path",
                 "data": {
-                  "pathName": "F2toM2"
+                  "pathName": "F1toRSide"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "pickUp"
                 }
               }
             ]
@@ -78,7 +52,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "F3toBack"
+            "pathName": "rSidetoPark"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]

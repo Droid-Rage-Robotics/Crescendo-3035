@@ -4,8 +4,8 @@
   "holonomicMode": true,
   "pathFolders": [
     "1+F2+1",
-    "L1+F3+park",
-    "R1+F1+park",
+    "L1+F3+ParkRed",
+    "R1+F1+ParkBlue",
     "TuningPaths",
     "shoot+F_"
   ],
@@ -13,7 +13,7 @@
     "Tuning"
   ],
   "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxAccel": 1.7,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5
