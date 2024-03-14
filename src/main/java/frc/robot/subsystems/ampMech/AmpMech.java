@@ -20,8 +20,8 @@ public class AmpMech {
     public enum Value {
         START(0,298,305,0),
 
-        INTAKE_SHOOTER(0,62,292,0.5),
-        INTAKE_HUMAN(0,132,164,.5),
+        INTAKE_SHOOTER(0,62,292,0.7),
+        INTAKE_HUMAN(0,132,164,-.7),
        
         AUTO_AMP(0,37,103,0),
         AMP(0,224,229,0),
