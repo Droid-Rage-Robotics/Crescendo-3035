@@ -51,12 +51,12 @@ public class RobotContainer {
 	//Add Reset encoder buttons
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
-		AmpMech ampMech, Climb climb, Vision vision, Light light, CycleTracker cycleTracker){
+		AmpMech ampMech, Climb climb, CycleTracker cycleTracker){
 		drive.setYawCommand(-90);
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 
 		
-		light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
+		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
 		// intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 
 		drive.setDefaultCommand(

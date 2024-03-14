@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivot;
@@ -18,13 +19,13 @@ public class AmpMech {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
-        START(0,298,305,0),
+        START(0,297,305,0),
 
         INTAKE_SHOOTER(0,62,292,0.7),
         INTAKE_HUMAN(0,132,164,-.7),
        
-        AUTO_AMP(0,37,103,0),
-        AMP(0,224,229,0),
+        AUTO_AMP(0,89,87,0),
+        AMP(0,89,87,-.7),
         TRAP(0,90,0,0),
 
         HOLD(0,65,70, 60),
@@ -140,13 +141,22 @@ public class AmpMech {
                 // case  AMP,TRAP ->
                 //     new SequentialCommandGroup(
                 //         new ParallelCommandGroup(
-                //             clawPivot.runOnce(() -> clawPivot.setTargetPosition((targetPosition.getPivotDegrees()))),
-                //             clawIntake.runOnce(() -> clawIntake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                //             pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                //             intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
                 //         ),
                 //         Commands.waitSeconds(0.5),
-                //         clawElevator.runOnce(() -> clawElevator.setTargetPosition(targetPosition.getElevatorInches()))
+                //         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
                 //     );
-                
+                case  AMP->//,TRAP ->
+                    new SequentialCommandGroup(
+                        new ParallelCommandGroup(
+                            pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                            arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
+                        ),
+                        Commands.waitSeconds(0.5),
+                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
+                        intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                    );
                 default -> 
                     new ParallelCommandGroup(
                         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
