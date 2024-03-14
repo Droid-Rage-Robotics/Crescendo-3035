@@ -15,7 +15,7 @@ import frc.robot.subsystems.drive.SwerveDriveConstants;
 
 public class PathPlannerFollow {
     private final SwerveDrive drive;
-    private final String pathName;
+    private final String autoName;
     private double maxVelocity = 0.3;
     private double acceleration = 0.5;
     private HashMap<String, Command> eventMap = new HashMap<>();
@@ -24,7 +24,7 @@ public class PathPlannerFollow {
 
     private PathPlannerFollow(SwerveDrive drive, String pathName, double maxVelocity, double acceleration, HashMap<String, Command> eventMap) {
         this.drive = drive;
-        this.pathName = pathName;
+        this.autoName = pathName;
         this.maxVelocity = maxVelocity;
         this.acceleration = acceleration;
         this.eventMap = eventMap;
@@ -32,7 +32,7 @@ public class PathPlannerFollow {
 
     private PathPlannerFollow(SwerveDrive drive, String pathName) {
         this.drive = drive;
-        this.pathName = pathName;
+        this.autoName = pathName;
     }
 
     public static PathPlannerFollow create(SwerveDrive drive, String pathName) {
@@ -40,20 +40,20 @@ public class PathPlannerFollow {
     }
 
     public PathPlannerFollow setMaxVelocity(double maxVelocity) {
-        return new PathPlannerFollow(drive, pathName, maxVelocity, acceleration, eventMap);
+        return new PathPlannerFollow(drive, autoName, maxVelocity, acceleration, eventMap);
     }
 
     public PathPlannerFollow setAcceleration(double acceleration) {
-        return new PathPlannerFollow(drive, pathName, maxVelocity, acceleration, eventMap);
+        return new PathPlannerFollow(drive, autoName, maxVelocity, acceleration, eventMap);
     }
 
     public PathPlannerFollow addMarker(String name, Command toRun) {
         eventMap.put(name, toRun);
-        return new PathPlannerFollow(drive, pathName, maxVelocity, acceleration, eventMap);
+        return new PathPlannerFollow(drive, autoName, maxVelocity, acceleration, eventMap);
     }
     public PathPlannerFollow addMarker(String name, ParallelCommandGroup toRun) {
         eventMap.put(name, toRun);
-        return new PathPlannerFollow(drive, pathName, maxVelocity, acceleration, eventMap);
+        return new PathPlannerFollow(drive, autoName, maxVelocity, acceleration, eventMap);
     }
     public Command build(){
         // PathPlannerPath path = new PathPlannerPath(drive, pathName)
@@ -88,7 +88,7 @@ public class PathPlannerFollow {
         //         },
         //         drive // Reference to this subsystem to set requirements\
         //     );
-        return AutoBuilder.buildAuto(pathName);
+        return AutoBuilder.buildAuto(autoName);
 
     }
     // public Command getAuto(String name){

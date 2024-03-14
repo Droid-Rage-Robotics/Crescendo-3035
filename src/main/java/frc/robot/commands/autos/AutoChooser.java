@@ -10,31 +10,38 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.SetIntakeAndShooter;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 
 public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
     public AutoChooser(
-        SwerveDrive drive//, Intake intake, Shooter shooter, Claw claw, Climb climb, Vision vision, Light light
+        SwerveDrive drive, Intake intake, Shooter shooter//, Claw claw, Climb climb, Light light
     ) {
-        createAutoBuilder(drive);
-
         //Put Named Commands HERE
-        // NamedCommands.registerCommand("shoot", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));
-        // NamedCommands.registerCommand("intake", intake.setPositionCommand(Intake.Value.START));
-        // NamedCommands.registerCommand("shootPreload", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));
+        NamedCommands.registerCommand("shoot", new SetIntakeAndShooter
+            (intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT));
+        NamedCommands.registerCommand("intake",
+            new SetIntakeAndShooter(intake, Intake.Value.INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.SPEAKER_SHOOT));
+        NamedCommands.registerCommand("pickUp",
+            new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, Shooter.ShooterSpeeds.SPEAKER_SHOOT));
 
+        //NO Use
+        // NamedCommands.registerCommand("shootPreload", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));//should be done before following
         // NamedCommands.registerCommand("transfer", intake.setPositionCommand(Intake.Value.START));
 
+
+        createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
         autoChooser.setDefaultOption("NothingAuto", new InstantCommand());
-        // autoChooser = AutoBuilder.buildAutoChooser();
-        addCloseAuto(drive);
-        addFarAuto();
+        addAutos(drive, intake, shooter);
         addTuningAuto(drive);
 
         
@@ -43,14 +50,20 @@ public class AutoChooser {
         return autoChooser.getSelected();
     }
 
-    public static void addCloseAuto(SwerveDrive drive){
-        autoChooser.addOption("R1+F1+ParkBlue", Autos.onePlusF1PlusParkRBlue(drive));
-        autoChooser.addOption("L1+F3+ParkRed", Autos.onePlusF3PlusParkLRed(drive));
-    }
-    
-    public static void addFarAuto(){
+    public static void addAutos(SwerveDrive drive, Intake intake, Shooter shooter){
+        // autoChooser.addOption("R1+F1+ParkRed", Autos.onePlusF1PlusParkRed(drive, intake, shooter));
+        autoChooser.addOption("L1+F3+ParkBLue", Autos.onePlusF1PlusParkBlue(drive, intake, shooter));
+        autoChooser.addOption("L1+F3ParkBlue(OnlyPickup)", Autos.onePlusF1ParkBlue(drive, intake, shooter));
+        // autoChooser.addOption("TEST", Autos.test(drive, intake, shooter));
+
+
+
+        autoChooser.addOption("ShootPlusPark", Autos.shootPLusPark(drive,intake,shooter,0));//Works
+        autoChooser.addOption("ShootPlusWaitPark", Autos.shootPLusPark(drive,intake,shooter,6));//Works
+        autoChooser.addOption("OnlyShoot", Autos.shoot(intake,shooter));//Works
 
     }
+    
     public static void addTuningAuto(SwerveDrive drive){
         autoChooser.addOption("BackwardTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
@@ -62,35 +75,35 @@ public class AutoChooser {
         autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
     }
 
-    public void createAutoBuilder(SwerveDrive drive){
+    public static void createAutoBuilder(SwerveDrive drive){
         AutoBuilder.configureHolonomic(
             drive::getPose, // Robot pose supplier
-                drive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                drive::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                drive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                //TODO:Test WILL THIS WORK? IS IT ROBOT RELATIVE OR FIELD CENTRIC
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.get(), 
-                        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.get(), 
-                        SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.get()),  // Translation PID constants
-                    new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.get(), 
-                        SwerveDriveConstants.SwerveDriveConfig.THETA_KI.get(), 
-                        SwerveDriveConstants.SwerveDriveConfig.THETA_KD.get()),  // Rotation PID constants
-                    4.5, // Max module speed, in m/s
-                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here; Ba
-                ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                drive // Reference to this subsystem to set requirements\
-            );
+            drive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            drive::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            drive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            //TODO:Test WILL THIS WORK? IS IT ROBOT RELATIVE OR FIELD CENTRIC
+            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.get(), 
+                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.get(), 
+                    SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KD.get()),  // Translation PID constants
+                new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.THETA_KP.get(), 
+                    SwerveDriveConstants.SwerveDriveConfig.THETA_KI.get(), 
+                    SwerveDriveConstants.SwerveDriveConfig.THETA_KD.get()),  // Rotation PID constants
+                4.5, // Max module speed, in m/s 4.5
+                0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                new ReplanningConfig() // Default path replanning config. See the API for the options here; Ba
+            ),
+            () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            drive // Reference to this subsystem to set requirements
+        );
     }
 }
