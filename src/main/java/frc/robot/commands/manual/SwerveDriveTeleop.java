@@ -20,6 +20,7 @@ public class SwerveDriveTeleop extends Command {
     private final Supplier<Double> x, y, turn;
     private final SlewRateLimiter xLimiter, yLimiter, turnLimiter;
     private volatile double xSpeed, ySpeed, turnSpeed;
+    private final Trigger rightBumper, aResetButton;
 
     public SwerveDriveTeleop(SwerveDrive drive,
             Supplier<Double> x, Supplier<Double> y, Supplier<Double> turn, Trigger rightBumper, Trigger aResetButton) {
@@ -31,12 +32,9 @@ public class SwerveDriveTeleop extends Command {
         this.xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.turnLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND.get());
-
-        //Slow Mode vs Fast
-        rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
-            .onFalse(drive.setSpeed(Speed.NORMAL));
-        aResetButton.onTrue(new InstantCommand(()->drive.setYawCommand(0)));
         
+        this.rightBumper = rightBumper;
+        this.aResetButton = aResetButton;
 
         addRequirements(drive);
     }
@@ -49,6 +47,11 @@ public class SwerveDriveTeleop extends Command {
         xSpeed = -y.get();
         ySpeed = -x.get();
         turnSpeed = -turn.get();
+
+        //Slow Mode vs Fast
+        rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
+            .onFalse(drive.setSpeed(Speed.NORMAL));
+        aResetButton.onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
         // Square inputs
         if (drive.isSquaredInputs()) {
