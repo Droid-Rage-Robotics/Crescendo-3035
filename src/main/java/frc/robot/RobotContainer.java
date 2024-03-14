@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -110,5 +111,15 @@ public class RobotContainer {
 		// 	.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 		// 	);
 		// operator.start().onTrue(new ClimbAndScoreSequence(ampMech, climb, intake));
+	}
+
+	public void teleopPeriodic(Intake intake, Shooter shooter){
+		if(intake.isElementInClaw()){
+			driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+		}
+		if(shooter.isShooterReadyToShootSpeaker()){
+			driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+		}
+		
 	}
 }

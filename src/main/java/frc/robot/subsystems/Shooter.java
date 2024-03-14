@@ -50,8 +50,12 @@ public class Constants {
         Shooter.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> addShooterWriter = ShuffleboardValue.create
         (0.0, "ShooterAddPower", Shooter.class.getSimpleName()).build();
+    protected final ShuffleboardValue<String> targetSpeedWriter = ShuffleboardValue.create
+        ("____", "Shooter/TargetShooterSpeed", 
+        Shooter.class.getSimpleName()).build();
     private final PIDController shooterController;
     private final SimpleMotorFeedforward feedforward;
+    private ShooterSpeeds targetShooterSpeed = ShooterSpeeds.HOLD;
     
     private final ShuffleboardValue<Boolean> isEnabled;
 
@@ -112,6 +116,8 @@ public class Constants {
     public void simulationPeriodic() {}
 
     public void setTargetVelocity(ShooterSpeeds velocity) {
+        targetSpeedWriter.set(velocity.toString());
+        targetShooterSpeed = velocity;
         if (velocity==ShooterSpeeds.SPEAKER_SHOOT){
             shooterController.setSetpoint(velocity.get()+addShooterWriter.get());
             targetVelocityWriter.set(velocity.get()+addShooterWriter.get());
@@ -147,5 +153,8 @@ public class Constants {
 
     public void addShooterSpeed(double num){
         addShooterWriter.set(addShooterWriter.get()+num);
+    }
+    public boolean isShooterReadyToShootSpeaker(){
+        return (targetShooterSpeed==ShooterSpeeds.SPEAKER_SHOOT)&&(shooterController.getPositionError()<200);
     }
 }
