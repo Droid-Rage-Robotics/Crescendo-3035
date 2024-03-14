@@ -59,7 +59,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     //15 missing
     private final SwerveDrive drive = new SwerveDrive(true);//2-10
-    private final Shooter shooter = new Shooter(true);//18.19
+    private final Shooter shooter = new Shooter(false);//18.19
 
     private final Climb climb = new Climb(false, false);//20,21^
     private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
@@ -175,7 +175,9 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light, cycleTracker);
-        // testButton.test(drive, intake, shooter,climb);
+        testButton.test(drive, intake, shooter,climb);
+        // testButton.configureIntakeTestBindings(intake);
+
     }
 
     @Override
@@ -244,7 +246,7 @@ public class Robot extends TimedRobot {
         // )
         // );
 
-        // testButton.configureIntakeTestBindings(intake);
+        
         // testButton.configureDriverOperatorBindings(drive,intake);
         // testButton.configureCycleTrackerBindings(cycleTracker);
 

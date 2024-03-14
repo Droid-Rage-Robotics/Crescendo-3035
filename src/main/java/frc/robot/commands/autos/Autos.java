@@ -51,7 +51,7 @@ public final class Autos {
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT),
             new WaitCommand(.3),
             new SetIntakeAndShooter(intake, Intake.Value.AUTO_INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.SPEAKER_SHOOT),
-            new WaitCommand(.6),
+            new WaitCommand(.8),
             PathPlannerFollow.create(drive, "R1+F1+ParkBlue")
                 .setMaxVelocity(1.5)
                 .setAcceleration(3)
@@ -64,7 +64,7 @@ public final class Autos {
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT),
             new WaitCommand(.3),
             new SetIntakeAndShooter(intake, Intake.Value.AUTO_INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.SPEAKER_SHOOT),
-            new WaitCommand(.6),
+            new WaitCommand(.8),
             PathPlannerFollow.create(drive, "R1+F1Blue")
                 .setMaxVelocity(1.5)
                 .setAcceleration(3)

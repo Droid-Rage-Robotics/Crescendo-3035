@@ -23,7 +23,7 @@ public class Intake {
 
         //IntakePos
         INTAKE_GROUND(210.5,-3000),
-        AUTO_INTAKE_GROUND(207.7,-3000),
+        AUTO_INTAKE_GROUND(208.,-3000),
         INTAKE_HUMAN(100,-INTAKE_GROUND.getIntakeSpeeds()),//INTAKE_GROUND
 
         SHOOTER_HOLD(20, 0),//Ready to give Note to shooter, but not doing it
