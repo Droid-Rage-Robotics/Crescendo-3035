@@ -46,7 +46,7 @@ public class IntakeWheel extends SubsystemBase {
                 .build(),
             ShuffleboardValue.create(0.0, "Intake/Voltage Wheel", Intake.class.getSimpleName())
                 .build(),
-            10
+            7
         );
         // intakeEncoder = intake.getEncoder();
 

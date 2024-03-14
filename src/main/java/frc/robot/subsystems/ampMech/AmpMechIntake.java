@@ -57,7 +57,7 @@ public class AmpMechIntake extends SubsystemBase {
         feedforward = new SimpleMotorFeedforward(0, 0, 0);
         // feedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
 
-
+        motor.setSmartCurrentLimit(10);
         ComplexWidgetBuilder.create(controller, "Claw Intake", AmpMech.class.getSimpleName());
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
