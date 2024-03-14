@@ -18,11 +18,11 @@ public class SwerveDriveConstants {
         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED(1),
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
 
-        TRANSLATIONAL_KP(1.8), //0.08361 //1.9-0.09
+        TRANSLATIONAL_KP(0), //1.8
         TRANSLATIONAL_KI(0),
         TRANSLATIONAL_KD(0),
 
-        THETA_KP(0.7), //0.01 //Changed to 1 from 0.2 (Lucky) =0.4 0.08
+        THETA_KP(0.555), //0.7
         THETA_KI(0),
         THETA_KD(0),
 
@@ -34,7 +34,7 @@ public class SwerveDriveConstants {
 
         FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-5.39),
         FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.638),
-        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-2.2774),//2.14//-5.39
+        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-2.2774),
         BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-5.7),
 
         DEFAULT_HEADING_OFFSET(0),
@@ -69,10 +69,12 @@ public class SwerveDriveConstants {
         private final ShuffleboardValue<Double> shuffleboardTranslationalValue;
         private final ShuffleboardValue<Double> shuffleboardAngularValue;
         private Speed(double translationalSpeed, double angularSpeed) {
-            shuffleboardTranslationalValue = ShuffleboardValue.create(translationalSpeed, Speed.class.getSimpleName()+"/"+name()+": Translational Speed", SwerveDrive.class.getSimpleName())
+            shuffleboardTranslationalValue = ShuffleboardValue.create(translationalSpeed, 
+                Speed.class.getSimpleName()+"/"+name()+": Translational Speed", SwerveDrive.class.getSimpleName())
                 .withSize(3, 3)
                 .build();
-            shuffleboardAngularValue = ShuffleboardValue.create(translationalSpeed, Speed.class.getSimpleName()+"/"+name()+": Angular Speed", SwerveDrive.class.getSimpleName())
+            shuffleboardAngularValue = ShuffleboardValue.create(translationalSpeed, 
+                Speed.class.getSimpleName()+"/"+name()+": Angular Speed", SwerveDrive.class.getSimpleName())
                 .withSize(3, 3)
                 .build();
         }

@@ -285,7 +285,6 @@ public class SwerveDrive extends SubsystemBase {
     }
     public void drive(ChassisSpeeds chassisSpeeds) {
         SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-
         setModuleStates(states);
     }
 
@@ -342,12 +341,14 @@ public class SwerveDrive extends SubsystemBase {
     }
 
 
-    public Command setYawCommand(double degrees) {
+    public Command setYawCommand(double degrees) {  //The "0" for driving is -90
         return runOnce(
-            () -> pigeon2.setYaw(degrees)
-            // pigeon2.reset()
+            () -> pigeon2.setYaw(degrees, 1)
         );
     }
+    // public Command resetHeadingDriving() {
+    //     return setYawCommand(-90);
+    // }
 
     private void coastMode() {
         for (SwerveModuleKraken swerveModule: swerveModules) {
@@ -426,7 +427,7 @@ public class SwerveDrive extends SubsystemBase {
     public Command driveAutoReset(){
         return this.runOnce(()->this.setYawCommand(this.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
     }
-    public ChassisSpeeds getSpeeds() {
+    public ChassisSpeeds getSpeeds() {//Is this Roboto Relative
         return DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());
     }
     public SwerveModuleState[] getModuleStates() {
