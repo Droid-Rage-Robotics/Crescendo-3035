@@ -192,4 +192,41 @@ public class TestButton {
 		operator.y().onTrue(sysID.sysIdQuasistatic(Direction.kReverse));
 		//	ONFALSE NO WORK, REMOVE ASAP @LUCKY
 	}
+	public void test(SwerveDrive drive, Intake intake, Shooter shooter, 
+		Climb climb){
+		// intake.setPositionCommand(Intake.Value.START);
+		// ampMech.setPositionCommand(AmpMech.Value.START);//No work
+		// new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
+		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+
+
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver.rightBumper(),
+				driver.a()
+				)
+			);
+
+		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		driver.leftTrigger().whileTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		 
+
+		operator.rightTrigger()
+			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT))
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+		
+		operator.povUp()
+			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
+		operator.povDown()
+			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
+		
+		
+
+	}
 }

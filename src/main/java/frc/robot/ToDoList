@@ -47,13 +47,8 @@ Make a function that forces all of the subsystems to set a start position in con
 write out which direction the -/+ is on all arms
 Download Pathplanner wiht Windows
 Seeif you put multiple Commands in one file called Commands that is static like TransferToAmpMech
-
-
-Without any PID, the arm shoudl stay upright, basically sayign that the kg is good
-System.out.println("setting command."+ targetPosition.name()); <-- Use this to troubleshoot>
-Connect in Pathplanner with Robot: 10.30.35.2
+make all bots in start pos
 Redo Shooter Dashboard Stuff
-Make RObotCOntainer seperate for testing
 Check Cotstants.OFFSET for liek  the arms for setting pos
 st current limit t the intake for 10: stator vs supply 5 amp
 
@@ -63,3 +58,9 @@ Host: sftp://roboRIO-3035-frc.local
 Username:lvuser
 Port:22
 Location of SysID Logs: /home/lvuser/logs 
+Without any PID, the arm shoudl stay upright, basically sayign that the kg is good
+System.out.println("setting command."+ targetPosition.name()); <-- Use this to troubleshoot>
+Connect in Pathplanner with Robot: 10.30.35.2
+Color
+5V - Multi COlor Strip
+12V - Single COlor Strip

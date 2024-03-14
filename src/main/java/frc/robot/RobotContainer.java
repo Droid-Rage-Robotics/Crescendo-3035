@@ -51,13 +51,11 @@ public class RobotContainer {
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
 		AmpMech ampMech, Climb climb, Vision vision, Light light, CycleTracker cycleTracker){
-		// intake.setPositionCommand(Intake.Value.START);
-		// ampMech.setPositionCommand(AmpMech.Value.START);//No work
-		new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
+		drive.setYawCommand(-90);
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 
 		
-		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
+		light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
 		// intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 
 		drive.setDefaultCommand(
@@ -74,12 +72,12 @@ public class RobotContainer {
 		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 		driver.leftTrigger().whileTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
-			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
 		
 
 		operator.rightTrigger()
 			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT))
-			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger()
 			.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
 			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
@@ -87,17 +85,18 @@ public class RobotContainer {
 		
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech))
-			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD))
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD))
 			.onFalse(ampMech.setPositionCommand(AmpMech.Value.HOLD));
 		
 		
-		
+
 		operator.povUp()
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
 		operator.povDown()
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
 		
 		
+
 		// operator.rightTrigger()
 		// 	.onTrue(new AutoAim(drive, vision, light)
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
@@ -110,12 +109,6 @@ public class RobotContainer {
 		// 	.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
 		// 	.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 		// 	);
-
 		// operator.start().onTrue(new ClimbAndScoreSequence(ampMech, climb, intake));
-
-		
-		// Trap
-		// Climb
-
 	}
 }

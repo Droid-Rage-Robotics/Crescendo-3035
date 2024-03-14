@@ -18,12 +18,14 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.SysID.SysID;
 import frc.robot.SysID.SysID.Measurement;
+import frc.robot.commands.LightCommand;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Light;
@@ -56,23 +58,23 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
-    // private final Shooter shooter = new Shooter(false);//18.19
+    private final SwerveDrive drive = new SwerveDrive(true);//2-10
+    private final Shooter shooter = new Shooter(true);//18.19
 
-    // private final Climb climb = new Climb(false, false);//20,21^
-    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17-could use drive motor instead
-    // private final Intake intake = new Intake(dropDown, intakeWheel);
+    private final Climb climb = new Climb(false, false);//20,21^
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17-could use drive motor instead
+    private final Intake intake = new Intake(dropDown, intakeWheel);
     
     // private final AmpMechElevator elevator = new AmpMechElevator(false);//22
     // private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false);//23
-    // private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
+    // private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(true);//25 
     // private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute(false, clawIntake.getMotor());//24
     // private final AmpMech ampMech = new AmpMech(elevator, arm, pivot, clawIntake);
     
-    // private AutoChooser autoChooser = new AutoChooser(
-    //     drive//, intake, shooter, claw, climb, vision, light
-    // );
+    private AutoChooser autoChooser = new AutoChooser(
+        drive, intake, shooter//, claw, climb, vision, light
+    );
     // private final CycleTracker3 cycleTracker = new CycleTracker3();
 
 
@@ -87,8 +89,8 @@ public class Robot extends TimedRobot {
 
 
     // private Field2d field = new Field2d(); //TODO:How does this work
-    // private RobotContainer robotContainer = new RobotContainer();
-    // private TestButton testButton = new TestButton();
+    private RobotContainer robotContainer = new RobotContainer();
+    private TestButton testButton = new TestButton();
 
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
@@ -104,6 +106,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        
         // PathPlannerServer.startServer(5811); // Use to see the Path of the robot on PathPlanner
         // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
         // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
@@ -130,6 +133,7 @@ public class Robot extends TimedRobot {
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }
+        // light.setAllColor(light.yellow);
     }
 
     @Override
@@ -140,21 +144,20 @@ public class Robot extends TimedRobot {
     
     @Override
     public void disabledPeriodic() {
-        light.setAllColor(light.green);
-
-        if(RobotController.getBatteryVoltage()<11.5){
-            light.setAllColor(light.batteryBlue);
-            // drive.playMusic(2);
-        } else{
-            // light.flashingColors(light.yellow, light.blue);
-        }
+        // if(RobotController.getBatteryVoltage()<11.5){
+        //     light.setAllColor(light.batteryBlue);
+        //     // drive.playMusic(2);
+        // } else{
+        //     light.flashingColors(light.yellow, light.blue);
+        // }
+        light.setAllColor(light.blue);
     }
 
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        // autonomousCommand = autoChooser.getAutonomousCommand();
-        autonomousCommand = new InstantCommand();
+        autonomousCommand = AutoChooser.getAutonomousCommand();
+        // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -170,74 +173,14 @@ public class Robot extends TimedRobot {
     
     @Override
     public void teleopInit() {
-        light.setAllColor(light.green);
-
         CommandScheduler.getInstance().cancelAll();
-        // claw.setPositionCommand(Claw.Value.START);
-        // drive.setYawCommand(
-        //     switch (DriverStation.getRawAllianceStation()) {
-        //         case Unknown -> 0;//180
-        //         case Blue1,Blue2,Blue3 -> 0;
-        //         case Red1,Red2,Red3 -> 0;
-        //     }
-        // );
-
-
-        // robotContainer.configureSparkMaxMotorBindings(
-        //     new SafeCanSparkMax(
-        //             25,
-        //             MotorType.kBrushless,
-        //             true,
-        //             IdleMode.Coast,
-        //             1,
-        //             1,
-        //             ShuffleboardValue.create(true, "Claw Intake Is Enabled", Claw.class.getSimpleName())
-        //                     .withWidget(BuiltInWidgets.kToggleSwitch)
-        //                     .build(),
-        //                 ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
-        //                     .build()
-        //         )
-        // );
-
-        // robotContainer.configureTalonMotorBindings(
-        //     new SafeTalonFX(
-        //     16,
-        //     true,
-        //     IdleMode.Coast,
-        //     1,
-        //     1,
-        //     ShuffleboardValue.create(true, "Is Enabled Wheel", Intake.class.getSimpleName())
-        //         .withWidget(BuiltInWidgets.kToggleSwitch)
-        //         .build(),
-        //     ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
-        //         .build()
-        // )
-        // );
-
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, claw, climb, vision, light, cycleTracker);
-        // robotContainer.configureIntakeTestBindings(intake);
-        // robotContainer.configureDriverOperatorBindings(drive,intake);
-        // robotContainer.configureCycleTrackerBindings(cycleTracker);
-
-        // robotContainer.configureClimbTestBindings(climb, intake);
-        // robotContainer.configureIntakeAndShooterTestBindings(intake, shooter);
-        // robotContainer.configureShooterTestBindings(shooter);
-        // ampMech.setPositionCommand(Value.AMP);
-        // testButtons.configureAmpMechTestBindings(ampMech);
-
-		// new InstantCommand(()->intake.setPositionCommand(Intake.Value.START));
-		// new InstantCommand(()->claw.setPositionCommand(Claw.Value.START));//no work
-
-
-        // robotContainer.configureDriveBindings(drive);
-        // robotContainer.configureSysIDBindings(sysID);
+        // testButton.test(drive, intake, shooter,climb);
     }
 
     @Override
     public void teleopPeriodic() {
         // robotContainer.teleopPeriodic();
-        light.setAllColor(light.green);
-
         matchTime.set(DriverStation.getMatchTime());
     }
     
@@ -258,4 +201,60 @@ public class Robot extends TimedRobot {
     public void teleopExit(){
         // cycleTracker.printAllData();
     }
+
+
+    // drive.setYawCommand(
+        //     switch (DriverStation.getRawAllianceStation()) {
+        //         case Unknown -> 0;//180
+        //         case Blue1,Blue2,Blue3 -> 0;
+        //         case Red1,Red2,Red3 -> 0;
+        //     }
+        // );
+
+
+        // testButton.configureSparkMaxMotorBindings(///tmp/hs_err_pid2641.log ﻿
+
+        //     new SafeCanSparkMax(
+        //             25,
+        //             MotorType.kBrushless,
+        //             true,
+        //             IdleMode.Coast,
+        //             1,
+        //             1,
+        //             ShuffleboardValue.create(true, "Claw Intake Is Enabled", Claw.class.getSimpleName())
+        //                     .withWidget(BuiltInWidgets.kToggleSwitch)
+        //                     .build(),
+        //                 ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
+        //                     .build()
+        //         )
+        // );
+
+        // testButton.configureTalonMotorBindings(
+        //     new SafeTalonFX(
+        //     16,
+        //     true,
+        //     IdleMode.Coast,
+        //     1,
+        //     1,
+        //     ShuffleboardValue.create(true, "Is Enabled Wheel", Intake.class.getSimpleName())
+        //         .withWidget(BuiltInWidgets.kToggleSwitch)
+        //         .build(),
+        //     ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
+        //         .build()
+        // )
+        // );
+
+        // testButton.configureIntakeTestBindings(intake);
+        // testButton.configureDriverOperatorBindings(drive,intake);
+        // testButton.configureCycleTrackerBindings(cycleTracker);
+
+        // testButton.configureClimbTestBindings(climb, intake);
+        // testButton.configureIntakeAndShooterTestBindings(intake, shooter);
+        // testButton.configureShooterTestBindings(shooter);
+
+
+        // testButton.configureDriveBindings(drive);
+        // testButton.configureSysIDBindings(sysID);
+        // testButton.configureAmpMechTestBindings(ampMech);
+        
 }
