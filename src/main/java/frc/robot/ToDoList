@@ -49,8 +49,6 @@ Download Pathplanner wiht Windows
 Seeif you put multiple Commands in one file called Commands that is static like TransferToAmpMech
 make all bots in start pos
 Redo Shooter Dashboard Stuff
-Check Cotstants.OFFSET for liek  the arms for setting pos
-st current limit t the intake for 10: stator vs supply 5 amp
 
 Notes:
 Connecting to Roborio using FileZilla
