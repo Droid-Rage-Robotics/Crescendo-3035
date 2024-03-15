@@ -26,14 +26,14 @@ public class Intake {
         AUTO_INTAKE_GROUND(208.,-3000),
         INTAKE_HUMAN(100,-INTAKE_GROUND.getIntakeSpeeds()),//INTAKE_GROUND
 
-        SHOOTER_HOLD(20, 0),//Ready to give Note to shooter, but not doing it
+        SHOOTER_HOLD(22, 0),//Ready to give Note to shooter, but not doing it
         SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 1000),//Giving Note to Shooter
        
 
-        HOLD(80, 0),
+        HOLD(74, 0),
         OUTTAKE(130,1500),
         CLIMB(INTAKE_GROUND.getAngle(), 0),
-        OUTTAKE_AMP(100,1500)
+        OUTTAKE_AMP(90,10000)
         ;
 
         private final ShuffleboardValue<Double> pivotAngle;
@@ -113,7 +113,13 @@ public class Intake {
                 case OUTTAKE -> 
                     new SequentialCommandGroup(
                         dropDown.runOnce(() -> dropDown.setTargetPosition((targetPosition.getAngle()))),
-                        new WaitCommand(6),
+                        new WaitCommand(1),
+                        intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                    );
+                case OUTTAKE_AMP ->
+                    new SequentialCommandGroup(
+                        dropDown.runOnce(() -> dropDown.setTargetPosition((targetPosition.getAngle()))),
+                        new WaitCommand(.7),
                         intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
                     );
                 default -> 

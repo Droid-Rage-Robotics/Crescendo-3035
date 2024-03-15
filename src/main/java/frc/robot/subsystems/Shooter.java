@@ -21,6 +21,8 @@ public class Constants {
         //15000+
         AMP_SHOOT(5000),//200
         SPEAKER_SHOOT(18000),//10000
+        AUTO_SPEAKER_SHOOT(17000),//10000
+
         HOLD(4000),
         STOP(0), 
         CLAW_TRANSFER(4000),//4000
