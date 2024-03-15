@@ -146,7 +146,7 @@ public class TestButton {
 		.onTrue(ampMech.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER))
 			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
 		operator.leftTrigger()
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.INTAKE_HUMAN))
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD))
 			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
 
 	}

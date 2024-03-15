@@ -79,15 +79,22 @@ public class RobotContainer {
 		operator.rightTrigger()
 			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD));
+		
 		operator.leftTrigger()
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
-			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
+			.onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE_AMP))
+			// .onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
+
+			
+		// operator.leftTrigger()
+		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
+		// 	.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
 		
 		
-		operator.a()
-			.onTrue(new TransferToAmpMech(intake, shooter, ampMech))
-			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD))
-			.onFalse(ampMech.setPositionCommand(AmpMech.Value.HOLD));
+		// operator.a()
+		// 	.onTrue(new TransferToAmpMech(intake, shooter, ampMech))
+		// 	.onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD))
+		// 	.onFalse(ampMech.setPositionCommand(AmpMech.Value.HOLD));
 		
 		
 
