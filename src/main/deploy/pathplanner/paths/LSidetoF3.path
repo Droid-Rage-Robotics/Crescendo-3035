@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3,
-        "y": 4.55
+        "x": 0.6690561529271205,
+        "y": 4.432084533684738
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7566125160740347,
-        "y": 4.303448834817898
+        "x": 1.1256686690011555,
+        "y": 4.185533368502636
       },
       "isLocked": false,
       "linkedName": null
@@ -66,7 +66,7 @@
   "reversed": false,
   "folder": "L1+F3+ParkRed",
   "previewStartingState": {
-    "rotation": -1.9983870383181999,
+    "rotation": -61.0490047925332,
     "velocity": 0
   },
   "useDefaultConstraints": true

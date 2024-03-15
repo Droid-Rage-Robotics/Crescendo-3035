@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3,
-        "y": 6.5
+        "x": 0.7626093884666401,
+        "y": 6.642279723305886
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.5578118905525558,
-        "y": 6.969716047694203
+        "y": 7.016492665463964
       },
       "isLocked": false,
       "linkedName": null
@@ -20,7 +20,7 @@
         "y": 7.0
       },
       "prevControl": {
-        "x": 1.8862732670968878,
+        "x": 1.6,
         "y": 7.0
       },
       "nextControl": null,
@@ -44,6 +44,9 @@
   },
   "reversed": false,
   "folder": "R1+F1+ParkBlue",
-  "previewStartingState": null,
+  "previewStartingState": {
+    "rotation": 57.17145820858748,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }
