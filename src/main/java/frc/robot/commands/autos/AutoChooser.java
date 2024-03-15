@@ -40,7 +40,7 @@ public class AutoChooser {
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
-        autoChooser.setDefaultOption("NothingAuto", new InstantCommand());
+        autoChooser.addOption("NothingAuto", new InstantCommand());
         addAutos(drive, intake, shooter);
         addTuningAuto(drive);
 
@@ -54,13 +54,14 @@ public class AutoChooser {
         // autoChooser.addOption("R1+F1+ParkRed", Autos.onePlusF1PlusParkRed(drive, intake, shooter));
         autoChooser.addOption("L1+F3+ParkBLue", Autos.onePlusF1PlusParkBlue(drive, intake, shooter));
         autoChooser.addOption("L1+F3ParkBlue(OnlyPickup)", Autos.onePlusF1ParkBlue(drive, intake, shooter));
+        // autoChooser.addOption("L1+F1Red(OnlyPickUp)", Autos.onePlusF1ParkRed(drive, intake, shooter));
         // autoChooser.addOption("TEST", Autos.test(drive, intake, shooter));
 
 
 
         autoChooser.addOption("ShootPlusPark", Autos.shootPLusPark(drive,intake,shooter,0));//Works
-        autoChooser.addOption("ShootPlusWaitPark", Autos.shootPLusPark(drive,intake,shooter,6));//Works
-        autoChooser.addOption("OnlyShoot", Autos.shoot(intake,shooter));//Works
+        autoChooser.addOption("ShootPlusWait6Park", Autos.shootPLusPark(drive,intake,shooter,6));//Works
+        autoChooser.setDefaultOption("OnlyShoot", Autos.shoot(intake,shooter));//Works
 
     }
     
