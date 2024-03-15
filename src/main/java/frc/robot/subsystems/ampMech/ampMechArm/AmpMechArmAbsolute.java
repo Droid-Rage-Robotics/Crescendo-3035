@@ -5,7 +5,7 @@ import com.revrobotics.SparkAbsoluteEncoder;
 public class AmpMechArmAbsolute extends AmpMechArm {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
-        public static double OFFSET = Math.PI / 2;  //90 Degree
+        public static double OFFSET = Math.PI;  //90 Degree
     }
     SparkAbsoluteEncoder absoluteEncoder;
     public AmpMechArmAbsolute(Boolean isEnabled) {

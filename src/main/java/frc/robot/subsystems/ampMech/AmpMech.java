@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivot;
@@ -21,14 +22,14 @@ public class AmpMech {
     public enum Value {
         START(0,297,305,0),
 
-        INTAKE_SHOOTER(0,62,292,0.7),
-        INTAKE_HUMAN(0,132,164,-.7),
+        INTAKE_SHOOTER(5,64,292,0.7),
+        INTAKE_HUMAN(10,132,164,-.7),
        
         AUTO_AMP(0,89,87,0),
         AMP(0,89,87,-.7),
         TRAP(0,90,0,0),
 
-        HOLD(0,65,70, 60),
+        HOLD(0,65.5,75, 60),
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
 
@@ -147,6 +148,17 @@ public class AmpMech {
                 //         Commands.waitSeconds(0.5),
                 //         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
                 //     );
+                case INTAKE_SHOOTER, HOLD -> new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
+                        arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees())),
+                        pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees())))
+                    ),
+                    new WaitCommand(.7),
+                    new ParallelCommandGroup(
+                        // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                        intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())))
+                );
                 case  AMP->//,TRAP ->
                     new SequentialCommandGroup(
                         new ParallelCommandGroup(
