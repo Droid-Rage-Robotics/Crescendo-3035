@@ -71,7 +71,8 @@ public class IntakeDropDown extends SubsystemBase {
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             ShuffleboardValue.create(0.0, "DropDown/Motor/Drop Voltage", Intake.class.getSimpleName())
-                .build()
+                .build(),
+                30
         );
 
         controller = new PIDController(.92, 0.0, 0.0);//0.62
