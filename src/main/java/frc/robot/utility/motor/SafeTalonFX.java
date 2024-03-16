@@ -70,8 +70,41 @@ public class SafeTalonFX extends SafeMotor{
         setIdleMode(mode);
         configuration.Audio.AllowMusicDurDisable = false; //true
         configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
-        configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
-        configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+        if(supplyCurrentLimit!=0){
+            configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
+            configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+        }
+        
+
+        this.velocityConversionFactor = velocityConversionFactor;
+
+        motor.getConfigurator().apply(configuration);
+
+        orchestra = new Orchestra();
+        orchestra.addInstrument(motor);
+    }
+
+    public SafeTalonFX(int deviceNumber, boolean isInverted, 
+        IdleMode mode, double positionConversionFactor,
+        double velocityConversionFactor,
+        ShuffleboardValue<Boolean> isEnabled, 
+        ShuffleboardValue<Double> outputWriter, double supplyCurrentLimit, double statorCurrentLimit) {
+        super(isEnabled, outputWriter);
+        motor = new TalonFX(deviceNumber);
+        
+        motor.setInverted(isInverted);
+        setIdleMode(mode);
+        configuration.Audio.AllowMusicDurDisable = false; //true
+        configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
+        if(supplyCurrentLimit!=0){
+            configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
+            configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+        }
+        if(statorCurrentLimit!=0){
+            configuration.CurrentLimits.StatorCurrentLimitEnable =true;
+            configuration.CurrentLimits.StatorCurrentLimit = supplyCurrentLimit;
+        }
+        
 
         this.velocityConversionFactor = velocityConversionFactor;
 
