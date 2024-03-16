@@ -30,6 +30,7 @@ public class PowerAmpMechIntake extends SubsystemBase {
                 ShuffleboardValue.create(0.0, "Intake/ Claw Intake Voltage", AmpMech.class.getSimpleName())
                     .build()
         );
+        motor.setSmartCurrentLimit(20);
     }
 
     @Override

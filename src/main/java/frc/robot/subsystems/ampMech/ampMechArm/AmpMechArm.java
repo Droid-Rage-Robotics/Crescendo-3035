@@ -77,7 +77,7 @@ public class AmpMechArm extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(1.6, 0.0, 0.0);
+        controller = new PIDController(1, 0.0, 0.0);//1.6
         // controller = new PIDController(0, 0.0, 0.0);
 
         controller.setTolerance(Math.toRadians(1));

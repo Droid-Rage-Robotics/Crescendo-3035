@@ -19,8 +19,8 @@ public class AmpMechArmAbsolute extends AmpMechArm {
     }
 
     public void periodic(){
-        // setVoltage(calculatePID(getEncoderPosition()));
-        setVoltage((calculatePID(getEncoderPosition())*1.2)+(Math.cos(getEncoderPosition())*(.21)));//.175
+        setVoltage(calculatePID(getEncoderPosition()));
+        // setVoltage((calculatePID(getEncoderPosition())*1.)+(Math.cos(getEncoderPosition())*(.2)));//.175
         // setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(getEncoderPosition(), 0));
     }
     
