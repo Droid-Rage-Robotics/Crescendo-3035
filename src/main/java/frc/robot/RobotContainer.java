@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,6 +19,7 @@ import frc.robot.commands.ClimbAndScoreSequence;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.LightCommand;
 import frc.robot.commands.SetIntakeAndShooter;
+import frc.robot.commands.TeleopShoot;
 import frc.robot.commands.TransferToAmpMech;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.commands.manual.ManualClimb;
@@ -51,9 +54,10 @@ public class RobotContainer {
 	//Add Reset encoder buttons
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
-		AmpMech ampMech, Climb climb, CycleTracker cycleTracker){
-		drive.setYawCommand(-90);
-		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+		//AmpMech ampMech, Climb climb, 
+		 CycleTracker cycleTracker){
+		// drive.setYawCommand(-90);
+		// climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 
 		
 		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
@@ -66,26 +70,46 @@ public class RobotContainer {
 				driver::getLeftY,
 				driver::getRightX,
 				driver.rightBumper(),
-				driver.a()
+				driver.b()
+				// 
 				)
 			);
+		// drive.driveAutoReset();
+		// driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
+		// driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
+		// driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(180)));
+		// driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
 		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 		driver.leftTrigger().whileTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
 			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
+
+		driver.povUp().onTrue(
+			new ParallelCommandGroup(
+				intake.setPositionCommand(Intake.Value.CLIMB)
+				// ampMech.setPositionCommand(AmpMech.Value.CLIMB)
+			)
+		);
 		
 
 		operator.rightTrigger()
-			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT))
-			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD));
-		
+			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.SPEAKER_SHOOT))
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.STOP));
+		operator.rightBumper()
+			.onTrue(new TeleopShoot(intake, shooter));
+			// .onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger()
 			.onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE_AMP))
 			// .onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
 
-			
+		
+		// operator.y()			
+		// .onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AMP_SHOOT))
+		// 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.STOP));
+
+
 		// operator.leftTrigger()
 		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
 		// 	.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));

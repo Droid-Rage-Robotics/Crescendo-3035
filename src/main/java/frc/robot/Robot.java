@@ -58,19 +58,24 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    private final SwerveDrive drive = new SwerveDrive(false);//2-10
-    private final Shooter shooter = new Shooter(false);//18.19
+    private final SwerveDrive drive = new SwerveDrive(true);//2-10
+    private final Shooter shooter = new Shooter(true);//18.19
 
-    private final Climb climb = new Climb(false, false);//20,21^
-    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17-could use drive motor instead
+    // private final Climb climb = new Climb(false,false);//20,21^
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, drive.getFRTurnCanSparkMax());//17-could use drive motor instead
     private final Intake intake = new Intake(dropDown, intakeWheel);
-    
-    private final AmpMechElevator elevator = new AmpMechElevator(false);//22
-    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true);//23
-    private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
-    private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute(true, clawIntake.getMotor());//24
-    private final AmpMech ampMech = new AmpMech(elevator, arm, pivot, clawIntake);
+    // private final AmpMechElevator elevator = new AmpMechElevator(true);//22
+
+
+
+
+
+    // private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false);//23
+    // private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
+    // private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute( false, clawIntake.getMotor());//24
+    // private final AmpMech ampMech = new AmpMech(elevator//, arm, pivot, clawIntake
+    // );
     
     private AutoChooser autoChooser = new AutoChooser(
         drive, intake, shooter//, claw, climb, vision, light
@@ -174,16 +179,17 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
-        // robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker);
+		drive.driveAutoReset();
+        robotContainer.configureTeleOpBindings(drive, intake, shooter, cycleTracker);
         // testButton.test(drive, intake, shooter,climb);
         // testButton.configureIntakeTestBindings(intake);
-        testButton.configureAmpMechTestBindings(ampMech);
+        // testButton.configureAmpMechTestBindings(ampMech);
 
     }
 
     @Override
     public void teleopPeriodic() {
-        // robotContainer.teleopPeriodic(intake,shooter);
+        robotContainer.teleopPeriodic(intake,shooter);
         matchTime.set(DriverStation.getMatchTime());
     }
     
@@ -206,58 +212,5 @@ public class Robot extends TimedRobot {
     }
 
 
-    // drive.setYawCommand(
-        //     switch (DriverStation.getRawAllianceStation()) {
-        //         case Unknown -> 0;//180
-        //         case Blue1,Blue2,Blue3 -> 0;
-        //         case Red1,Red2,Red3 -> 0;
-        //     }
-        // );
-
-
-        // testButton.configureSparkMaxMotorBindings(///tmp/hs_err_pid2641.log ﻿
-
-        //     new SafeCanSparkMax(
-        //             25,
-        //             MotorType.kBrushless,
-        //             true,
-        //             IdleMode.Coast,
-        //             1,
-        //             1,
-        //             ShuffleboardValue.create(true, "Claw Intake Is Enabled", Claw.class.getSimpleName())
-        //                     .withWidget(BuiltInWidgets.kToggleSwitch)
-        //                     .build(),
-        //                 ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
-        //                     .build()
-        //         )
-        // );
-
-        // testButton.configureTalonMotorBindings(
-        //     new SafeTalonFX(
-        //     16,
-        //     true,
-        //     IdleMode.Coast,
-        //     1,
-        //     1,
-        //     ShuffleboardValue.create(true, "Is Enabled Wheel", Intake.class.getSimpleName())
-        //         .withWidget(BuiltInWidgets.kToggleSwitch)
-        //         .build(),
-        //     ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
-        //         .build()
-        // )
-        // );
-
-        
-        // testButton.configureDriverOperatorBindings(drive,intake);
-        // testButton.configureCycleTrackerBindings(cycleTracker);
-
-        // testButton.configureClimbTestBindings(climb, intake);
-        // testButton.configureIntakeAndShooterTestBindings(intake, shooter);
-        // testButton.configureShooterTestBindings(shooter);
-
-
-        // testButton.configureDriveBindings(drive);
-        // testButton.configureSysIDBindings(sysID);
-        // testButton.configureAmpMechTestBindings(ampMech);
         
 }
