@@ -19,14 +19,15 @@ public class Constants {
 
     public enum ShooterSpeeds {
         //15000+
-        AMP_SHOOT(5000),//200
+        AMP_SHOOT(3000),//200
         SPEAKER_SHOOT(18000),//10000
-        AUTO_SPEAKER_SHOOT(17000),//10000
+        AUTO_SPEAKER_SHOOT(15500),//10000
 
         HOLD(4000),
         STOP(0), 
         CLAW_TRANSFER(4000),//4000
         POSITION_TOLERANCE(5),
+        // AMP(3000)
 
         ;
         private final ShuffleboardValue<Double> velocityRPM;
@@ -76,7 +77,8 @@ public class Constants {
             this.isEnabled,
                 ShuffleboardValue.create(0.0, "Shooter/VoltageL", 
                 Shooter.class.getSimpleName())
-                    .build()
+                    .build(), 
+                    30
         );
         motorR = new SafeTalonFX(
             18,
@@ -87,7 +89,8 @@ public class Constants {
             this.isEnabled,
                 ShuffleboardValue.create(0.0, "Shooter/VoltageR", 
                 Shooter.class.getSimpleName())
-                    .build() 
+                    .build(),
+                    30
         );
        
         shooterController = new PIDController(

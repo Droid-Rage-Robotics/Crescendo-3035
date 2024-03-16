@@ -20,7 +20,7 @@ public class AmpMech {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
-        START(0,297,305,0),
+        START(0,297,295,0),
 
         INTAKE_SHOOTER(5,64,292,0.7),
         INTAKE_HUMAN(10,132,164,-.7),
@@ -30,6 +30,8 @@ public class AmpMech {
         TRAP(0,90,0,0),
 
         HOLD(0,65.5,75, 60),
+        CLIMB(16.6,0, 0,0),
+
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
 
@@ -96,23 +98,24 @@ public class AmpMech {
     }
 
     private final AmpMechElevator elevator;
-    private final AmpMechArmAbsolute arm;
-    private final AmpMechPivotAbsolute pivot;
-    private final PowerAmpMechIntake intake;
+    // private final AmpMechArmAbsolute arm;
+    // private final AmpMechPivotAbsolute pivot;
+    // private final PowerAmpMechIntake intake;
     private Value position = Value.START;
     private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
         .create(position.name(), "Current Arm Position", "Misc")
         .withSize(1, 3)
         .build();
 
-    public AmpMech(AmpMechElevator elevator,
-        AmpMechArmAbsolute arm,
-        AmpMechPivotAbsolute pivot,
-        PowerAmpMechIntake intake) {
+    public AmpMech(AmpMechElevator elevator
+        // AmpMechArmAbsolute arm,
+        // AmpMechPivotAbsolute pivot,
+        // PowerAmpMechIntake intake
+        ) {
         this.elevator = elevator;
-        this.arm = arm;
-        this.pivot = pivot;
-        this.intake = intake;
+        // this.arm = arm;
+        // this.pivot = pivot;
+        // this.intake = intake;
 
         // setPositionCommand(Value.START);
         setStartPos(Value.START);
@@ -130,51 +133,79 @@ public class AmpMech {
 
     public void setStartPos(Value pos) {
         elevator.setTargetPosition(pos.getElevatorInches());
-        pivot.setTargetPosition(pos.getPivotDegrees());
-        intake.setTargetPosition(pos.getIntakeSpeeds());
-        arm.setTargetPosition(pos.getArmDegrees());
+        // pivot.setTargetPosition(pos.getPivotDegrees());
+        // intake.setTargetPosition(pos.getIntakeSpeeds());
+        // arm.setTargetPosition(pos.getArmDegrees());
     }
 
     public Command setPositionCommand(Value targetPosition) {
         return SuppliedCommand.create(() -> Commands.sequence(
             Commands.runOnce(() -> logPosition(targetPosition)),
             switch (targetPosition) {
-                // case  AMP,TRAP ->
+                // // case  AMP,TRAP ->
+                // //     new SequentialCommandGroup(
+                // //         new ParallelCommandGroup(
+                // //             pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                // //             intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                // //         ),
+                // //         Commands.waitSeconds(0.5),
+                // //         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
+                // //     );
+                // // case INTAKE_SHOOTER -> new SequentialCommandGroup(
+                // //     new ParallelCommandGroup(
+                // //         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
+                // //         // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
+                        
+                // //     ),
+                // //      new WaitCommand(1),
+                // //     // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                // //     new WaitCommand(.7),
+                // //     new ParallelCommandGroup(
+                // //         // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                // //         // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())))
+                // // );
+                // case HOLD -> new SequentialCommandGroup(
+                    
+                //     // new ParallelCommandGroup(
+                //     //     elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
+                //     //     // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees())),
+                //     //     // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                //     // ),
+                //      new WaitCommand(1)
+                //     // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees())))
+                //     // new WaitCommand(.7)
+                //         // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                        
+                // );
+                // case  AMP->//,TRAP ->
                 //     new SequentialCommandGroup(
                 //         new ParallelCommandGroup(
-                //             pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
-                //             intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                //             // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                //             // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                 //         ),
                 //         Commands.waitSeconds(0.5),
                 //         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
+                //         // intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
                 //     );
-                case INTAKE_SHOOTER, HOLD -> new SequentialCommandGroup(
+                case  START ->
+                new SequentialCommandGroup(
+                    // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                    // intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
+                    new WaitCommand(1),
                     new ParallelCommandGroup(
-                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
-                        arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees())),
-                        pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees())))
+                        // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                     ),
-                    new WaitCommand(.7),
-                    new ParallelCommandGroup(
-                        // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
-                        intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())))
-                );
-                case  AMP->//,TRAP ->
-                    new SequentialCommandGroup(
-                        new ParallelCommandGroup(
-                            pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
-                            arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
-                        ),
-                        Commands.waitSeconds(0.5),
-                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
-                        intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
-                    );
+                    Commands.waitSeconds(0.5),
+                    elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
+                    
+                );              
+
                 default -> 
                     new ParallelCommandGroup(
-                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
-                        pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
-                        intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
-                        arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
+                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
+                        // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
+                        // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
+                        // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                     );
             }
         ));
@@ -184,48 +215,49 @@ public class AmpMech {
         return elevator.runOnce(() -> 
             elevator.setTargetPosition(elevator.getTargetPosition() - 3));
     }
-    public Command lowerPivotCommand(double lowerNum) {
-        return pivot.runOnce(() -> 
-            pivot.setTargetPosition(pivot.getTargetPosition() - lowerNum));
-    }
+    // public Command lowerPivotCommand(double lowerNum) {
+    //     return pivot.runOnce(() -> 
+    //         pivot.setTargetPosition(pivot.getTargetPosition() - lowerNum));
+    // }
     // public Command pushChargeDownCommand() {
     //     return clawPivot.runOnce(() -> 
     //         clawPivot.setTargetPosition(Value.INTAKE_LOW_CUBE.getPivotDegrees()));
     // }
     public boolean isElementInClaw(){
-        return intake.isElementInClaw();
+        // return intake.isElementInClaw();
+        return false;
 
     }
 
     public void manualAmpMechElevator(double move){
         elevator.setTargetPosition(move);
     }
-    public void manualAmpMechPivot(double move){
-        pivot.setTargetPosition(move);
-    }
-    public void manualAmpMechIntake(double move){
-        intake.setTargetPosition(move);
-    }
+    // public void manualAmpMechPivot(double move){
+    //     pivot.setTargetPosition(move);
+    // }
+    // public void manualAmpMechIntake(double move){
+    //     intake.setTargetPosition(move);
+    // }
     public double getAmpMechElevatorTarget(){
         return elevator.getTargetPosition();
     }
-    public double getAmpMechPivotTarget(){
-        return pivot.getTargetPosition();
-    }
-    public double getAmpMechIntakeTarget(){
-        return intake.getTargetPosition();
-    }
+    // public double getAmpMechPivotTarget(){
+    //     return pivot.getTargetPosition();
+    // }
+    // public double getAmpMechIntakeTarget(){
+    //     return intake.getTargetPosition();
+    // }
 
     public AmpMechElevator getElevator(){
         return elevator;
     }
-    public AmpMechPivot getPivot(){
-        return pivot;
-    }
-    public PowerAmpMechIntake getIntake(){
-        return intake;
-    }
-    public AmpMechArmAbsolute getClawArmAbs(){
-        return arm;
-    }
+    // public AmpMechPivot getPivot(){
+    //     return pivot;
+    // }
+    // public PowerAmpMechIntake getIntake(){
+    //     return intake;
+    // }
+    // public AmpMechArmAbsolute getClawArmAbs(){
+    //     return arm;
+    // }
 }

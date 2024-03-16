@@ -22,18 +22,19 @@ public class Intake {
         START(20,0),//15
 
         //IntakePos
-        INTAKE_GROUND(210.5,-3000),
-        AUTO_INTAKE_GROUND(208.,-3000),
+        INTAKE_GROUND(205.21,-3000),
+        AUTO_INTAKE_GROUND(207,-3000),
         INTAKE_HUMAN(100,-INTAKE_GROUND.getIntakeSpeeds()),//INTAKE_GROUND
+        // CLIMB(INTAKE_GROUND,-3000),
 
-        SHOOTER_HOLD(22, 0),//Ready to give Note to shooter, but not doing it
+        SHOOTER_HOLD(23.5, 0),//Ready to give Note to shooter, but not doing it
         SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 1000),//Giving Note to Shooter
        
 
         HOLD(74, 0),
         OUTTAKE(130,1500),
         CLIMB(INTAKE_GROUND.getAngle(), 0),
-        OUTTAKE_AMP(90,10000)
+        OUTTAKE_AMP(88,3200)//
         ;
 
         private final ShuffleboardValue<Double> pivotAngle;
@@ -119,7 +120,7 @@ public class Intake {
                 case OUTTAKE_AMP ->
                     new SequentialCommandGroup(
                         dropDown.runOnce(() -> dropDown.setTargetPosition((targetPosition.getAngle()))),
-                        new WaitCommand(.7),
+                        new WaitCommand(1.3),//.7
                         intakeWheel.runOnce(() -> intakeWheel.setTargetPosition(targetPosition.getIntakeSpeeds()))
                     );
                 default -> 
@@ -155,7 +156,7 @@ public class Intake {
             dropDown.setTargetPosition(dropDown.getTargetPosition() - lowerNum));
     }
     public boolean isElementInClaw(){
-        return intakeWheel.isElementIn();
+        return intakeWheel.isElementIn()&&positionWriter.get()==Intake.Value.INTAKE_GROUND.name();
     }
 
     public IntakeDropDownAbsolute getDropDown(){
