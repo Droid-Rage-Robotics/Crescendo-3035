@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
+import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -343,7 +344,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public Command setYawCommand(double degrees) {  //The "0" for driving is -90
         return runOnce(
-            () -> pigeon2.setYaw(degrees, 1)
+            () -> pigeon2.setYaw(degrees, 5)
         );
     }
     // public Command resetHeadingDriving() {
@@ -442,5 +443,9 @@ public class SwerveDrive extends SubsystemBase {
             // swerveModule.brakeMode();
             swerveModule.playMusic(num);
         }
+    }
+
+    public SafeCanSparkMax getFRTurnCanSparkMax(){
+        return frontLeft.getTurnMotor();
     }
 }
