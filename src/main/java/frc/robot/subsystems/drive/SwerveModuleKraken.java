@@ -89,7 +89,10 @@ public class SwerveModuleKraken {
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
             ShuffleboardValue.create(0.0, "Module/Module" + num + "/Drive Voltage "+ driveMotorId, SwerveDrive.class.getSimpleName())
-                .build());
+                .build(),
+                30
+                // ,300
+                );
         turnMotor = new SafeCanSparkMax(turnMotorId, MotorType.kBrushless,
             turningMotorReversed,
             IdleMode.Coast,
@@ -99,7 +102,10 @@ public class SwerveModuleKraken {
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
             ShuffleboardValue.create(0.0, "Module/Module" + num + "/Turn Voltage "+ turnMotorId, SwerveDrive.class.getSimpleName())
-                .build());
+                .build()
+                // 7
+        );
+        turnMotor.setSmartCurrentLimit(30);
 
         // driveMotor.setPositionConversionFactor(Constants.DRIVE_ENCODER_ROT_2_METER);
         // driveMotor.getEncoder().setVelocityConversionFactor(Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC);
@@ -193,5 +199,8 @@ public class SwerveModuleKraken {
 
     public void playMusic(int num){
         driveMotor.playMusic(num);
+    }
+    public SafeCanSparkMax getTurnMotor(){
+        return turnMotor;
     }
 }
