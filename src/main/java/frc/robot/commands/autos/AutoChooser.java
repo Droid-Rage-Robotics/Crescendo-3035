@@ -61,7 +61,10 @@ public class AutoChooser {
 
         autoChooser.addOption("ShootPlusPark", Autos.shootPLusPark(drive,intake,shooter,0));//Works
         autoChooser.addOption("ShootPlusWait6Park", Autos.shootPLusPark(drive,intake,shooter,6));//Works
-        autoChooser.setDefaultOption("OnlyShoot", Autos.shoot(intake,shooter));//Works
+        autoChooser.addOption("OnlyShoot", Autos.shoot(intake,shooter));//Works
+        autoChooser.addOption("SHOOTPLUSTURN(Only the human player side)", Autos.shootPLusTurnParkHuman(drive,intake, shooter, 2));
+        autoChooser.addOption("SHOOTPLUSTURN(NON human player side)", Autos.shootPLusTurnParkNonHUMAN(drive,intake, shooter, 2));
+        autoChooser.setDefaultOption("OUT(San Antonio Playoff))", Autos.out(drive,intake, shooter));
 
     }
     
