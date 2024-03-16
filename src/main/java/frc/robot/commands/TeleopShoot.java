@@ -4,15 +4,15 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.intake.Intake;
 
-public class SetIntakeAndShooter extends SequentialCommandGroup {
-    public SetIntakeAndShooter (Intake intake, Intake.Value intakePos, Shooter shooter, Shooter.ShooterSpeeds speed){
+public class TeleopShoot extends SequentialCommandGroup {
+    public TeleopShoot (Intake intake, Shooter shooter){
         addCommands(
             new SequentialCommandGroup(
-                shooter.runOnce(()->shooter.setTargetVelocity(speed)),
-                new WaitCommand(.8),//.6
-                intake.setPositionCommand(intakePos)
+                shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)
                 )
             );
     }   
