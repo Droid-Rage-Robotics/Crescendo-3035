@@ -6,8 +6,10 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
@@ -20,7 +22,7 @@ public class SwerveDriveTeleop extends Command {
     private final Supplier<Double> x, y, turn;
     private final SlewRateLimiter xLimiter, yLimiter, turnLimiter;
     private volatile double xSpeed, ySpeed, turnSpeed;
-    private final Trigger rightBumper, aResetButton;
+    // private final Trigger rightBumper;//, aResetButton;
 
     public SwerveDriveTeleop(SwerveDrive drive,
             Supplier<Double> x, Supplier<Double> y, Supplier<Double> turn, Trigger rightBumper, Trigger aResetButton) {
@@ -33,8 +35,16 @@ public class SwerveDriveTeleop extends Command {
         this.yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.turnLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND.get());
         
-        this.rightBumper = rightBumper;
-        this.aResetButton = aResetButton;
+        rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
+            .whileFalse(drive.setSpeed(Speed.NORMAL));
+                        // .onFalse(drive.setSpeed(Speed.NORMAL));
+
+        // this.aResetButton = aResetButton;
+        aResetButton.onTrue(drive.setYawCommand(0));
+        // driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
+        // driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
+        // driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(180)));
+        // driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
         addRequirements(drive);
     }
@@ -49,9 +59,9 @@ public class SwerveDriveTeleop extends Command {
         turnSpeed = -turn.get();
 
         //Slow Mode vs Fast
-        rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
-            .onFalse(drive.setSpeed(Speed.NORMAL));
-        aResetButton.onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
+        // rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
+        //     .onFalse(drive.setSpeed(Speed.NORMAL));
+        // aResetButton.onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
         // Square inputs
         if (drive.isSquaredInputs()) {
