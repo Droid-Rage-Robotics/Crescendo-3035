@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8207147183525153,
-      "y": 4.371055665188254
+      "x": 0.8799163752173672,
+      "y": 6.670053340106681
     },
-    "rotation": 0
+    "rotation": 46.9091524329964
   },
   "command": {
     "type": "sequential",
@@ -18,13 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LSidetoF3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
+                  "pathName": "out"
                 }
               }
             ]
