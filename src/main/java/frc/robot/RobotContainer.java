@@ -69,9 +69,7 @@ public class RobotContainer {
 				driver::getLeftX,
 				driver::getLeftY,
 				driver::getRightX,
-				driver.rightBumper(),
-				driver.b()
-				// 
+				driver
 				)
 			);
 		// drive.driveAutoReset();

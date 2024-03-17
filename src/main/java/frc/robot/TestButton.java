@@ -41,7 +41,6 @@ public class TestButton {
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
 
 	public TestButton() {
-		DriverStation.silenceJoystickConnectionWarning(true);
 	}
 	
 	public void configureDriveBindings(SwerveDrive drive) {
@@ -51,8 +50,7 @@ public class TestButton {
 				driver::getLeftX,
 				driver::getLeftY,
 				driver::getRightX,
-				driver.rightBumper(),
-				driver.a()
+				driver
 		));
 	}
 
@@ -63,8 +61,7 @@ public class TestButton {
 				driver::getLeftX,
 				driver::getLeftY,
 				driver::getRightX,
-				driver.rightBumper(),
-				driver.a()
+				driver
 		));
 
 		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
@@ -206,9 +203,7 @@ public class TestButton {
 				driver::getLeftX,
 				driver::getLeftY,
 				driver::getRightX,
-				driver.rightBumper(),
-				driver.a()
-				)
+				driver)
 			);
 
 		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
