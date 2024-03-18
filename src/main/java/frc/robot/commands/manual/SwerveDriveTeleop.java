@@ -22,11 +22,12 @@ public class SwerveDriveTeleop extends Command {
     private final Supplier<Double> x, y, turn;
     private final SlewRateLimiter xLimiter, yLimiter, turnLimiter;
     private volatile double xSpeed, ySpeed, turnSpeed;
+    private boolean isLimiter;
     // private final Trigger rightBumper;//, aResetButton;
 
     public SwerveDriveTeleop(SwerveDrive drive,
             Supplier<Double> x, Supplier<Double> y, 
-            Supplier<Double> turn, CommandXboxController driver) {
+            Supplier<Double> turn, CommandXboxController driver, boolean isLimiter) {
         this.drive = drive;
         this.x = x;
         this.y = y;
@@ -35,6 +36,7 @@ public class SwerveDriveTeleop extends Command {
         this.xLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.turnLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND.get());
+        this.isLimiter = isLimiter;
         
         driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
             .whileFalse(drive.setSpeed(Speed.NORMAL));
@@ -120,21 +122,37 @@ public class SwerveDriveTeleop extends Command {
         if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;
 
         // Smooth driving and apply speed
-        xSpeed = 
-            // xLimiter.calculate(xSpeed) * 
-            xSpeed *
-            SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
-            drive.getTranslationalSpeed();
-        ySpeed = 
-            // yLimiter.calculate(ySpeed) *
-            ySpeed *
-            SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
-            drive.getTranslationalSpeed();
-        turnSpeed = 
-            // turnLimiter.calculate(turnSpeed) * 
-            turnSpeed *
-            SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() * 
-            drive.getAngularSpeed();
+        if(isLimiter){
+            xSpeed = 
+                xLimiter.calculate(xSpeed) * 
+                xSpeed *
+                SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+                drive.getTranslationalSpeed();
+            ySpeed = 
+                yLimiter.calculate(ySpeed) *
+                ySpeed *
+                SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+                drive.getTranslationalSpeed();
+            turnSpeed = 
+                turnLimiter.calculate(turnSpeed) * 
+                turnSpeed *
+                SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() * 
+                drive.getAngularSpeed();
+        } else {
+            xSpeed = 
+                xSpeed *
+                SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+                drive.getTranslationalSpeed();
+            ySpeed = 
+                ySpeed *
+                SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+                drive.getTranslationalSpeed();
+            turnSpeed = 
+                turnSpeed *
+                SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() * 
+                drive.getAngularSpeed();
+        }
+        
 
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
 

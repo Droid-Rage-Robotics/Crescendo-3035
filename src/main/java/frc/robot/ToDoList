@@ -54,7 +54,6 @@ Implement Safe Hardware Encoders
 Add IsEnabled Button to all!!!!!
 make dpad esets emet
 Make the imu update faster
-Add Slew Rate Limiter to drive
 Add PID to climb
 battery voltage usage
 
