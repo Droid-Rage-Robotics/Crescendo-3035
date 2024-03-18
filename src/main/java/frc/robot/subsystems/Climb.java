@@ -92,7 +92,7 @@ public class Climb extends SubsystemBase{
 
     @Override
     public void periodic() {
-        // setPower(controller.calculate(getEncoderPosition()));
+        setPower(controller.calculate(getEncoderPosition()));
         // setPower(controller.calculate(getEncoderPosition())+
         //     feedforward.calculate(getVelocity(), getVelocity()));
     } 
