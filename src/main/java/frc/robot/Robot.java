@@ -111,14 +111,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        
-        // PathPlannerServer.startServer(5811); // Use to see the Path of the robot on PathPlanner
-        // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-        // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-        //     // Do whatever you want with the pose here
-        //     field.setRobotPose(pose);
-        // });
-        // PathPlannerLogging.logCurrentPose(field.getRobotPose()); 
+        // RobotController.setBrownoutVoltage(kDefaultPeriod);
+        //6.3V for Roborio1- Roborio2 is 6.75V
     }
     
     /**
