@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SuppliedCommand;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
-import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivot;
-import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivotAbsolute;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class AmpMech {
@@ -20,38 +18,33 @@ public class AmpMech {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
-        START(0,297,295,0),
+        START(0,297,0),
 
-        INTAKE_SHOOTER(5,64,292,0.7),
-        INTAKE_HUMAN(10,132,164,-.7),
+        INTAKE_SHOOTER(5,64,0.7),
+        INTAKE_HUMAN(10,132,-.7),
        
-        AUTO_AMP(0,89,87,0),
-        AMP(0,89,87,-.7),
-        TRAP(0,90,0,0),
+        AUTO_AMP(0,89,0),
+        AMP(0,89,-.7),
+        TRAP(0,90,0),
 
-        HOLD(0,65.5,75, 60),
-        CLIMB(16.6,0, 0,0),
+        HOLD(0,65.5,60),
+        CLIMB(16.6,0, 0),
 
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
 
         private final ShuffleboardValue<Double> elevatorInches;
-        private final ShuffleboardValue<Double> pivotAngle;
         private final ShuffleboardValue<Double> armAngle;
         private final ShuffleboardValue<Double> intakeSpeeds;
         
 
-        private Value(double elevatorInches, double armAngle, double pivotAngle, double intakeSpeeds) {
+        private Value(double elevatorInches, double armAngle, double intakeSpeeds) {
             this.elevatorInches = ShuffleboardValue.create(elevatorInches, 
                 AmpMechElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
                 .withSize(1, 3)
                 .build();
             this.armAngle = ShuffleboardValue.create(armAngle, 
                 AmpMechElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
-                .withSize(1, 3)
-                .build();
-            this.pivotAngle = ShuffleboardValue.create(pivotAngle, 
-                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
                 .withSize(1, 3)
                 .build();
             this.intakeSpeeds = ShuffleboardValue.create(intakeSpeeds, 
@@ -71,10 +64,6 @@ public class AmpMech {
                 AmpMechElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
                 .withSize(1, 3)
                 .build();
-            this.pivotAngle = ShuffleboardValue.create(copyValue.getPivotDegrees(), 
-                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Pivot Angle", "Misc")
-                .withSize(1, 3)
-                .build();
             this.intakeSpeeds = ShuffleboardValue.create(copyValue.getIntakeSpeeds(), 
                 AmpMechElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
                 .withSize(1, 3)
@@ -88,10 +77,6 @@ public class AmpMech {
         public double getIntakeSpeeds() {
             return intakeSpeeds.get();
         }
-
-        public double getPivotDegrees() {
-            return pivotAngle.get();
-        }
         public double getArmDegrees() {
             return armAngle.get();
         }
@@ -99,7 +84,6 @@ public class AmpMech {
 
     private final AmpMechElevator elevator;
     // private final AmpMechArmAbsolute arm;
-    // private final AmpMechPivotAbsolute pivot;
     // private final PowerAmpMechIntake intake;
     private Value position = Value.START;
     private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
@@ -109,12 +93,10 @@ public class AmpMech {
 
     public AmpMech(AmpMechElevator elevator
         // AmpMechArmAbsolute arm,
-        // AmpMechPivotAbsolute pivot,
         // PowerAmpMechIntake intake
         ) {
         this.elevator = elevator;
         // this.arm = arm;
-        // this.pivot = pivot;
         // this.intake = intake;
 
         // setPositionCommand(Value.START);
@@ -133,7 +115,6 @@ public class AmpMech {
 
     public void setStartPos(Value pos) {
         elevator.setTargetPosition(pos.getElevatorInches());
-        // pivot.setTargetPosition(pos.getPivotDegrees());
         // intake.setTargetPosition(pos.getIntakeSpeeds());
         // arm.setTargetPosition(pos.getArmDegrees());
     }
@@ -145,7 +126,6 @@ public class AmpMech {
                 // // case  AMP,TRAP ->
                 // //     new SequentialCommandGroup(
                 // //         new ParallelCommandGroup(
-                // //             pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
                 // //             intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
                 // //         ),
                 // //         Commands.waitSeconds(0.5),
@@ -158,10 +138,8 @@ public class AmpMech {
                         
                 // //     ),
                 // //      new WaitCommand(1),
-                // //     // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
                 // //     new WaitCommand(.7),
                 // //     new ParallelCommandGroup(
-                // //         // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
                 // //         // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())))
                 // // );
                 // case HOLD -> new SequentialCommandGroup(
@@ -172,15 +150,12 @@ public class AmpMech {
                 //     //     // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
                 //     // ),
                 //      new WaitCommand(1)
-                //     // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees())))
                 //     // new WaitCommand(.7)
-                //         // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
                         
                 // );
                 // case  AMP->//,TRAP ->
                 //     new SequentialCommandGroup(
                 //         new ParallelCommandGroup(
-                //             // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
                 //             // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                 //         ),
                 //         Commands.waitSeconds(0.5),
@@ -189,7 +164,6 @@ public class AmpMech {
                 //     );
                 case  START ->
                 new SequentialCommandGroup(
-                    // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
                     // intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
                     new WaitCommand(1),
                     new ParallelCommandGroup(
@@ -203,7 +177,6 @@ public class AmpMech {
                 default -> 
                     new ParallelCommandGroup(
                         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
-                        // pivot.runOnce(() -> pivot.setTargetPosition((targetPosition.getPivotDegrees()))),
                         // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
                         // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                     );
