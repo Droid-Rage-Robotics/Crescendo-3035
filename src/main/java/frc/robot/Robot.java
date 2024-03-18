@@ -179,7 +179,9 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
-		drive.driveAutoReset();
+		DriverStation.silenceJoystickConnectionWarning(true);
+
+		drive.driveAutoReset();//TODO: Test
         robotContainer.configureTeleOpBindings(drive, intake, shooter, cycleTracker);
         // testButton.test(drive, intake, shooter,climb);
         // testButton.configureIntakeTestBindings(intake);

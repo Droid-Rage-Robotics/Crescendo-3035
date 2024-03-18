@@ -25,7 +25,8 @@ public class SwerveDriveTeleop extends Command {
     // private final Trigger rightBumper;//, aResetButton;
 
     public SwerveDriveTeleop(SwerveDrive drive,
-            Supplier<Double> x, Supplier<Double> y, Supplier<Double> turn, Trigger rightBumper, Trigger aResetButton) {
+            Supplier<Double> x, Supplier<Double> y, 
+            Supplier<Double> turn, CommandXboxController driver) {
         this.drive = drive;
         this.x = x;
         this.y = y;
@@ -35,16 +36,16 @@ public class SwerveDriveTeleop extends Command {
         this.yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.turnLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND.get());
         
-        rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
             .whileFalse(drive.setSpeed(Speed.NORMAL));
                         // .onFalse(drive.setSpeed(Speed.NORMAL));
 
         // this.aResetButton = aResetButton;
-        aResetButton.onTrue(drive.setYawCommand(0));
-        // driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
-        // driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
-        // driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(180)));
-        // driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
+        driver.b().onTrue(drive.setYawCommand(0));
+        driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
+        driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(180)));
+        driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
+        driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
         addRequirements(drive);
     }
@@ -58,10 +59,6 @@ public class SwerveDriveTeleop extends Command {
         ySpeed = -x.get();
         turnSpeed = -turn.get();
 
-        //Slow Mode vs Fast
-        // rightBumper.whileTrue(drive.setSpeed(Speed.SLOW))
-        //     .onFalse(drive.setSpeed(Speed.NORMAL));
-        // aResetButton.onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
         // Square inputs
         if (drive.isSquaredInputs()) {
