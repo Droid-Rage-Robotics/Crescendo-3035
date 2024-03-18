@@ -2,28 +2,25 @@ package frc.robot.subsystems.intake.dropDown;
 
 import com.revrobotics.SparkAbsoluteEncoder;
 
-import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import frc.robot.utility.motor.SafeSparkAbsoluteEncoder;
 
 public class IntakeDropDownAbsolute extends IntakeDropDown {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
         public static double OFFSET = Math.PI / 2;  //90 Degree
     }
-    SparkAbsoluteEncoder absoluteEncoder;
-    // protected final ShuffleboardValue<Double> rawEncoderPositionWriter = 
-    //     ShuffleboardValue.create(0.0, "Raw Encoder Position (Degrees)", 
-    //     Claw.class.getSimpleName())
-    //     .withSize(1, 2)
-    //     .build();
+    // SparkAbsoluteEncoder absoluteEncoder;
+    private SafeSparkAbsoluteEncoder absoluteEncoder;
     public IntakeDropDownAbsolute(Boolean isEnabled, SafeCanSparkMax sparkMax) {
         super(isEnabled);
-        absoluteEncoder = sparkMax.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        absoluteEncoder = new SafeSparkAbsoluteEncoder(sparkMax,false, (Math.PI * 2), (Math.PI * 2 / 60));
+        // absoluteEncoder = sparkMax.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         
-        absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
-        absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
-        absoluteEncoder.setInverted(false);
+        // absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
+        // absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
+        // absoluteEncoder.setInverted(false);
+
         // setTargetPosition(Constants.OFFSET);
     }
 
