@@ -1,7 +1,6 @@
 
 TODO:
-- Update Radios: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/radio-programming.html#prerequisites 
-- Heading Direction of Drivetrain after Auto 
+- 
 - Trapezoid Profile: https://github.com/wpilibsuite/allwpilib/blob/main/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/elevatortrapezoidprofile/Robot.java
 - MAKE ALL HARDWARE INCLUSIN CANCODERS/THORUGH BORE BE DR HARDWARE to force implementation
 On ALL Subsystems:
@@ -22,6 +21,7 @@ Extra Ideas:
 - Field Centric Turning
 - Changing Shooter Speed According to Distance: InterpolatingMatrixTreeMap
 - Limit Switch to the Intake
+- Make a DroidRagelib - search how to do it
 
 Test:
 - Limelight Tracking AutoAim.java
@@ -30,7 +30,7 @@ Test:
 - Test Software Switch on Shuffleboard to see if it work
 - Test NamedCommands
 - Test CycleTracker: https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html; https://www.chiefdelphi.com/t/roborio-wpilib-logging/159434/17
-- test claw to be faster
+- Test Dpad Resets/Heading Direction of Drivetrain after Auto 
 Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
 
@@ -40,7 +40,7 @@ April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/
 
 
 make a framework to make all of the arms to be implemented similairly 
-make a DroidRagelib - search how to do it
+
 
 3-11
 Make a function that forces all of the subsystems to set a start position in configure telopbuttons
@@ -49,6 +49,11 @@ Download Pathplanner wiht Windows
 Seeif you put multiple Commands in one file called Commands that is static like TransferToAmpMech
 make all bots in start pos
 Redo Shooter Dashboard Stuff
+Implement Safe Hardware Encoders
+Add IsEnabled Button to all!!!!!
+Make the imu update faster
+Add PID to climb
+battery voltage usage
 
 Notes:
 Connecting to Roborio using FileZilla
@@ -62,62 +67,60 @@ Connect in Pathplanner with Robot: 10.30.35.2
 Color
 5V - Multi COlor Strip
 12V - Single COlor Strip
-Implement Safe Hardware Encoders
-Add IsEnabled Button to all!!!!!
-make dpad esets emet
-Make the imu update faster
 
 
- // drive.setYawCommand(
-        //     switch (DriverStation.getRawAllianceStation()) {
-        //         case Unknown -> 0;//180
-        //         case Blue1,Blue2,Blue3 -> 0;
-        //         case Red1,Red2,Red3 -> 0;
-        //     }
-        // );
 
 
-        // testButton.configureSparkMaxMotorBindings(///tmp/hs_err_pid2641.log ﻿
-
-        //     new SafeCanSparkMax(
-        //             25,
-        //             MotorType.kBrushless,
-        //             true,
-        //             IdleMode.Coast,
-        //             1,
-        //             1,
-        //             ShuffleboardValue.create(true, "Claw Intake Is Enabled", Claw.class.getSimpleName())
-        //                     .withWidget(BuiltInWidgets.kToggleSwitch)
-        //                     .build(),
-        //                 ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
-        //                     .build()
-        //         )
-        // );
-
-        // testButton.configureTalonMotorBindings(
-        //     new SafeTalonFX(
-        //     16,
-        //     true,
-        //     IdleMode.Coast,
-        //     1,
-        //     1,
-        //     ShuffleboardValue.create(true, "Is Enabled Wheel", Intake.class.getSimpleName())
-        //         .withWidget(BuiltInWidgets.kToggleSwitch)
-        //         .build(),
-        //     ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
-        //         .build()
-        // )
-        // );
-
-        
-        // testButton.configureDriverOperatorBindings(drive,intake);
-        // testButton.configureCycleTrackerBindings(cycleTracker);
-
-        // testButton.configureClimbTestBindings(climb, intake);
-        // testButton.configureIntakeAndShooterTestBindings(intake, shooter);
-        // testButton.configureShooterTestBindings(shooter);
+// drive.setYawCommand(
+//     switch (DriverStation.getRawAllianceStation()) {
+//         case Unknown -> 0;//180
+//         case Blue1,Blue2,Blue3 -> 0;
+//         case Red1,Red2,Red3 -> 0;
+//     }
+// );
 
 
-        // testButton.configureDriveBindings(drive);
-        // testButton.configureSysIDBindings(sysID);
-        // testButton.configureAmpMechTestBindings(ampMech);
+// testButton.configureSparkMaxMotorBindings(///tmp/hs_err_pid2641.log ﻿
+
+//     new SafeCanSparkMax(
+//             25,
+//             MotorType.kBrushless,
+//             true,
+//             IdleMode.Coast,
+//             1,
+//             1,
+//             ShuffleboardValue.create(true, "Claw Intake Is Enabled", Claw.class.getSimpleName())
+//                     .withWidget(BuiltInWidgets.kToggleSwitch)
+//                     .build(),
+//                 ShuffleboardValue.create(0.0, "Claw Intake Voltage", Claw.class.getSimpleName())
+//                     .build()
+//         )
+// );
+
+// testButton.configureTalonMotorBindings(
+//     new SafeTalonFX(
+//     16,
+//     true,
+//     IdleMode.Coast,
+//     1,
+//     1,
+//     ShuffleboardValue.create(true, "Is Enabled Wheel", Intake.class.getSimpleName())
+//         .withWidget(BuiltInWidgets.kToggleSwitch)
+//         .build(),
+//     ShuffleboardValue.create(0.0, "Voltage Wheel", Intake.class.getSimpleName())
+//         .build()
+// )
+// );
+
+
+// testButton.configureDriverOperatorBindings(drive,intake);
+// testButton.configureCycleTrackerBindings(cycleTracker);
+
+// testButton.configureClimbTestBindings(climb, intake);
+// testButton.configureIntakeAndShooterTestBindings(intake, shooter);
+// testButton.configureShooterTestBindings(shooter);
+
+
+// testButton.configureDriveBindings(drive);
+// testButton.configureSysIDBindings(sysID);
+// testButton.configureAmpMechTestBindings(ampMech);

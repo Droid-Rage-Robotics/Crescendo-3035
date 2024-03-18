@@ -1,20 +1,26 @@
 package frc.robot.utility.motor;
 
-import com.revrobotics.REVLibError;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
-public class SafeSparkAbsEncoder {
+public class SafeSparkAbsoluteEncoder {
     private SparkAbsoluteEncoder encoder;
 
-
-    public SafeSparkAbsEncoder(SafeCanSparkMax motor, boolean isInverted, double positionConversionFactor, double velocityConversionFactor){
+    //Math.PI*2 = 360 Degrees
+    //Math.PI*2/60
+    public SafeSparkAbsoluteEncoder(SafeCanSparkMax motor, boolean isInverted, double positionConversionFactor, double velocityConversionFactor){
         encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
         encoder.setInverted(isInverted);
         encoder.setPositionConversionFactor(positionConversionFactor);
         encoder.setVelocityConversionFactor(velocityConversionFactor);
     } 
     public double getPosition() {
+        return encoder.getPosition();
+    }
+    public double getDegrees() {
+        return encoder.getPosition()*(Math.PI*2);
+    }
+    public double getRadian() {
         return encoder.getPosition();
     }
     public double getVelocity() {

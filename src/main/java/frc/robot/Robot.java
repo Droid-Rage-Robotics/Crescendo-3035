@@ -35,8 +35,6 @@ import frc.robot.subsystems.ampMech.AmpMechElevator;
 import frc.robot.subsystems.ampMech.PowerAmpMechIntake;
 import frc.robot.subsystems.ampMech.AmpMech.Value;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
-import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivot;
-import frc.robot.subsystems.ampMech.ampMechPivot.AmpMechPivotAbsolute;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
@@ -73,7 +71,6 @@ public class Robot extends TimedRobot {
 
     // private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false);//23
     // private final PowerAmpMechIntake clawIntake = new PowerAmpMechIntake(false);//25 
-    // private final AmpMechPivotAbsolute pivot = new AmpMechPivotAbsolute( false, clawIntake.getMotor());//24
     // private final AmpMech ampMech = new AmpMech(elevator//, arm, pivot, clawIntake
     // );
     
@@ -111,14 +108,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        
-        // PathPlannerServer.startServer(5811); // Use to see the Path of the robot on PathPlanner
-        // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-        // PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-        //     // Do whatever you want with the pose here
-        //     field.setRobotPose(pose);
-        // });
-        // PathPlannerLogging.logCurrentPose(field.getRobotPose()); 
+        // RobotController.setBrownoutVoltage(kDefaultPeriod);
+        //6.3V for Roborio1- Roborio2 is 6.75V
     }
     
     /**

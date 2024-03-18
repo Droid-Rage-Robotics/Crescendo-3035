@@ -50,7 +50,8 @@ public class TestButton {
 				driver::getLeftX,
 				driver::getLeftY,
 				driver::getRightX,
-				driver
+				driver,
+				true
 		));
 	}
 
@@ -61,7 +62,8 @@ public class TestButton {
 				driver::getLeftX,
 				driver::getLeftY,
 				driver::getRightX,
-				driver
+				driver,
+				true
 		));
 
 		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
@@ -203,8 +205,9 @@ public class TestButton {
 				driver::getLeftX,
 				driver::getLeftY,
 				driver::getRightX,
-				driver)
-			);
+				driver,
+				true
+		));
 
 		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));

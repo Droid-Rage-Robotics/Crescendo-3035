@@ -342,7 +342,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
 
-    public Command setYawCommand(double degrees) {  //The "0" for driving is -90
+    public Command setYawCommand(double degrees) {
         return runOnce(
             () -> pigeon2.setYaw(degrees, 5)
         );

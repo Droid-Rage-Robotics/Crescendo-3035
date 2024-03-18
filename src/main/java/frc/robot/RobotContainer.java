@@ -69,7 +69,8 @@ public class RobotContainer {
 				driver::getLeftX,
 				driver::getLeftY,
 				driver::getRightX,
-				driver
+				driver,
+				true
 				)
 			);
 		// drive.driveAutoReset();
@@ -95,10 +96,11 @@ public class RobotContainer {
 			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.SPEAKER_SHOOT))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.STOP));
 		operator.rightBumper()
-			.onTrue(new TeleopShoot(intake, shooter));
+			.onTrue(new TeleopShoot(intake, shooter, cycleTracker));
 			// .onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger()
 			.onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE_AMP))
+			.onTrue(new InstantCommand(()-> cycleTracker.trackCycle(ShooterSpeeds.SPEAKER_SHOOT)))
 			// .onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
 
