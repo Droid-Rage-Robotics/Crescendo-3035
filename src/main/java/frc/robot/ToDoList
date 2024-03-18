@@ -31,7 +31,7 @@ Test:
 - Test Software Switch on Shuffleboard to see if it work
 - Test NamedCommands
 - Test CycleTracker: https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html; https://www.chiefdelphi.com/t/roborio-wpilib-logging/159434/17
-- test claw to be faster
+- Test Dpad Resets
 Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
 
@@ -52,7 +52,6 @@ make all bots in start pos
 Redo Shooter Dashboard Stuff
 Implement Safe Hardware Encoders
 Add IsEnabled Button to all!!!!!
-make dpad esets emet
 Make the imu update faster
 Add PID to climb
 battery voltage usage
