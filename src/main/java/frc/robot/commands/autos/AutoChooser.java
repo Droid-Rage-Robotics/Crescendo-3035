@@ -25,8 +25,8 @@ public class AutoChooser {
         SwerveDrive drive, Intake intake, Shooter shooter//, Claw claw, Climb climb, Light light
     ) {
         //Put Named Commands HERE
-        NamedCommands.registerCommand("shoot", new SetIntakeAndShooter
-            (intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT));
+        NamedCommands.registerCommand("shoot", 
+        new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT));
         NamedCommands.registerCommand("intake",
             new SetIntakeAndShooter(intake, Intake.Value.INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.SPEAKER_SHOOT));
         NamedCommands.registerCommand("pickUp",
