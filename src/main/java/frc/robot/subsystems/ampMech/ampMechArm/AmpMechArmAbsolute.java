@@ -4,6 +4,8 @@ import com.revrobotics.SparkAbsoluteEncoder;
 
 import frc.robot.utility.motor.SafeSparkAbsoluteEncoder;
 
+import frc.robot.utility.motor.SafeSparkAbsoluteEncoder;
+
 public class AmpMechArmAbsolute extends AmpMechArm {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
