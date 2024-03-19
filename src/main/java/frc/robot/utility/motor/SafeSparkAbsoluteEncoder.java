@@ -57,4 +57,6 @@ public class SafeSparkAbsoluteEncoder {
     public void setVelocityConversionFactor(double velocityConversionFactor) {
         encoder.setVelocityConversionFactor(velocityConversionFactor);
     }
+    public void setInverted(boolean b) {
+    }
 }

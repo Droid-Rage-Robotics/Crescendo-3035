@@ -2,19 +2,23 @@ package frc.robot.subsystems.ampMech.ampMechArm;
 
 import com.revrobotics.SparkAbsoluteEncoder;
 
+import frc.robot.utility.motor.SafeSparkAbsoluteEncoder;
+
 public class AmpMechArmAbsolute extends AmpMechArm {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
         public static double OFFSET = Math.PI;  //90 Degree
     }
-    SparkAbsoluteEncoder absoluteEncoder;
+SafeSparkAbsoluteEncoder absoluteEncoder;
     public AmpMechArmAbsolute(Boolean isEnabled) {
         super(isEnabled);
-        absoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        
-        absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
-        absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
-        absoluteEncoder.setInverted(false);
+        absoluteEncoder = new SafeSparkAbsoluteEncoder(motor, false, 
+         (Math.PI * 2), (Math.PI * 2 / 60), this);
+        // absoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+       
+        // absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
+        // absoluteEncoder.setVelocityConversionFactor(Math.PI * 2 / 60);
+        // absoluteEncoder.setInverted(false);
         // setTargetPosition(Constants.OFFSET);
     }
 
