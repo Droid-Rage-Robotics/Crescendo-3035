@@ -22,7 +22,7 @@ public class Light extends SubsystemBase {
         ("Color", "Light Color", Light.class.getSimpleName())
         .build();
     
-    private int LED_COUNT_ONE = 25;   //Number of LEDS on Strip (Can have multiple strips)
+    private int LED_COUNT_ONE = 13;   //Number of LEDS on Strip (Can have multiple strips)
     // private int LED_COUNT_TWO = 39;   //Number of LEDS on Strip (Can have multiple strips)
     public final Color red = Color.kRed, 
                       batteryBlue = Color.kMidnightBlue,
@@ -47,7 +47,7 @@ public class Light extends SubsystemBase {
     }
     private SwitchLED switchLED;
     private FlashingColor flashingColor;
-    private Rainbow rainbow;
+    // private Rainbow rainbow;
     
     public Light() {
         ledOne = new AddressableLED(2);

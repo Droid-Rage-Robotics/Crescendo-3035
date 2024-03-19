@@ -56,13 +56,13 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10
-    private final Shooter shooter = new Shooter(true);//18.19
+    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
+    // private final Shooter shooter = new Shooter(false);//18.19
 
     // private final Climb climb = new Climb(false,false);//20,21^
-    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
-    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, drive.getFRTurnCanSparkMax());//17-could use drive motor instead
-    private final Intake intake = new Intake(dropDown, intakeWheel);
+    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
+    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, drive.getFRTurnCanSparkMax());//17-could use drive motor instead
+    // private final Intake intake = new Intake(dropDown, intakeWheel);
     // private final AmpMechElevator elevator = new AmpMechElevator(true);//22
 
 
@@ -74,14 +74,14 @@ public class Robot extends TimedRobot {
     // private final AmpMech ampMech = new AmpMech(elevator//, arm, pivot, clawIntake
     // );
     
-    private AutoChooser autoChooser = new AutoChooser(
-        drive, intake, shooter//, claw, climb, vision, light
-    );
-    private final CycleTracker cycleTracker = new CycleTracker();
+    // private AutoChooser autoChooser = new AutoChooser(
+    //     drive, intake, shooter//, claw, climb, vision, light
+    // );
+    // private final CycleTracker cycleTracker = new CycleTracker();
 
 
     // private final Vision vision = new Vision();
-    // private final Light light = new Light();
+    private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
     // private final SysID sysID = new SysID(clawElevator.getMotor(), Measurement.DISTANCE);
@@ -91,8 +91,8 @@ public class Robot extends TimedRobot {
 
 
     // private Field2d field = new Field2d(); //TODO:How does this work
-    private RobotContainer robotContainer = new RobotContainer();
-    private TestButton testButton = new TestButton();
+    // private RobotContainer robotContainer = new RobotContainer();
+    // private TestButton testButton = new TestButton();
 
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
@@ -129,7 +129,7 @@ public class Robot extends TimedRobot {
         // if(DriverStation.isEStopped()){ //Robot Estopped
         //     light.flashingColors(light.red, light.white);
         // }
-        // light.setAllColor(light.yellow);
+        light.setAllColor(light.yellow);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
         // } else{
         //     light.flashingColors(light.yellow, light.blue);
         // }
-        // light.setAllColor(light.blue);
+        light.setAllColor(light.blue);
     }
 
     @Override
@@ -172,8 +172,8 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 		DriverStation.silenceJoystickConnectionWarning(true);
 
-		drive.driveAutoReset();//TODO: Test
-        robotContainer.configureTeleOpBindings(drive, intake, shooter, cycleTracker);
+		// drive.driveAutoReset();//TODO: Test
+        // robotContainer.configureTeleOpBindings(drive, intake, shooter, cycleTracker);
         // testButton.test(drive, intake, shooter,climb);
         // testButton.configureIntakeTestBindings(intake);
         // testButton.configureAmpMechTestBindings(ampMech);
@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        robotContainer.teleopPeriodic(intake,shooter);
+        // robotContainer.teleopPeriodic(intake,shooter);
         matchTime.set(DriverStation.getMatchTime());
     }
     
