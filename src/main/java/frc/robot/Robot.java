@@ -56,7 +56,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //CAN 15 is skipped
 public class Robot extends TimedRobot {
     //15 missing
-    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
+    private final SwerveDrive drive = new SwerveDrive(false);//2-10
     // private final Shooter shooter = new Shooter(false);//18.19
 
     // private final Climb climb = new Climb(false,false);//20,21^

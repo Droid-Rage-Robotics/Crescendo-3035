@@ -90,8 +90,7 @@ encoder fixing?
 // );
 
 
-// testButton.configureSparkMaxMotorBindings(///tmp/hs_err_pid2641.log ﻿
-
+// testButton.configureSparkMaxMotorBindings(
 //     new SafeCanSparkMax(
 //             25,
 //             MotorType.kBrushless,

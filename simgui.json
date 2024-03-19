@@ -4,6 +4,20 @@
       "window": {
         "visible": true
       }
+    },
+    "RoboRIO": {
+      "5V Rail": {
+        "open": true
+      },
+      "6V Rail": {
+        "open": true
+      },
+      "RoboRIO Input": {
+        "open": true
+      },
+      "window": {
+        "visible": true
+      }
     }
   },
   "NTProvider": {
