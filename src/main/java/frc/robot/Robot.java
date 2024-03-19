@@ -11,6 +11,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -57,12 +58,12 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     //15 missing
     private final SwerveDrive drive = new SwerveDrive(false);//2-10
-    // private final Shooter shooter = new Shooter(false);//18.19
+    private final Shooter shooter = new Shooter(false);//18.19
 
-    // private final Climb climb = new Climb(false,false);//20,21^
-    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, drive.getFRTurnCanSparkMax());//17-could use drive motor instead
-    // private final Intake intake = new Intake(dropDown, intakeWheel);
+    // private final Climb climb = new Climb(false,false);//20,21^^
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, drive.getFRTurnCanSparkMax());//17-could use drive motor instead
+    private final Intake intake = new Intake(dropDown, intakeWheel);
     // private final AmpMechElevator elevator = new AmpMechElevator(true);//22
 
 
@@ -74,9 +75,9 @@ public class Robot extends TimedRobot {
     // private final AmpMech ampMech = new AmpMech(elevator//, arm, pivot, clawIntake
     // );
     
-    // private AutoChooser autoChooser = new AutoChooser(
-    //     drive, intake, shooter//, claw, climb, vision, light
-    // );
+    private AutoChooser autoChooser = new AutoChooser(
+        drive, intake, shooter//, claw, climb, vision, light
+    );
     // private final CycleTracker cycleTracker = new CycleTracker();
 
 
@@ -92,7 +93,7 @@ public class Robot extends TimedRobot {
 
     // private Field2d field = new Field2d(); //TODO:How does this work
     // private RobotContainer robotContainer = new RobotContainer();
-    // private TestButton testButton = new TestButton();
+    private TestButton testButton = new TestButton();
 
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
@@ -171,6 +172,10 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 		DriverStation.silenceJoystickConnectionWarning(true);
+        // testButton.configureDriveBindings(drive);
+        testButton.configureIntakeTestBindings(intake);
+        
+        // drive.runOnce(()->drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
 
 		// drive.driveAutoReset();//TODO: Test
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, cycleTracker);
@@ -184,6 +189,9 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         // robotContainer.teleopPeriodic(intake,shooter);
         matchTime.set(DriverStation.getMatchTime());
+        if(intake.isElementInClaw()){
+            testButton.rumble();
+        }
     }
     
     @Override

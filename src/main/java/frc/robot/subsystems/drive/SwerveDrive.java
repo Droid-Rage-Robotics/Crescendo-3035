@@ -426,8 +426,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Command driveAutoReset(){
-        return this.runOnce(()->this.setYawCommand(this.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
-    }
+        return runOnce(()->setYawCommand(getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
+    }      
     public ChassisSpeeds getSpeeds() {//Is this Roboto Relative
         return DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());
     }

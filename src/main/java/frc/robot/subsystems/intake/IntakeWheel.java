@@ -80,7 +80,9 @@ public class IntakeWheel extends SubsystemBase {
     protected double getIntakeEncoderVelocity() {
         double velocity = motor.getVelocity();
         encoderVelocityWriter.write(velocity);
-        encoderVelocityErrorWriter.write(getIntakeTargetVelocity() - velocity);
+        encoderVelocityErrorWriter.write(intakeController.getPositionError());
+
+        // encoderVelocityErrorWriter.write(getIntakeTargetVelocity() - velocity);
         return velocity;
     }
     protected double getIntakeTargetVelocity() {

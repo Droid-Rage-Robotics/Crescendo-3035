@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.proto.Controller;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -80,6 +81,9 @@ public class TestButton {
 		operator.leftTrigger()
 			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
+		
+
+		// operator.
 	}
 	
 	public void configureShooterTestBindings(Shooter shooter){
@@ -225,6 +229,12 @@ public class TestButton {
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
 		
 		
+
+	}
+
+	public void rumble(){
+		operator.getHID().setRumble(RumbleType.kBothRumble, 1);
+		driver.getHID().setRumble(RumbleType.kBothRumble, 1);
 
 	}
 }

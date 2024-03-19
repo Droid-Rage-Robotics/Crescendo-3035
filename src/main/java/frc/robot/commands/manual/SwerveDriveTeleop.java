@@ -45,7 +45,7 @@ public class SwerveDriveTeleop extends Command {
         // this.aResetButton = aResetButton;
         driver.b().onTrue(drive.setYawCommand(0));
         driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
-        driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(180)));
+        driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(-180)));//180
         driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
         driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
