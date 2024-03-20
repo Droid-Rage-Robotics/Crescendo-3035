@@ -16,14 +16,16 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeCancoder;
+import frc.robot.utility.motor.SafeCancoder.EncoderRange;
 import frc.robot.utility.motor.SafeMotor;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class SwerveModuleKraken {
+public class SwerveModuleKrakenCAN {
     public enum POD{
         FL,
         BL,
@@ -52,46 +54,37 @@ public class SwerveModuleKraken {
     private final SafeTalonFX driveMotor;
     private final SafeCanSparkMax turnMotor;
 
-    // private final Supplier<Double> absoluteEncoderOffsetRad;
-    private final CANcoder turnEncoder;
+    private final Supplier<Double> absoluteEncoderOffsetRad;
+    private final SafeCancoder turnEncoder;
     private final PIDController turningPidController;
     private final SimpleMotorFeedforward feedforward;
-    // private static int num = 1;
+    // private POD pod;
     // private final double driveSpeedMultiplier;
 
-    public SwerveModuleKraken(int driveMotorId, 
+    public SwerveModuleKrakenCAN(int driveMotorId, 
         int turnMotorId, boolean driveMotorReversed, 
         boolean turningMotorReversed, int absoluteEncoderId, 
         Supplier<Double> absoluteEncoderOffsetRad, 
-        boolean absoluteEncoderReversed, boolean isEnabled, POD podName) {
-        // this.pod = pod;
-    
-        // this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
+        boolean absoluteEncoderReversed, boolean isEnabled, POD pod) {
+        // this.pod = pod;ShuffleboardValue<Double> frontLeftTurnPositionWriter
         
-
-
-        turnEncoder = new CANcoder(absoluteEncoderId);
-        CANcoderConfiguration config = new CANcoderConfiguration();
-        if(absoluteEncoderReversed){
-            config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        } else{
-            config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        }
-        config.MagnetSensor.MagnetOffset = absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD;
-        config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-        turnEncoder.getConfigurator().apply(config);
-        
+        this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
+        turnEncoder = new SafeCancoder(absoluteEncoderId, absoluteEncoderReversed, EncoderRange.ZERO_TO_ONE,
+            0.0,0.0,0.0,
+            ShuffleboardValue.create(0.0, pod.toString()+"", SwerveDrive.class.getSimpleName())
+                    .withWidget(BuiltInWidgets.kToggleSwitch)
+                    .build());
         driveMotor = new SafeTalonFX(driveMotorId,
             driveMotorReversed,
             SafeMotor.IdleMode.Brake,
             Constants.DRIVE_ENCODER_ROT_2_METER,
             Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC,
-            ShuffleboardValue.create(isEnabled, "Module/Module " + podName.toString() + "/Drive Is Enabled "+ 
-                podName.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Module/Module " + pod.toString() + "/Drive Is Enabled "+ 
+                pod.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Voltage "+ 
-                podName.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Module/Module " + pod.toString() + "/Drive Voltage "+ 
+                pod.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
                 .build(),
                 30
                 // ,300
@@ -101,12 +94,12 @@ public class SwerveModuleKraken {
             IdleMode.Coast,
             Constants.TURN_ENCODER_ROT_2_RAD,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Module/Module " + podName.toString() + "/Turn Is Enabled "+
-                podName.toString() +turnMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Module/Module " + pod.toString() + "/Turn Is Enabled "+
+                pod.toString() +turnMotorId, SwerveDrive.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Turn Voltage "+ 
-                podName.toString() + turnMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Module/Module " + pod.toString() + "/Turn Voltage "+ 
+                pod.toString() + turnMotorId, SwerveDrive.class.getSimpleName())
                 .build()
                 // 7
         );
@@ -128,7 +121,7 @@ public class SwerveModuleKraken {
     }
 
     public double getTurningPosition() {
-        return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
+        return (turnEncoder.getAbsolutePosition()*Constants.TURN_ENCODER_ROT_2_RAD);
     }
 
     public double getDriveVelocity(){
@@ -137,7 +130,7 @@ public class SwerveModuleKraken {
     }
 
     public double getTurningVelocity(){
-        return turnEncoder.getVelocity().getValueAsDouble();
+        return turnEncoder.getVelocity();
     }
 
     // public double getTurnEncoderRad() {
@@ -206,5 +199,8 @@ public class SwerveModuleKraken {
     }
     public SafeCanSparkMax getTurnMotor(){
         return turnMotor;
+    }
+    public void periodic(){
+
     }
 }

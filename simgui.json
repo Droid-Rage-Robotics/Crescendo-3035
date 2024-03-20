@@ -5,6 +5,18 @@
         "visible": true
       }
     },
+    "Other Devices": {
+      "SPARK MAX [4]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[3]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
     "RoboRIO": {
       "5V Rail": {
         "open": true
@@ -22,7 +34,13 @@
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Intake/Drop PID": "PIDController",
+      "/Shuffleboard/Intake/Reset Intake Drop Encoder": "Command",
+      "/Shuffleboard/Intake/Reset Intake Wheel Encoder": "Command",
+      "/Shuffleboard/Intake/Wheel PID": "PIDController",
+      "/Shuffleboard/Misc/Auto Chooser": "String Chooser",
+      "/Shuffleboard/SwerveDrive/Field": "Field2d"
     }
   },
   "NetworkTables Info": {

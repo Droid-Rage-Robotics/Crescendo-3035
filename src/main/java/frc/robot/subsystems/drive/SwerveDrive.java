@@ -4,11 +4,6 @@ import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Pigeon2FeaturesConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
-// import com.ctre.phoenix6.hardware.Pigeon2.AxisDirection;
-// import com.ctre.phoenix.sensors.
-
-// import com.ctre.phoenix.sensors.Pigeon2;
-// import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
+import frc.robot.subsystems.drive.SwerveModuleKraken.POD;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.SafeCanSparkMax;
@@ -60,7 +56,7 @@ public class SwerveDrive extends SubsystemBase {
         10, 
         SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        DriveOptions.IS_ENABLED.get()
+        DriveOptions.IS_ENABLED.get(),POD.FR
     );
     private final SwerveModuleKraken backRight = new SwerveModuleKraken(
         5,
@@ -72,7 +68,7 @@ public class SwerveDrive extends SubsystemBase {
         11, 
         SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        DriveOptions.IS_ENABLED.get()
+        DriveOptions.IS_ENABLED.get(),POD.BR
     );
     private final SwerveModuleKraken backLeft = new SwerveModuleKraken(
         7,
@@ -84,7 +80,7 @@ public class SwerveDrive extends SubsystemBase {
         12, 
         SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        DriveOptions.IS_ENABLED.get()
+        DriveOptions.IS_ENABLED.get(),POD.BL
     );
     private final SwerveModuleKraken frontLeft = new SwerveModuleKraken(
         9,
@@ -96,7 +92,7 @@ public class SwerveDrive extends SubsystemBase {
         13, 
         SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        DriveOptions.IS_ENABLED.get()
+        DriveOptions.IS_ENABLED.get(),POD.FL
     );
     private final SwerveModuleKraken[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
 
@@ -118,7 +114,7 @@ public class SwerveDrive extends SubsystemBase {
         ShuffleboardValue.create(speed.name(), "State/Speed", SwerveDrive.class.getSimpleName()).build();
     
     private final ShuffleboardValue<Double> headingWriter = 
-        ShuffleboardValue.create(0.0, "Gyro/Heading (Degrees)", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(0.0, "Gyro/Heading-Yaw (Degrees)", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<Double> rollWriter = 
         ShuffleboardValue.create(0.0, "Gyro/Roll (Degrees)", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<Double> pitchWriter =   
@@ -138,7 +134,8 @@ public class SwerveDrive extends SubsystemBase {
     
     private final ShuffleboardValue<Double> backLeftTurnPositionWriter = 
         ShuffleboardValue.create(0.0, "Swerve Modules/Back Left/Turn Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-    private final ShuffleboardValue<Double> backLeftDriveDistanceWriter = ShuffleboardValue.create(0.0, "Swerve Modules/Back Left/Drive Position (Radians)", SwerveDrive.class.getSimpleName()).build();
+    private final ShuffleboardValue<Double> backLeftDriveDistanceWriter = 
+        ShuffleboardValue.create(0.0, "Swerve Modules/Back Left/Drive Position (Radians)", SwerveDrive.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Double> backRightTurnPositionWriter = 
         ShuffleboardValue.create(0.0, "Swerve Modules/Back Right/Turn Position (Radians)", SwerveDrive.class.getSimpleName()).build();
