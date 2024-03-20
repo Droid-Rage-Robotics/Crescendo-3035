@@ -150,7 +150,7 @@ public class SwerveDrive extends SubsystemBase {
     private final ShuffleboardValue<Double> forwardVelocityWriter = 
         ShuffleboardValue.create(0.0, "Forward Velocity Writer", SwerveDrive.class.getSimpleName()).build();
 
-    private boolean isBreakMode = false;
+    // private boolean isBreakMode = false;
     private final Field2d field2d = new Field2d();
 
     public SwerveDrive(Boolean isEnabled) {
@@ -191,21 +191,21 @@ public class SwerveDrive extends SubsystemBase {
         locationWriter.set(getPose().getTranslation().toString());
 
 
-        // frontLeftTurnAbsolutePositionWriter.set(frontLeft.getTurnEncoderRad());
-        frontLeftTurnPositionWriter.set(frontLeft.getTurningPosition());
-        frontLeftDriveDistanceWriter.set(frontLeft.getDrivePos());
+        // // frontLeftTurnAbsolutePositionWriter.set(frontLeft.getTurnEncoderRad());
+        // frontLeftTurnPositionWriter.set(frontLeft.getTurningPosition());
+        // frontLeftDriveDistanceWriter.set(frontLeft.getDrivePos());
 
-        // frontRightTurnAbsolutePositionWriter.set(frontRight.getTurnEncoderRad());
-        frontRightTurnPositionWriter.set(frontRight.getTurningPosition());
-        frontRightDriveDistanceWriter.set(frontRight.getDrivePos());
+        // // frontRightTurnAbsolutePositionWriter.set(frontRight.getTurnEncoderRad());
+        // frontRightTurnPositionWriter.set(frontRight.getTurningPosition());
+        // frontRightDriveDistanceWriter.set(frontRight.getDrivePos());
 
-        // backLeftTurnAbsolutePositionWriter.set(backLeft.getTurnEncoderRad());
-        backLeftTurnPositionWriter.set(backLeft.getTurningPosition());
-        backLeftDriveDistanceWriter.set(backLeft.getDrivePos());
+        // // backLeftTurnAbsolutePositionWriter.set(backLeft.getTurnEncoderRad());
+        // backLeftTurnPositionWriter.set(backLeft.getTurningPosition());
+        // backLeftDriveDistanceWriter.set(backLeft.getDrivePos());
 
-        // backRightTurnAbsolutePositionWriter.set(backRight.getTurnEncoderRad());
-        backRightTurnPositionWriter.set(backRight.getTurningPosition());
-        backRightDriveDistanceWriter.set(backRight.getDrivePos());
+        // // backRightTurnAbsolutePositionWriter.set(backRight.getTurnEncoderRad());
+        // backRightTurnPositionWriter.set(backRight.getTurningPosition());
+        // backRightDriveDistanceWriter.set(backRight.getDrivePos());
 
         forwardVelocityWriter.write(getForwardVelocity());
     }
@@ -425,6 +425,7 @@ public class SwerveDrive extends SubsystemBase {
     public Command driveAutoReset(){
         return runOnce(()->setYawCommand(getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
     }      
+
     public ChassisSpeeds getSpeeds() {//Is this Roboto Relative
         return DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());
     }

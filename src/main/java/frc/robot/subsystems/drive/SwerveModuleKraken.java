@@ -58,17 +58,13 @@ public class SwerveModuleKraken {
     private final SimpleMotorFeedforward feedforward;
     // private static int num = 1;
     // private final double driveSpeedMultiplier;
-
+    private ShuffleboardValue<Double> turnPositionWriter;
+    private ShuffleboardValue<Double> drivePositionWriter;
     public SwerveModuleKraken(int driveMotorId, 
         int turnMotorId, boolean driveMotorReversed, 
         boolean turningMotorReversed, int absoluteEncoderId, 
         Supplier<Double> absoluteEncoderOffsetRad, 
         boolean absoluteEncoderReversed, boolean isEnabled, POD podName) {
-        // this.pod = pod;
-    
-        // this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
-        
-
 
         turnEncoder = new CANcoder(absoluteEncoderId);
         CANcoderConfiguration config = new CANcoderConfiguration();
@@ -120,14 +116,20 @@ public class SwerveModuleKraken {
 
         feedforward = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV);
 
+        this.turnPositionWriter = ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Turn Position (Radians)", 
+            SwerveDrive.class.getSimpleName()).build();
+        this.drivePositionWriter = ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Position (Radians)", 
+            SwerveDrive.class.getSimpleName()).build();
         resetDriveEncoder();
     }
 
     public double getDrivePos() {
+        drivePositionWriter.write(driveMotor.getPosition());
         return driveMotor.getPosition();
     }
 
     public double getTurningPosition() {
+        turnPositionWriter.write(turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
         return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
     }
 
