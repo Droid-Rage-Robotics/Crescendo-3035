@@ -1,13 +1,5 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.Robot;
-import frc.robot.subsystems.drive.SwerveDrive;
-
-import java.util.function.DoubleSupplier;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -17,12 +9,12 @@ public class AlignToAprilTagSpectrum
 // extends PIDCommand 
 {
 
-    private static double lowKP = 0.035;
-    private static double highKP = 0.06;
-    private static double tolerance = 2;
-    SwerveDrive driveCommand;
-    DoubleSupplier fwdPositiveSupplier;
-    private static double out;
+    // private static double lowKP = 0.035;
+    // private static double highKP = 0.06;
+    // private static double tolerance = 2;
+    // SwerveDrive driveCommand;
+    // DoubleSupplier fwdPositiveSupplier;
+    // private static double out;
 
     /** Creates a new AlignToAprilTag. */
     // public AlignToAprilTagSpectrum(

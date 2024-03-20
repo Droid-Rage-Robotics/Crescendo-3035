@@ -1,9 +1,7 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
-import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
 // Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {

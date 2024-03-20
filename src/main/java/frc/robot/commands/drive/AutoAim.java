@@ -12,9 +12,9 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
 
 public class AutoAim extends Command {//TODO: Test this
-  private SwerveDrive drive;
+  // private SwerveDrive drive;
   private Light light;
-  private Vision vision;
+  // private Vision vision;
   private ProfiledPIDController turnController, distanceController; // Or a normal PID Control
   public AutoAim(SwerveDrive drive, Vision vision, Light light) {
         turnController = new ProfiledPIDController(
@@ -36,9 +36,9 @@ public class AutoAim extends Command {//TODO: Test this
             turnController.calculate(vision.gettX(),0));
 
     addRequirements(drive, vision);
-    this.drive = drive;
+    // this.drive = drive;
     this.light = light;
-    this.vision = vision;
+    // this.vision = vision;
   }
   
   @Override

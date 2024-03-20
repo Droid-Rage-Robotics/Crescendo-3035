@@ -2,7 +2,6 @@ package frc.robot.subsystems.ampMech.ampMechArm;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 

@@ -1,11 +1,6 @@
 package frc.robot.subsystems.drive;
 
 import java.util.function.Supplier;
-
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -16,7 +11,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeCancoder;
 import frc.robot.utility.motor.SafeCancoder.EncoderRange;
@@ -54,7 +48,7 @@ public class SwerveModuleKrakenCAN {
     private final SafeTalonFX driveMotor;
     private final SafeCanSparkMax turnMotor;
 
-    private final Supplier<Double> absoluteEncoderOffsetRad;
+    // private final Supplier<Double> absoluteEncoderOffsetRad;
     private final SafeCancoder turnEncoder;
     private final PIDController turningPidController;
     private final SimpleMotorFeedforward feedforward;
@@ -68,7 +62,7 @@ public class SwerveModuleKrakenCAN {
         boolean absoluteEncoderReversed, boolean isEnabled, POD pod) {
         // this.pod = pod;ShuffleboardValue<Double> frontLeftTurnPositionWriter
         
-        this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
+        // this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
         turnEncoder = new SafeCancoder(absoluteEncoderId, absoluteEncoderReversed, EncoderRange.ZERO_TO_ONE,
             0.0,0.0,0.0,
             ShuffleboardValue.create(0.0, pod.toString()+"", SwerveDrive.class.getSimpleName())

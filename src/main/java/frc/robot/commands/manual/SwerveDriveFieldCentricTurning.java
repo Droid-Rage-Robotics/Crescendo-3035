@@ -1,16 +1,7 @@
 package frc.robot.commands.manual;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.function.Supplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.drive.SwerveDrive;
-
 @Deprecated
 public class SwerveDriveFieldCentricTurning extends Command {
     // private final SwerveDrive drive;

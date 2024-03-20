@@ -1,15 +1,12 @@
 
 TODO:
-- 
 - Trapezoid Profile: https://github.com/wpilibsuite/allwpilib/blob/main/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/elevatortrapezoidprofile/Robot.java
-- MAKE ALL HARDWARE INCLUSIN CANCODERS/THORUGH BORE BE DR HARDWARE to force implementation
 On ALL Subsystems:
 - Have the 2 commands and one protected
 - Positions/Velocity
 - Min/Max Position
 - Check FeedForward/PID calculations
 Non Urgent ToDos:
-- FIX the Motors in same file from having hte same shuffle board names
 - Make and extended Subsystems to have protected instead of private
 
 Extra Ideas:
@@ -20,7 +17,6 @@ Extra Ideas:
 - Robot Tracking on Field
 - Field Centric Turning
 - Changing Shooter Speed According to Distance: InterpolatingMatrixTreeMap
-- Limit Switch to the Intake
 - Make a DroidRagelib - search how to do it
 - Limelight Tracking AutoAim.java
 

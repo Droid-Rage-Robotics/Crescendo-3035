@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.ampMech.AmpMech;
-import frc.robot.subsystems.ampMech.AmpMechElevator;
 public class ManualAmpMechElevator extends Command {
     private final AmpMech claw;
     private final Supplier<Double> move;

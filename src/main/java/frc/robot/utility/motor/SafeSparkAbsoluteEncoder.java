@@ -4,12 +4,11 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SafeSparkAbsoluteEncoder {
     private SparkAbsoluteEncoder encoder;
-    private final SubsystemBase base;
+    // private final SubsystemBase base;
     protected final ShuffleboardValue<Double> degreeWriter;
     protected final ShuffleboardValue<Double> radianWriter;
     protected final ShuffleboardValue<Double> rawWriter;
@@ -24,7 +23,7 @@ public class SafeSparkAbsoluteEncoder {
         encoder.setInverted(isInverted);
         encoder.setPositionConversionFactor(positionConversionFactor);
         encoder.setVelocityConversionFactor(velocityConversionFactor);
-        this.base = base;
+        // this.base = base;
 
         rawWriter = ShuffleboardValue
             .create(0.0, base.getName()+"/Pos/Raw", base.getClass().getSimpleName())

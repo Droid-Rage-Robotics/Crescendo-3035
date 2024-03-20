@@ -1,9 +1,5 @@
 package frc.robot.subsystems.ampMech.ampMechArm;
 
-import com.revrobotics.SparkAbsoluteEncoder;
-
-import frc.robot.utility.motor.SafeSparkAbsoluteEncoder;
-
 import frc.robot.utility.motor.SafeSparkAbsoluteEncoder;
 
 public class AmpMechArmAbsolute extends AmpMechArm {

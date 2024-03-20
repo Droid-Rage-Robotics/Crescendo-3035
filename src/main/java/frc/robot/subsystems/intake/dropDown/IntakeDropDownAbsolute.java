@@ -1,7 +1,5 @@
 package frc.robot.subsystems.intake.dropDown;
 
-import com.revrobotics.SparkAbsoluteEncoder;
-
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeSparkAbsoluteEncoder;
 

@@ -43,7 +43,6 @@ import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.InfoTracker.CycleTracker;
-import frc.robot.utility.InfoTracker.CycleTracker3;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;

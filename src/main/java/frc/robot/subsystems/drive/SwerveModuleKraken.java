@@ -17,7 +17,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.motor.SafeCancoder;
 import frc.robot.utility.motor.SafeMotor;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.motor.SafeTalonFX;

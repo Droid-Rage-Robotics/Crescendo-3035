@@ -16,7 +16,7 @@ import frc.robot.subsystems.drive.SwerveDrive;
 public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TImeout to lockwheels
   /** Creates a new AutoBalance. */
   // private static DriverStation driverStation;
-  private SwerveDrive drive;
+  // private SwerveDrive drive;
   private Light light;
   // private Timer timer;
   // private WriteOnlyBoolean atSetpointWriter = new WriteOnlyBoolean(false, "PID Auto balance at positionn", Drive.class.getSimpleName());
@@ -37,7 +37,7 @@ public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TIme
           });
 
     addRequirements(drive);
-    this.drive = drive;
+    // this.drive = drive;
     this.light = light;
     getController().setTolerance(0.5); //degrees
     // ComplexWidgetBuilder.create(getController(), "PID Auto balance controller", Drive.class.getSimpleName());
