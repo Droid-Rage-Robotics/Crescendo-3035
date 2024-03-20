@@ -32,8 +32,8 @@ public class Constants {
         ;
         private final ShuffleboardValue<Double> velocityRPM;
         private ShooterSpeeds(double velocityRPM) {
-            this.velocityRPM = ShuffleboardValue.create(velocityRPM, Shooter.class.
-                getSimpleName()+"/"+name()+": Velocity (RPM)", Shooter.class.getSimpleName())
+            this.velocityRPM = ShuffleboardValue.create(velocityRPM, "ShooterSpeeds"+"/"+
+                name()+": Velocity (RPM)", Shooter.class.getSimpleName())
                     .withSize(1, 3)
                     .build();
         }
