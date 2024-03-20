@@ -191,22 +191,26 @@ public class SwerveDrive extends SubsystemBase {
         locationWriter.set(getPose().getTranslation().toString());
 
 
-        // // frontLeftTurnAbsolutePositionWriter.set(frontLeft.getTurnEncoderRad());
-        // frontLeftTurnPositionWriter.set(frontLeft.getTurningPosition());
-        // frontLeftDriveDistanceWriter.set(frontLeft.getDrivePos());
+        // frontLeftTurnAbsolutePositionWriter.set(frontLeft.getTurnEncoderRad());
+        frontLeftTurnPositionWriter.set(frontLeft.getTurningPosition());
+        frontLeftDriveDistanceWriter.set(frontLeft.getDrivePos());
 
-        // // frontRightTurnAbsolutePositionWriter.set(frontRight.getTurnEncoderRad());
-        // frontRightTurnPositionWriter.set(frontRight.getTurningPosition());
-        // frontRightDriveDistanceWriter.set(frontRight.getDrivePos());
+        // frontRightTurnAbsolutePositionWriter.set(frontRight.getTurnEncoderRad());
+        frontRightTurnPositionWriter.set(frontRight.getTurningPosition());
+        frontRightDriveDistanceWriter.set(frontRight.getDrivePos());
 
-        // // backLeftTurnAbsolutePositionWriter.set(backLeft.getTurnEncoderRad());
-        // backLeftTurnPositionWriter.set(backLeft.getTurningPosition());
-        // backLeftDriveDistanceWriter.set(backLeft.getDrivePos());
+        // backLeftTurnAbsolutePositionWriter.set(backLeft.getTurnEncoderRad());
+        backLeftTurnPositionWriter.set(backLeft.getTurningPosition());
+        backLeftDriveDistanceWriter.set(backLeft.getDrivePos());
 
-        // // backRightTurnAbsolutePositionWriter.set(backRight.getTurnEncoderRad());
-        // backRightTurnPositionWriter.set(backRight.getTurningPosition());
-        // backRightDriveDistanceWriter.set(backRight.getDrivePos());
+        // backRightTurnAbsolutePositionWriter.set(backRight.getTurnEncoderRad());
+        backRightTurnPositionWriter.set(backRight.getTurningPosition());
+        backRightDriveDistanceWriter.set(backRight.getDrivePos());
 
+        for (SwerveModuleKraken swerveModule: swerveModules) {
+            swerveModule.getTurningPosition();
+            swerveModule.getDrivePos();
+        }
         forwardVelocityWriter.write(getForwardVelocity());
     }
 

@@ -15,7 +15,7 @@ public class SafeCancoder{
 
     //Can use in relative and Absolute Encoder
     private final CANcoder encoder;
-    CANcoderConfiguration canConfiguration;
+    private CANcoderConfiguration canConfiguration;
     private double positionConversionFactor, velocityConversionFactor;
 
     public SafeCancoder(int deviceNumber, boolean isInverted, 

@@ -1,6 +1,8 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
@@ -41,7 +43,10 @@ public class SwerveDriveConstants {
         ;
         private final ShuffleboardValue<Double> shuffleboardValue;
         private SwerveDriveConfig(double value) {
-            shuffleboardValue = ShuffleboardValue.create(value, SwerveDriveConfig.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName()).build();
+            shuffleboardValue = ShuffleboardValue.create(value, 
+                SwerveDriveConfig.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName())
+                // .withWidget(BuiltInWidgets.kAccelerometer)
+                .build();
         }
         @Override 
         public ShuffleboardValue<Double> getNum() { return shuffleboardValue; }

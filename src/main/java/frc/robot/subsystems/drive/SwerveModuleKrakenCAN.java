@@ -54,18 +54,20 @@ public class SwerveModuleKrakenCAN {
     private final SimpleMotorFeedforward feedforward;
     // private POD pod;
     // private final double driveSpeedMultiplier;
+    private ShuffleboardValue<Double> turnPositionWriter;
+    private ShuffleboardValue<Double> drivePositionWriter;
 
     public SwerveModuleKrakenCAN(int driveMotorId, 
         int turnMotorId, boolean driveMotorReversed, 
         boolean turningMotorReversed, int absoluteEncoderId, 
         Supplier<Double> absoluteEncoderOffsetRad, 
-        boolean absoluteEncoderReversed, boolean isEnabled, POD pod) {
+        boolean absoluteEncoderReversed, boolean isEnabled, POD podName) {
         // this.pod = pod;ShuffleboardValue<Double> frontLeftTurnPositionWriter
         
         // this.absoluteEncoderOffsetRad = absoluteEncoderOffsetRad;
         turnEncoder = new SafeCancoder(absoluteEncoderId, absoluteEncoderReversed, EncoderRange.ZERO_TO_ONE,
             0.0,0.0,0.0,
-            ShuffleboardValue.create(0.0, pod.toString()+"", SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, podName.toString()+"", SwerveDrive.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build());
         driveMotor = new SafeTalonFX(driveMotorId,
@@ -73,12 +75,12 @@ public class SwerveModuleKrakenCAN {
             SafeMotor.IdleMode.Brake,
             Constants.DRIVE_ENCODER_ROT_2_METER,
             Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC,
-            ShuffleboardValue.create(isEnabled, "Module/Module " + pod.toString() + "/Drive Is Enabled "+ 
-                pod.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Module/Module " + podName.toString() + "/Drive Is Enabled "+ 
+                podName.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Module/Module " + pod.toString() + "/Drive Voltage "+ 
-                pod.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Voltage "+ 
+                podName.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
                 .build(),
                 30
                 // ,300
@@ -88,12 +90,12 @@ public class SwerveModuleKrakenCAN {
             IdleMode.Coast,
             Constants.TURN_ENCODER_ROT_2_RAD,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Module/Module " + pod.toString() + "/Turn Is Enabled "+
-                pod.toString() +turnMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Module/Module " + podName.toString() + "/Turn Is Enabled "+
+                podName.toString() +turnMotorId, SwerveDrive.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Module/Module " + pod.toString() + "/Turn Voltage "+ 
-                pod.toString() + turnMotorId, SwerveDrive.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Turn Voltage "+ 
+                podName.toString() + turnMotorId, SwerveDrive.class.getSimpleName())
                 .build()
                 // 7
         );
@@ -106,95 +108,97 @@ public class SwerveModuleKrakenCAN {
         turningPidController.enableContinuousInput(0, 2*Math.PI);//Was  -Math.PI, Math.PI but changed to 0 and 2PI
 
         feedforward = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV);
+        this.turnPositionWriter = ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Turn Position (Radians)", 
+        SwerveDrive.class.getSimpleName()).build();
+    this.drivePositionWriter = ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Position (Radians)", 
+        SwerveDrive.class.getSimpleName()).build();
+    resetDriveEncoder();
+}
 
-        resetDriveEncoder();
-    }
+public double getDrivePos() {
+    drivePositionWriter.write(driveMotor.getPosition());
+    return driveMotor.getPosition();
+}
 
-    public double getDrivePos() {
-        return driveMotor.getPosition();
-    }
+public double getTurningPosition() {
+    turnPositionWriter.write(turnEncoder.getAbsolutePosition()*Constants.TURN_ENCODER_ROT_2_RAD);
+    return (turnEncoder.getAbsolutePosition()*Constants.TURN_ENCODER_ROT_2_RAD);
+}
 
-    public double getTurningPosition() {
-        return (turnEncoder.getAbsolutePosition()*Constants.TURN_ENCODER_ROT_2_RAD);
-    }
+public double getDriveVelocity(){
+    // return driveMotor.getEncoder().getVelocity();
+    return driveMotor.getVelocity();
+}
 
-    public double getDriveVelocity(){
-        // return driveMotor.getEncoder().getVelocity();
-        return driveMotor.getVelocity();
-    }
+public double getTurningVelocity(){
+    return turnEncoder.getVelocity();
+}
 
-    public double getTurningVelocity(){
-        return turnEncoder.getVelocity();
-    }
+// public double getTurnEncoderRad() {
+//     return getTurningPosition();
+// }
 
-    // public double getTurnEncoderRad() {
-    //     return getTurningPosition();
-    // }
-    
-    public void resetDriveEncoder(){
-        // driveMotor.getEncoder().setPosition(0);
-        driveMotor.setPosition(0);
-    }
+public void resetDriveEncoder(){
+    // driveMotor.getEncoder().setPosition(0);
+    driveMotor.setPosition(0);
+}
 
-    public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(getDrivePos(), new Rotation2d(getTurningPosition()));
-    }
+public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(getDrivePos(), new Rotation2d(getTurningPosition()));
+}
 
-    public SwerveModuleState getState(){
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
-    }
+public SwerveModuleState getState(){
+    return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+}
 
-    public void setState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-            stop();
-            return;
-        }
-        state = SwerveModuleState.optimize(state, getState().angle);
-        driveMotor.setPower(state.speedMetersPerSecond / Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
-        turnMotor.setPower((turningPidController.calculate(getTurningPosition(), state.angle.getRadians()))*1);
-        SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.toString());
-        SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", state.toString());
+public void setState(SwerveModuleState state) {
+    if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+        stop();
+        return;
     }
+    state = SwerveModuleState.optimize(state, getState().angle);
+    driveMotor.setPower(state.speedMetersPerSecond / Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
+    turnMotor.setPower((turningPidController.calculate(getTurningPosition(), state.angle.getRadians()))*1);
+    SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.toString());
+    SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", state.toString());
+}
 
-    public void setFeedforwardState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-            stop();
-            return;
-        }
-        state = SwerveModuleState.optimize(state, getState().angle);
-        driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
-        turnMotor.setPower(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-        SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.toString());
-        SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", state.toString());
+public void setFeedforwardState(SwerveModuleState state) {
+    if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+        stop();
+        return;
     }
+    state = SwerveModuleState.optimize(state, getState().angle);
+    driveMotor.setVoltage(feedforward.calculate(state.speedMetersPerSecond));
+    turnMotor.setPower(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+    SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.toString());
+    SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", state.toString());
+}
 
-    public void stop(){
-        driveMotor.setPower(0);
-        turnMotor.setPower(0);
-    }
+public void stop(){
+    driveMotor.setPower(0);
+    turnMotor.setPower(0);
+}
 
-    public void coastMode() {
-        driveMotor.setIdleMode(IdleMode.Coast);
-        turnMotor.setIdleMode(IdleMode.Coast);
-    }
+public void coastMode() {
+    driveMotor.setIdleMode(IdleMode.Coast);
+    turnMotor.setIdleMode(IdleMode.Coast);
+}
 
-    public void brakeMode() {
-        driveMotor.setIdleMode(IdleMode.Brake);
-        turnMotor.setIdleMode(IdleMode.Brake);
-    }
+public void brakeMode() {
+    driveMotor.setIdleMode(IdleMode.Brake);
+    turnMotor.setIdleMode(IdleMode.Brake);
+}
 
-    public void brakeAndCoastMode() {
-        driveMotor.setIdleMode(IdleMode.Brake);
-        turnMotor.setIdleMode(IdleMode.Coast);
-    }
+public void brakeAndCoastMode() {
+    driveMotor.setIdleMode(IdleMode.Brake);
+    turnMotor.setIdleMode(IdleMode.Coast);
+}
 
-    public void playMusic(int num){
-        driveMotor.playMusic(num);
-    }
-    public SafeCanSparkMax getTurnMotor(){
-        return turnMotor;
-    }
-    public void periodic(){
-
-    }
+public void playMusic(int num){
+    driveMotor.playMusic(num);
+}
+public SafeCanSparkMax getTurnMotor(){
+    return turnMotor;
+}
 }
