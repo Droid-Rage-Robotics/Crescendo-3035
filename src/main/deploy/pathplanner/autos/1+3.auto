@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "one"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "one"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -24,15 +37,66 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "three"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "two"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickUp"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "four"
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "three"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickUp"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "four"
+                }
+              }
+            ]
           }
         },
         {

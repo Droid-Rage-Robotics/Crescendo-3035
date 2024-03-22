@@ -11,6 +11,18 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 
 public final class Autos {
+    public static Command onePlusThree(SwerveDrive drive, Intake intake, Shooter shooter, double wait) {
+        return new SequentialCommandGroup(
+            new WaitCommand(.2),
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            new WaitCommand(.5),
+            new SetIntakeAndShooter(intake, Intake.Value.INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            PathPlannerFollow.create(drive, "1+3")
+                .setMaxVelocity(1)
+                .setAcceleration(3)
+                .build()
+        );
+    }
     public static Command shootPLusPark(SwerveDrive drive, Intake intake, Shooter shooter, double wait) {
         return new SequentialCommandGroup(           
             new WaitCommand(1), 
@@ -23,7 +35,7 @@ public final class Autos {
                 .setAcceleration(3)
                 .build()
         );
-    }//L1+F3Red
+    }
     public static Command shootPLusTurnParkHuman(SwerveDrive drive, Intake intake, Shooter shooter, double wait) {
         return new SequentialCommandGroup(            
                         new WaitCommand(1),

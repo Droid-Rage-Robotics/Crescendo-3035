@@ -26,11 +26,11 @@ public class AutoChooser {
     ) {
         //Put Named Commands HERE
         NamedCommands.registerCommand("shoot", 
-        new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.SPEAKER_SHOOT));
+        new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT));
         NamedCommands.registerCommand("intake",
-            new SetIntakeAndShooter(intake, Intake.Value.INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.SPEAKER_SHOOT));
+            new SetIntakeAndShooter(intake, Intake.Value.INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.STOP));
         NamedCommands.registerCommand("pickUp",
-            new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, Shooter.ShooterSpeeds.SPEAKER_SHOOT));
+            new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT));
 
         //NO Use
         // NamedCommands.registerCommand("shootPreload", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));//should be done before following
