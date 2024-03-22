@@ -99,7 +99,7 @@ public class SwerveModuleKrakenCAN {
                 .build()
                 // 7
         );
-        turnMotor.setSmartCurrentLimit(30);
+        // turnMotor.setSmartCurrentLimit(30);
 
         // driveMotor.setPositionConversionFactor(Constants.DRIVE_ENCODER_ROT_2_METER);
         // driveMotor.getEncoder().setVelocityConversionFactor(Constants.DRIVE_ENCODER_RPM_2_METER_PER_SEC);

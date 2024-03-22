@@ -24,6 +24,7 @@ public class SafeCanSparkMax extends SafeMotor {
         setIdleMode(mode);
         motor.getEncoder().setPositionConversionFactor(positionConversionFactor);
         motor.getEncoder().setVelocityConversionFactor(velocityConversionFactor);
+        setSmartCurrentLimit(40);//Default for all Spark Maxes
  
         motor.burnFlash();
     }   
@@ -135,7 +136,7 @@ public class SafeCanSparkMax extends SafeMotor {
         return motor.get();
     }
 
-    public void setSmartCurrentLimit(int num){
+    private void setSmartCurrentLimit(int num){
         motor.setSmartCurrentLimit(num);
 
     }

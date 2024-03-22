@@ -78,6 +78,7 @@ public class Constants {
                 ShuffleboardValue.create(0.0, "Shooter/VoltageL", 
                 Shooter.class.getSimpleName())
                     .build(), 
+                    30,
                     30
         );
         motorR = new SafeTalonFX(
@@ -90,6 +91,7 @@ public class Constants {
                 ShuffleboardValue.create(0.0, "Shooter/VoltageR", 
                 Shooter.class.getSimpleName())
                     .build(),
+                    30,
                     30
         );
        
