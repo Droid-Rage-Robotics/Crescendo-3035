@@ -84,6 +84,7 @@ public class SafeTalonFX extends SafeMotor{
         orchestra.addInstrument(motor);
     }
 
+    // motor.getVoltageCompensationNominalVoltage()
     public SafeTalonFX(int deviceNumber, boolean isInverted, 
         IdleMode mode, double positionConversionFactor,
         double velocityConversionFactor,
@@ -142,6 +143,8 @@ public class SafeTalonFX extends SafeMotor{
     @Override
     public double getVelocity() {
         return motor.getVelocity().getValueAsDouble()*velocityConversionFactor;
+        // return motor.getVelocity().getValueAsDouble();
+
     }
     @Override
     public double getSpeed() {

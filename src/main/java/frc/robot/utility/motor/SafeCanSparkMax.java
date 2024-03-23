@@ -6,10 +6,14 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.Climb;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SafeCanSparkMax extends SafeMotor {
     private final CANSparkMax motor;
+    // private ShuffleboardValue<Double> numWriter = ShuffleboardValue.create
+    //     (0.0, "Misc/safecansparkmac thing", Climb.class.getSimpleName())
+    //     .build();
     public SafeCanSparkMax(
         int deviceId, MotorType type, 
         boolean isInverted, IdleMode mode,
@@ -24,8 +28,7 @@ public class SafeCanSparkMax extends SafeMotor {
         setIdleMode(mode);
         motor.getEncoder().setPositionConversionFactor(positionConversionFactor);
         motor.getEncoder().setVelocityConversionFactor(velocityConversionFactor);
-        setSmartCurrentLimit(40);//Default for all Spark Maxes
- 
+        setSmartCurrentLimit(40);//Default for all Spark Maxes  
         motor.burnFlash();
     }   
     // public SafeCanSparkMax(int deviceId, MotorType type, 
@@ -56,6 +59,13 @@ public class SafeCanSparkMax extends SafeMotor {
         }
         if (!isEnabled.get()) motor.set(0);
             else motor.setVoltage(outputVolts);
+            // numWriter.set(
+            //     motor.getBusVoltage()
+            //     // motor.getOutputCurrent()
+            //     // motor.getVoltageCompensationNominalVoltage()
+            //     // motor.enableVoltageCompensation(33) 
+
+            // );
     }
 
     // @Override
@@ -138,7 +148,6 @@ public class SafeCanSparkMax extends SafeMotor {
 
     private void setSmartCurrentLimit(int num){
         motor.setSmartCurrentLimit(num);
-
     }
 }
 
