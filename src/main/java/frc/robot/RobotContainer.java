@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.DroidRageConstants.Gamepad;
 import frc.robot.SysID.SysID;
 import frc.robot.commands.ClimbAndScoreSequence;
+import frc.robot.commands.ClimbAndTrap;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.LightCommand;
 import frc.robot.commands.SetIntakeAndShooter;
@@ -54,7 +56,7 @@ public class RobotContainer {
 	//Add Reset encoder buttons
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
-		//AmpMech ampMech, Climb climb, 
+		AmpMech ampMech, Climb climb, 
 		 CycleTracker cycleTracker){
 		// drive.setYawCommand(-90);
 		// climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
@@ -81,8 +83,15 @@ public class RobotContainer {
 
 		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-		driver.leftTrigger().whileTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
+		driver.leftTrigger().whileTrue(//intake.setPositionCommand(Intake.Value.OUTTAKE)
+			new ConditionalCommand(
+				ampMech.setPositionCommand(AmpMech.Value.AMP), //true
+				intake.setPositionCommand(Intake.Value.OUTTAKE), //false
+				()->(AmpMech.Value.AUTO_AMP==ampMech.getPosition()||AmpMech.Value.AMP==ampMech.getPosition())))	//Check
 			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
+			
+			//Make it where when the amp mech is ready to outake, it outtakes
+
 
 		driver.povUp().onTrue(
 			new ParallelCommandGroup(
@@ -94,38 +103,41 @@ public class RobotContainer {
 
 		operator.rightTrigger()
 			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.SPEAKER_SHOOT))
-			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.STOP));
+			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.rightBumper()
 			.onTrue(new TeleopShoot(intake, shooter, cycleTracker));
 			// .onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger()
-			.onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE_AMP))
-			.onTrue(new InstantCommand(()-> cycleTracker.trackCycle(ShooterSpeeds.SPEAKER_SHOOT)))
-			// .onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
+			// .onTrue(new InstantCommand(()-> cycleTracker.trackCycle(ShooterSpeeds.SPEAKER_SHOOT)))
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP))
+			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
+
+			// .onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE_AMP))
+			// .onFalse(intake.setPositionCommand(Intake.Value.HOLD));
 
 		
 		// operator.y()			
 		// .onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AMP_SHOOT))
 		// 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.STOP));
 
+		
+		
+		operator.a()
+			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
+		operator.y()
+		//
+			// .onTrue()//CLimb Goes up
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.CLIMB));
+			// .onFalse();//detract climb pull down
+		// operator.x()
+		// 	//CLimb Goes up
+		// 		.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
+		
 
-		// operator.leftTrigger()
-		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
-		// 	.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
-		
-		
-		// operator.a()
-		// 	.onTrue(new TransferToAmpMech(intake, shooter, ampMech))
-		// 	.onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD))
-		// 	.onFalse(ampMech.setPositionCommand(AmpMech.Value.HOLD));
-		
-		
-
-		operator.povUp()
-			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
-		operator.povDown()
-			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
+		// operator.povUp()
+		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
+		// operator.povDown()
+		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
 		
 		
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
@@ -74,12 +75,12 @@ public class TestButton {
 	}
 	
 	public void configureIntakeTestBindings(Intake intake){
-		intake.setPositionCommand(Intake.Value.START);
+		// intake.setPositionCommand(Intake.Value.START);
 		operator.rightTrigger()
 			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 		operator.leftTrigger()
-			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))
+			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_HUMAN))//OUTTAKE
 			.onFalse(intake.setPositionCommand(Intake.Value.START));
 		
 
@@ -99,10 +100,10 @@ public class TestButton {
 	}
 
 	public void configureClimbTestBindings(Climb climb, Intake intake){
-		// operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
-		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
-		// operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
-		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+		operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
+			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+		operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
+			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
 
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 		
@@ -143,14 +144,23 @@ public class TestButton {
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
 	}
 
-	public void configureAmpMechTestBindings(AmpMech ampMech){
+	public void configureAmpMechTestBindings(AmpMech ampMech, Intake intake){
 		// ampMech.setPositionCommand(AmpMech.Value.START);
 		operator.rightTrigger()
-		.onTrue(ampMech.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER))
-			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
+		// .onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
+		.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
+
+			// .onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
 		operator.leftTrigger()
 			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD))
 			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
+
+		driver.leftTrigger().whileTrue(//intake.setPositionCommand(Intake.Value.OUTTAKE)
+			new ConditionalCommand(
+				ampMech.setPositionCommand(AmpMech.Value.AMP), //true
+				intake.setPositionCommand(Intake.Value.OUTTAKE), //false
+				()->(AmpMech.Value.HOLD_AMP==ampMech.getPosition())))//||AmpMech.Value.AMP==ampMech.getPosition())))	//Check)))//
+			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
 
 	}
 
@@ -163,10 +173,10 @@ public class TestButton {
 			.onFalse(new InstantCommand(()->motor.setPower(0)));
 	}
 
-	public void configureCycleTrackerBindings(CycleTracker3 cycleTracker){
+	public void configureCycleTrackerBindings(CycleTracker cycleTracker){
 		operator.rightTrigger().onTrue(new InstantCommand(()->cycleTracker.trackCycle(Shooter.ShooterSpeeds.AMP_SHOOT)));
 		operator.leftTrigger()
-			.onTrue(new InstantCommand(()->cycleTracker.trackCycle(Shooter.ShooterSpeeds.HOLD)));
+			.onTrue(new InstantCommand(()->cycleTracker.trackCycle(Shooter.ShooterSpeeds.SPEAKER_SHOOT)));
 	}
 	
 	public void configureTalonMotorBindings(SafeTalonFX motor){
@@ -181,12 +191,19 @@ public class TestButton {
 		operator.b().onTrue(new InstantCommand(()->motor.stopMusic()));
 	}
 
-
-
-	// public Command getAutonomousCommand(AutoChooser autoChooser) {
-	// 	// return autoChooser.getSelected();
-	// 	return new InstantCommand();
-	// }
+	public void configureOperatorBindings(AmpMech ampMech, Intake intake, Shooter shooter){
+		operator.leftTrigger()
+			// .onTrue(new InstantCommand(()-> cycleTracker.trackCycle(ShooterSpeeds.SPEAKER_SHOOT)))
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
+			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
+		
+		
+		operator.a()
+			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
+		operator.y()
+			// .onTrue()//CLimb Goes up
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.CLIMB));
+	}
 
 	public void configureSysIDBindings(SysID sysID){
 		operator.x().onTrue(sysID.sysIdDynamic(Direction.kForward));
