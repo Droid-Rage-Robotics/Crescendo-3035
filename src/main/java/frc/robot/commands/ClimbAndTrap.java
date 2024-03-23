@@ -3,25 +3,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.intake.Intake;
 
-public class TransferToAmpMech extends SequentialCommandGroup {
-    public TransferToAmpMech (Intake intake, Shooter shooter, AmpMech ampMech){
+public class ClimbAndTrap extends SequentialCommandGroup {
+    public ClimbAndTrap (Intake intake, Shooter shooter, AmpMech ampMech, Climb climb){
         addCommands(
-            new ParallelCommandGroup(
-                ampMech.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER),
-                shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.CLAW_TRANSFER)),
-                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)
-            ),
-            new WaitCommand(1),
-            new ParallelCommandGroup(
-                ampMech.setPositionCommand(AmpMech.Value.HOLD),
-                shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.STOP)),
-                intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
+            new ParallelCommandGroup(//CLIMBING
+                // climb.climb
+                ampMech.setPositionCommand(AmpMech.Value.CLIMB)
             )
+            
         );
     }
 
