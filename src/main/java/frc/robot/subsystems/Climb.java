@@ -13,16 +13,16 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 // @Deprecated
 public class Climb extends SubsystemBase{
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 1;
+        public static final double GEAR_RATIO = 1 / 1; //36:1
         public static final double GEAR_DIAMETER_INCHES = 1.88;
         public static final double COUNTS_PER_PULSE = 1; // 2048 bc rev through bore
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
         public static final double MIN_POSITION = 0;
         public static final double MAX_POSITION = 16.2;
     }public enum Position{
-        CLIMB(0),
+        CLIMB(5),
         START(0),
-        TRAP(0),
+        TRAP(2)
         ;
 
         private final ShuffleboardValue<Double>  climbPos;
@@ -34,7 +34,7 @@ public class Climb extends SubsystemBase{
                 .build();
         }
     } 
-    private final PIDController controller = new PIDController(2., 0, 0);
+    private final PIDController controller = new PIDController(.38, 0, 0);
     // private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
     private final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
         (0.0, "Climb/Voltage", Climb.class.getSimpleName())

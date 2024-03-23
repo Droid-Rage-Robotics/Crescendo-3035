@@ -25,7 +25,7 @@ public class Constants {
 
         HOLD(4000),
         STOP(0), 
-        CLAW_TRANSFER(4000),//4000
+        CLAW_TRANSFER(2000),//4000
         POSITION_TOLERANCE(5),
         // AMP(3000)
 
@@ -112,7 +112,9 @@ public class Constants {
     @Override
     public void periodic() {
         encoderVelocityWriter.set(getVelocity());
-        encoderVelocityErrorWriter.set(shooterController.getVelocityError());
+        // encoderVelocityErrorWriter.set(shooterController.getVelocityError());
+        encoderVelocityErrorWriter.set(shooterController.getSetpoint() - getVelocity());
+
         setPower(shooterController.calculate(getVelocity())+
             feedforward.calculate(getVelocity(), getVelocity()));
 
@@ -163,5 +165,9 @@ public class Constants {
     }
     public boolean isShooterReadyToShootSpeaker(){
         return (targetShooterSpeed==ShooterSpeeds.SPEAKER_SHOOT)&&(shooterController.getPositionError()<200);
+    }
+
+    public boolean isShooterTransferAmp(){
+        return true;
     }
 }
