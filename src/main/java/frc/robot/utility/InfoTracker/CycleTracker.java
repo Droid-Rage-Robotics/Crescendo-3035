@@ -1,5 +1,6 @@
 package frc.robot.utility.InfoTracker;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
@@ -7,6 +8,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class CycleTracker {
     //TODO:Test
     protected StatCalculator stat = new StatCalculator();
+    protected double lastTime = 0;
     protected Timer timer = new Timer();
 /* SIngleton - {@link CommandScheduler} {@link Sendable}*/ 
     
@@ -41,7 +43,9 @@ public class CycleTracker {
     }
     
     public void trackCycle(Shooter.ShooterSpeeds num){
-        double cycleTime = timer.get();
+        // double cycleTime = timer.get();
+        double cycleTime = DriverStation.getMatchTime()- lastTime;
+lastTime= DriverStation.getMatchTime();
         stat.addNumber(cycleTime);
         cycle.set(stat.getSizeDouble());
         mean.set(stat.getMean());
@@ -50,10 +54,18 @@ public class CycleTracker {
         switch (num){
             case AMP_SHOOT:
                 amp.set(amp.get()+1);
+                break;
             case SPEAKER_SHOOT:
                 speaker.set(speaker.get()+1);
+                break;
             case POSITION_TOLERANCE:
             case STOP:
+                break;
+            case AUTO_SPEAKER_SHOOT:
+                break;
+            case CLAW_TRANSFER:
+                break;
+            case HOLD:
                 break;
         }
     }
