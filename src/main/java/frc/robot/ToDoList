@@ -39,7 +39,10 @@ When transfertoampmech, make it where the ampmach transfers when shooter stalls 
 MAKE ROBOT CONTAINER TRACK CYCLES
 
 make a framework to make all of the arms to be implemented similairly 
-
+Shooter Stall
+3 Cycle Auto
+limelight camera thing
+TEST PID POSITIONSon the trap arm
 
 3-11
 Make a function that forces all of the subsystems to set a start position in configure telopbuttons

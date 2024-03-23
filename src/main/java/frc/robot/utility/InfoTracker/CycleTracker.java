@@ -6,11 +6,15 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class CycleTracker {
-    //TODO:Test
+    public enum ScorePos{
+        SPEAKER,
+        AMP,
+        TRAP
+    }
     protected StatCalculator stat = new StatCalculator();
     protected double lastTime = 0;
     protected Timer timer = new Timer();
-/* SIngleton - {@link CommandScheduler} {@link Sendable}*/ 
+    /* SIngleton - {@link CommandScheduler} {@link Sendable}*/ 
     
     // private HashMap<String, Double> data;
     protected final ShuffleboardValue<Double> cycle = 
@@ -42,30 +46,23 @@ public class CycleTracker {
         timer.start();
     }
     
-    public void trackCycle(Shooter.ShooterSpeeds num){
+    public void trackCycle(ScorePos num){
         // double cycleTime = timer.get();
-        double cycleTime = DriverStation.getMatchTime()- lastTime;
-lastTime= DriverStation.getMatchTime();
+        double cycleTime = DriverStation.getMatchTime() - lastTime;
+        lastTime= DriverStation.getMatchTime();
         stat.addNumber(cycleTime);
         cycle.set(stat.getSizeDouble());
         mean.set(stat.getMean());
         slowest.set(stat.getLowestValue());
         fastest.set(stat.getHighestValue());
         switch (num){
-            case AMP_SHOOT:
+            case AMP:
                 amp.set(amp.get()+1);
                 break;
-            case SPEAKER_SHOOT:
+            case SPEAKER:
                 speaker.set(speaker.get()+1);
                 break;
-            case POSITION_TOLERANCE:
-            case STOP:
-                break;
-            case AUTO_SPEAKER_SHOOT:
-                break;
-            case CLAW_TRANSFER:
-                break;
-            case HOLD:
+            case TRAP:
                 break;
         }
     }

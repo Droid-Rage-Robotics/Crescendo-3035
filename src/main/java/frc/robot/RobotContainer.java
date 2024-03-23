@@ -85,7 +85,10 @@ public class RobotContainer {
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 		driver.leftTrigger().whileTrue(//intake.setPositionCommand(Intake.Value.OUTTAKE)
 			new ConditionalCommand(
-				ampMech.setPositionCommand(AmpMech.Value.AMP), //true
+				new SequentialCommandGroup(
+					ampMech.setPositionCommand(AmpMech.Value.AMP), //true
+					new InstantCommand(()->cycleTracker.trackCycle(CycleTracker.ScorePos.AMP))
+				),
 				intake.setPositionCommand(Intake.Value.OUTTAKE), //false
 				()->(AmpMech.Value.AUTO_AMP==ampMech.getPosition()||AmpMech.Value.AMP==ampMech.getPosition())))	//Check
 			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
@@ -102,10 +105,10 @@ public class RobotContainer {
 		
 
 		operator.rightTrigger()
-			.onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.SPEAKER_SHOOT))
+			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
-		operator.rightBumper()
-			.onTrue(new TeleopShoot(intake, shooter, cycleTracker));
+		// operator.rightBumper()
+		// 	.onTrue(new TeleopShoot(intake, shooter, cycleTracker));
 			// .onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger()
 			// .onTrue(new InstantCommand(()-> cycleTracker.trackCycle(ShooterSpeeds.SPEAKER_SHOOT)))
@@ -124,11 +127,10 @@ public class RobotContainer {
 		
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
-		operator.y()
-		//
-			// .onTrue()//CLimb Goes up
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.CLIMB));
-			// .onFalse();//detract climb pull down
+		operator.povUp()
+			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.CLIMB))
+			.onFalse(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)));
 		// operator.x()
 		// 	//CLimb Goes up
 		// 		.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
@@ -148,11 +150,6 @@ public class RobotContainer {
 		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
 		// 		.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
-		// operator.leftTrigger()
-		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.INTAKE_SHOOTER)
-		// 	.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-		// 	.alongWith(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
-		// 	);
 		// operator.start().onTrue(new ClimbAndScoreSequence(ampMech, climb, intake));
 	}
 

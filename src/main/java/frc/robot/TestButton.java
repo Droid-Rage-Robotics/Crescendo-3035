@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -99,15 +100,22 @@ public class TestButton {
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
 	}
 
-	public void configureClimbTestBindings(Climb climb, Intake intake){
-		operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
-			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
-		operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
-			.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+	public void configureClimbTestBindings(Climb climb, Intake intake, AmpMech ampMech){
+		// operator.rightTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.CLIMB)))
+		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
+		// operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
+		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
 
-		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+		// climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+		operator.povUp()
+			.onTrue( new ParallelCommandGroup(
+				climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)),
+				ampMech.setPositionCommand(AmpMech.Value.CLIMB)
+			))
+			.onFalse(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)));
 		
 	}
+	// public void configure
 
 	public void configureIntakeAndShooterTestBindings(Intake intake, Shooter shooter//, SwerveDrive drive
 	){
@@ -174,9 +182,9 @@ public class TestButton {
 	}
 
 	public void configureCycleTrackerBindings(CycleTracker cycleTracker){
-		operator.rightTrigger().onTrue(new InstantCommand(()->cycleTracker.trackCycle(Shooter.ShooterSpeeds.AMP_SHOOT)));
+		operator.rightTrigger().onTrue(new InstantCommand(()->cycleTracker.trackCycle(CycleTracker.ScorePos.AMP)));
 		operator.leftTrigger()
-			.onTrue(new InstantCommand(()->cycleTracker.trackCycle(Shooter.ShooterSpeeds.SPEAKER_SHOOT)));
+			.onTrue(new InstantCommand(()->cycleTracker.trackCycle(CycleTracker.ScorePos.SPEAKER)));
 	}
 	
 	public void configureTalonMotorBindings(SafeTalonFX motor){

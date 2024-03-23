@@ -46,19 +46,19 @@ public class Robot extends TimedRobot {
     // private final SwerveDrive drive = new SwerveDrive(false);//2-10
     // private final Shooter shooter = new Shooter(true);//18.19    
 
-    private final Climb climb = new Climb(false,false);//20,21 do pos, pid done
+    private final Climb climb = new Climb(true,true);//20,21 do pos, pid done
     private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
     private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
     private final Intake intake = new Intake(dropDown, intakeWheel);//done
-    // private final AmpMechElevator elevator = new AmpMechElevator(true);//22done
-    // private final AmpMechIntake clawIntake = new AmpMechIntake(true);//24 done
-    // private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true,clawIntake.getMotor());//23done
-    // private final AmpMech ampMech = new AmpMech(elevator, arm, clawIntake);
+    private final AmpMechElevator elevator = new AmpMechElevator(true);//22done
+    private final AmpMechIntake clawIntake = new AmpMechIntake(true);//24 done
+    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true,clawIntake.getMotor());//23done TEST PID POSITIONS
+    private final AmpMech ampMech = new AmpMech(elevator, arm, clawIntake);
     
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive, intake, shooter//, claw, climb, vision, light
     // );
-    // private final CycleTracker cycleTracker = new CycleTracker();
+    // private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
 
 
     // private final Vision vision = new Vision();
@@ -166,7 +166,7 @@ public class Robot extends TimedRobot {
         // testButton.configureCycleTrackerBindings(cycleTracker);//works
         // testButton.configureOperatorBindings(ampMech, intake, shooter);
         // testButton.configureShooterTestBindings(shooter);
-        testButton.configureClimbTestBindings(climb, intake);
+        testButton.configureClimbTestBindings(climb, intake, ampMech);
 
     }
 

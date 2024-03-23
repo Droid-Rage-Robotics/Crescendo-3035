@@ -35,12 +35,26 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Climb/PID": "PIDController",
+      "/Shuffleboard/Climb/Reset Encoder": "Command",
       "/Shuffleboard/Intake/Drop PID": "PIDController",
       "/Shuffleboard/Intake/Reset Intake Drop Encoder": "Command",
       "/Shuffleboard/Intake/Reset Intake Wheel Encoder": "Command",
       "/Shuffleboard/Intake/Wheel PID": "PIDController",
       "/Shuffleboard/Misc/Auto Chooser": "String Chooser",
       "/Shuffleboard/SwerveDrive/Field": "Field2d"
+    },
+    "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Climb/PID": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Info": {
