@@ -40,26 +40,28 @@ public class AmpMechArm extends SubsystemBase {
         .build();
     
         protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Arm/ Encoder Velocity (Radians per Second)", AmpMech.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Arm/ Encoder Velocity (Radians per Second)", 
+            AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
     protected final ShuffleboardValue<Double> degreeTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Arm/Target/Degree", AmpMech.class.getSimpleName())
+        .create(0.0, "Arm/Target/Degrees", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> radianTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Arm/Target/Radian", AmpMech.class.getSimpleName())
+        .create(0.0, "Arm/Target/Radians", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
-        .create(0.0, "Arm/Target/Raw", AmpMech.class.getSimpleName())
+        .create(0.0, "Arm/Target/Raws", AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     
 
     protected final ShuffleboardValue<Boolean> isMovingManually = 
-        ShuffleboardValue.create(false, "Arm/ Moving manually", AmpMech.class.getSimpleName())
+        ShuffleboardValue.create(false, "Arm/ Moving manually", 
+            AmpMech.class.getSimpleName())
         .build();
     
     public AmpMechArm(Boolean isEnabled) {
@@ -77,14 +79,12 @@ public class AmpMechArm extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(1, 0.0, 0.0);//1.6
+        controller = new PIDController(3.1, 0.0, 0.0);//1.6
         // controller = new PIDController(0, 0.0, 0.0);
 
         controller.setTolerance(Math.toRadians(1));
 
-        // feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - may 
-        // feedforward = new ArmFeedforward(0.,.60679,.085861,.0035872);//Make some 0 testing
-        feedforward = new ArmFeedforward(0,0,0);
+        feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - Works
 
 
         ComplexWidgetBuilder.create(controller, "Arm PID", AmpMech.class.getSimpleName())

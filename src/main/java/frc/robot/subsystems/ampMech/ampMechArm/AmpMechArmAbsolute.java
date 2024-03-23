@@ -1,17 +1,18 @@
 package frc.robot.subsystems.ampMech.ampMechArm;
 
+import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeSparkAbsoluteEncoder;
 
 public class AmpMechArmAbsolute extends AmpMechArm {
     public static class Constants {
         public static double RADIANS_PER_ROTATION = Math.PI * 2;
-        public static double OFFSET = Math.PI;  //90 Degree
+        public static double OFFSET = Math.PI;///2;  //90 Degree
     }
-SafeSparkAbsoluteEncoder absoluteEncoder;
-    public AmpMechArmAbsolute(Boolean isEnabled) {
+    SafeSparkAbsoluteEncoder absoluteEncoder;
+    public AmpMechArmAbsolute(Boolean isEnabled, SafeCanSparkMax sparkMax) {
         super(isEnabled);
-        absoluteEncoder = new SafeSparkAbsoluteEncoder(motor, false, 
-         (Math.PI * 2), (Math.PI * 2 / 60), this);
+        absoluteEncoder = new SafeSparkAbsoluteEncoder(sparkMax, false, 
+         (Constants.RADIANS_PER_ROTATION), (Constants.RADIANS_PER_ROTATION / 60), this);
         // absoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
        
         // absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
@@ -21,9 +22,11 @@ SafeSparkAbsoluteEncoder absoluteEncoder;
     }
 
     public void periodic(){
-        setVoltage(calculatePID(getEncoderPosition()));
-        // setVoltage((calculatePID(getEncoderPosition())*1.)+(Math.cos(getEncoderPosition())*(.2)));//.175
-        // setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(getEncoderPosition(), 0));
+        // setVoltage(calculatePID(getEncoderPosition()));
+        // setVoltage(calculatePID(getEncoderPosition())+(Math.cos(getRawEncoder())*(.23)));
+
+        // setVoltage((calculatePID(getEncoderPosition())*1.8)+(Math.cos(getRawEncoder())*(.23)));//WORKS
+        setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(controller.getSetpoint(), 0));//WORKS :)
     }
     
     @Override
@@ -33,6 +36,11 @@ SafeSparkAbsoluteEncoder absoluteEncoder;
         degreePosWriter.write(Math.toDegrees(radianPos));
         double raw = (absoluteEncoder.getPosition());
         rawPosWriter.write((raw));
+        return radianPos;
+    }
+    
+    public double getRawEncoder() {//FOR The Math.cos()/ kG
+        double radianPos = (absoluteEncoder.getPosition() + (Math.PI/2)) % Constants.RADIANS_PER_ROTATION;
         return radianPos;
     }
 

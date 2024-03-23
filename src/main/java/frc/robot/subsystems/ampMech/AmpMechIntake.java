@@ -11,36 +11,35 @@ import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-@Deprecated
+// @Deprecated
 public class AmpMechIntake extends SubsystemBase {
     public static class Constants {
-        public static final double GEAR_RATIO = 1 / 180;//Old One is 240 // New is 180 (I think)
+        public static final double GEAR_RATIO = 3/1;//3:1
         public static final double READINGS_PER_REVOLUTION = 1;
         public static final double ROTATIONS_TO_RADIANS = (GEAR_RATIO * READINGS_PER_REVOLUTION) / (Math.PI * 2);
     }
 
-    protected final ShuffleboardValue<Double> targetVelocityWriter = ShuffleboardValue.create
-        (0.0, "Intake/ Claw Intake Target Velocity", AmpMech.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> encoderVelocityWriter = ShuffleboardValue.create
-        (0.0, "Intake/ Claw Intake Encoder Velocity", AmpMech.class.getSimpleName()).build();
-    protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
-        (0.0, "Intake/ Claw Intake Encoder Velocity Error", AmpMech.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> targetWriter = ShuffleboardValue.create
+        (0.0, "Intake/ Claw Intake Target", AmpMech.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> encoderWriter = ShuffleboardValue.create
+        (0.0, "Intake/ Claw Intake Encoder", AmpMech.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> encoderErrorWriter = ShuffleboardValue.create
+        (0.0, "Intake/ Claw Intake Encoder Error", AmpMech.class.getSimpleName()).build();
 
-    private final ShuffleboardValue<Boolean> isElementInClawWriter = ShuffleboardValue.create
-            (false, "Intake/ Claw Intake Is Element In", AmpMech.class.getSimpleName()).build();
+    // private final ShuffleboardValue<Boolean> isElementInClawWriter = ShuffleboardValue.create
+    //         (false, "Intake/ Claw Intake Is Element In", AmpMech.class.getSimpleName()).build();
     
     
     protected final SafeCanSparkMax motor;
     protected final PIDController controller;
-    protected final SimpleMotorFeedforward feedforward;
 
     public AmpMechIntake(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            25,
+            24,
             MotorType.kBrushless,
             false,
             IdleMode.Coast,
-            1,
+            Constants.GEAR_RATIO,
             1,
             ShuffleboardValue.create(isEnabled, "Intake/ Claw Intake Is Enabled", AmpMech.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
@@ -50,14 +49,10 @@ public class AmpMechIntake extends SubsystemBase {
         );
 
         controller = new PIDController(
-            0.0003,//0.0003 
+            0.3,
             0,
             0);
-        controller.setTolerance(5);
-        feedforward = new SimpleMotorFeedforward(0, 0, 0);
-        // feedforward = new SimpleMotorFeedforward(0.64, 0.000515, 0);
-
-        // motor.setSmartCurrentLimit(10);
+        controller.setTolerance(1);
         ComplexWidgetBuilder.create(controller, "Claw Intake", AmpMech.class.getSimpleName());
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
@@ -66,30 +61,28 @@ public class AmpMechIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        motor.setVoltage(controller.calculate(getEncoderVelocity(),getTargetPosition()) + 
-            feedforward.calculate(getTargetPosition()));
-        isElementInClawWriter.set(isElementInClaw());
-        
+        motor.setVoltage(controller.calculate(getEncoder()));        
     }
     
     
     protected void setTargetPosition(double target) {
         controller.setSetpoint(target);
-        targetVelocityWriter.set(target);
+        targetWriter.set(target);
     }
-    protected double getEncoderVelocity() {
-        double velocity = motor.getEncoder().getVelocity();
-        encoderVelocityWriter.write(velocity);
-        encoderVelocityErrorWriter.write(getTargetPosition() - velocity);
-        return velocity;
+    protected double getEncoder() {
+        double pos = motor.getPosition();
+        encoderWriter.write(pos);
+        encoderErrorWriter.write(getTargetPosition() - pos);
+        return pos;
     }
     public void resetEncoder() {
         motor.getEncoder().setPosition(0);//TODO: Test
     }
 
-    protected boolean isElementInClaw(){
-        return encoderVelocityErrorWriter.get()<-2000;
-    }
+    // protected boolean isElementInClaw(){
+    //     return encoderErrorWriter.get()<-2000;
+    // }
+
     public double getTargetPosition(){
         return controller.getSetpoint();
     }

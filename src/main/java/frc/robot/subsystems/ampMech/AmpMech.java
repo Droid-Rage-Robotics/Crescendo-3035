@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SuppliedCommand;
+import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class AmpMech {
@@ -14,17 +15,19 @@ public class AmpMech {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
-        START(0,297,0),
+        START(0,147,0),
 
-        INTAKE_SHOOTER(5,64,0.7),
-        INTAKE_HUMAN(10,132,-.7),
-       
-        AUTO_AMP(0,89,0),
-        AMP(0,89,-.7),
-        TRAP(0,90,0),
+        INTAKE_SHOOTER(0,140,20),
+        // INTAKE_HUMAN(10,132,INTAKE_SHOOTER.getIntakeSpeeds()),
+        AMP(20,220,33),
+        HOLD_AMP(AMP.getElevatorInches(),220,INTAKE_SHOOTER.getIntakeSpeeds()),
 
-        HOLD(0,65.5,60),
-        CLIMB(16.6,0, 0),
+        AUTO_AMP(AMP.getElevatorInches(),AMP.getArmDegrees(),AMP.getIntakeSpeeds()),
+        TRAP(36.5,150,33),
+
+        HOLD(0,180,INTAKE_SHOOTER.getIntakeSpeeds()),
+        CLIMB(TRAP.getElevatorInches(),HOLD.getArmDegrees(), 0),
+        SHOOT(0,216,0)
 
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
@@ -79,24 +82,24 @@ public class AmpMech {
     }
 
     private final AmpMechElevator elevator;
-    // private final AmpMechArmAbsolute arm;
-    // private final PowerAmpMechIntake intake;
+    private final AmpMechArmAbsolute arm;
+    private final AmpMechIntake intake;
     private Value position = Value.START;
     private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
         .create(position.name(), "Current Arm Position", "Misc")
         .withSize(1, 3)
         .build();
 
-    public AmpMech(AmpMechElevator elevator
-        // AmpMechArmAbsolute arm,
-        // PowerAmpMechIntake intake
+    public AmpMech(AmpMechElevator elevator,
+        AmpMechArmAbsolute arm,
+        AmpMechIntake intake
         ) {
         this.elevator = elevator;
-        // this.arm = arm;
-        // this.intake = intake;
+        this.arm = arm;
+        this.intake = intake;
 
         // setPositionCommand(Value.START);
-        setStartPos(Value.START);
+        setStartPos();
     }
 
     private void logPosition(Value targetPosition) {
@@ -109,72 +112,30 @@ public class AmpMech {
         return position;
     }
 
-    public void setStartPos(Value pos) {
-        elevator.setTargetPosition(pos.getElevatorInches());
-        // intake.setTargetPosition(pos.getIntakeSpeeds());
-        // arm.setTargetPosition(pos.getArmDegrees());
+    public void setStartPos() {
+        elevator.setTargetPosition(Value.START.getElevatorInches());
+        intake.setTargetPosition(Value.START.getIntakeSpeeds());
+        arm.setTargetPosition(Value.START.getArmDegrees());
     }
 
     public Command setPositionCommand(Value targetPosition) {
         return SuppliedCommand.create(() -> Commands.sequence(
             Commands.runOnce(() -> logPosition(targetPosition)),
             switch (targetPosition) {
-                // // case  AMP,TRAP ->
-                // //     new SequentialCommandGroup(
-                // //         new ParallelCommandGroup(
-                // //             intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
-                // //         ),
-                // //         Commands.waitSeconds(0.5),
-                // //         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
-                // //     );
-                // // case INTAKE_SHOOTER -> new SequentialCommandGroup(
-                // //     new ParallelCommandGroup(
-                // //         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
-                // //         // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
-                        
-                // //     ),
-                // //      new WaitCommand(1),
-                // //     new WaitCommand(.7),
-                // //     new ParallelCommandGroup(
-                // //         // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())))
-                // // );
-                // case HOLD -> new SequentialCommandGroup(
-                    
-                //     // new ParallelCommandGroup(
-                //     //     elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
-                //     //     // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees())),
-                //     //     // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
-                //     // ),
-                //      new WaitCommand(1)
-                //     // new WaitCommand(.7)
-                        
-                // );
-                // case  AMP->//,TRAP ->
-                //     new SequentialCommandGroup(
-                //         new ParallelCommandGroup(
-                //             // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
-                //         ),
-                //         Commands.waitSeconds(0.5),
-                //         elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
-                //         // intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
-                //     );
-                case  START ->
-                new SequentialCommandGroup(
-                    // intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
-                    new WaitCommand(1),
-                    new ParallelCommandGroup(
-                        // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
-                    ),
-                    Commands.waitSeconds(0.5),
-                    elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
-                    
-                );              
-
+                case INTAKE_SHOOTER ->
+                    new SequentialCommandGroup(
+                        new ParallelCommandGroup(
+                            elevator.runOnce(()->elevator.setTargetPosition(targetPosition.getElevatorInches())),
+                            arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
+                        ),
+                        new WaitCommand(1.1),
+                        intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                    );
                 default -> 
                     new ParallelCommandGroup(
-                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches()))
-                        // intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
-                        // arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
+                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
+                        intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
+                        arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                     );
             }
         ));

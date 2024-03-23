@@ -18,12 +18,12 @@ public class AmpMechElevator extends SubsystemBase {
         public static final double COUNTS_PER_PULSE = 1; // 2048 bc rev through bore
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
         // public static final double MIN_POSITION = 0;
-        // public static final double MAX_POSITION = 16.2;
+        // public static final double MAX_POSITION = 36;
     }
     private final SafeCanSparkMax motor;
     
-    private final PIDController controller = new PIDController(1, 0, 0.);//2.4
-    // private final PIDController controller = new PIDController(0, 0, 0);//2.4
+    // private final PIDController controller = new PIDController(0, 0, 0.);//2.4
+    private final PIDController controller = new PIDController(.5, 0, 0);//2.4
     private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
     // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.15, .6, 0, 0);
 
@@ -32,7 +32,7 @@ public class AmpMechElevator extends SubsystemBase {
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Elevator/ Encoder Velocity (Radians per Second)", AmpMech.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Elevator/ Encoder Velocity (Radians per Second)", AmpMechElevator.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
@@ -40,14 +40,14 @@ public class AmpMechElevator extends SubsystemBase {
         .withSize(1, 2)
         .build();
     private final ShuffleboardValue<Double> voltage = ShuffleboardValue
-        .create(0.0, "Elevator/ Elevator Voltage", AmpMech.class.getSimpleName())
+        .create(0.0, "Elevator/ Elev Voltage", AmpMech.class.getSimpleName())
         .build();
     protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue
-        .create(0.0, "Elevator/ Elevator Encoder Position", AmpMech.class.getSimpleName())
+        .create(0.0, "Elevator/ Elev Encoder Position", AmpMech.class.getSimpleName())
         .withSize(1, 3)
         .build();
     protected final ShuffleboardValue<Boolean> isMovingManually = ShuffleboardValue
-        .create(false, "Elevator/ Elevator Moving manually", AmpMech.class.getSimpleName())
+        .create(false, "Elevator/ Elev Moving manually", AmpMech.class.getSimpleName())
         .build();
 ;
 
@@ -59,7 +59,7 @@ public class AmpMechElevator extends SubsystemBase {
             IdleMode.Coast,
             1,
             1.0,
-            ShuffleboardValue.create(isEnabled, "Elevator/ Elevator Is Enabled", AmpMech.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "Elevator/ Elev Is Enabled", AmpMech.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             voltage
@@ -67,18 +67,20 @@ public class AmpMechElevator extends SubsystemBase {
         
         controller.setTolerance(0.1);
 
-        ComplexWidgetBuilder.create(controller, "Elevator PID", AmpMech.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Elev PID", AmpMechElevator.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
-            "Elevator Reset Encoder", AmpMech.class.getSimpleName());
+            "Elevator Reset Encoder", AmpMechElevator.class.getSimpleName());
     }
 
     @Override
     public void periodic() {
+        // setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + 
+        //     feedforward.calculate(getTargetPosition()));
         setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + 
-            feedforward.calculate(getTargetPosition()));
+            .37);
         // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()) + 
         //     .2);
         // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()));
