@@ -24,7 +24,7 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
 
     public void periodic(){
         // setVoltage(calculatePID(getEncoderPosition()));
-        setVoltage((calculatePID(getEncoderPosition())*2.5)+(Math.cos(getEncoderPosition())*(.175)));
+        setVoltage((calculatePID(getEncoderPosition())*2.5)+(Math.cos(getEncoderPosition())*(.175))); //WORKS; DO NOT TOUCH! :)
 
         // setVoltage(calculatePID(getEncoderPosition())+calculateFeedforward(getEncoderPosition(), 0));
     }
