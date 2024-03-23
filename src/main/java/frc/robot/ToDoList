@@ -34,9 +34,9 @@ Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
 
 
+When transfertoampmech, make it where the ampmach transfers when shooter stalls out
 
-
-
+MAKE ROBOT CONTAINER TRACK CYCLES
 
 make a framework to make all of the arms to be implemented similairly 
 

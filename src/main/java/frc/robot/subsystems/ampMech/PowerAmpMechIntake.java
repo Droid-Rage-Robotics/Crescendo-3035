@@ -9,25 +9,25 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class PowerAmpMechIntake extends SubsystemBase {
     protected final ShuffleboardValue<Double> targetPowerWriter = ShuffleboardValue.create
-        (0.0, "Intake/ Claw Intake Target Power", AmpMech.class.getSimpleName()).build();
+        (0.0, "AmpIntake/ Claw Intake Target Power", PowerAmpMechIntake.class.getSimpleName()).build();
     private final ShuffleboardValue<Boolean> isElementInClawWriter = ShuffleboardValue.create
-            (false, "Intake/ Claw Intake Is Element In", AmpMech.class.getSimpleName()).build();
+            (false, "AmpIntake/ Claw Intake Is Element In", PowerAmpMechIntake.class.getSimpleName()).build();
     
     
     protected final SafeCanSparkMax motor;
 
     public PowerAmpMechIntake(Boolean isEnabled) {
         motor = new SafeCanSparkMax(
-            25,
+            24,
             MotorType.kBrushless,
             false,
             IdleMode.Coast,
             1,
             1,
-            ShuffleboardValue.create(isEnabled, "Intake/ Claw Intake Is Enabled", AmpMech.class.getSimpleName())
+            ShuffleboardValue.create(isEnabled, "AmpIntake/ Claw Intake Is Enabled", PowerAmpMechIntake.class.getSimpleName())
                     .withWidget(BuiltInWidgets.kToggleSwitch)
                     .build(),
-                ShuffleboardValue.create(0.0, "Intake/ Claw Intake Voltage", AmpMech.class.getSimpleName())
+                ShuffleboardValue.create(0.0, "AmpIntake/ Claw Intake Voltage", PowerAmpMechIntake.class.getSimpleName())
                     .build()
         );
         // motor.setSmartCurrentLimit(20);
