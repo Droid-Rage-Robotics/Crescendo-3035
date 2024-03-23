@@ -31,12 +31,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "two"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -100,15 +94,53 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "five"
+            "name": "shoot"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "six"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "five"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "six"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickUp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
