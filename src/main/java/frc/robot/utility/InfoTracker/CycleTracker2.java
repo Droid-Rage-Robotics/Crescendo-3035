@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
+@Deprecated
 public class CycleTracker2 {
     //TODO:Test
     protected StatCalculator stat = new StatCalculator();

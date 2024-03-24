@@ -18,27 +18,27 @@ public class CycleTracker {
     
     // private HashMap<String, Double> data;
     protected final ShuffleboardValue<Double> cycle = 
-        ShuffleboardValue.create(0.0, "Cycles:", "Misc")
+        ShuffleboardValue.create(0.0, "CycleTracker/Cycles:", "Misc")
             .withSize(1, 2)
             .build();
     protected final ShuffleboardValue<Double> mean = 
-        ShuffleboardValue.create(0.0, "Mean:", "Misc")
+        ShuffleboardValue.create(0.0, "CycleTracker/Mean:", "Misc")
             .withSize(1, 2)
             .build();
     protected final ShuffleboardValue<Double> fastest = 
-        ShuffleboardValue.create(0.0, "Fastest Time:", "Misc")
+        ShuffleboardValue.create(0.0, "CycleTracker/Fastest Time:", "Misc")
             .withSize(1, 2)
             .build();
     protected final ShuffleboardValue<Double> slowest = 
-        ShuffleboardValue.create(0.0, "Slowest Time:", "Misc")
+        ShuffleboardValue.create(0.0, "CycleTracker/Slowest Time:", "Misc")
             .withSize(1, 2)
             .build();
     protected final ShuffleboardValue<Double> amp = 
-        ShuffleboardValue.create(0.0, "Amp:", "Misc")
+        ShuffleboardValue.create(0.0, "CycleTracker/Amp:", "Misc")
             .withSize(1, 2)
             .build();
     protected final  ShuffleboardValue<Double> speaker = 
-        ShuffleboardValue.create(0.0, "Speaker:", "Misc")
+        ShuffleboardValue.create(0.0, "CycleTracker/Speaker:", "Misc")
             .withSize(1, 2)
             .build();
 
