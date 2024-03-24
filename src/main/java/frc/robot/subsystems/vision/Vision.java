@@ -37,6 +37,13 @@ public class Vision extends SubsystemBase {
         (false, "tV", Vision.class.getSimpleName()).build();
     // private HttpCamera limelightFeed = new HttpCamera
     //     ("limelight", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+    HttpCamera httpCamera = new HttpCamera("Limelight", "http://frcvision.local:1181/stream.mjpg");
+    // CameraServer
+    // CameraServer.getInstance().addCamera(httpCamera);
+    //     Shuffleboard.getTab("Tab")
+    //         .add(httpCamera);     
+        
+
     // CameraServer.getInstance().startAutomaticCapture(limelightFeed);
     
     // LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
@@ -46,6 +53,7 @@ public class Vision extends SubsystemBase {
         LimelightHelpers.setLEDMode_PipelineControl("");
         LimelightHelpers.setLEDMode_ForceOff("");
         LimelightHelpers.setCropWindow("",-1,1,-1,1);
+        CameraServer.addCamera(httpCamera);
     }
 
     @Override
