@@ -18,7 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "out"
+                  "pathName": "oldOut"
                 }
               }
             ]
@@ -27,6 +27,6 @@
       ]
     }
   },
-  "folder": "Autos",
+  "folder": "Used",
   "choreoAuto": false
 }

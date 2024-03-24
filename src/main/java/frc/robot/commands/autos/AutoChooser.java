@@ -52,20 +52,28 @@ public class AutoChooser {
 
     public static void addAutos(SwerveDrive drive, Intake intake, Shooter shooter){
         // autoChooser.addOption("R1+F1+ParkRed", Autos.onePlusF1PlusParkRed(drive, intake, shooter));
-        autoChooser.addOption("L1+F3+ParkBLue", Autos.onePlusF1PlusParkBlue(drive, intake, shooter));
-        autoChooser.addOption("L1+F3ParkBlue(OnlyPickup)", Autos.onePlusF1ParkBlue(drive, intake, shooter));
+        autoChooser.addOption("L1+F3+ParkBLue", 
+            Autos.onePlusF1PlusParkBlue(drive, intake, shooter));
+        autoChooser.addOption("L1+F3ParkBlue(OnlyPickup)", 
+            Autos.onePlusF1ParkBlue(drive, intake, shooter));
         // autoChooser.addOption("L1+F1Red(OnlyPickUp)", Autos.onePlusF1ParkRed(drive, intake, shooter));
         // autoChooser.addOption("TEST", Autos.test(drive, intake, shooter));
 
 
 
-        autoChooser.addOption("ShootPlusPark", Autos.shootPLusPark(drive,intake,shooter,0));//Works
-        autoChooser.addOption("ShootPlusWait6Park", Autos.shootPLusPark(drive,intake,shooter,6));//Works
-        autoChooser.addOption("OnlyShoot", Autos.shoot(intake,shooter));//Works
-        autoChooser.addOption("SHOOTPLUSTURN(Only the human player side)", Autos.shootPLusTurnParkHuman(drive,intake, shooter, 2));
-        autoChooser.addOption("SHOOTPLUSTURN(NON human player side)", Autos.shootPLusTurnParkNonHUMAN(drive,intake, shooter, 2));
-        autoChooser.setDefaultOption("OUT(San Antonio Playoff))", Autos.out(drive,intake, shooter));
-
+        autoChooser.addOption("ShootPlusPark", 
+            BasicAutos.shootPLusPark(drive,intake,shooter,0));//Works
+        autoChooser.addOption("ShootPlusWait6Park", 
+            BasicAutos.shootPLusPark(drive,intake,shooter,6));//Works
+        autoChooser.addOption("OnlyShoot", BasicAutos.shoot(intake,shooter));//Works
+        autoChooser.addOption("SHOOTPLUSTURN(Only the human player side)", 
+            BasicAutos.shootPLusTurnParkHuman(drive,intake, shooter, 2));//Work
+        // autoChooser.addOption("SHOOTPLUSTURN(NON human player side)", 
+        //     Autos.shootPLusTurnParkNonHUMAN(drive,intake, shooter, 2));//No Work
+        autoChooser.addOption("OUT(San Antonio Playoff))", 
+            BasicAutos.out(drive,intake, shooter));
+        autoChooser.addOption("ToCenter", BasicAutos.toCenter(drive, intake, shooter));
+        
     }
     
     public static void addTuningAuto(SwerveDrive drive){
