@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.SuppliedCommand;
+import frc.robot.commands.general.SuppliedCommand;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -17,7 +17,9 @@ public class AmpMech {
     public enum Value {
         START(0,147,0),
 
-        INTAKE_SHOOTER(0,140,20),
+        SHOOTER(0,140,0),
+        INTAKE_SHOOTER(SHOOTER.getElevatorInches(),SHOOTER.getArmDegrees(),20),
+
         // INTAKE_HUMAN(10,132,INTAKE_SHOOTER.getIntakeSpeeds()),
         AMP(20,220,33),
         HOLD_AMP(AMP.getElevatorInches(),AMP.getArmDegrees(),INTAKE_SHOOTER.getIntakeSpeeds()),

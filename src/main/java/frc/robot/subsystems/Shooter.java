@@ -172,7 +172,9 @@ public class Constants {
     }
 
     public boolean isShooterTransferAmp(){
-        return shooterVoltageWriter.get()>90;
+        //1.58-1.59 Usual Wih No Ring
+        //With Ring is .5 ish
+        return shooterVoltageWriter.get()<.6;
         // return true;
     }
 }

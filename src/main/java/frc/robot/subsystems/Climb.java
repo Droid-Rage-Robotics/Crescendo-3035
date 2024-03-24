@@ -5,7 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.DisabledCommand;
+import frc.robot.commands.general.DisabledCommand;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -20,9 +20,9 @@ public class Climb extends SubsystemBase{
         public static final double MIN_POSITION = 0;
         public static final double MAX_POSITION = 16.2;
     }public enum Position{
-        CLIMB(5),
+        CLIMB(29),
         START(0),
-        TRAP(2)
+        TRAP(-27)
         ;
 
         private final ShuffleboardValue<Double>  climbPos;
@@ -54,7 +54,7 @@ public class Climb extends SubsystemBase{
         motorL = new SafeCanSparkMax(
             21, 
             MotorType.kBrushless,
-            false,
+            true,
             IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
@@ -68,7 +68,7 @@ public class Climb extends SubsystemBase{
         motorR = new SafeCanSparkMax(
             20, 
             MotorType.kBrushless,
-            true,
+            false,
             IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
