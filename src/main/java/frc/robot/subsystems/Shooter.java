@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.motor.SafeTalonFX;
@@ -56,6 +57,9 @@ public class Constants {
     protected final ShuffleboardValue<String> targetSpeedWriter = ShuffleboardValue.create
         ("____", "Shooter/TargetShooterSpeed", 
         Shooter.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> shooterVoltageWriter = ShuffleboardValue.create
+        (0.0, "ShooterVoltageWriter", 
+        Shooter.class.getSimpleName()).build();
     private final PIDController shooterController;
     private final SimpleMotorFeedforward feedforward;
     private ShooterSpeeds targetShooterSpeed = ShooterSpeeds.HOLD;
@@ -67,7 +71,6 @@ public class Constants {
             Shooter.class.getSimpleName())
             .withWidget(BuiltInWidgets.kToggleSwitch)
             .build();
-
         motorL = new SafeTalonFX(
             19,
             false,
@@ -118,6 +121,7 @@ public class Constants {
         setPower(shooterController.calculate(getVelocity())+
             feedforward.calculate(getVelocity(), getVelocity()));
 
+        shooterVoltageWriter.set(motorR.getVoltage());
         
     }
       
@@ -168,6 +172,7 @@ public class Constants {
     }
 
     public boolean isShooterTransferAmp(){
-        return true;
+        return shooterVoltageWriter.get()>90;
+        // return true;
     }
 }

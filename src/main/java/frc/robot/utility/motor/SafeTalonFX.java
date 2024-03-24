@@ -238,4 +238,12 @@ public class SafeTalonFX extends SafeMotor{
     //     motor.Smart
     // }
 
+    public double getVoltage(){
+        return motor.getMotorVoltage().getValueAsDouble();//The applied (output) motor voltage
+        // motor.getSupplyCurrent().getValueAsDouble();//Measured supply side current
+        // motor.getSupplyVoltage().getValueAsDouble();//Measured supply voltage to the TalonFX
+        // motor.getTorqueCurrent().getValueAsDouble();//Stator current where positive current means 
+            //torque is applied in the forward direction as determined by the Inverted setting; 
+            //Doesn't seem like this ^^
+    }
 }

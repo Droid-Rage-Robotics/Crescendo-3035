@@ -25,6 +25,9 @@ Test:
 - Test Software Switch on Shuffleboard to see if it work
 - Test Dpad Resets/Heading Direction of Drivetrain after Auto 
 - Test Lights
+- Figure out voltage writer stuff
+
+
 Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
 
