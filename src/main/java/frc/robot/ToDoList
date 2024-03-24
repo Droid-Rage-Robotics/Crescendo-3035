@@ -21,21 +21,16 @@ Extra Ideas:
 - Limelight Tracking AutoAim.java
 
 Test:
-
 - Make all of the writes that are not necessary during a match be in a practice only writers (Helps prevent the likelihood of loop overruns)
-- does Pathplannerfollow work?
 - Test Software Switch on Shuffleboard to see if it work
-- Test NamedCommands
-- Test CycleTracker: https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html; https://www.chiefdelphi.com/t/roborio-wpilib-logging/159434/17
 - Test Dpad Resets/Heading Direction of Drivetrain after Auto 
-Test Lights
-Test Absolute Encoder
+- Test Lights
 Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
 
 
 When transfertoampmech, make it where the ampmach transfers when shooter stalls out
-
+ 
 MAKE ROBOT CONTAINER TRACK CYCLES
 
 make a framework to make all of the arms to be implemented similairly 
@@ -53,8 +48,7 @@ make all bots in start pos
 Redo Shooter Dashboard Stuff
 Implement Safe Hardware Encoders
 Add IsEnabled Button to all!!!!!
-Make the imu update faster
-Add PID to climb
+Make the imu update rate faster - Can't do
 battery voltage usage
 
 Notes:
@@ -69,6 +63,7 @@ Connect in Pathplanner with Robot: 10.30.35.2
 Color
 5V - Multi COlor Strip
 12V - Single COlor Strip
+CycleTracker: https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html; https://www.chiefdelphi.com/t/roborio-wpilib-logging/159434/17
 
 
 

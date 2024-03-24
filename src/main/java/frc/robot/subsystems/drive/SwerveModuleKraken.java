@@ -59,6 +59,7 @@ public class SwerveModuleKraken {
     // private final double driveSpeedMultiplier;
     private ShuffleboardValue<Double> turnPositionWriter;
     private ShuffleboardValue<Double> drivePositionWriter;
+    private ShuffleboardValue<Double> turnVoltageWriter;
     
     public SwerveModuleKraken(int driveMotorId, 
         int turnMotorId, boolean driveMotorReversed, 
@@ -123,6 +124,10 @@ public class SwerveModuleKraken {
         this.drivePositionWriter = ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Position (Radians)", 
             SwerveDrive.class.getSimpleName()).build();
         resetDriveEncoder();
+
+        turnVoltageWriter = ShuffleboardValue.create(0.0, podName.toString()+"", SwerveDrive.class.getSimpleName())
+            .withWidget(BuiltInWidgets.kGraph)
+            .build();
     }
 
     public double getDrivePos() {
@@ -169,7 +174,7 @@ public class SwerveModuleKraken {
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.setPower(state.speedMetersPerSecond / Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
         turnMotor.setPower((turningPidController.calculate(getTurningPosition(), state.angle.getRadians()))*1);
-        SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.toString());
+        SmartDashboard.putString("Swerve[" + turnEncoder.getDeviceID() + "] state", state.   toString());
         SmartDashboard.putString("Swerve[" + turnMotor.getDeviceID() + "] state", state.toString());
     }
 
@@ -210,5 +215,10 @@ public class SwerveModuleKraken {
     }
     public SafeCanSparkMax getTurnMotor(){
         return turnMotor;
+    }
+
+    public void getTurnVoltage(){
+        turnMotor.getVoltage();
+
     }
 }

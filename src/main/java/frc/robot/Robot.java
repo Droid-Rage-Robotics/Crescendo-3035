@@ -19,6 +19,7 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
+import frc.robot.subsystems.vision.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -47,7 +48,7 @@ public class Robot extends TimedRobot {
     // private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
 
 
-    // private final Vision vision = new Vision();
+    private final Vision vision = new Vision();
     // private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);

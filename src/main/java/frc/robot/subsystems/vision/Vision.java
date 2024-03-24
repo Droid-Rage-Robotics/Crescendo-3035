@@ -1,5 +1,8 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -32,6 +35,9 @@ public class Vision extends SubsystemBase {
         (0.0, "tY", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Boolean> tVWriter = ShuffleboardValue.create
         (false, "tV", Vision.class.getSimpleName()).build();
+    // private HttpCamera limelightFeed = new HttpCamera
+    //     ("limelight", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+    // CameraServer.getInstance().startAutomaticCapture(limelightFeed);
     
     // LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
 
