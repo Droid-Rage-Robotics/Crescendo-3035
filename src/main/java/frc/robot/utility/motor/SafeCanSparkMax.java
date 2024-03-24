@@ -1,12 +1,11 @@
 package frc.robot.utility.motor;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.subsystems.Climb;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SafeCanSparkMax extends SafeMotor {
@@ -21,6 +20,18 @@ public class SafeCanSparkMax extends SafeMotor {
         double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
         ShuffleboardValue<Double> outputWriter) {
+            this(deviceId, type, isInverted, mode, 
+            positionConversionFactor, velocityConversionFactor, 
+            isEnabled, outputWriter, 40);
+            //Makes Default for all Spark Maxes; Sparks usual default is 80
+    }   
+    public SafeCanSparkMax(
+        int deviceId, MotorType type, 
+        boolean isInverted, IdleMode mode,
+        double positionConversionFactor,
+        double velocityConversionFactor,
+        ShuffleboardValue<Boolean> isEnabled, 
+        ShuffleboardValue<Double> outputWriter, int smartCurrentLimit) {
 
         super(isEnabled, outputWriter);
         motor = new CANSparkMax(deviceId, type);
@@ -28,20 +39,9 @@ public class SafeCanSparkMax extends SafeMotor {
         setIdleMode(mode);
         motor.getEncoder().setPositionConversionFactor(positionConversionFactor);
         motor.getEncoder().setVelocityConversionFactor(velocityConversionFactor);
-        setSmartCurrentLimit(40);//Default for all Spark Maxes  
+        setSmartCurrentLimit(smartCurrentLimit);//Sparks usual default is 80
         motor.burnFlash();
     }   
-    // public SafeCanSparkMax(int deviceId, MotorType type, 
-    //     boolean isInverted
-    //     ,
-    //     IdleMode mode,
-    //     double positionConversionFactor,
-    //     double velocityConversionFactor,
-    //     ShuffleboardValue<Boolean> isEnabled, 
-    //     ShuffleboardValue<Double> outputWriter) {
-    //     super(isEnabled, outputWriter);
-    //     motor = new CANSparkMax(deviceId, type);
-    // }
 
     @Override
     public void setPower(double power) {
@@ -148,6 +148,12 @@ public class SafeCanSparkMax extends SafeMotor {
 
     private void setSmartCurrentLimit(int num){
         motor.setSmartCurrentLimit(num);
+    }
+
+    public double getVoltage(){
+        // return motor.getAppliedOutput();//motor controller's applied output duty cycle.
+        // return motor.getBusVoltage();//voltage fed into the motor controller.
+        return motor.getOutputCurrent();//motor controller's output current in Amps.
     }
 }
 
