@@ -1,33 +1,28 @@
-package frc.robot.commands;
+package frc.robot.commands.general;
 
 import java.util.Set;
-import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
+public class DisabledCommand extends Command {
+    private final Command command;
 
-public class SuppliedCommand extends Command {
-    private final Supplier<Command> commandSupplier;
-    private Command command = Commands.none();
-
-    protected SuppliedCommand(Supplier<Command> commandSupplier) {
-        this.commandSupplier = commandSupplier;
+    private DisabledCommand(Command command) {
+        this.command = command;
     }
 
-    public static SuppliedCommand create(Supplier<Command> commandSupplier) {
-        return new SuppliedCommand(commandSupplier);
+    public static DisabledCommand create(Command command) {
+        return new DisabledCommand(command);
     }
 
     @Override
     public Set<Subsystem> getRequirements() { // getRequirements is run when the command is scheduled
-        command = commandSupplier.get();
         return command.getRequirements();
     }
     
     @Override
     public void initialize() {
-        command = commandSupplier.get();//TODO:Test
         command.initialize();
     }
 
@@ -44,5 +39,10 @@ public class SuppliedCommand extends Command {
     @Override
     public boolean isFinished() {
         return command.isFinished();
+    }
+
+    @Override
+    public boolean runsWhenDisabled() {
+        return true;
     }
 }

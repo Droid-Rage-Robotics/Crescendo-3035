@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.DisabledCommand;
+import frc.robot.commands.general.DisabledCommand;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
@@ -28,6 +28,8 @@ public class IntakeWheel extends SubsystemBase {
          (0.0, "Intake/Wheel Encoder Velocity", Intake.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> encoderVelocityErrorWriter = ShuffleboardValue.create
         (0.0, "Intake/Wheel Encoder Velocity Error", Intake.class.getSimpleName()).build();
+    protected final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
+        (0.0, "Intake/Voltage", Intake.class.getSimpleName()).build();
 
     private final ShuffleboardValue<Boolean> isElementInWriter = ShuffleboardValue.create
             (false, "Is Element In", Intake.class.getSimpleName()).build();
@@ -43,7 +45,7 @@ public class IntakeWheel extends SubsystemBase {
             ShuffleboardValue.create(isEnabled, "Intake/Is Enabled Wheel", Intake.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            ShuffleboardValue.create(0.0, "Intake/Voltage Wheel", Intake.class.getSimpleName())
+            ShuffleboardValue.create(0.0, "Intake/Output Writer", Intake.class.getSimpleName())
                 .build(),
             7
         );
@@ -67,6 +69,7 @@ public class IntakeWheel extends SubsystemBase {
     public void periodic() {
         motor.setVoltage(calculateIntakePID(getIntakeTargetVelocity()) + 
             calculateIntakeFeedforward(getIntakeTargetVelocity()));
+        voltageWriter.set(motor.getVoltage());
         isElementInWriter.set(isElementIn());
         
     }
@@ -100,7 +103,8 @@ public class IntakeWheel extends SubsystemBase {
     }
 
     public boolean isElementIn(){
-        return encoderVelocityErrorWriter.get()<-1000;
+        // return encoderVelocityErrorWriter.get()<-1000;
+        return voltageWriter.get()<1.75;
         //or color sensor 
     }
     public Command setPower(double  power){
