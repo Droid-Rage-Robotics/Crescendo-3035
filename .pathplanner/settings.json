@@ -4,11 +4,13 @@
   "holonomicMode": true,
   "pathFolders": [
     "1+3",
-    "misc",
-    "TuningPaths"
+    "onePlusThree",
+    "TuningPaths",
+    "misc"
   ],
   "autoFolders": [
     "Autos",
+    "Used",
     "TuningAutos"
   ],
   "defaultMaxVel": 3.0,

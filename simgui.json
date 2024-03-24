@@ -35,6 +35,12 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/AmpMech/Arm PID": "PIDController",
+      "/Shuffleboard/AmpMech/Claw Intake": "PIDController",
+      "/Shuffleboard/AmpMech/Claw Intake Reset Claw Encoder": "Command",
+      "/Shuffleboard/AmpMech/Reset Arm Encoder": "Command",
+      "/Shuffleboard/AmpMechElevator/Elev PID": "PIDController",
+      "/Shuffleboard/AmpMechElevator/Elevator Reset Encoder": "Command",
       "/Shuffleboard/Climb/PID": "PIDController",
       "/Shuffleboard/Climb/Reset Encoder": "Command",
       "/Shuffleboard/Intake/Drop PID": "PIDController",
