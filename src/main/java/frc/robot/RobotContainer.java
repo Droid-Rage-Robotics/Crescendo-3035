@@ -53,12 +53,7 @@ public class RobotContainer {
 				driver,
 				true
 				)
-			);
-		// drive.driveAutoReset();
-		// driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
-		// driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
-		// driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(180)));
-		// driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
+			);//TODO:Test Yaw Buttons
 
 		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
@@ -86,30 +81,19 @@ public class RobotContainer {
 		operator.rightTrigger()
 			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
-		// operator.rightBumper()
-		// 	.onTrue(new TeleopShoot(intake, shooter, cycleTracker));
-			// .onFalse(new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, ShooterSpeeds.HOLD));
-		operator.leftTrigger()
-			// .onTrue(new InstantCommand(()-> cycleTracker.trackCycle(ShooterSpeeds.SPEAKER_SHOOT)))
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP))
-			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
+		operator.leftTrigger().onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
+		operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
 
-			// .onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE_AMP))
-			// .onFalse(intake.setPositionCommand(Intake.Value.HOLD));
-
-		
-		// operator.y()			
-		// .onTrue(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AMP_SHOOT))
-		// 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.STOP));
-
-		
-		
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
+		
 		operator.povUp()
-			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.CLIMB))
-			.onFalse(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)));
+			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)));
+		operator.povDown()
+			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)))
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
+			// .onTrue();
+		
 		// operator.x()
 		// 	//CLimb Goes up
 		// 		.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));

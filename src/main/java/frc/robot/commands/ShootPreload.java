@@ -11,8 +11,12 @@ public class ShootPreload extends SequentialCommandGroup {
         addCommands(
             new SequentialCommandGroup(
                 shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+                new WaitCommand(1.4),
+                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
                 new WaitCommand(1),
-                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)
+                new SetIntakeAndShooter(intake, Intake.Value.INTAKE_GROUND, 
+                    shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT)
+            
                 )
             );
 
