@@ -1,7 +1,6 @@
 package frc.robot.subsystems.ampMech;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,7 +23,7 @@ public class AmpMechElevator extends SubsystemBase {
     
     // private final PIDController controller = new PIDController(0, 0, 0.);//2.4
     private final PIDController controller = new PIDController(.5, 0, 0);//2.4
-    private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
+    // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
     // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.15, .6, 0, 0);
 
     protected final ShuffleboardValue<Double> rawPosWriter = ShuffleboardValue

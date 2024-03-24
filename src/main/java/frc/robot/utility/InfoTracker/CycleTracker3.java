@@ -66,6 +66,14 @@ StringLogEntry myStringLog;
             case POSITION_TOLERANCE:
             case STOP:
                 break;
+            case AUTO_SPEAKER_SHOOT:
+                break;
+            case CLAW_TRANSFER:
+                break;
+            case HOLD:
+                break;
+            default:
+                break;
         }
     }
 

@@ -1,41 +1,25 @@
 package frc.robot;
 
-import edu.wpi.first.math.proto.Controller;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-import edu.wpi.first.wpilibj2.command.button.CommandStadiaController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.DroidRageConstants.Gamepad;
 import frc.robot.SysID.SysID;
-import frc.robot.commands.ClimbAndScoreSequence;
-import frc.robot.commands.IntakeElementInCommand;
-import frc.robot.commands.LightCommand;
 import frc.robot.commands.SetIntakeAndShooter;
 import frc.robot.commands.TransferToAmpMech;
-import frc.robot.commands.autos.AutoChooser;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.subsystems.Climb;
-import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
-import frc.robot.utility.InfoTracker.CycleTracker3;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.motor.SafeTalonFX;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class TestButton {
 	private final CommandXboxController driver =

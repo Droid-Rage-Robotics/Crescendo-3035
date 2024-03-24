@@ -30,9 +30,9 @@ public class Light extends SubsystemBase {
                       green = Color.kGreen, //Ready to Shoot?
                       white = Color.kWhite; //Aligned?
     
-                      class Rainbow{
-      private int rainbowFirstPixelHue = 0;
-    }
+    // class Rainbow{
+    //   private int rainbowFirstPixelHue = 0;
+    // }
     class SwitchLED{
       private boolean on = true;
       private double lastChange;

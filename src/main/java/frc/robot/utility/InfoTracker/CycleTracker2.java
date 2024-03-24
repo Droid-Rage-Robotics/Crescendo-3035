@@ -64,6 +64,8 @@ public class CycleTracker2 {
             case POSITION_TOLERANCE:
             case STOP:
                 break;
+            default:
+                break;
         }
     }
 
