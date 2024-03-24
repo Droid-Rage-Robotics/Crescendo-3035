@@ -10,50 +10,50 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.Vision;
-
+@Deprecated
 public class AutoAim extends Command {//TODO: Test this
-  // private SwerveDrive drive;
-  private Light light;
-  // private Vision vision;
-  private ProfiledPIDController turnController, distanceController; // Or a normal PID Control
-  public AutoAim(SwerveDrive drive, Vision vision, Light light) {
-        turnController = new ProfiledPIDController(
-            0.034, 
-            0,
-            0.0000,
-            new TrapezoidProfile.Constraints(1.525, 1));
-        turnController.setTolerance(1);//1 degree
+  // // private SwerveDrive drive;
+  // private Light light;
+  // // private Vision vision;
+  // private ProfiledPIDController turnController, distanceController; // Or a normal PID Control
+  // public AutoAim(SwerveDrive drive, Vision vision, Light light) {
+  //       turnController = new ProfiledPIDController(
+  //           0.034, 
+  //           0,
+  //           0.0000,
+  //           new TrapezoidProfile.Constraints(1.525, 1));
+  //       turnController.setTolerance(1);//1 degree
         
-        distanceController = new ProfiledPIDController(
-            0.034, 
-            0,
-            0.0000,
-            new TrapezoidProfile.Constraints(1.525, 1));
-        distanceController.setTolerance(0.5);//Some sort od distance thing
+  //       distanceController = new ProfiledPIDController(
+  //           0.034, 
+  //           0,
+  //           0.0000,
+  //           new TrapezoidProfile.Constraints(1.525, 1));
+  //       distanceController.setTolerance(0.5);//Some sort od distance thing
         
-        drive.drive(distanceController.calculate(vision.gettY(), 0), 
-            0, 
-            turnController.calculate(vision.gettX(),0));
+  //       drive.drive(distanceController.calculate(vision.gettY(), 0), 
+  //           0, 
+  //           turnController.calculate(vision.gettX(),0));
 
-    addRequirements(drive, vision);
-    // this.drive = drive;
-    this.light = light;
-    // this.vision = vision;
-  }
+  //   addRequirements(drive, vision);
+  //   // this.drive = drive;
+  //   this.light = light;
+  //   // this.vision = vision;
+  // }
   
-  @Override
-  public void initialize() {
-    System.out.println("AutoAiming Start");
-  }
+  // @Override
+  // public void initialize() {
+  //   System.out.println("AutoAiming Start");
+  // }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    // Should be Moved to LightCommand
-      light.setAllColor(light.red);
-    if(turnController.atSetpoint()&&distanceController.atSetpoint()){
-      light.setAllColor(light.green);
-    }
-    return turnController.atSetpoint()&&distanceController.atSetpoint();
-  }
+  // // Returns true when the command should end.
+  // @Override
+  // public boolean isFinished() {
+  //   // Should be Moved to LightCommand
+  //     light.setAllColor(light.red);
+  //   if(turnController.atSetpoint()&&distanceController.atSetpoint()){
+  //     light.setAllColor(light.green);
+  //   }
+  //   return turnController.atSetpoint()&&distanceController.atSetpoint();
+  // }
 }
