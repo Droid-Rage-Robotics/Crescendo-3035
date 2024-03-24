@@ -56,7 +56,7 @@ public class SwerveModuleKrakenCAN {
     // private final double driveSpeedMultiplier;
     private ShuffleboardValue<Double> turnPositionWriter;
     private ShuffleboardValue<Double> drivePositionWriter;
-
+@Deprecated
     public SwerveModuleKrakenCAN(int driveMotorId, 
         int turnMotorId, boolean driveMotorReversed, 
         boolean turningMotorReversed, int absoluteEncoderId, 

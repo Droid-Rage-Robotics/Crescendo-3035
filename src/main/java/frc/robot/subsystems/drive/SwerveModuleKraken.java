@@ -89,10 +89,11 @@ public class SwerveModuleKraken {
             ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Voltage "+ 
                 podName.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
                 .build(),
-                40,//30
-            45//0
-                // ,300
-                );
+                55,
+                40
+                );//45,40 
+            //30,0 San Antonio
+            //45,40
         turnMotor = new SafeCanSparkMax(turnMotorId, MotorType.kBrushless,
             turningMotorReversed,
             IdleMode.Coast,
@@ -104,8 +105,8 @@ public class SwerveModuleKraken {
                 .build(),
             ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Turn Voltage "+ 
                 podName.toString() + turnMotorId, SwerveDrive.class.getSimpleName())
-                .build()
-                // 7
+                .build(),
+                30
         );
         // turnMotor.setSmartCurrentLimit(30);
 
