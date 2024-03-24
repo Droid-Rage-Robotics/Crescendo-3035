@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.SetIntakeAndShooter;
-import frc.robot.commands.TeleopShoot;
-import frc.robot.commands.TransferToAmpMech;
+import frc.robot.commands.climbAndAmp.TransferToAmpMech;
 import frc.robot.commands.manual.SwerveDriveTeleop;
+import frc.robot.commands.shooter.SetIntakeAndShooter;
+import frc.robot.commands.shooter.TeleopShoot;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
@@ -88,7 +88,8 @@ public class RobotContainer {
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
 		
 		operator.povUp()
-			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)));
+			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
+			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
 		operator.povDown()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)))
 			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
@@ -121,7 +122,7 @@ public class RobotContainer {
 			driver.getHID().setRumble(RumbleType.kBothRumble, 1);
 		}
 		if(shooter.isShooterReadyToShootSpeaker()){
-			driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+			operator.getHID().setRumble(RumbleType.kBothRumble, 1);
 		}
 		
 	}

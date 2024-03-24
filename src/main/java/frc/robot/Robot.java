@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.autos.AutoChooser;
@@ -20,6 +21,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.utility.InfoTracker.CycleTracker;
+import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,44 +31,41 @@ import frc.robot.subsystems.vision.Vision;
  * directory.
  */
 //CAN 15 is skipped
+//Test Vision
+//Climb positions
+//current stuff
 public class Robot extends TimedRobot {
     //15 missing
     private final SwerveDrive drive = new SwerveDrive(false);//2-10
-    private final Shooter shooter = new Shooter(true);//18.19    
+    private final Shooter shooter = new Shooter(false);//18.19    
 
-    private final Climb climb = new Climb(true,true);//20,21 do pos, pid done
+    private final Climb climb = new Climb(false,false);//20,21 do pos, pid done
     private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
     private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
     private final Intake intake = new Intake(dropDown, intakeWheel);//done
-    private final AmpMechElevator elevator = new AmpMechElevator(true);//22done
-    private final AmpMechIntake clawIntake = new AmpMechIntake(true);//24 done
-    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true,clawIntake.getMotor());//23done TEST PID POSITIONS
+    private final AmpMechElevator elevator = new AmpMechElevator(false);//22done
+    private final AmpMechIntake clawIntake = new AmpMechIntake(false);//24 done
+    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false,clawIntake.getMotor());//23done TEST PID POSITIONS
     private final AmpMech ampMech = new AmpMech(elevator, arm, clawIntake);
     
-    private AutoChooser autoChooser = new AutoChooser(
-        drive, intake, shooter//, claw, climb, vision, light
-    );
-    // private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
+    // private AutoChooser autoChooser = new AutoChooser(
+    //     drive, intake, shooter//, claw, climb, vision, light
+    // );
+    private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
 
 
-    private final Vision vision = new Vision();
+    // private final Vision vision = new Vision();
     // private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
-    // private final SysID sysID = new SysID(clawElevator.getMotor(), Measurement.DISTANCE);
-    // private final SysID sysID = new SysID(clawIntake.getMotor(), Measurement.DISTANCE);
-    // private final SysID sysID = new SysID(dropDown.getMotor(), Measurement.ANGLE);
 
+    private RobotContainer robotContainer = new RobotContainer();
+    // private TestButton testButton = new TestButton();
 
-
-    // private Field2d field = new Field2d(); //TODO:How does this work
-    // private RobotContainer robotContainer = new RobotContainer();
-    private TestButton testButton = new TestButton();
-
-    // private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
-	// 	(0.0, "Match Time", "Misc")
-	// 	.withWidget(BuiltInWidgets.kTextView)
-	// 	.build();
+    private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
+		(0.0, "Match Time", "Misc")
+		.withWidget(BuiltInWidgets.kTextView)
+		.build();
     private Command autonomousCommand;
   
   /**
@@ -146,24 +146,22 @@ public class Robot extends TimedRobot {
         // drive.runOnce(()->drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
 
 		// drive.driveAutoReset();//TODO: Test
-        // robotContainer.configureTeleOpBindings(drive, intake, shooter, cycleTracker);
-        // testButton.test(drive, intake, shooter,climb);
+        robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker);
+        // testButton.test(drive, intake, shooter, climb);
         // testButton.configureIntakeTestBindings(intake);
         // testButton.configureAmpMechTestBindings(ampMech, intake);
         // testButton.configureCycleTrackerBindings(cycleTracker);//works
         // testButton.configureOperatorBindings(ampMech, intake, shooter);
         // testButton.configureShooterTestBindings(shooter);
-        testButton.configureClimbTestBindings(climb, intake, ampMech);
+        // testButton.configureOperatorBindings(climb, intake, ampMech,shooter);
+        // testButton.configureClimbTestBindings(climb, intake, ampMech);
 
     }
 
     @Override
     public void teleopPeriodic() {
-        // robotContainer.teleopPeriodic(intake,shooter);
-        // matchTime.set(DriverStation.getMatchTime());
-        // if(intake.isElementInClaw()){
-        //     testButton.rumble();
-        // }
+        robotContainer.teleopPeriodic(intake,shooter);
+        matchTime.set(DriverStation.getMatchTime());
     }
     
     @Override

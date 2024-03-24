@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.SysID.SysID;
-import frc.robot.commands.SetIntakeAndShooter;
-import frc.robot.commands.TransferToAmpMech;
+import frc.robot.commands.climbAndAmp.TransferToAmpMech;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.SwerveDriveTeleop;
+import frc.robot.commands.shooter.SetIntakeAndShooter;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
@@ -90,7 +90,7 @@ public class TestButton {
 		// operator.leftTrigger().onTrue(climb.runOnce(() -> climb.setTargetPosition(Climb.Position.TRAP)))
 		// 	.onFalse(climb.runOnce(() ->climb.setTargetPosition(Climb.Position.START)));
 
-		// climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 		operator.povUp()
 			.onTrue( new ParallelCommandGroup(
 				climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)),
@@ -130,7 +130,7 @@ public class TestButton {
 			// .onTrue(new TransferToAmpMech(intake, shooter, ampMech))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 
-			operator.povUp()
+		operator.povUp()
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
 		operator.povDown()
 			.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
@@ -183,18 +183,29 @@ public class TestButton {
 		operator.b().onTrue(new InstantCommand(()->motor.stopMusic()));
 	}
 
-	public void configureOperatorBindings(AmpMech ampMech, Intake intake, Shooter shooter){
-		operator.leftTrigger()
-			// .onTrue(new InstantCommand(()-> cycleTracker.trackCycle(ShooterSpeeds.SPEAKER_SHOOT)))
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
-			.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
+	public void configureOperatorBindings(Climb climb, Intake intake, AmpMech ampMech, Shooter shooter){
+		// operator.leftTrigger()
+		// 	// .onTrue(new InstantCommand(()-> cycleTracker.trackCycle(ShooterSpeeds.SPEAKER_SHOOT)))
+		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.AMP))
+		// 	.onFalse(ampMech.setPositionCommand(AmpMech.Value.START));
 		
 		
+		// operator.a()
+		// 	.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
+		// operator.y()
+		// 	// .onTrue()//CLimb Goes up
+		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.CLIMB));
+		operator.leftTrigger().onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
+		operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
+
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
-		operator.y()
-			// .onTrue()//CLimb Goes up
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.CLIMB));
+		
+		operator.povUp()
+			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)));
+		operator.povDown()
+			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)))
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
 	}
 
 	public void configureSysIDBindings(SysID sysID){
@@ -244,6 +255,5 @@ public class TestButton {
 	public void rumble(){
 		operator.getHID().setRumble(RumbleType.kBothRumble, 1);
 		driver.getHID().setRumble(RumbleType.kBothRumble, 1);
-
 	}
 }
