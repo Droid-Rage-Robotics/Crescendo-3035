@@ -27,6 +27,7 @@ Test:
 - Test Lights
 - Figure out voltage writer stuff
 
+Make where the absolute encoders discconnect then the mechanism should just turn off
 
 Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38

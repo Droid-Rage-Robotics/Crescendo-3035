@@ -7,7 +7,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.IntakeElementInCommand;
+import frc.robot.commands.climbAndAmp.ClimbAndTrap;
+import frc.robot.commands.climbAndAmp.DropAmp;
 import frc.robot.commands.climbAndAmp.TransferToAmpMech;
+import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.commands.shooter.SetIntakeAndShooter;
 import frc.robot.commands.shooter.TeleopShoot;
@@ -38,7 +42,7 @@ public class RobotContainer {
 		AmpMech ampMech, Climb climb, 
 		 CycleTracker cycleTracker){
 		// drive.setYawCommand(-90);
-		// climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 
 		
 		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
@@ -55,20 +59,20 @@ public class RobotContainer {
 				)
 			);//TODO:Test Yaw Buttons
 
-		driver.rightTrigger().whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
-			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		driver.rightTrigger()
+			.whileTrue(new IntakeElementInCommand(driver, intake));
+			// .whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
+			// .onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+
 		driver.leftTrigger().whileTrue(//intake.setPositionCommand(Intake.Value.OUTTAKE)
 			new ConditionalCommand(
-				new SequentialCommandGroup(
-					ampMech.setPositionCommand(AmpMech.Value.AMP), //true
-					new InstantCommand(()->cycleTracker.trackCycle(CycleTracker.ScorePos.AMP))
-				),
+				new DropAmp(ampMech, cycleTracker),//true
 				intake.setPositionCommand(Intake.Value.OUTTAKE), //false
 				()->(AmpMech.Value.AUTO_AMP==ampMech.getPosition()||AmpMech.Value.AMP==ampMech.getPosition())))	//Check
 			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
 			
 			//Make it where when the amp mech is ready to outake, it outtakes
-
+//what means??^^
 
 		driver.povUp().onTrue(
 			new ParallelCommandGroup(
@@ -82,17 +86,23 @@ public class RobotContainer {
 			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger().onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
-		operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
+		// operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
 
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
-		
+		operator.b()//TODO REMOVE THIS
+			.onTrue(new SequentialCommandGroup(
+				new DropAmp(ampMech, cycleTracker)
+			));
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
 		operator.povDown()
-			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)))
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
+			.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
+			// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.TRAP)))
+			// .onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP))
+			// .onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
+
 			// .onTrue();
 		
 		// operator.x()
@@ -118,9 +128,9 @@ public class RobotContainer {
 	}
 
 	public void teleopPeriodic(Intake intake, Shooter shooter){
-		if(intake.isElementInClaw()){
-			driver.getHID().setRumble(RumbleType.kBothRumble, 1);
-		}
+		// if(intake.isElementInClaw()){
+		// 	driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+		// }
 		if(shooter.isShooterReadyToShootSpeaker()){
 			operator.getHID().setRumble(RumbleType.kBothRumble, 1);
 		}
