@@ -88,7 +88,10 @@ public class SafeCanSparkMax extends SafeMotor {
 
     public RelativeEncoder getEncoder() {
         return motor.getEncoder();
-    }    
+    }   
+    public RelativeEncoder getAlternateEncoder(int countsPerRev) {
+        return motor.getAlternateEncoder(countsPerRev);
+    }     
 
     @Override
     public double getPosition() {

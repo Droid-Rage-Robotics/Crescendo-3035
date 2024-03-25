@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.climb;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -35,13 +35,13 @@ public class Climb extends SubsystemBase{
                 .build();
         }
     } 
-    private final PIDController controller = new PIDController(1, 0, 0);
+    protected final PIDController controller = new PIDController(1, 0, 0);
     // private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
-    private final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
+    protected final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
         (0.0, "Climb/Voltage", Climb.class.getSimpleName())
         .build();
 
-    private final SafeCanSparkMax motorL, motorR;
+    protected final SafeCanSparkMax motorL, motorR;
     protected final ShuffleboardValue<Double> encoderPositionWriter = ShuffleboardValue
         .create(0.0, "Climb/Encoder Position", Climb.class.getSimpleName())
         .withSize(1, 3)
