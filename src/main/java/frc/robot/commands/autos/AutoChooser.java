@@ -58,8 +58,10 @@ public class AutoChooser {
             Autos.onePlusF1ParkBlue(drive, intake, shooter));
         // autoChooser.addOption("L1+F1Red(OnlyPickUp)", Autos.onePlusF1ParkRed(drive, intake, shooter));
         // autoChooser.addOption("TEST", Autos.test(drive, intake, shooter));
-
-
+        autoChooser.addOption("One Plus Three", 
+            Autos.onePlusThree(drive, intake, shooter));
+        autoChooser.setDefaultOption("One Plus F1", 
+            Autos.onePlusF1(drive, intake, shooter));
 
         autoChooser.addOption("ShootPlusPark", 
             BasicAutos.shootPLusPark(drive,intake,shooter,0));//Works

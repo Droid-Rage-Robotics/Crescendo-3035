@@ -1,13 +1,22 @@
 package frc.robot.commands.autos;
 
 import frc.robot.subsystems.drive.SwerveDrive;
+
+import java.nio.file.Path;
+
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public final class TuningAutos {
     
     public static Command forwardTest(SwerveDrive drive) {//Top Red/Bottom Blue
+        PathPlannerPath path = PathPlannerPath.fromPathFile("ForwardTest");
         return new SequentialCommandGroup(
+            // Commands.runOnce(() -> drive.resetOdometry(path.getPreviewStartingHolonomicPose())),
+            // PathPlannerFollow.
             PathPlannerFollow.create(drive, "ForwardTest")
                 .setMaxVelocity(1)
                 .setAcceleration(3)

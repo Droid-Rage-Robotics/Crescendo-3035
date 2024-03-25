@@ -11,10 +11,19 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 
 public final class Autos {
-    public static Command onePlusThree(SwerveDrive drive, Intake intake, Shooter shooter, double wait) {
+    public static Command onePlusThree(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             PathPlannerFollow.create(drive, "1+3")
+                .setMaxVelocity(1)
+                .setAcceleration(3)
+                .build()
+        );
+    }
+    public static Command onePlusF1(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            PathPlannerFollow.create(drive, "1+F1")
                 .setMaxVelocity(1)
                 .setAcceleration(3)
                 .build()
