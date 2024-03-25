@@ -25,19 +25,19 @@ public class ManualClimb extends Command {
 
     @Override
     public void execute() {
-        if(!isClimbing){
-            if(climb.getEncoderPosition() < 15){
-                isClimbing = true;
-            }
-        }
-        if(isClimbing){
-            intake.setPositionCommand(Intake.Value.CLIMB);
-        }
+        // if(!isClimbing){
+        //     if(climb.getEncoderPosition() > 15){
+        //         isClimbing = true;
+        //     }
+        // }
+        // if(isClimbing){
+        //     intake.setPositionCommand(Intake.Value.CLIMB);
+        // }
         double move = -climbMove.get();
         move = DroidRageConstants.squareInput(move);
         move = DroidRageConstants.applyDeadBand(move);
         // climb.setPower(move*1);
-        climb.setTargetPosition(climb.getTargetPosition() + move * 0.6);
+        climb.setTargetPosition(climb.getTargetPosition() + move * 0.4);
         climb.setMovingManually(!(move == 0));
     }
 

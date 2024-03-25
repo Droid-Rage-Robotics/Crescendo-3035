@@ -17,8 +17,8 @@ public class TransferToAmpMech extends SequentialCommandGroup {
                 shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.CLAW_TRANSFER)),
                 intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)
             ),
-            new WaitUntilCommand(()->shooter.isShooterTransferAmp()),
-            // new WaitCommand(1),
+            // new WaitUntilCommand(()->shooter.isShooterTransferAmp()),
+            new WaitCommand(.4),
             new ParallelCommandGroup(
                 ampMech.setPositionCommand(AmpMech.Value.HOLD),
                 shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.STOP)),
