@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -19,10 +20,15 @@ public class Vision extends SubsystemBase {
     // private HttpCamera limelightFeed = new HttpCamera
     //     ("limelight", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
     HttpCamera httpCamera = new HttpCamera("Limelight", "http://frcvision.local:1181/stream.mjpg");
+    //http://limelight.local:5801
+    //http://10.30.35.56:5801/
     //http://10.30.35.106:5801/
+    //http://frcvision.local:1181/stream.mjpg
+
+    //mjpg:http://10.30.35.56.5800 - no work
 
     // CameraServer
-    // CameraServer.getInstance().addCamera(httpCamera);
+    // CameraServer.addCamera(httpCamera);
     //     Shuffleboard.getTab("Tab")
     //         .add(httpCamera);     
         
@@ -32,14 +38,17 @@ public class Vision extends SubsystemBase {
 
     // Initialize Limelight network tables
     public Vision() {
+        // LimelightHelpers.
         LimelightHelpers.setLEDMode_PipelineControl("");
         LimelightHelpers.setLEDMode_ForceOff("");
         LimelightHelpers.setCropWindow("",-1,1,-1,1);
-        CameraServer.addCamera(httpCamera);
+        // CameraServer.addCamera(httpCamera);
+        Shuffleboard.getTab("Misc").add(httpCamera).withSize(3, 3);
     }
 
     @Override
     public void periodic() {
+        // httpCamera
         // llresults = LimelightHelpers.getLatestResults("");
         // // Post to smart dashboard periodically
         // SmartDashboard.putNumberArray("botpose", llresults.targetingResults.botpose);

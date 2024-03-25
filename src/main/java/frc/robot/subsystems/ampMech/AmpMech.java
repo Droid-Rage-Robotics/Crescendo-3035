@@ -15,24 +15,27 @@ public class AmpMech {
     //in Charged Up; Allows for you to different 
     //Position Based on game element
     public enum Value {
+        //0 start
+        //20 hold
+        //33 push
         START(0,147,0),
 
-        SHOOTER(0,140,0),
+        SHOOTER(0,140,0),//Ready to intake from shooter 
         INTAKE_SHOOTER(SHOOTER.getElevatorInches(),SHOOTER.getArmDegrees(),20),
 
         // INTAKE_HUMAN(10,132,INTAKE_SHOOTER.getIntakeSpeeds()),
-        AMP(20,220,33),
-        HOLD_AMP(AMP.getElevatorInches(),AMP.getArmDegrees(),INTAKE_SHOOTER.getIntakeSpeeds()),
+        AMP(17,220,33),
+        HOLD_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), INTAKE_SHOOTER.getIntakeSpeeds()),
 
-        AUTO_AMP(AMP.getElevatorInches(),AMP.getArmDegrees(),AMP.getIntakeSpeeds()),
+        AUTO_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), AMP.getIntakeSpeeds()),
 
         
-        TRAP(36.5,150,33),
-        HOLD_TRAP(TRAP.getElevatorInches(),TRAP.getArmDegrees(),0),
+        TRAP(35,225,33),
+        HOLD_TRAP(TRAP.getElevatorInches(),170,20),
 
         HOLD(0,180,INTAKE_SHOOTER.getIntakeSpeeds()),
         CLIMB(TRAP.getElevatorInches(),140, 0),
-        SHOOT(0,216,0)
+        SHOOT(0,200,0)//When Shooting
 
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
@@ -134,6 +137,15 @@ public class AmpMech {
                             arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                         ),
                         new WaitCommand(1.1),
+                        intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                    );
+                case TRAP ->
+                    new SequentialCommandGroup(
+                        new ParallelCommandGroup(
+                            elevator.runOnce(()->elevator.setTargetPosition(targetPosition.getElevatorInches())),
+                            arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
+                        ),
+                        new WaitCommand(1.5),
                         intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
                     );
                 default -> 

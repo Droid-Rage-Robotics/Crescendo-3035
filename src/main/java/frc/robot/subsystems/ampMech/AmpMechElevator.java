@@ -22,7 +22,7 @@ public class AmpMechElevator extends SubsystemBase {
     private final SafeCanSparkMax motor;
     
     // private final PIDController controller = new PIDController(0, 0, 0.);//2.4
-    private final PIDController controller = new PIDController(.5, 0, 0);//2.4
+    private final PIDController controller = new PIDController(.52, 0, 0);
     // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0,0, 0, 0);
     // private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.15, .6, 0, 0);
 
@@ -78,7 +78,7 @@ public class AmpMechElevator extends SubsystemBase {
     public void periodic() {
         // setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + 
         //     feedforward.calculate(getTargetPosition()));
-        setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + 
+        setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + //1.1
             .37);
         // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()) + 
         //     .2);

@@ -84,7 +84,7 @@ public class AmpMechArm extends SubsystemBase {
 
         controller.setTolerance(Math.toRadians(1));
 
-        feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor - Works
+        feedforward = new ArmFeedforward(0.455,.65,.0859,.0035872); //SysID with just motor - Works
 
 
         ComplexWidgetBuilder.create(controller, "Arm PID", AmpMech.class.getSimpleName())

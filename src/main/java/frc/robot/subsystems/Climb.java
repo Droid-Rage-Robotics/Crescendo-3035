@@ -17,12 +17,13 @@ public class Climb extends SubsystemBase{
         public static final double GEAR_DIAMETER_INCHES = 1.88;
         public static final double COUNTS_PER_PULSE = 1; // 2048 bc rev through bore
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
-        public static final double MIN_POSITION = 0;
-        public static final double MAX_POSITION = 16.2;
-    }public enum Position{
-        CLIMB(29),
+        // public static final double MIN_POSITION = -29;
+        // public static final double MAX_POSITION = 29;
+    }
+    public enum Position{
+        CLIMB(12),
         START(0),
-        TRAP(-27)
+        TRAP(-29)
         ;
 
         private final ShuffleboardValue<Double>  climbPos;
@@ -34,7 +35,7 @@ public class Climb extends SubsystemBase{
                 .build();
         }
     } 
-    private final PIDController controller = new PIDController(.38, 0, 0);
+    private final PIDController controller = new PIDController(1, 0, 0);
     // private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
     private final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
         (0.0, "Climb/Voltage", Climb.class.getSimpleName())
@@ -62,7 +63,8 @@ public class Climb extends SubsystemBase{
                 Climb.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            voltageWriter
+            voltageWriter,
+            60
         );
 
         motorR = new SafeCanSparkMax(
@@ -76,7 +78,8 @@ public class Climb extends SubsystemBase{
                 Climb.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-            voltageWriter
+            voltageWriter,
+            60
         );
 
         ComplexWidgetBuilder.create(controller, "PID", 
@@ -87,6 +90,8 @@ public class Climb extends SubsystemBase{
         ComplexWidgetBuilder.create(DisabledCommand
             .create(runOnce(this::resetEncoder)), 
             "Reset Encoder", Climb.class.getSimpleName());
+        // controller.se
+        setTargetPosition(Climb.Position.START);
     }
 
     @Override
@@ -126,14 +131,13 @@ public class Climb extends SubsystemBase{
     }
 
     
-    public double getMaxPosition() {
-        return Constants.MAX_POSITION;
-    }
-
+    // public double getMaxPosition() {
+    //     return Constants.MAX_POSITION;
+    // }
     
-    public double getMinPosition() {
-        return Constants.MIN_POSITION;
-    }
+    // public double getMinPosition() {
+    //     return Constants.MIN_POSITION;
+    // }
 
     
     public void resetEncoder() {
@@ -178,5 +182,8 @@ public class Climb extends SubsystemBase{
     }
     public SafeCanSparkMax getMotorR(){
         return motorR;
+    }
+    public double getError(){
+        return controller.getPositionError();
     }
 }
