@@ -37,7 +37,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //Climb positions
 //current stuff
 public class Robot extends TimedRobot {
-    //15 missing
+    //15 missing^
     private final SwerveDrive drive = new SwerveDrive(false);//2-10
     private final Shooter shooter = new Shooter(false);//18.19    
 
@@ -47,8 +47,8 @@ public class Robot extends TimedRobot {
     private final AmpMech ampMech = new AmpMech(elevator, arm, clawIntake);
 
     // private final Climb climb = new Climb(false,false);//20,21
-    private final ClimbAlternate climb = new ClimbAlternate(false,false,arm.getMotor());//20,21
-    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    private final ClimbAlternate climb = new ClimbAlternate(false,false);//20,21
+    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
     private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
     private final Intake intake = new Intake(dropDown, intakeWheel);//done
     
@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
     private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
 
 
-    // private final Vision vision = new Vision();
+    private final Vision vision = new Vision();
     private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);

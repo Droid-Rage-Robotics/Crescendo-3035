@@ -91,14 +91,14 @@ public class RobotContainer {
 			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
 			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
 		operator.leftTrigger().onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
-		// operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
+		operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
 
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
-		operator.b()//TODO REMOVE THIS
-			.onTrue(new SequentialCommandGroup(
-				new DropAmp(ampMech, cycleTracker)
-			));
+		// operator.b()//TODO REMOVE THIS
+		// 	.onTrue(new SequentialCommandGroup(
+		// 		new DropAmp(ampMech, cycleTracker)
+		// 	));
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
