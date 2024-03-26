@@ -65,9 +65,9 @@ public class RobotContainer {
 		// .onTrue(new InstantCommand(()->drive.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
 
 		driver.rightTrigger()
-			.whileTrue(new IntakeElementInCommand(driver, intake));
+			.whileTrue(new IntakeElementInCommand(driver, intake))
 			// .whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
-			// .onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 
 		driver.leftTrigger().whileTrue(//intake.setPositionCommand(Intake.Value.OUTTAKE)
 			new ConditionalCommand(

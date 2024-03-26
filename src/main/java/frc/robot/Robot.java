@@ -38,7 +38,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10
+    private final SwerveDrive drive = new SwerveDrive(false);//2-10
     private final Shooter shooter = new Shooter(false);//18.19    
 
     private final AmpMechElevator elevator = new AmpMechElevator(false);//22done
@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
 
     // private final Climb climb = new Climb(false,false);//20,21
     private final ClimbAlternate climb = new ClimbAlternate(false,false,arm.getMotor());//20,21
-    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
     private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
     private final Intake intake = new Intake(dropDown, intakeWheel);//done
     
