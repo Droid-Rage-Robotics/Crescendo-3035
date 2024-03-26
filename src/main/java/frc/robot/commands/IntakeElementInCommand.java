@@ -16,7 +16,7 @@ public class IntakeElementInCommand extends SequentialCommandGroup {
                     intake.setPositionCommand(Intake.Value.SHOOTER_HOLD),
                     new InstantCommand(
                         ()->driver.getHID().setRumble(RumbleType.kBothRumble, 1)
-                    )
+                    ).withTimeout(3)
                 ),
                 new SequentialCommandGroup(//false
                     intake.setPositionCommand(Intake.Value.INTAKE_GROUND)
