@@ -131,3 +131,9 @@ encoder fixing?
 // testButton.configureDriveBindings(drive);
 // testButton.configureSysIDBindings(sysID);
 // testButton.configureAmpMechTestBindings(ampMech);
+
+
+Test the rotation of the drive  moror
+2910 for drivetrain
+ public static final int DRIVE_CURRENT_LIMIT = 70;
+    public static final int STEER_CURRENT_LIMIT = 30;
