@@ -71,7 +71,7 @@ public class SafeTalonFX extends SafeMotor{
         motor.setInverted(isInverted);
         setIdleMode(mode);
         configuration.Audio.AllowMusicDurDisable = false; //true
-        // configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
+        // configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //Does not work as intended
         if(supplyCurrentLimit!=0){
             configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
             configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
@@ -127,8 +127,8 @@ public class SafeTalonFX extends SafeMotor{
     }
 
     public double getPosition() {
-        // return motor.getPosition().getValueAsDouble()*positionConversionFactor;
-        return motor.getPosition().getValueAsDouble();
+        return motor.getPosition().getValueAsDouble()*positionConversionFactor;
+        // return motor.getPosition().getValueAsDouble();
 
     }
 
