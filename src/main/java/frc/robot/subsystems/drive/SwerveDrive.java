@@ -109,18 +109,18 @@ public class SwerveDrive extends SubsystemBase {
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
 
     private final ShuffleboardValue<String> tippingStateWriter = 
-        ShuffleboardValue.create(tippingState.name(), "State/Tipping State", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(tippingState.name(), "Current/State/Tipping State", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<String> speedStateWriter = 
-        ShuffleboardValue.create(speed.name(), "State/Speed", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(speed.name(), "Current/State/Speed", SwerveDrive.class.getSimpleName()).build();
     
     private final ShuffleboardValue<Double> headingWriter = 
-        ShuffleboardValue.create(0.0, "Gyro/Heading-Yaw (Degrees)", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(0.0, "Current/Gyro/Heading-Yaw (Degrees)", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<Double> rollWriter = 
-        ShuffleboardValue.create(0.0, "Gyro/Roll (Degrees)", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(0.0, "Current/Gyro/Roll (Degrees)", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<Double> pitchWriter =   
-        ShuffleboardValue.create(0.0, "Gyro/Pitch (Degrees)", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create(0.0, "Current/Gyro/Pitch (Degrees)", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<String> locationWriter = 
-        ShuffleboardValue.create("", "Robot Location", SwerveDrive.class.getSimpleName()).build();
+        ShuffleboardValue.create("", "Current/Robot Location", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<Boolean> isEnabled = 
         ShuffleboardValue.create(true, "Is Drive Enabled", SwerveDrive.class.getSimpleName())
         .withWidget(BuiltInWidgets.kToggleSwitch)

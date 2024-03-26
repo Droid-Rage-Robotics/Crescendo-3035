@@ -58,7 +58,7 @@ public class Constants {
         ("____", "Shooter/TargetShooterSpeed", 
         Shooter.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> shooterVoltageWriter = ShuffleboardValue.create
-        (0.0, "ShooterVoltageWriter", 
+        (0.0, "Shooter/ShooterVoltageWriter", 
         Shooter.class.getSimpleName()).build();
     private final PIDController shooterController;
     private final SimpleMotorFeedforward feedforward;
