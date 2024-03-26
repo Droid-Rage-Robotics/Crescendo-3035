@@ -18,7 +18,7 @@ import frc.robot.utility.motor.SafeMotor;
 import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.motor.SafeTalonFX;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
-
+@Deprecated
 public class SwerveModuleKrakenCAN {
     public enum POD{
         FL,

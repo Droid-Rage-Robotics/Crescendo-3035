@@ -44,7 +44,7 @@ public class SwerveDrive extends SubsystemBase {
         new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, -SwerveDriveConfig.TRACK_WIDTH.get() / 2)   // Back Right ++
     );
 
-    
+    // private Field2d field = new Field2d();
     
     private final SwerveModuleKraken frontRight = new SwerveModuleKraken(
         3,
@@ -99,7 +99,7 @@ public class SwerveDrive extends SubsystemBase {
     private final Pigeon2 pigeon2 = new Pigeon2(14);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();;
 
-    private final SwerveDriveOdometry odometery = new SwerveDriveOdometry (
+    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
         DRIVE_KINEMATICS, 
         new Rotation2d(0), 
         getModulePositions()
@@ -154,6 +154,7 @@ public class SwerveDrive extends SubsystemBase {
     private final Field2d field2d = new Field2d();
 
     public SwerveDrive(Boolean isEnabled) {
+        // field2d.se();
         for (SwerveModuleKraken swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
@@ -178,7 +179,7 @@ public class SwerveDrive extends SubsystemBase {
     
     @Override
     public void periodic() {
-        odometery.update(
+        odometry.update(
             getRotation2d(),
             getModulePositions()
         );
@@ -250,7 +251,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return odometery.getPoseMeters();
+        return odometry.getPoseMeters();
     }
 
     public boolean isFieldOriented() {
@@ -278,7 +279,7 @@ public class SwerveDrive extends SubsystemBase {
     // }
 
     public void resetOdometry(Pose2d pose) {
-        odometery.resetPosition(getRotation2d(), getModulePositions(), pose);
+        odometry.resetPosition(getRotation2d(), getModulePositions(), pose);
     }
 
     public void drive(double xSpeed, double ySpeed, double turnSpeed) {

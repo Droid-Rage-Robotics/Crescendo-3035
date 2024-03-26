@@ -121,21 +121,21 @@ public class SwerveDriveTeleop extends Command {
 
         // Smooth driving and apply speed
         if(isLimiter){
-            xSpeed = 
-                xLimiter.calculate(xSpeed) * 
-                xSpeed *
-                SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
-                drive.getTranslationalSpeed();
-            ySpeed = 
-                yLimiter.calculate(ySpeed) *
-                ySpeed *
-                SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
-                drive.getTranslationalSpeed();
-            turnSpeed = 
-                turnLimiter.calculate(turnSpeed) * 
-                turnSpeed *
-                SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() * 
-                drive.getAngularSpeed();
+            // xSpeed = 
+            //     xLimiter.calculate(xSpeed) * 
+            //     xSpeed *
+            //     SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+            //     drive.getTranslationalSpeed();
+            // ySpeed = 
+            //     yLimiter.calculate(ySpeed) *
+            //     ySpeed *
+            //     SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+            //     drive.getTranslationalSpeed();
+            // turnSpeed = 
+            //     turnLimiter.calculate(turnSpeed) * 
+            //     turnSpeed *
+            //     SwerveDriveConstants.SwerveDriveConfig.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() * 
+            //     drive.getAngularSpeed();
         } else {
             xSpeed = 
                 xSpeed *
