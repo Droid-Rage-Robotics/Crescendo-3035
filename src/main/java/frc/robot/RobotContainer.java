@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -56,9 +58,11 @@ public class RobotContainer {
 				driver::getLeftY,
 				driver::getRightX,
 				driver,
-				true
+				false//No Work; Do no use this
 				)
 			);//TODO:Test Yaw Buttons
+		// driver.x().onTrue(drive.resetEncoders())
+		// .onTrue(new InstantCommand(()->drive.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
 
 		driver.rightTrigger()
 			.whileTrue(new IntakeElementInCommand(driver, intake));
