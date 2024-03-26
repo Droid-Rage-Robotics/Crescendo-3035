@@ -43,6 +43,7 @@ public class AutoChooser {
         autoChooser.addOption("NothingAuto", new InstantCommand());
         addAutos(drive, intake, shooter);
         addTuningAuto(drive);
+        autoChooser.setDefaultOption("test", BasicAutos.test(drive));
 
         
     }
@@ -60,7 +61,7 @@ public class AutoChooser {
         // autoChooser.addOption("TEST", Autos.test(drive, intake, shooter));
         autoChooser.addOption("One Plus Three", 
             Autos.onePlusThree(drive, intake, shooter));
-        autoChooser.setDefaultOption("One Plus F1", 
+        autoChooser.addOption("One Plus F1", 
             Autos.onePlusF1(drive, intake, shooter));
 
         autoChooser.addOption("ShootPlusPark", 
@@ -90,12 +91,12 @@ public class AutoChooser {
     }
 
     public static void createAutoBuilder(SwerveDrive drive){
+        // AutoBuilder
         AutoBuilder.configureHolonomic(
             drive::getPose, // Robot pose supplier
             drive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             drive::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             drive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            //TODO:Test WILL THIS WORK? IS IT ROBOT RELATIVE OR FIELD CENTRIC
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.get(), 
                     SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.get(), 

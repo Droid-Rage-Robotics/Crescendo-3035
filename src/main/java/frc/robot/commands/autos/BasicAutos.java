@@ -76,6 +76,14 @@ public final class BasicAutos {
         );
     }
 
+    public static Command test(SwerveDrive drive){
+        return new SequentialCommandGroup(
+            PathPlannerPathFollow.create(drive, "BackwardTest")
+                .build(),
+                PathPlannerPathFollow.create(drive, "TurnTest")
+                .build()
+        );
+    }
 
     private BasicAutos () {}
 }
