@@ -43,7 +43,7 @@ public class AutoChooser {
         autoChooser.addOption("NothingAuto", new InstantCommand());
         addAutos(drive, intake, shooter);
         addTuningAuto(drive);
-        autoChooser.setDefaultOption("test", BasicAutos.test(drive));
+        autoChooser.addOption("test", BasicAutos.test(drive));
 
         
     }
@@ -80,7 +80,7 @@ public class AutoChooser {
     }
     
     public static void addTuningAuto(SwerveDrive drive){
-        autoChooser.addOption("BackwardTest", TuningAutos.backTest(drive));
+        autoChooser.setDefaultOption("BackwardTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));

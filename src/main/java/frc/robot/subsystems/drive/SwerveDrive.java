@@ -137,8 +137,8 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDrive(Boolean isEnabled) {
         // field2d.se();
         for (SwerveModuleKraken swerveModule: swerveModules) {
-            // swerveModule.brakeMode();
-            swerveModule.coastMode();
+            swerveModule.brakeMode();
+            // swerveModule.coastMode();
             // swerveModule.brakeAndCoast^Mode();
         }
         //TODO: Figure Out Mounting Config
