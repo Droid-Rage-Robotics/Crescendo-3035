@@ -8,12 +8,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Light extends SubsystemBase {
+  //You can only make one addressable led
     private final AddressableLED ledOne;
-    // private final AddressableLED ledTwo;
     private final AddressableLEDBuffer bufferOne;
-    
-    
-    // private final AddressableLEDBuffer bufferTwo;
 
     private final ShuffleboardValue<String> lightWriter = ShuffleboardValue.create
         ("Color", "Light Color", Light.class.getSimpleName())
@@ -48,9 +45,7 @@ public class Light extends SubsystemBase {
     
     public Light() {
         ledOne = new AddressableLED(2);
-        // ledTwo = new AddressableLED(1);
         bufferOne = new AddressableLEDBuffer(LED_COUNT_ONE);
-        // bufferTwo = new AddressableLEDBuffer(LED_COUNT_TWO);
 
         ledOne.setLength(bufferOne.getLength());
         ledOne.setData(bufferOne);
@@ -62,7 +57,6 @@ public class Light extends SubsystemBase {
     public void periodic() {
       // lightWriter.set(bufferOne.getLED(2).toString());
       ledOne.setData(bufferOne);
-      // ledTwo.setData(bufferTwo);
     }
   
     @Override
