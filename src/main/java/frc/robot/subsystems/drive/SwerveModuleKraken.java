@@ -37,7 +37,10 @@ public class SwerveModuleKraken {
         public static final double DRIVE_ENCODER_ROT_2_METER = DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMETER_METERS;
         public static final double DRIVE_ENCODER_RPM_2_METER_PER_SEC = DRIVE_ENCODER_ROT_2_METER / 60;
         public static final double READINGS_PER_REVOLUTION = 1;//4096
+
+        //Used for the CANCoder
         public static final double TURN_ENCODER_ROT_2_RAD = 2 * Math.PI / READINGS_PER_REVOLUTION;
+        public static final double TURN_ENCODER_ROT_2_RAD_SEC = TURN_ENCODER_ROT_2_RAD/60;
 
         public static final double TURN_P = 0.11;//0.5
 
@@ -56,10 +59,10 @@ public class SwerveModuleKraken {
     private final PIDController turningPidController;
     private final SimpleMotorFeedforward feedforward;
     // private static int num = 1;
-    // private final double driveSpeedMultiplier;
+    // private final double driveSpeedMultiplier
     private ShuffleboardValue<Double> turnPositionWriter;
     private ShuffleboardValue<Double> drivePositionWriter;
-    private ShuffleboardValue<Double> turnVoltageWriter;
+    // private ShuffleboardValue<Double> turnVoltageWriter;
     
     public SwerveModuleKraken(int driveMotorId, 
         int turnMotorId, boolean driveMotorReversed, 
@@ -100,7 +103,7 @@ public class SwerveModuleKraken {
             turningMotorReversed,
             IdleMode.Coast,
             Constants.TURN_ENCODER_ROT_2_RAD,
-            1.0,
+            Constants.TURN_ENCODER_ROT_2_RAD_SEC,
             ShuffleboardValue.create(isEnabled, "Module/Module " + podName.toString() + "/Turn Is Enabled "+
                 podName.toString() +turnMotorId, SwerveDrive.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
@@ -120,15 +123,17 @@ public class SwerveModuleKraken {
 
         feedforward = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV);
 
-        this.turnPositionWriter = ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Turn Position (Radians)", 
+        turnPositionWriter = ShuffleboardValue.create(0.0, 
+        "Module/Module " + podName.toString() + "/Turn Position (Radians)", 
             SwerveDrive.class.getSimpleName()).build();
-        this.drivePositionWriter = ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Position (Radians)", 
+        drivePositionWriter = ShuffleboardValue.create(0.0, 
+            "Module/Module " + podName.toString() + "/Drive Position (Radians)", 
             SwerveDrive.class.getSimpleName()).build();
         resetDriveEncoder();
 
-        turnVoltageWriter = ShuffleboardValue.create(0.0, podName.toString()+"", SwerveDrive.class.getSimpleName())
-            .withWidget(BuiltInWidgets.kGraph)
-            .build();
+        // turnVoltageWriter = ShuffleboardValue.create(0.0, podName.toString()+"", SwerveDrive.class.getSimpleName())
+        //     .withWidget(BuiltInWidgets.kGraph)
+        //     .build();
     }
 
     public double getDrivePos() {
@@ -145,13 +150,14 @@ public class SwerveModuleKraken {
         // return driveMotor.getEncoder().getVelocity();
         return driveMotor.getVelocity();
     }
-
-    public double getTurningVelocity(){
-        return turnEncoder.getVelocity().getValueAsDouble();
-    }
+    // public double getTurningVelocity(){
+    //     return turnEncoder.getVelocity().getValueAsDouble();
+    // }
 
     // public double getTurnEncoderRad() {
-    //     return getTurningPosition();
+    //     return getTurningPosition()*Constants.TURN_ENCODER_ROT_2_RAD_SEC;
+    //     return getTurningPosition()*; ^^ Have to most likely use the Constant to multiply
+
     // }
     
     public void resetDriveEncoder(){
@@ -220,6 +226,11 @@ public class SwerveModuleKraken {
 
     public void getTurnVoltage(){
         turnMotor.getVoltage();
-
     }
+
+    // public void periodic(){
+    //     getDrivePos();
+    //     getTurningPosition();
+    // }
+
 }

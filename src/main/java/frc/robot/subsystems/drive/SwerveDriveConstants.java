@@ -44,7 +44,7 @@ public class SwerveDriveConstants {
         private final ShuffleboardValue<Double> shuffleboardValue;
         private SwerveDriveConfig(double value) {
             shuffleboardValue = ShuffleboardValue.create(value, 
-                SwerveDriveConfig.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName())
+                "Constants/"+SwerveDriveConfig.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName())
                 // .withWidget(BuiltInWidgets.kAccelerometer)
                 .build();
         }
@@ -59,7 +59,8 @@ public class SwerveDriveConstants {
         ;
         private final ShuffleboardValue<Boolean> shuffleboardValue;
         private DriveOptions(boolean value) {
-            shuffleboardValue = ShuffleboardValue.create(value, DriveOptions.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName()).build();
+            shuffleboardValue = ShuffleboardValue.create(value, "Constants/"+
+                DriveOptions.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName()).build();
         } 
         @Override 
         public ShuffleboardValue<Boolean> getNum() { return shuffleboardValue; }
@@ -75,11 +76,11 @@ public class SwerveDriveConstants {
         private final ShuffleboardValue<Double> shuffleboardAngularValue;
         private Speed(double translationalSpeed, double angularSpeed) {
             shuffleboardTranslationalValue = ShuffleboardValue.create(translationalSpeed, 
-                Speed.class.getSimpleName()+"/"+name()+": Translational Speed", SwerveDrive.class.getSimpleName())
+                "Constants/"+Speed.class.getSimpleName()+"/"+name()+": Translational Speed", SwerveDrive.class.getSimpleName())
                 .withSize(3, 3)
                 .build();
             shuffleboardAngularValue = ShuffleboardValue.create(translationalSpeed, 
-                Speed.class.getSimpleName()+"/"+name()+": Angular Speed", SwerveDrive.class.getSimpleName())
+                "Constants/"+Speed.class.getSimpleName()+"/"+name()+": Angular Speed", SwerveDrive.class.getSimpleName())
                 .withSize(3, 3)
                 .build();
         }

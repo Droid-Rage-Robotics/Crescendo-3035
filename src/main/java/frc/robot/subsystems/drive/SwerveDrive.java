@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModuleKraken.POD;
@@ -44,7 +45,6 @@ public class SwerveDrive extends SubsystemBase {
         new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, -SwerveDriveConfig.TRACK_WIDTH.get() / 2)   // Back Right ++
     );
 
-    // private Field2d field = new Field2d();
     
     private final SwerveModuleKraken frontRight = new SwerveModuleKraken(
         3,
@@ -121,27 +121,6 @@ public class SwerveDrive extends SubsystemBase {
         ShuffleboardValue.create(0.0, "Gyro/Pitch (Degrees)", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<String> locationWriter = 
         ShuffleboardValue.create("", "Robot Location", SwerveDrive.class.getSimpleName()).build();
-
-    private final ShuffleboardValue<Double> frontLeftTurnPositionWriter = 
-        ShuffleboardValue.create(0.0, "Swerve Modules/Front Left/Turn Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-    private final ShuffleboardValue<Double> frontLeftDriveDistanceWriter = 
-        ShuffleboardValue.create(0.0, "Swerve Modules/Front Left/Drive Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-
-    private final ShuffleboardValue<Double> frontRightTurnPositionWriter = 
-        ShuffleboardValue.create(0.0, "Swerve Modules/Front Right/Turn Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-    private final ShuffleboardValue<Double> frontRightDriveDistanceWriter = 
-        ShuffleboardValue.create(0.0, "Swerve Modules/Front Right/Drive Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-    
-    private final ShuffleboardValue<Double> backLeftTurnPositionWriter = 
-        ShuffleboardValue.create(0.0, "Swerve Modules/Back Left/Turn Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-    private final ShuffleboardValue<Double> backLeftDriveDistanceWriter = 
-        ShuffleboardValue.create(0.0, "Swerve Modules/Back Left/Drive Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-
-    private final ShuffleboardValue<Double> backRightTurnPositionWriter = 
-        ShuffleboardValue.create(0.0, "Swerve Modules/Back Right/Turn Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-    private final ShuffleboardValue<Double> backRightDriveDistanceWriter = 
-        ShuffleboardValue.create(0.0, "Swerve Modules/Back Right/Drive Position (Radians)", SwerveDrive.class.getSimpleName()).build();
-
     private final ShuffleboardValue<Boolean> isEnabled = 
         ShuffleboardValue.create(true, "Is Drive Enabled", SwerveDrive.class.getSimpleName())
         .withWidget(BuiltInWidgets.kToggleSwitch)
@@ -152,12 +131,14 @@ public class SwerveDrive extends SubsystemBase {
 
     // private boolean isBreakMode = false;
     private final Field2d field2d = new Field2d();
+    
+    // ComplexWidgetBuilder.create(field2d);
 
     public SwerveDrive(Boolean isEnabled) {
         // field2d.se();
         for (SwerveModuleKraken swerveModule: swerveModules) {
-            swerveModule.brakeMode();
-            // swerveModule.coastMode();
+            // swerveModule.brakeMode();
+            swerveModule.coastMode();
             // swerveModule.brakeAndCoast^Mode();
         }
         //TODO: Figure Out Mounting Config
@@ -166,12 +147,14 @@ public class SwerveDrive extends SubsystemBase {
         poseConfigs.MountPoseYaw = 180;//Heading//180
         // pigeon2.configMountPose();
         pigeon2.getConfigurator().apply(poseConfigs);
-        pigeon2.setYaw(0);
+        // pigeon2.setYaw(0);
         
         // pigeon2.configMountPose(AxisDirection.NegativeX, AxisDirection.PositiveZ);
-        setYawCommand(SwerveDriveConfig.DEFAULT_HEADING_OFFSET.get());
+        // pigeon2.setYaw(0);
+        // setYawCommand(SwerveDriveConfig.DEFAULT_HEADING_OFFSET.get()); //<-This will not work
 
-        ComplexWidgetBuilder.create(field2d, "Field", SwerveDrive.class.getSimpleName());
+        // ComplexWidgetBuilder.create(field2d, "Field", SwerveDrive.class.getSimpleName());
+        SmartDashboard.putData(field2d);
         this.isEnabled.set(isEnabled);
         
     }
@@ -192,26 +175,12 @@ public class SwerveDrive extends SubsystemBase {
         locationWriter.set(getPose().getTranslation().toString());
 
 
-        // frontLeftTurnAbsolutePositionWriter.set(frontLeft.getTurnEncoderRad());
-        frontLeftTurnPositionWriter.set(frontLeft.getTurningPosition());
-        frontLeftDriveDistanceWriter.set(frontLeft.getDrivePos());
 
-        // frontRightTurnAbsolutePositionWriter.set(frontRight.getTurnEncoderRad());
-        frontRightTurnPositionWriter.set(frontRight.getTurningPosition());
-        frontRightDriveDistanceWriter.set(frontRight.getDrivePos());
 
-        // backLeftTurnAbsolutePositionWriter.set(backLeft.getTurnEncoderRad());
-        backLeftTurnPositionWriter.set(backLeft.getTurningPosition());
-        backLeftDriveDistanceWriter.set(backLeft.getDrivePos());
-
-        // backRightTurnAbsolutePositionWriter.set(backRight.getTurnEncoderRad());
-        backRightTurnPositionWriter.set(backRight.getTurningPosition());
-        backRightDriveDistanceWriter.set(backRight.getDrivePos());
-
-        for (SwerveModuleKraken swerveModule: swerveModules) {
-            swerveModule.getTurningPosition();
-            swerveModule.getDrivePos();
-        }
+        // for (SwerveModuleKraken swerveModule: swerveModules) {
+        //     swerveModule.getTurningPosition();
+        //     swerveModule.getDrivePos();
+        // }
         forwardVelocityWriter.write(getForwardVelocity());
     }
 
