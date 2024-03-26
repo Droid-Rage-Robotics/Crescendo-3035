@@ -12,7 +12,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SafeTalonFX extends SafeMotor{
     //Can use in relative and Absolute Encoder
-    private double velocityConversionFactor;
+    private double velocityConversionFactor, positionConversionFactor;
     private final TalonFX motor;
     private final Orchestra orchestra;
     private final MusicTone music = new MusicTone(20);
@@ -40,22 +40,11 @@ public class SafeTalonFX extends SafeMotor{
         double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
         ShuffleboardValue<Double> outputWriter) {
-        super(isEnabled, outputWriter);
-        motor = new TalonFX(deviceNumber);
-        
-        motor.setInverted(isInverted);
-        setIdleMode(mode);
-        configuration.Audio.AllowMusicDurDisable = false; //true
-        configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
-        // configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
-        // configuration.CurrentLimits.SupplyCurrentLimit =5;
-
-        this.velocityConversionFactor = velocityConversionFactor;
-
-        motor.getConfigurator().apply(configuration);
-
-        orchestra = new Orchestra();
-        orchestra.addInstrument(motor);
+            this(deviceNumber, isInverted, 
+            mode, positionConversionFactor,
+            velocityConversionFactor,
+            isEnabled, 
+            outputWriter, 0,0);
     }
 
     public SafeTalonFX(int deviceNumber, boolean isInverted, 
@@ -63,25 +52,11 @@ public class SafeTalonFX extends SafeMotor{
         double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
         ShuffleboardValue<Double> outputWriter, double supplyCurrentLimit) {
-        super(isEnabled, outputWriter);
-        motor = new TalonFX(deviceNumber);
-        
-        motor.setInverted(isInverted);
-        setIdleMode(mode);
-        configuration.Audio.AllowMusicDurDisable = false; //true
-        configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
-        if(supplyCurrentLimit!=0){
-            configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
-            configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
-        }
-        
-
-        this.velocityConversionFactor = velocityConversionFactor;
-
-        motor.getConfigurator().apply(configuration);
-
-        orchestra = new Orchestra();
-        orchestra.addInstrument(motor);
+            this(deviceNumber, isInverted, 
+            mode, positionConversionFactor,
+            velocityConversionFactor,
+            isEnabled, 
+            outputWriter, supplyCurrentLimit,0);
     }
 
     // motor.getVoltageCompensationNominalVoltage()
@@ -96,7 +71,7 @@ public class SafeTalonFX extends SafeMotor{
         motor.setInverted(isInverted);
         setIdleMode(mode);
         configuration.Audio.AllowMusicDurDisable = false; //true
-        configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
+        // configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //TODO:Test
         if(supplyCurrentLimit!=0){
             configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
             configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
@@ -106,7 +81,7 @@ public class SafeTalonFX extends SafeMotor{
             configuration.CurrentLimits.StatorCurrentLimit = supplyCurrentLimit;
         }
         
-
+        this.positionConversionFactor = positionConversionFactor;
         this.velocityConversionFactor = velocityConversionFactor;
 
         motor.getConfigurator().apply(configuration);
@@ -152,7 +127,9 @@ public class SafeTalonFX extends SafeMotor{
     }
 
     public double getPosition() {
+        // return motor.getPosition().getValueAsDouble()*positionConversionFactor;
         return motor.getPosition().getValueAsDouble();
+
     }
 
     public void setPosition(double position) {
