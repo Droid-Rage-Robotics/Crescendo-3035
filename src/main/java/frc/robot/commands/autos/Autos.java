@@ -15,7 +15,7 @@ public final class Autos {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             PathPlannerFollow.create(drive, "1+3")
-                .setMaxVelocity(1)
+                .setMaxVelocity(3)
                 .setAcceleration(3)
                 .build()
         );
@@ -24,7 +24,7 @@ public final class Autos {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             PathPlannerFollow.create(drive, "1+F1")
-                .setMaxVelocity(1)
+                .setMaxVelocity(3)
                 .setAcceleration(3)
                 .build()
         );

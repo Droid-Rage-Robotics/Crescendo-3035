@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public final class TuningAutos {
@@ -18,19 +17,31 @@ public final class TuningAutos {
             // Commands.runOnce(() -> drive.resetOdometry(path.getPreviewStartingHolonomicPose())),
             // PathPlannerFollow.
             PathPlannerFollow.create(drive, "ForwardTest")
-                .setMaxVelocity(1)
-                .setAcceleration(3)
+            .setMaxVelocity(6)
+            .setAcceleration(6)
                 .build()
         );
     }
     public static Command backTest(SwerveDrive drive) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "BackwardTest")
-                .setMaxVelocity(1)
-                .setAcceleration(3)
+                .setMaxVelocity(3)
+                .setAcceleration(5)
                 .build()
         );
     }
+    // public static Command forwardAndBackTest(SwerveDrive drive) {//Top Red/Bottom Blue
+    //     return new SequentialCommandGroup(
+    //         PathPlannerFollow.create(drive, "ForwardTest")
+    //             .setMaxVelocity(3)
+    //             .setAcceleration(5)
+    //             .build(),
+    //         PathPlannerFollow.create(drive, "BackwardTest")
+    //             .setMaxVelocity(6)
+    //             .setAcceleration(6)
+    //             .build()
+    //     );
+    // }
     public static Command turnTest(SwerveDrive drive) {
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "TurnTest")

@@ -43,7 +43,7 @@ public class AutoChooser {
         autoChooser.addOption("NothingAuto", new InstantCommand());
         addAutos(drive, intake, shooter);
         addTuningAuto(drive);
-        autoChooser.addOption("test", BasicAutos.test(drive));
+        // autoChooser.addOption("test", BasicAutos.test(drive));
 
         
     }
@@ -59,7 +59,7 @@ public class AutoChooser {
             Autos.onePlusF1ParkBlue(drive, intake, shooter));
         // autoChooser.addOption("L1+F1Red(OnlyPickUp)", Autos.onePlusF1ParkRed(drive, intake, shooter));
         // autoChooser.addOption("TEST", Autos.test(drive, intake, shooter));
-        autoChooser.addOption("One Plus Three", 
+        autoChooser.setDefaultOption("One Plus Three", 
             Autos.onePlusThree(drive, intake, shooter));
         autoChooser.addOption("One Plus F1", 
             Autos.onePlusF1(drive, intake, shooter));
@@ -80,7 +80,7 @@ public class AutoChooser {
     }
     
     public static void addTuningAuto(SwerveDrive drive){
-        autoChooser.setDefaultOption("BackwardTest", TuningAutos.backTest(drive));
+        autoChooser.addOption("BackwardTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
@@ -88,6 +88,7 @@ public class AutoChooser {
         // autoChooser.addOption("LineToLinearTest", TuningAutos.lineToLinearTest(drive));
         autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
         autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
+        // autoChooser.addOption("ForwardAndBack", TuningAutos.forwardAndBackTest(drive));
     }
 
     public static void createAutoBuilder(SwerveDrive drive){
