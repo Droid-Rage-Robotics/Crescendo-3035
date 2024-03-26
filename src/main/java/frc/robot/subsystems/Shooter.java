@@ -26,7 +26,7 @@ public class Constants {
 
         HOLD(4000),
         STOP(0), 
-        CLAW_TRANSFER(2000),//4000
+        CLAW_TRANSFER(2300),//4000
         POSITION_TOLERANCE(5),
         // AMP(3000)
 

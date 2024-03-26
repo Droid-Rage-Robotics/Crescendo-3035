@@ -75,7 +75,7 @@ public class IntakeDropDown extends SubsystemBase {
                 30
         );
 
-        controller = new PIDController(.92, 0.0, 0.0);//0.62
+        controller = new PIDController(.927, 0.0, 0.0);//0.62
         // controller = new PIDController(0, 0.0, 0.0);
 
         controller.setTolerance(Math.toRadians(1));

@@ -24,16 +24,16 @@ public class AmpMech {
         INTAKE_SHOOTER(SHOOTER.getElevatorInches(),SHOOTER.getArmDegrees(),20),
 
         // INTAKE_HUMAN(10,132,INTAKE_SHOOTER.getIntakeSpeeds()),
-        AMP(17,220,33),
+        AMP(17,220,38),
         HOLD_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), INTAKE_SHOOTER.getIntakeSpeeds()),
 
         AUTO_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), AMP.getIntakeSpeeds()),
 
         
-        TRAP(35,225,33),
+        TRAP(35,225,AMP.getIntakeSpeeds()),
         HOLD_TRAP(TRAP.getElevatorInches(),170,20),
 
-        HOLD(0,180,INTAKE_SHOOTER.getIntakeSpeeds()),
+        HOLD(0,START.getArmDegrees(),INTAKE_SHOOTER.getIntakeSpeeds()),
         CLIMB(TRAP.getElevatorInches(),140, 0),
         SHOOT(0,220,0)//When Shooting
 

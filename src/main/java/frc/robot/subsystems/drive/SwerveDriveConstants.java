@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
@@ -22,13 +23,18 @@ public class SwerveDriveConstants {
         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED(1),
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
 
-        TRANSLATIONAL_KP(0), //1.8
+        TRANSLATIONAL_KP(8.15), //1.8
         TRANSLATIONAL_KI(0),
         TRANSLATIONAL_KD(0),
 
-        THETA_KP(0.555), //0.7
+        THETA_KP(7.2), //7
         THETA_KI(0),
         THETA_KD(0),
+//1.8, 7
+        //Jack in the Bot
+    //     private final PIDController xController = new PIDController(8, 0, 0);
+    // private final PIDController yController = new PIDController(8, 0, 0);
+    // private final PIDController rotationController = new PIDController(1.5, 0, 0);
 
         // use witth 4096 reading
         // FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),
@@ -70,7 +76,7 @@ public class SwerveDriveConstants {
 
     public enum Speed {
         TURBO(1, 1),
-        NORMAL(4, .45),//3.5, 1 //1,.4
+        NORMAL(6, 1),//3.5, 1 //1,.4
         SLOW(0.2, 0.2),
         SUPER_SLOW(0.05, 0.05),
         ;

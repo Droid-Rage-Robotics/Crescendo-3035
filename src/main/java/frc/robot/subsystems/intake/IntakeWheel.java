@@ -47,7 +47,9 @@ public class IntakeWheel extends SubsystemBase {
                 .build(),
             ShuffleboardValue.create(0.0, "Intake/Output Writer", Intake.class.getSimpleName())
                 .build(),
-            7
+                15
+            // 10,
+            // 15
         );
         // intakeEncoder = intake.getEncoder();
 

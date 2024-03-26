@@ -20,7 +20,7 @@ public class Climb extends SubsystemBase{
         // public static final double MIN_POSITION = -37;//Motor
         // public static final double MAX_POSITION = 30;
         public static final double MIN_POSITION = -1;//Encoder
-        public static final double MAX_POSITION = 1;
+        public static final double MAX_POSITION = 1.1;
     }
     public enum Position{
         //Normal Motor Value

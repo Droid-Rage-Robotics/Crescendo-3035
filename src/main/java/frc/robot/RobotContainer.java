@@ -69,12 +69,19 @@ public class RobotContainer {
 			// .whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 
+		driver.rightTrigger().and(driver.leftBumper())
+			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_HOLD))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 		driver.leftTrigger().whileTrue(//intake.setPositionCommand(Intake.Value.OUTTAKE)
 			new ConditionalCommand(
 				new DropAmp(ampMech, cycleTracker),//true
 				intake.setPositionCommand(Intake.Value.OUTTAKE), //false
-				()->(AmpMech.Value.AUTO_AMP==ampMech.getPosition()||AmpMech.Value.AMP==ampMech.getPosition())))	//Check
-			.onFalse(intake.setPositionCommand(Intake.Value.HOLD));
+				()->(AmpMech.Value.HOLD_AMP==ampMech.getPosition()||AmpMech.Value.AMP==ampMech.getPosition())))	//Check
+			.onFalse(new SequentialCommandGroup(
+				intake.setPositionCommand(Intake.Value.HOLD),
+				
+				ampMech.setPositionCommand(AmpMech.Value.START)
+				));
 			
 			//Make it where when the amp mech is ready to outake, it outtakes
 //what means??^^
@@ -89,7 +96,11 @@ public class RobotContainer {
 
 		operator.rightTrigger()
 			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
-			.onFalse(new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD));
+			.onFalse(new SequentialCommandGroup(
+				new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD),
+                ampMech.setPositionCommand(AmpMech.Value.START)
+
+			));
 		operator.leftTrigger().onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
 		operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
 
