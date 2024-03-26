@@ -38,7 +38,9 @@ public class ManualClimb extends Command {
         move = DroidRageConstants.squareInput(move);
         move = DroidRageConstants.applyDeadBand(move);
         // climb.setPower(move*1);
-        climb.setTargetPosition(climb.getTargetPosition() + move * 0.4);
+        // climb.setTargetPosition(climb.getTargetPosition() + move * 0.4);//For Motor
+        climb.setTargetPosition(climb.getTargetPosition() + move * 0.05);//For Encoder
+
         climb.setMovingManually(!(move == 0));
     }
 

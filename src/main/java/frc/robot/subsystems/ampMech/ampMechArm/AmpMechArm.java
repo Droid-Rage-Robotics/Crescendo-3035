@@ -39,7 +39,7 @@ public class AmpMechArm extends SubsystemBase {
         .withSize(1, 2)
         .build();
     
-        protected final ShuffleboardValue<Double> encoderVelocityWriter = 
+    protected final ShuffleboardValue<Double> encoderVelocityWriter = 
         ShuffleboardValue.create(0.0, "Arm/ Encoder Velocity (Radians per Second)", 
             AmpMech.class.getSimpleName())
         .withSize(1, 2)
@@ -79,12 +79,12 @@ public class AmpMechArm extends SubsystemBase {
                 .build()
         );
 
-        controller = new PIDController(3.1, 0.0, 0.0);//1.6
+        controller = new PIDController(3.5, 0.0, 0.0);//1.6
         // controller = new PIDController(0, 0.0, 0.0);
 
         controller.setTolerance(Math.toRadians(1));
 
-        feedforward = new ArmFeedforward(0.455,.65,.0859,.0035872); //SysID with just motor - Works
+        feedforward = new ArmFeedforward(0.46,.655,.0859,.003587);
 
 
         ComplexWidgetBuilder.create(controller, "Arm PID", AmpMech.class.getSimpleName())

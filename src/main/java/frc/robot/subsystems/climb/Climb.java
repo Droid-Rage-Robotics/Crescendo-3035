@@ -17,14 +17,20 @@ public class Climb extends SubsystemBase{
         public static final double GEAR_DIAMETER_INCHES = 1.88;
         public static final double COUNTS_PER_PULSE = 1; // 2048 bc rev through bore
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
-        // public static final double MIN_POSITION = -29;
-        // public static final double MAX_POSITION = 29;
+        // public static final double MIN_POSITION = -37;//Motor
+        // public static final double MAX_POSITION = 30;
+        public static final double MIN_POSITION = -1;//Encoder
+        public static final double MAX_POSITION = 1;
     }
     public enum Position{
-        CLIMB(12),
+        //Normal Motor Value
+        // CLIMB(12),
+        // START(0),
+        // TRAP(-29)
+        // ;
+        CLIMB(1),
         START(0),
-        TRAP(-29)
-        ;
+        TRAP(-.945);
 
         private final ShuffleboardValue<Double>  climbPos;
 
@@ -35,7 +41,8 @@ public class Climb extends SubsystemBase{
                 .build();
         }
     } 
-    protected final PIDController controller = new PIDController(1, 0, 0);
+    // protected final PIDController controller = new PIDController(1, 0, 0);//For Motor PID
+    protected final PIDController controller = new PIDController(1., 0, 0);//For Encoder
     // private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1, 0.2, 0);
     protected final ShuffleboardValue<Double> voltageWriter = ShuffleboardValue.create
         (0.0, "Climb/Voltage", Climb.class.getSimpleName())
@@ -82,6 +89,8 @@ public class Climb extends SubsystemBase{
             60
         );
 
+        controller.setTolerance(.1);
+
         ComplexWidgetBuilder.create(controller, "PID", 
             Climb.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
@@ -90,7 +99,6 @@ public class Climb extends SubsystemBase{
         ComplexWidgetBuilder.create(DisabledCommand
             .create(runOnce(this::resetEncoder)), 
             "Reset Encoder", Climb.class.getSimpleName());
-        // controller.se
         setTargetPosition(Climb.Position.START);
     }
 
@@ -104,8 +112,11 @@ public class Climb extends SubsystemBase{
         setTargetPosition(position.climbPos.get());
         // controller.setSetpoint(position.climbPos.get());
     }
-    public void setTargetPosition(double positionRadians){
-        controller.setSetpoint(positionRadians);
+    public void setTargetPosition(double position){
+        if(position<Constants.MIN_POSITION||position>Constants.MAX_POSITION){
+            return;
+        }
+        controller.setSetpoint(position);
     }
     
     
@@ -115,6 +126,9 @@ public class Climb extends SubsystemBase{
         motorR.setPower(power);
     }
     protected void setVoltage(double voltage) {
+        if(voltage<0.005){
+            voltage=0;
+        }
         voltageWriter.set(voltage);    
         motorL.setVoltage(voltage);
         // rightMotor.setVoltage(voltage);

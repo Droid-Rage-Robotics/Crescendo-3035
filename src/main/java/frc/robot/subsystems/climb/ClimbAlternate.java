@@ -1,21 +1,16 @@
 package frc.robot.subsystems.climb;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.general.DisabledCommand;
-import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.motor.SafeMotor.IdleMode;
-import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
 // @Deprecated
 public class ClimbAlternate extends Climb{
-    private SafeCanSparkMax sparkMax;
-    public ClimbAlternate(Boolean isEnabledLeft, Boolean isEnabledRight, SafeCanSparkMax sparkMax) {
+    // private SafeCanSparkMax sparkMax;
+    private RelativeEncoder encoder;
+    public ClimbAlternate(Boolean isEnabledLeft, Boolean isEnabledRight) {
         super(isEnabledLeft,isEnabledRight);
-        this.sparkMax = sparkMax;
+        encoder = motorL.getAlternateEncoder(1024);
+        encoder.setInverted(false);
+        // this.sparkMax = sparkMax;
     }
 
     @Override
@@ -29,10 +24,7 @@ public class ClimbAlternate extends Climb{
 
     
     public double getEncoderPosition() {
-        double position = sparkMax.getAlternateEncoder(1024).getPosition();
-        // sparkMax.
-        //2048, 8192, 4096
-        // double position = motorL.getPosition(); //If You want to Change what motor is giving the values
+        double position = encoder.getPosition();
         encoderPositionWriter.write(position);
         return position;
     }

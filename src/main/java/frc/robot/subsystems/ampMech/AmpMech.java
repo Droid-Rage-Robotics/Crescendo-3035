@@ -35,7 +35,7 @@ public class AmpMech {
 
         HOLD(0,180,INTAKE_SHOOTER.getIntakeSpeeds()),
         CLIMB(TRAP.getElevatorInches(),140, 0),
-        SHOOT(0,200,0)//When Shooting
+        SHOOT(0,220,0)//When Shooting
 
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
