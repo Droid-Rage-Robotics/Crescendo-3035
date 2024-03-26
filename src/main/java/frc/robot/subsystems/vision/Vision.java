@@ -2,10 +2,9 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
-import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 // Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {
@@ -17,21 +16,14 @@ public class Vision extends SubsystemBase {
     //     (0.0, "Vision/tY", Vision.class.getSimpleName()).build();
     // protected final ShuffleboardValue<Boolean> tVWriter = ShuffleboardValue.create
     //     (false, "Vision/tV", Vision.class.getSimpleName()).build();
-    // private HttpCamera limelightFeed = new HttpCamera
-    //     ("limelight", "http://10.30.35.11:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
-    HttpCamera httpCamera = new HttpCamera("Limelight", "http://frcvision.local:1181/stream.mjpg");
-    //http://limelight.local:5801
-    //http://10.30.35.56:5801/
-    //http://10.30.35.106:5801/
-    //http://frcvision.local:1181/stream.mjpg
-
-    //mjpg:http://10.30.35.56.5800 - no work
-
-    // CameraServer
-    // CameraServer.addCamera(httpCamera);
-    //     Shuffleboard.getTab("Tab")
-    //         .add(httpCamera);     
-        
+    HttpCamera httpCamera = new HttpCamera("Limelight", "http://roborio-3035-FRC.local:5801");
+    // http://roborio-2928-FRC.local:5801 - Works
+    
+    // http://limelight.local:5801
+    // http://10.30.35.56:5801/
+    // http://10.30.35.106:5801/
+    // http://frcvision.local:1181/stream.mjpg
+    // http://frcvision.local:1181/stream.mjpg
 
     // CameraServer.getInstance().startAutomaticCapture(limelightFeed);
     // LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
@@ -42,13 +34,16 @@ public class Vision extends SubsystemBase {
         LimelightHelpers.setLEDMode_PipelineControl("");
         LimelightHelpers.setLEDMode_ForceOff("");
         LimelightHelpers.setCropWindow("",-1,1,-1,1);
-        // CameraServer.addCamera(httpCamera);
+        CameraServer.addCamera(httpCamera);
         Shuffleboard.getTab("Misc").add(httpCamera).withSize(3, 3);
+
+        for (int port = 5800; port <= 5809; port++) {
+            PortForwarder.add(port, "limelight.local", port);
+        }
     }
 
     @Override
     public void periodic() {
-        // httpCamera
         // llresults = LimelightHelpers.getLatestResults("");
         // // Post to smart dashboard periodically
         // SmartDashboard.putNumberArray("botpose", llresults.targetingResults.botpose);
