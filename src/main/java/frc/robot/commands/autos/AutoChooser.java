@@ -99,7 +99,8 @@ public class AutoChooser {
             drive::getPose, // Robot pose supplier
             drive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             drive::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            drive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            // drive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            drive::setFeedforwardModuleStates,//To Use Feedforward
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 new PIDConstants(SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KP.get(), 
                     SwerveDriveConstants.SwerveDriveConfig.TRANSLATIONAL_KI.get(), 

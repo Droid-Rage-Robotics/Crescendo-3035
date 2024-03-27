@@ -272,6 +272,10 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
+    public void setFeedforwardModuleStates(ChassisSpeeds chassisSpeeds) {
+        SwerveModuleState[] states = SwerveDrive.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        setFeedforwardModuleStates(states);
+    }
     public void setFeedforwardModuleStates(SwerveModuleState[] states) {
         if (!isEnabled.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(

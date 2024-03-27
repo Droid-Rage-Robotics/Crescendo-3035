@@ -77,6 +77,9 @@ figure out led
 soldering kit
 encoder fixing?
 
+Drive Feedforward
+kS - Increase until the robot very slowly moves forward (this means too much,so lower)
+Then kV until the robot goes forward the amount needed
 
 
 // drive.setYawCommand(
