@@ -72,15 +72,15 @@ public class IntakeDropDown extends SubsystemBase {
                 .build(),
             ShuffleboardValue.create(0.0, "DropDown/Motor/Drop Voltage", Intake.class.getSimpleName())
                 .build(),
-                30
+                40
         );
 
-        controller = new PIDController(.927, 0.0, 0.0);//0.62
+        controller = new PIDController(1, 0.0, 0.0);//0.62
         // controller = new PIDController(0, 0.0, 0.0);
 
         controller.setTolerance(Math.toRadians(1));
 
-        feedforward = new ArmFeedforward(0.452,.65,.0859,.003587); //SysID with minor changes
+        feedforward = new ArmFeedforward(0.453,.65,.0859,.003587); //SysID with minor changes
         // feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor 
 
 
