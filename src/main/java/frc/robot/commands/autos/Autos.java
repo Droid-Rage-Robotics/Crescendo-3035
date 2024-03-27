@@ -26,6 +26,14 @@ public final class Autos {
             PathPlannerFollow.create(drive, "1+F1")
                 .setMaxVelocity(3)
                 .setAcceleration(3)
+                .build(),
+            PathPlannerFollow.create(drive, "F1+F2")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build(),
+            PathPlannerFollow.create(drive, "F2+F3")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
                 .build()
         );
     }

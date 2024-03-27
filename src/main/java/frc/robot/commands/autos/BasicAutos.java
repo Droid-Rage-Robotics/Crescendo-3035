@@ -78,9 +78,32 @@ public final class BasicAutos {
 
     public static Command test(SwerveDrive drive){
         return new SequentialCommandGroup(
-            PathPlannerPathFollow.create(drive, "BackwardTest")
+            // PathPlannerPathFollow.create(drive, "one")
+            //     .build(),
+            //     PathPlannerPathFollow.create(drive, "two")
+            //     .build(),
+            //     PathPlannerPathFollow.create(drive, "three")
+            //     .build(),
+            //     PathPlannerPathFollow.create(drive, "four")
+            //     .build(),
+            //     PathPlannerPathFollow.create(drive, "five")
+            //     .build(),
+            //     PathPlannerPathFollow.create(drive, "six")
+            //     .build()
+            PathPlannerFollow.create(drive, "one")
+                .setMaxVelocity(1)
+                .setAcceleration(3)
                 .build(),
-                PathPlannerPathFollow.create(drive, "TurnTest")
+                PathPlannerFollow.create(drive, "two")
+                .setMaxVelocity(1)
+                .setAcceleration(3)
+                .build(),PathPlannerFollow.create(drive, "three")
+                .setMaxVelocity(1)
+                .setAcceleration(3)
+                .build(),
+                PathPlannerFollow.create(drive, "four")
+                .setMaxVelocity(1)
+                .setAcceleration(3)
                 .build()
         );
     }
