@@ -1,4 +1,3 @@
-
 {
   "version": 1.0,
   "startingPose": {
@@ -153,6 +152,6 @@
       ]
     }
   },
-  "folder": "Autos",
+  "folder": null,
   "choreoAuto": false
 }
