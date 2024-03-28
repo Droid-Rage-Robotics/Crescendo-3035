@@ -42,7 +42,7 @@ public class RobotContainer {
 	//Add Reset encoder buttons
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
-		AmpMech ampMech, Climb climb, 
+		AmpMech ampMech, ClimbAlternate climb, 
 		 CycleTracker cycleTracker){
 		// drive.setYawCommand(-90);
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
@@ -86,12 +86,12 @@ public class RobotContainer {
 			//Make it where when the amp mech is ready to outake, it outtakes
 //what means??^^
 
-		driver.povUp().onTrue(
-			new ParallelCommandGroup(
-				intake.setPositionCommand(Intake.Value.CLIMB)
-				// ampMech.setPositionCommand(AmpMech.Value.CLIMB)
-			)
-		);
+		// driver.povUp().onTrue(
+		// 	new ParallelCommandGroup(
+		// 		intake.setPositionCommand(Intake.Value.CLIMB)
+		// 		// ampMech.setPositionCommand(AmpMech.Value.CLIMB)
+		// 	)
+		// );
 		
 
 		operator.rightTrigger()
@@ -112,7 +112,8 @@ public class RobotContainer {
 		// 	));
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
-			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
+			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB))
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
 		operator.povDown()
 			.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
 			// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.TRAP)))
@@ -130,8 +131,11 @@ public class RobotContainer {
 		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
 		// operator.povDown()
 		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
-		
-		
+
+		operator.back()
+			.onTrue(new InstantCommand(()->climb.resetEncoder()));
+		operator.start()
+			.onTrue(ampMech.resetElevator());
 
 		// operator.rightTrigger()
 		// 	.onTrue(new AutoAim(drive, vision, light)
