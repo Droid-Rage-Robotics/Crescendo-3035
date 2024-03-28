@@ -40,24 +40,23 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     //15 missing^
     private final SwerveDrive drive = new SwerveDrive(false);//2-10
-    private final Shooter shooter = new Shooter(true);//18.19    
+    private final Shooter shooter = new Shooter(true);//18,19    
 
-    private final AmpMechElevator elevator = new AmpMechElevator(true);//22done
-    private final AmpMechIntake clawIntake = new AmpMechIntake(true);//24 done
-    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true, clawIntake.getMotor());//23done TEST PID POSITIONS
+    private final AmpMechElevator elevator = new AmpMechElevator(true);//22
+    private final AmpMechIntake clawIntake = new AmpMechIntake(true);//24
+    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true, clawIntake.getMotor());//23
     private final AmpMech ampMech = new AmpMech(elevator, arm, clawIntake);
 
-    // private final Climb climb = new Climb(false,false);//20,21
     private final ClimbAlternate climb = new ClimbAlternate(true,true);//20,21
     private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
     private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17
-    private final Intake intake = new Intake(dropDown, intakeWheel);//done
+    private final Intake intake = new Intake(dropDown, intakeWheel);
     
     private AutoChooser autoChooser = new AutoChooser(
         drive, intake, shooter, ampMech//, claw, climb, vision, light
     );
     private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
-
+// private final Climb climb = new Climb(false,false);//20,21
 
     private final Vision vision = new Vision();
     private final Light light = new Light();

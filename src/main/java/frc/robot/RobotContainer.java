@@ -46,11 +46,6 @@ public class RobotContainer {
 		 CycleTracker cycleTracker){
 		// drive.setYawCommand(-90);
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
-
-		
-		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
-		// intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
-
 		drive.setDefaultCommand(
 			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
 				drive,
@@ -60,39 +55,25 @@ public class RobotContainer {
 				driver,
 				false//No Work; Do no use this
 				)
-			);//TODO:Test Yaw Buttons
-		// driver.x().onTrue(drive.resetEncoders())
-		// .onTrue(new InstantCommand(()->drive.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
-
+			);
 		driver.rightTrigger()
 			.whileTrue(new IntakeElementInCommand(driver, intake))
-			// .whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_GROUND))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 
 		driver.rightTrigger().and(driver.leftBumper())
 			.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_HOLD))
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-		driver.leftTrigger().whileTrue(//intake.setPositionCommand(Intake.Value.OUTTAKE)
+		driver.leftTrigger().whileTrue(
 			new ConditionalCommand(
 				new DropAmp(ampMech, cycleTracker),//true
 				intake.setPositionCommand(Intake.Value.OUTTAKE), //false
-				()->(AmpMech.Value.HOLD_AMP==ampMech.getPosition()||AmpMech.Value.AMP==ampMech.getPosition())))	//Check
+				()->(AmpMech.Value.HOLD_AMP==ampMech.getPosition()||
+					AmpMech.Value.AMP==ampMech.getPosition())))	//Check
 			.onFalse(new SequentialCommandGroup(
 				intake.setPositionCommand(Intake.Value.HOLD),
 				
 				ampMech.setPositionCommand(AmpMech.Value.START)
 				));
-			
-			//Make it where when the amp mech is ready to outake, it outtakes
-//what means??^^
-
-		// driver.povUp().onTrue(
-		// 	new ParallelCommandGroup(
-		// 		intake.setPositionCommand(Intake.Value.CLIMB)
-		// 		// ampMech.setPositionCommand(AmpMech.Value.CLIMB)
-		// 	)
-		// );
-		
 
 		operator.rightTrigger()
 			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
@@ -145,6 +126,8 @@ public class RobotContainer {
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
 		// 		.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
 		// operator.start().onTrue(new ClimbAndScoreSequence(ampMech, climb, intake));
+	// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
+		// intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 	}
 
 	public void teleopPeriodic(Intake intake, Shooter shooter){
