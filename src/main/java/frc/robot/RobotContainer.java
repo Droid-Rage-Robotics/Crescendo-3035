@@ -1,12 +1,9 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.IntakeElementInCommand;
@@ -14,6 +11,7 @@ import frc.robot.commands.climbAndAmp.ClimbAndTrap;
 import frc.robot.commands.climbAndAmp.DropAmp;
 import frc.robot.commands.climbAndAmp.TransferToAmpMech;
 import frc.robot.commands.manual.ManualClimb;
+import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
 import frc.robot.commands.shooter.SetIntakeAndShooter;
 import frc.robot.commands.shooter.TeleopShoot;
@@ -46,6 +44,7 @@ public class RobotContainer {
 		 CycleTracker cycleTracker){
 		// drive.setYawCommand(-90);
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
+		ampMech.getElevator().setDefaultCommand(new ManualElevator(operator::getLeftY, ampMech));
 		drive.setDefaultCommand(
 			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
 				drive,
@@ -113,9 +112,9 @@ public class RobotContainer {
 		// operator.povDown()
 		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
 
-		operator.back()
-			.onTrue(new InstantCommand(()->climb.resetEncoder()));
 		operator.start()
+			.onTrue(new InstantCommand(()->climb.resetEncoder()));
+		operator.back()
 			.onTrue(ampMech.resetElevator());
 
 		// operator.rightTrigger()
