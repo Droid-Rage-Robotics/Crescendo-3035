@@ -25,7 +25,7 @@ public class Intake {
         // CLIMB(INTAKE_GROUND,-3000),
         
 
-        SHOOTER_HOLD(23, 0),//Ready to give Note to shooter, but not doing it
+        SHOOTER_HOLD(23, -100),//Ready to give Note to shooter, but not doing it//0
         SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 1000),//Giving Note to Shooter
         AUTO_SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 2000),//Giving Note to Shooter
        
