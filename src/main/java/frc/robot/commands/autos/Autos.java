@@ -7,16 +7,27 @@ import frc.robot.commands.shooter.SetIntakeAndShooter;
 import frc.robot.commands.shooter.ShootPreload;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 
 public final class Autos {
-    public static Command onePlusThree(SwerveDrive drive, Intake intake, Shooter shooter) {
+    public static Command onePlusThree(SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech) {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            // new WaitCommand(.3),
             PathPlannerFollow.create(drive, "1+3")
-                .setMaxVelocity(3)
-                .setAcceleration(3)
+                .setMaxVelocity(2.3)
+                .setAcceleration(2)
+                .build()
+        );
+    }
+    public static Command onePlusTwo(SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            PathPlannerFollow.create(drive, "1+2")
+                .setMaxVelocity(2)
+                .setAcceleration(2)
                 .build()
         );
     }
@@ -73,6 +84,13 @@ public final class Autos {
             PathPlannerFollow.create(drive, "L1+F3Red")
                 .setMaxVelocity(1.5)
                 .setAcceleration(3)
+                .build()
+        );
+    }
+
+    public static Command test(SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech) {
+        return new SequentialCommandGroup(
+            PathPlannerFollow.create(drive, "test")
                 .build()
         );
     }

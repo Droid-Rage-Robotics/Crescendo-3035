@@ -10,9 +10,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.LightCommand.IntakeState;
+import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.SetIntakeAndShooter;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
+import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -22,26 +27,37 @@ public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
     public AutoChooser(
-        SwerveDrive drive, Intake intake, Shooter shooter//, Claw claw, Climb climb, Light light
+        SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech//, Claw claw, Climb climb, Light light
     ) {
         //Put Named Commands HERE
-        NamedCommands.registerCommand("shoot", 
-        new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT));
+        NamedCommands.registerCommand("shoot",
+            intake.setPositionCommand(Intake.Value.AUTO_SHOOTER_TRANSFER)
+        );
         NamedCommands.registerCommand("intake",
-            new SetIntakeAndShooter(intake, Intake.Value.INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.STOP));
+             new SequentialCommandGroup(
+                intake.setPositionCommand(Intake.Value.AUTO_INTAKE_GROUND)
+                // new WaitCommand(.3)
+             ));
         NamedCommands.registerCommand("pickUp",
-            new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT));
+            // new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT)
+            new SequentialCommandGroup(
+                intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
+                )
+            // );
+            );
 
         //NO Use
         // NamedCommands.registerCommand("shootPreload", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));//should be done before following
         // NamedCommands.registerCommand("transfer", intake.setPositionCommand(Intake.Value.START));
 
+        ampMech.setAutoStartPos();
+        shooter.setTargetVelocity(ShooterSpeeds.AUTO_SPEAKER_SHOOT);
 
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
         autoChooser.addOption("NothingAuto", new InstantCommand());
-        addAutos(drive, intake, shooter);
+        addAutos(drive, intake, shooter, ampMech);
         addTuningAuto(drive);
         // autoChooser.addOption("test", BasicAutos.test(drive));
 
@@ -51,7 +67,7 @@ public class AutoChooser {
         return autoChooser.getSelected();
     }
 
-    public static void addAutos(SwerveDrive drive, Intake intake, Shooter shooter){
+    public static void addAutos(SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech){
         // autoChooser.addOption("R1+F1+ParkRed", Autos.onePlusF1PlusParkRed(drive, intake, shooter));
         autoChooser.addOption("L1+F3+ParkBLue", 
             Autos.onePlusF1PlusParkBlue(drive, intake, shooter));
@@ -59,8 +75,10 @@ public class AutoChooser {
             Autos.onePlusF1ParkBlue(drive, intake, shooter));
         // autoChooser.addOption("L1+F1Red(OnlyPickUp)", Autos.onePlusF1ParkRed(drive, intake, shooter));
         // autoChooser.addOption("TEST", Autos.test(drive, intake, shooter));
-        autoChooser.addOption("One Plus Three", 
-            Autos.onePlusThree(drive, intake, shooter));
+        autoChooser.setDefaultOption("One Plus Three", 
+            Autos.onePlusThree(drive, intake, shooter,ampMech));
+        autoChooser.addOption("One Plus Two", 
+            Autos.onePlusTwo(drive, intake, shooter,ampMech));
         autoChooser.addOption("One Plus F1", 
             Autos.onePlusF1(drive, intake, shooter));
 
@@ -75,9 +93,12 @@ public class AutoChooser {
         //     Autos.shootPLusTurnParkNonHUMAN(drive,intake, shooter, 2));//No Work
         autoChooser.addOption("OUT(San Antonio Playoff))", 
             BasicAutos.out(drive,intake, shooter));
-        autoChooser.addOption("ToCenter", BasicAutos.toCenter(drive, intake, shooter));
 
-        autoChooser.setDefaultOption("TEST Basic autos", BasicAutos.test(drive));
+
+        // autoChooser.addOption("ToCenter", BasicAutos.toCenter(drive, intake, shooter));
+        // autoChooser.addOption("TEST Basic autos", BasicAutos.test(drive));
+
+        // autoChooser.addOption("test", Autos.test(drive, intake, shooter,ampMech));
         
     }
     
