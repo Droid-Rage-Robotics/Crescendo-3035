@@ -46,8 +46,8 @@ public class IntakeWheel extends SubsystemBase {
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
             ShuffleboardValue.create(0.0, "Intake/Output Writer", Intake.class.getSimpleName())
-                .build(),
-                15//25
+                .build()//25
+            ,10
         );
         // intakeEncoder = intake.getEncoder();
 
