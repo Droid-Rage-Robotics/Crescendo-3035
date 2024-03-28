@@ -35,7 +35,8 @@ public class AmpMech {
 
         HOLD(0,START.getArmDegrees(),INTAKE_SHOOTER.getIntakeSpeeds()),
         CLIMB(TRAP.getElevatorInches(),140, 0),
-        SHOOT(0,220,0)//When Shooting
+        SHOOT(0,220,0),//When Shooting,
+        AUTO(0,220,0)
 
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
@@ -107,7 +108,7 @@ public class AmpMech {
         this.intake = intake;
 
         // setPositionCommand(Value.START);
-        setStartPos();
+        setTeleopStartPos();
     }
 
     private void logPosition(Value targetPosition) {
@@ -120,10 +121,15 @@ public class AmpMech {
         return position;
     }
 
-    public void setStartPos() {
+    public void setTeleopStartPos() {
         elevator.setTargetPosition(Value.START.getElevatorInches());
         intake.setTargetPosition(Value.START.getIntakeSpeeds());
         arm.setTargetPosition(Value.START.getArmDegrees());
+    }
+    public void setAutoStartPos() {
+        elevator.setTargetPosition(Value.AUTO.getElevatorInches());
+        intake.setTargetPosition(Value.AUTO.getIntakeSpeeds());
+        arm.setTargetPosition(Value.AUTO.getArmDegrees());
     }
 
     public Command setPositionCommand(Value targetPosition) {

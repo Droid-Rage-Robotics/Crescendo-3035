@@ -23,11 +23,11 @@ public class SwerveDriveConstants {
         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED(1),
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
 
-        TRANSLATIONAL_KP(8.), //1.8
+        TRANSLATIONAL_KP(3), //2.5
         TRANSLATIONAL_KI(0),
         TRANSLATIONAL_KD(0),
 
-        THETA_KP(6.9), //7
+        THETA_KP(0.22), //.7
         THETA_KI(0),
         THETA_KD(0),
 //1.8, 7
