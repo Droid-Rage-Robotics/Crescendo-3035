@@ -31,12 +31,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "pickUp"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -44,6 +38,12 @@
                 "type": "path",
                 "data": {
                   "pathName": "two"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickUp"
                 }
               }
             ]
@@ -53,24 +53,6 @@
           "type": "named",
           "data": {
             "name": "shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intake"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
           }
         },
         {
@@ -93,69 +75,19 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "pickUp"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickUp"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "four"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "five"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "pickUp"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "six"
                 }
               }
             ]
