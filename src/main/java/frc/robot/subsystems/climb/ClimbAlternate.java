@@ -18,11 +18,14 @@ public class ClimbAlternate extends Climb{
         setPower(controller.calculate(getEncoderPosition()));
     } 
 
+
+    @Override
     public void resetEncoder() {
         motorL.getEncoder().setPosition(0);
+        encoder.setPosition(0);
     }
 
-    
+    @Override
     public double getEncoderPosition() {
         double position = encoder.getPosition();
         encoderPositionWriter.write(position);

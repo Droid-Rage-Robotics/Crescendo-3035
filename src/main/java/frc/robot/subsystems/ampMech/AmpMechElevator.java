@@ -76,13 +76,18 @@ public class AmpMechElevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + 
-        //     feedforward.calculate(getTargetPosition()));
-        setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + //1.1
-            .37);
-        // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()) + 
-        //     .2);
-        // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()));
+        
+        if(getVoltage()>3){
+            setTargetPosition(2);
+
+        } else{
+            // setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + 
+            //     feedforward.calculate(getTargetPosition()));
+            setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + .37);
+            // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()) + 
+            //     .2);
+            // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()));
+        }
     }
     @Override
     public void simulationPeriodic() {
@@ -130,5 +135,9 @@ public class AmpMechElevator extends SubsystemBase {
 
     public SafeCanSparkMax getMotor(){
         return motor;
+    }
+
+    public double getVoltage(){
+        return motor.getVoltage();
     }
 }
