@@ -50,8 +50,6 @@ public class AutoChooser {
         // NamedCommands.registerCommand("shootPreload", shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT));//should be done before following
         // NamedCommands.registerCommand("transfer", intake.setPositionCommand(Intake.Value.START));
 
-        ampMech.setAutoStartPos();
-        shooter.setTargetVelocity(ShooterSpeeds.AUTO_SPEAKER_SHOOT);
 
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")

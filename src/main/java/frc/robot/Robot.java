@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.ampMech.AmpMechElevator;
 import frc.robot.subsystems.ampMech.AmpMechIntake;
@@ -38,7 +39,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10
+    private final SwerveDrive drive = new SwerveDrive(false);//2-10
     private final Shooter shooter = new Shooter(true);//18.19    
 
     private final AmpMechElevator elevator = new AmpMechElevator(true);//22done
@@ -125,6 +126,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
         autonomousCommand = AutoChooser.getAutonomousCommand();
+        ampMech.setAutoStartPos();
+        shooter.setTargetVelocity(ShooterSpeeds.AUTO_SPEAKER_SHOOT);
         // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
