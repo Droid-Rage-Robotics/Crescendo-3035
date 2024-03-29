@@ -114,12 +114,13 @@ public class Constants {
 
     @Override
     public void periodic() {
-        encoderVelocityWriter.set(getVelocity());
+        double velocity = getVelocity();
+        encoderVelocityWriter.set(velocity);
         // encoderVelocityErrorWriter.set(shooterController.getVelocityError());
-        encoderVelocityErrorWriter.set(shooterController.getSetpoint() - getVelocity());
+        encoderVelocityErrorWriter.set(shooterController.getSetpoint() - velocity);
 
-        setPower(shooterController.calculate(getVelocity())+
-            feedforward.calculate(getVelocity(), getVelocity()));
+        setPower(shooterController.calculate(velocity)+
+            feedforward.calculate(velocity, velocity));
 
         shooterVoltageWriter.set(motorR.getVoltage());
         

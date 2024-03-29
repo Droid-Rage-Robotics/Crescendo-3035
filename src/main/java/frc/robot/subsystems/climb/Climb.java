@@ -19,8 +19,8 @@ public class Climb extends SubsystemBase{
         public static final double ROT_TO_INCHES = (COUNTS_PER_PULSE * GEAR_RATIO) / (GEAR_DIAMETER_INCHES * Math.PI);
         // public static final double MIN_POSITION = -37;//Motor
         // public static final double MAX_POSITION = 30;
-        public static final double MIN_POSITION = -1.7;//Encoder
-        public static final double MAX_POSITION =1.7;//1.1
+        public static final double MIN_POSITION = -1.2;//Encoder
+        public static final double MAX_POSITION =1.2;//1.1
     }
     public enum Position{
         //Normal Motor Value
@@ -30,7 +30,7 @@ public class Climb extends SubsystemBase{
         // ;
         CLIMB(.7),
         START(0),
-        TRAP(-.4);//-1.1
+        TRAP(-.9);//-1.1
 
         private final ShuffleboardValue<Double>  climbPos;
 
