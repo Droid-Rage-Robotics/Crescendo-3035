@@ -18,14 +18,45 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "four"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "four"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickUp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Seperate",
   "choreoAuto": false
 }

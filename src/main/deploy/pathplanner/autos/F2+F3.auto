@@ -18,14 +18,33 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "six"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "six"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pickUp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Seperate",
   "choreoAuto": false
 }

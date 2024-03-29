@@ -54,10 +54,22 @@
           "data": {
             "name": "shoot"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Seperate",
   "choreoAuto": false
 }

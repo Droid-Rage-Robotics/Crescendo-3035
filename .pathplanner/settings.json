@@ -10,8 +10,9 @@
   ],
   "autoFolders": [
     "Autos",
-    "Used",
-    "TuningAutos"
+    "Seperate",
+    "TuningAutos",
+    "Used"
   ],
   "defaultMaxVel": 2.3,
   "defaultMaxAccel": 1.6,
