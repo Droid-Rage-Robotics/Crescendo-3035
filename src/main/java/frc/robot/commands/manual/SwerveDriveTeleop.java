@@ -36,16 +36,17 @@ public class SwerveDriveTeleop extends Command {
         this.turnLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND.get());
         this.isLimiter = isLimiter;
         
+        // drive.setSpeed(Speed.SLOW);
         driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
             .whileFalse(drive.setSpeed(Speed.NORMAL));
                         // .onFalse(drive.setSpeed(Speed.NORMAL));
 
         // this.aResetButton = aResetButton;
         driver.b().onTrue(drive.setYawCommand(0));
-        driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
-        driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(-180)));//180
-        driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
-        driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
+        // driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
+        // driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(-180)));//180
+        // driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
+        // driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
         addRequirements(drive);
     }

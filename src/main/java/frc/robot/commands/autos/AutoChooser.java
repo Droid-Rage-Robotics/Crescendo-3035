@@ -143,11 +143,12 @@ autoChooser.addOption("RIGHT(non-human player)",
                 // Boolean supplier that controls when the path will be mirrored for the red alliance
                 // This will flip the path being followed to the red side of the field.
                 // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                //Is this working?
                 var alliance = DriverStation.getAlliance();
                 if (alliance.isPresent()) {
                     return alliance.get() == DriverStation.Alliance.Red;
                 }
-                return true;//To Test
+                return false;//To Test-true
             },
             drive // Reference to this subsystem to set requirements
         );
