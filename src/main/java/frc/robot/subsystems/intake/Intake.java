@@ -2,10 +2,12 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
+import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Intake {
@@ -25,15 +27,15 @@ public class Intake {
         // CLIMB(INTAKE_GROUND,-3000),
         
 
-        SHOOTER_HOLD(23, -100),//Ready to give Note to shooter, but not doing it//0
-        SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 1000),//Giving Note to Shooter
+        SHOOTER_HOLD(23, 0),//Ready to give Note to shooter, but not doing it//0,-100
+        SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 1200),//Giving Note to Shooter
         AUTO_SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 2000),//Giving Note to Shooter
        
         INTAKE_HOLD(SHOOTER_HOLD.getAngle(),INTAKE_GROUND.getIntakeSpeeds()),
 
         HOLD(74, 0),
         OUTTAKE(130,1500),
-        CLIMB(INTAKE_GROUND.getAngle(), 0),
+        CLIMB(170, 0),//INTAKE_GROUND.getAngle()
         OUTTAKE_AMP(88,3200)//
         ;
 
@@ -166,4 +168,7 @@ public class Intake {
         return intakeWheel;
     }
 
+    public Command setDropIdleMode(IdleMode mode){
+        return new InstantCommand(()->dropDown.setDropIdleMode(mode));
+    }
 }
