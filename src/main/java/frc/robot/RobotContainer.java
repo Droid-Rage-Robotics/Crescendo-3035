@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -73,6 +75,9 @@ public class RobotContainer {
 				
 				ampMech.setPositionCommand(AmpMech.Value.START)
 				));
+		driver.y().onTrue(
+			ampMech.setPositionCommand(AmpMech.Value.OUT)
+		);
 
 		operator.rightTrigger()
 			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
@@ -83,7 +88,15 @@ public class RobotContainer {
 			));
 		operator.leftTrigger().onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
 		operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
-
+		operator.rightBumper().onTrue(new SequentialCommandGroup(
+			ampMech.setPositionCommand(AmpMech.Value.SHOOT),
+			shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+		))
+		.onFalse(new SequentialCommandGroup(
+				new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD),
+                ampMech.setPositionCommand(AmpMech.Value.START)
+			)
+		);
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
 		// operator.b()//TODO REMOVE THIS
@@ -93,14 +106,15 @@ public class RobotContainer {
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
 				// .onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-
+			.onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
 			// .onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
 		operator.povRight()
 			// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
 			// .onTrue(intake.setPositionCommand(Intake.Value.CLIMB))
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.START));
 		operator.povDown()
+			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
 			// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.TRAP)))
 			// .onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP))

@@ -40,7 +40,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     //15 missing^
     private final SwerveDrive drive = new SwerveDrive(true);//2-10
-    private final Shooter shooter = new Shooter(true);//18,19    
+    private final Shooter shooter = new Shooter(true);//18,19  %  
 
     private final AmpMechElevator elevator = new AmpMechElevator(true);//22-DO NOT TURN THIS ON
     private final AmpMechIntake clawIntake = new AmpMechIntake(true);//24
@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 		DriverStation.silenceJoystickConnectionWarning(true);
-        // ampMech.setStartPos();
+        ampMech.setTeleopStartPos();
         // testButton.configureDriveBindings(drive);
         // testButton.configureIntakeTestBindings(intake);
         
