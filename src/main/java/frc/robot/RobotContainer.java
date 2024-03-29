@@ -92,7 +92,13 @@ public class RobotContainer {
 		// 	));
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
-			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB))
+				// .onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+
+			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
+			// .onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
+		operator.povRight()
+			// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
+			// .onTrue(intake.setPositionCommand(Intake.Value.CLIMB))
 			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
 		operator.povDown()
 			.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
