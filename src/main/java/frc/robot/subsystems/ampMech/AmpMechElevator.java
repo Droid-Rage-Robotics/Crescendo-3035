@@ -77,17 +77,17 @@ public class AmpMechElevator extends SubsystemBase {
     @Override
     public void periodic() {
         
-        if(getVoltage()>3){
-            setTargetPosition(2);
+        // if(getVoltage()>5){
+        //     setTargetPosition(2);
 
-        } else{
+        // } else{
             // setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + 
             //     feedforward.calculate(getTargetPosition()));
             setVoltage((controller.calculate(getEncoderPosition(),getTargetPosition())*1.1) + .37);
             // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()) + 
             //     .2);
             // setVoltage(controller.calculate(getEncoderPosition(),getTargetPosition()));
-        }
+        // }
     }
     @Override
     public void simulationPeriodic() {
@@ -97,7 +97,7 @@ public class AmpMechElevator extends SubsystemBase {
     
     public void setTargetPosition(double target) {
         // if (target < Constants.MIN_POSITION) return;
-        // if (target > Constants.MAX_POSITION) return;
+        if (target > 30) return;
         controller.setSetpoint(target);
         rawTargetPosWriter.set(target);
         rawTargetPosWriter.set(target);

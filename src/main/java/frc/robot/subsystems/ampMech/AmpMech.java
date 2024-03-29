@@ -21,21 +21,21 @@ public class AmpMech {
         //33 push
         START(0,147,0),
 
-        SHOOTER(0,140,0),//Ready to intake from shooter 
+        SHOOTER(0,142,0),//Ready to intake from shooter 
         INTAKE_SHOOTER(SHOOTER.getElevatorInches(),SHOOTER.getArmDegrees(),20),
 
         // INTAKE_HUMAN(10,132,INTAKE_SHOOTER.getIntakeSpeeds()),
-        AMP(17,220,38),
+        AMP(15,220,38),
         HOLD_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), INTAKE_SHOOTER.getIntakeSpeeds()),
 
         AUTO_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), AMP.getIntakeSpeeds()),
 
         
-        TRAP(35,225,AMP.getIntakeSpeeds()),
-        HOLD_TRAP(TRAP.getElevatorInches(),170,20),
+        TRAP(0,170,AMP.getIntakeSpeeds()),//30, 225
+        HOLD_TRAP(TRAP.getElevatorInches(),144,20),//30
 
         HOLD(0,START.getArmDegrees(),INTAKE_SHOOTER.getIntakeSpeeds()),
-        CLIMB(TRAP.getElevatorInches(),140, 0),
+        CLIMB(TRAP.getElevatorInches(),142, 0),
         SHOOT(0,220,0),//When Shooting,
         AUTO(0,220,0)
 
@@ -148,12 +148,21 @@ public class AmpMech {
                     );
                 case TRAP ->
                     new SequentialCommandGroup(
+                            arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees())),
+
                         new ParallelCommandGroup(
-                            elevator.runOnce(()->elevator.setTargetPosition(targetPosition.getElevatorInches())),
-                            arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
+                            elevator.runOnce(()->elevator.setTargetPosition(targetPosition.getElevatorInches()))
                         ),
-                        new WaitCommand(1.5),
+                        new WaitCommand(1.8),
+                        
+                            arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees())),
                         intake.runOnce(()->intake.setTargetPosition(targetPosition.getIntakeSpeeds()))
+                    );
+                case START -> 
+                    new ParallelCommandGroup(
+                        elevator.runOnce(() -> elevator.setTargetPosition(targetPosition.getElevatorInches())),
+                        intake.runOnce(() -> intake.setTargetPosition(targetPosition.getIntakeSpeeds())),
+                        arm.runOnce(()->arm.setTargetPosition(targetPosition.getArmDegrees()))
                     );
                 default -> 
                     new ParallelCommandGroup(

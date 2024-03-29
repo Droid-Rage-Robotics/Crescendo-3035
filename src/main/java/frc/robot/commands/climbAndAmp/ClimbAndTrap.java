@@ -16,7 +16,7 @@ public class ClimbAndTrap extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 climb.runOnce(()->climb.setTargetPosition(Climb.Position.TRAP)),
                 ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP),
-                intake.setPositionCommand(Intake.Value.CLIMB)
+                intake.setPositionCommand(Intake.Value.CLIMB)//CLIMB
             )
             // ,new WaitUntilCommand(()->(climb.getError())<.5),
             // new WaitUntilCommand(()->Math.abs(climb.getTargetPosition()-climb.getEncoderPosition())<.5),
