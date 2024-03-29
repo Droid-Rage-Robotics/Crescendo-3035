@@ -50,7 +50,7 @@ public final class BasicAutos {
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(1),
             new SetIntakeAndShooter(intake, Intake.Value.INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.STOP),
-            new WaitCommand(4.5),
+            new WaitCommand(1),
             PathPlannerFollow.create(drive, "toCenter")
                 .setMaxVelocity(1)
                 .setAcceleration(3)
@@ -62,6 +62,27 @@ public final class BasicAutos {
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(4.5),
             PathPlannerFollow.create(drive, "oldOut")
+                .setMaxVelocity(1)
+                .setAcceleration(3)
+                .build()
+        );
+    }
+
+    public static Command right(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            new WaitCommand(1),
+            PathPlannerFollow.create(drive, "right")
+                .setMaxVelocity(1)
+                .setAcceleration(3)
+                .build()
+        );
+    }
+    public static Command left(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            new WaitCommand(1),
+            PathPlannerFollow.create(drive, "left")
                 .setMaxVelocity(1)
                 .setAcceleration(3)
                 .build()

@@ -26,12 +26,52 @@ public final class Autos {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             PathPlannerFollow.create(drive, "1+2")
-                .setMaxVelocity(2)
-                .setAcceleration(2)
+                .setMaxVelocity(3)
+                .setAcceleration(3)
                 .build()
         );
     }
     public static Command onePlusFullSeperate(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            PathPlannerFollow.create(drive, "F1+F2")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build(),
+            PathPlannerFollow.create(drive, "1+F1")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build(),
+            // intake.setPositionCommand(Intake.Value.AUTO_INTAKE_GROUND),
+            
+            
+            // PathPlannerFollow.create(drive, "F2+F3")
+            //     .setMaxVelocity(3)
+            //     .setAcceleration(3)
+            //     .build()
+
+            PathPlannerFollow.create(drive, "F2+F3Pick")//F2+F3Pick
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build()
+            //push code                                                 
+                
+        );
+    }
+    public static Command onePlusMiddle(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            PathPlannerFollow.create(drive, "F1+F2")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build(),
+            PathPlannerFollow.create(drive, "ForwardTest")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build()
+        );
+    }
+    public static Command onePlusTwoSeperate(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             PathPlannerFollow.create(drive, "1+F1")
@@ -43,11 +83,10 @@ public final class Autos {
                 .setMaxVelocity(3)
                 .setAcceleration(3)
                 .build(),
-            
-            PathPlannerFollow.create(drive, "F2+F3")
-                .setMaxVelocity(3)
-                .setAcceleration(3)
-                .build()
+            PathPlannerFollow.create(drive, "ForwardTest")
+                .setMaxVelocity(6)
+                .setAcceleration(6)
+                    .build()
 
             // PathPlannerFollow.create(drive, "F2+F3Pick")//F2+F3Pick
             //     .setMaxVelocity(3)

@@ -56,8 +56,9 @@ public class AutoChooser {
             .withSize(1, 3);
         autoChooser.addOption("NothingAuto", new InstantCommand());
         addAutos(drive, intake, shooter, ampMech);
-        addTuningAuto(drive);
+        // addTuningAuto(drive);
         // autoChooser.addOption("test", BasicAutos.test(drive));
+        autoChooser.addOption("shootandMiddle", Autos.onePlusMiddle(drive,intake,shooter));
 
         
     }
@@ -81,7 +82,8 @@ public class AutoChooser {
             Autos.onePlusTwo(drive, intake, shooter,ampMech));
         autoChooser.setDefaultOption("One Plus FULL Seperate", 
             Autos.onePlusFullSeperate(drive, intake, shooter));
-
+// autoChooser.addOption("One Plus 2 Seperate", 
+//             Autos.onePlusFullSeperate(drive, intake, shooter));
         autoChooser.addOption("ShootPlusPark", 
             BasicAutos.shootPLusPark(drive,intake,shooter,0));//Works
         autoChooser.addOption("ShootPlusWait6Park", 
@@ -93,13 +95,17 @@ public class AutoChooser {
         //     Autos.shootPLusTurnParkNonHUMAN(drive,intake, shooter, 2));//No Work
         autoChooser.addOption("OUT(San Antonio Playoff))", 
             BasicAutos.out(drive,intake, shooter));
-
-
-        // autoChooser.addOption("ToCenter", BasicAutos.toCenter(drive, intake, shooter));
+        
+autoChooser.addOption("RIGHT(non-human player)", 
+            BasicAutos.right(drive,intake, shooter));
+// autoChooser.addOption("LEFT(human player)", 
+//             BasicAutos.left(drive,intake, shooter));
+        autoChooser.addOption("ToCenter", BasicAutos.toCenter(drive, intake, shooter));
         // autoChooser.addOption("TEST Basic autos", BasicAutos.test(drive));
 
         // autoChooser.addOption("test", Autos.test(drive, intake, shooter,ampMech));
         
+        // autoChooser.addOption("shootandMiddle", Autos.onePlusMiddle(drive,intake,shooter));
     }
     
     public static void addTuningAuto(SwerveDrive drive){
@@ -141,7 +147,7 @@ public class AutoChooser {
                 if (alliance.isPresent()) {
                     return alliance.get() == DriverStation.Alliance.Red;
                 }
-                return false;
+                return true;//To Test
             },
             drive // Reference to this subsystem to set requirements
         );
