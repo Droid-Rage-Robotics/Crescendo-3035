@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.0,
-      "y": 0.0034144330583732153
+      "x": 0.769156467890401,
+      "y": 4.364801969040559
     },
-    "rotation": 0
+    "rotation": -60.2551187030578
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ForwardTest"
+            "pathName": "1."
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2."
           }
         }
       ]
