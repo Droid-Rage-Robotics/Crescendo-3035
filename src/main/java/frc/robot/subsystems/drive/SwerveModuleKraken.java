@@ -95,7 +95,7 @@ public class SwerveModuleKraken {
             ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Voltage "+ 
                 podName.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
                 .build(),
-                40,
+                60,
                 120
                 );//45,40 
                 //40,25
@@ -113,7 +113,7 @@ public class SwerveModuleKraken {
             ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Turn Voltage "+ 
                 podName.toString() + turnMotorId, SwerveDrive.class.getSimpleName())
                 .build(),
-                35
+                80
         );
         // turnMotor.setSmartCurrentLimit(30);
 

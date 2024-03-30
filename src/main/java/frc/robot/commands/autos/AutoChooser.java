@@ -58,7 +58,9 @@ public class AutoChooser {
         addAutos(drive, intake, shooter, ampMech);
         // addTuningAuto(drive);
         // autoChooser.addOption("test", BasicAutos.test(drive));
-        autoChooser.addOption("shootandMiddle", Autos.onePlusMiddle(drive,intake,shooter));
+        autoChooser.addOption("shootandMiddle", Autos.onePlusMiddle(drive,intake,shooter));//WORKS
+        autoChooser.addOption("ShootHumanMid Pickup", Autos.onePlusHUuman(drive,intake,shooter));//Works
+        autoChooser.addOption("ShootHumanPlusmIddle", Autos.onePlusHumanAndMidle(drive,intake,shooter));
 
         
     }

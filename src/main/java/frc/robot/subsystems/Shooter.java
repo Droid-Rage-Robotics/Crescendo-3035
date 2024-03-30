@@ -22,7 +22,7 @@ public class Constants {
         //15000+
         AMP_SHOOT(3000),//200
         SPEAKER_SHOOT(18000),//10000
-        AUTO_SPEAKER_SHOOT(18000),//10000
+        AUTO_SPEAKER_SHOOT(18900),//10000
 
         HOLD(4000),
         STOP(0), 

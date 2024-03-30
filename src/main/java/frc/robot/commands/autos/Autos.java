@@ -61,11 +61,36 @@ public final class Autos {
     public static Command onePlusMiddle(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
-            PathPlannerFollow.create(drive, "F1+F2")
+            new WaitCommand(.7),
+            PathPlannerFollow.create(drive, "shootMiddle")
                 .setMaxVelocity(3)
                 .setAcceleration(3)
-                .build(),
-            PathPlannerFollow.create(drive, "ForwardTest")
+                .build()
+            // PathPlannerFollow.create(drive, "F1+F2")
+            //     .setMaxVelocity(3)
+            //     .setAcceleration(3)
+            //     .build(),
+            // PathPlannerFollow.create(drive, "ForwardTest")
+            //     .setMaxVelocity(3)
+            //     .setAcceleration(3)
+            //     .build()
+        );
+    }
+    public static Command onePlusHUuman(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            new WaitCommand(.7),
+            PathPlannerFollow.create(drive, "shootHuman")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build()
+        );
+    }
+    public static Command onePlusHumanAndMidle(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            new WaitCommand(.7),
+            PathPlannerFollow.create(drive, "shootHumanPlusMid")
                 .setMaxVelocity(3)
                 .setAcceleration(3)
                 .build()

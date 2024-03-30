@@ -87,16 +87,16 @@ public class RobotContainer {
 
 			));
 		operator.leftTrigger().onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
-		operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
-		operator.rightBumper().onTrue(new SequentialCommandGroup(
-			ampMech.setPositionCommand(AmpMech.Value.SHOOT),
-			shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-		))
-		.onFalse(new SequentialCommandGroup(
-				new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD),
-                ampMech.setPositionCommand(AmpMech.Value.START)
-			)
-		);
+		// operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
+		// operator.rightBumper().onTrue(new SequentialCommandGroup(
+		// 	ampMech.setPositionCommand(AmpMech.Value.SHOOT),
+		// 	shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+		// ))
+		// .onFalse(new SequentialCommandGroup(
+		// 		new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD),
+        //         ampMech.setPositionCommand(AmpMech.Value.START)
+		// 	)
+		// );
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
 		// operator.b()//TODO REMOVE THIS
