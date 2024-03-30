@@ -60,8 +60,9 @@ public class AutoChooser {
         // autoChooser.addOption("test", BasicAutos.test(drive));
         autoChooser.addOption("shootandMiddle", Autos.onePlusMiddle(drive,intake,shooter));//WORKS
         autoChooser.addOption("ShootHumanMid Pickup", Autos.onePlusHUuman(drive,intake,shooter));//Works
-        autoChooser.addOption("ShootHumanPlusmIddle", Autos.onePlusHumanAndMidle(drive,intake,shooter));
-
+        autoChooser.addOption("ShootHumanPlusmIddle", Autos.onePlusHumanAndMidle(drive,intake,shooter));//work ish
+        //
+autoChooser.addOption("AMP", Autos.amp(drive,intake,shooter));//work ish
         
     }
     public static Command getAutonomousCommand() {

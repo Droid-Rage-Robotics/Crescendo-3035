@@ -30,7 +30,7 @@ public final class BasicAutos {
                 .setAcceleration(3)
                 .build()
             ,new WaitCommand(3),
-            new SetIntakeAndShooter(intake, Intake.Value.CLIMB, shooter, Shooter.ShooterSpeeds.HOLD)
+            new SetIntakeAndShooter(intake, Intake.Value.CLIMB_DOWN, shooter, Shooter.ShooterSpeeds.HOLD)
         );
     }
     // public static Command shootPLusTurnParkNonHUMAN(SwerveDrive drive, Intake intake, Shooter shooter, double wait) {

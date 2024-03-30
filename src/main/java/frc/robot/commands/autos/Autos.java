@@ -31,6 +31,18 @@ public final class Autos {
                 .build()
         );
     }
+    public static Command amp(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+            new WaitCommand(1.5),//.8
+            intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
+            new WaitCommand(1.4),
+            PathPlannerFollow.create(drive, "amp")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build()
+        );
+    }
     public static Command onePlusFullSeperate(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
