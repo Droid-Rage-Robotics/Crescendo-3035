@@ -4,9 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "1+3",
-    "onePlusThree",
+    "side",
     "TuningPaths",
-    "misc"
+    "misc",
+    "onePlusThree"
   ],
   "autoFolders": [
     "Autos",
