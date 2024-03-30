@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.807151291906006,
-        "y": 5.68
+        "x": 1.2,
+        "y": 5.63
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.013324674627704,
-        "y": 5.68
+        "x": 2.2,
+        "y": 5.63
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.34,
-        "y": 5.68
+        "x": 3.5,
+        "y": 5.63
       },
       "prevControl": {
-        "x": 1.9859143592822128,
-        "y": 5.629336452151655
+        "x": 2.6096682959482864,
+        "y": 5.63
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,10 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "1+3",
-  "previewStartingState": {
-    "rotation": 1.5074357587750131,
-    "velocity": 0
-  },
+  "folder": "TuningPaths",
+  "previewStartingState": null,
   "useDefaultConstraints": true
 }
