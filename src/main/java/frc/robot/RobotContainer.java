@@ -106,7 +106,7 @@ public class RobotContainer {
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
 				// .onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-			.onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
+			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
 			// .onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
 		operator.povRight()
