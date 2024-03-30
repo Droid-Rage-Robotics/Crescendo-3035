@@ -12,9 +12,16 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "amp"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "amp"
+                }
+              }
+            ]
           }
         },
         {
