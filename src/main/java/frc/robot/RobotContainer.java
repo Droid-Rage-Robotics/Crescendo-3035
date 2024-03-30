@@ -109,10 +109,10 @@ public class RobotContainer {
 			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB_DOWN));
 			// .onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
-		operator.povRight()
-			// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
-			// .onTrue(intake.setPositionCommand(Intake.Value.CLIMB))
-			.onTrue(ampMech.setPositionCommand(AmpMech.Value.START));
+		// operator.povRight()
+		// 	// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
+		// 	// .onTrue(intake.setPositionCommand(Intake.Value.CLIMB))
+		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.START));
 		operator.povDown()
 			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));

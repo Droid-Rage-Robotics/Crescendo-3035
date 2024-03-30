@@ -30,13 +30,13 @@ public final class Autos {
                 .setAcceleration(3)
                 .build()
         );
-    }
+    }    
     public static Command amp(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
             shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
-            new WaitCommand(1.5),//.8
+            new WaitCommand(2),//.8
             intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
-            new WaitCommand(1.4),
+            new WaitCommand(7),
             PathPlannerFollow.create(drive, "amp")
                 .setMaxVelocity(3)
                 .setAcceleration(3)
