@@ -42,7 +42,7 @@ public class SwerveModuleKraken {
         public static final double TURN_ENCODER_ROT_2_RAD = 2 * Math.PI / READINGS_PER_REVOLUTION;
         public static final double TURN_ENCODER_ROT_2_RAD_SEC = TURN_ENCODER_ROT_2_RAD/60;
 
-        public static final double TURN_P = 0.11;//0.5
+        public static final double TURN_P = 0.115;//0.5
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
 
