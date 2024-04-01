@@ -86,47 +86,19 @@ public class RobotContainer {
                 ampMech.setPositionCommand(AmpMech.Value.START)
 
 			));
-		operator.leftTrigger().onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
-		// operator.leftBumper().onTrue(ampMech.setPositionCommand(AmpMech.Value.TRAP));
-		// operator.rightBumper().onTrue(new SequentialCommandGroup(
-		// 	ampMech.setPositionCommand(AmpMech.Value.SHOOT),
-		// 	shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-		// ))
-		// .onFalse(new SequentialCommandGroup(
-		// 		new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD),
-        //         ampMech.setPositionCommand(AmpMech.Value.START)
-		// 	)
-		// );
+		operator.leftTrigger()
+			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
-		// operator.b()//TODO REMOVE THIS
-		// 	.onTrue(new SequentialCommandGroup(
-		// 		new DropAmp(ampMech, cycleTracker)
-		// 	));
+		
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
-				// .onTrue(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
-			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB_DOWN));
-			// .onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP));
-		// operator.povRight()
-		// 	// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
-		// 	// .onTrue(intake.setPositionCommand(Intake.Value.CLIMB))
-		// 	.onTrue(ampMech.setPositionCommand(AmpMech.Value.START));
 		operator.povDown()
 			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
-			// .onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.TRAP)))
-			// .onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_TRAP))
-			// .onTrue(intake.setPositionCommand(Intake.Value.CLIMB));
 
-			// .onTrue();
 		
-		// operator.x()
-		// 	//CLimb Goes up
-		// 		.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
-		
-
 		// operator.povUp()
 		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
 		// operator.povDown()
@@ -145,14 +117,15 @@ public class RobotContainer {
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
 		// 		.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
 		// operator.start().onTrue(new ClimbAndScoreSequence(ampMech, climb, intake));
-	// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
+
+		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
 		// intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 	}
 
 	public void teleopPeriodic(Intake intake, Shooter shooter){
-		// if(intake.isElementInClaw()){
-		// 	driver.getHID().setRumble(RumbleType.kBothRumble, 1);
-		// }
+		if(intake.isElementInClaw()){
+			driver.getHID().setRumble(RumbleType.kBothRumble, 1);
+		}
 		if(shooter.isShooterReadyToShootSpeaker()){
 			operator.getHID().setRumble(RumbleType.kBothRumble, 1);
 		}
