@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -97,7 +98,7 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModuleKraken[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
 
     private final Pigeon2 pigeon2 = new Pigeon2(14);
-    private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();;
+    private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry (
         DRIVE_KINEMATICS, 
@@ -423,5 +424,16 @@ public class SwerveDrive extends SubsystemBase {
 
     public SafeCanSparkMax getFRTurnCanSparkMax(){
         return frontLeft.getTurnMotor();
+    }
+
+    public void changeAllianceRotation(){
+        pigeon2.setYaw(
+            pigeon2.getYaw().getValueAsDouble()+
+            switch (DriverStation.getRawAllianceStation()) {
+                case Unknown -> 0;//180
+                case Blue1,Blue2,Blue3 -> 0;
+                case Red1,Red2,Red3 -> 0;
+            }
+        );
     }
 }

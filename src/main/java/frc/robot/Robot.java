@@ -146,6 +146,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 		DriverStation.silenceJoystickConnectionWarning(true);
         ampMech.setTeleopStartPos();
+        // drive.changeAllianceRotation();//TODO:Test
         // testButton.configureDriveBindings(drive);
         // testButton.configureIntakeTestBindings(intake);
         

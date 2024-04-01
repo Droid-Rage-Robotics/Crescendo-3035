@@ -6,6 +6,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -21,6 +22,7 @@ public class SwerveDriveTeleop extends Command {
     private final SlewRateLimiter xLimiter, yLimiter, turnLimiter;
     private volatile double xSpeed, ySpeed, turnSpeed;
     private boolean isLimiter;
+    private Rotation2d heading;
     // private final Trigger rightBumper;//, aResetButton;
 
     public SwerveDriveTeleop(SwerveDrive drive,
@@ -48,6 +50,15 @@ public class SwerveDriveTeleop extends Command {
         // driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
         // driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
 
+        heading = new Rotation2d(//TODO:Test; Don't think this will work
+            switch (DriverStation.getRawAllianceStation()) {
+                //https://github.com/Spectrum3847/2024-Ultraviolet/blob/main/src/main/java/frc/spectrumLib/swerve/Drivetrain.java#L262
+                case Unknown -> 0;//180
+                case Blue1,Blue2,Blue3 -> 0;
+                case Red1,Red2,Red3 -> 180;
+            }
+        );
+        
         addRequirements(drive);
     }
 
@@ -74,7 +85,7 @@ public class SwerveDriveTeleop extends Command {
             double modifiedYSpeed = ySpeed;
 
             
-            Rotation2d heading = drive.getRotation2d();
+            heading = drive.getRotation2d();
 
             // heading.rotateBy(
             //     Rotation2d.fromDegrees(
