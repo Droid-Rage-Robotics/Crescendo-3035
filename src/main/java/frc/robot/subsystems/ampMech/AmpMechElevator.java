@@ -31,7 +31,8 @@ public class AmpMechElevator extends SubsystemBase {
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> encoderVelocityWriter = 
-        ShuffleboardValue.create(0.0, "Elevator/ Encoder Velocity (Radians per Second)", AmpMechElevator.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "Elevator/ Encoder Velocity (Radians per Second)", 
+        AmpMech.class.getSimpleName())
         .withSize(1, 2)
         .build();
     protected final ShuffleboardValue<Double> rawTargetPosWriter = ShuffleboardValue
@@ -66,12 +67,12 @@ public class AmpMechElevator extends SubsystemBase {
         
         controller.setTolerance(0.1);
 
-        ComplexWidgetBuilder.create(controller, "Elev PID", AmpMechElevator.class.getSimpleName())
+        ComplexWidgetBuilder.create(controller, "Elevator/ Elev PID", AmpMech.class.getSimpleName())
             .withWidget(BuiltInWidgets.kPIDController)
             .withSize(2, 1);
         ComplexWidgetBuilder.create(
             DisabledCommand.create(runOnce(this::resetEncoder)),
-            "Elevator Reset Encoder", AmpMechElevator.class.getSimpleName());
+            "Elevator Reset Encoder", AmpMech.class.getSimpleName());
     }
 
     @Override

@@ -10,7 +10,7 @@ import frc.robot.commands.general.SuppliedCommand;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class AmpMech {
+public class AmpMechNew {
     //Can use the Positions to make another Value 
     //that holds 2 Positions to join together like 
     //in Charged Up; Allows for you to different 
@@ -19,26 +19,26 @@ public class AmpMech {
         //0 start
         //20 hold
         //33 push
-        START(0,130,0),
+        START(0,130,0,0),
 
-        SHOOTER(0,142,0),//Ready to intake from shooter 
-        INTAKE_SHOOTER(SHOOTER.getElevatorInches(),SHOOTER.getArmDegrees(),20),
+        SHOOTER(0,142,0,0),//Ready to intake from shooter 
+        INTAKE_SHOOTER(SHOOTER.getElevatorInches(),SHOOTER.getArmDegrees(),20,0),
 
         // INTAKE_HUMAN(10,132,INTAKE_SHOOTER.getIntakeSpeeds()),
-        AMP(23,220,38),
-        HOLD_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), INTAKE_SHOOTER.getIntakeSpeeds()),
+        AMP(23,220,38,0),
+        HOLD_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), INTAKE_SHOOTER.getIntakeSpeeds(),0),
 
-        AUTO_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), AMP.getIntakeSpeeds()),
+        AUTO_AMP(AMP.getElevatorInches(), AMP.getArmDegrees(), AMP.getIntakeSpeeds(),0),
 
         
-        TRAP(0,170,AMP.getIntakeSpeeds()),//30, 225
-        HOLD_TRAP(TRAP.getElevatorInches(),144,20),//30
+        TRAP(0,170,AMP.getIntakeSpeeds(),0),//30, 225
+        HOLD_TRAP(TRAP.getElevatorInches(),144,20,0),//30
 
-        HOLD(0,START.getArmDegrees(),INTAKE_SHOOTER.getIntakeSpeeds()),
-        CLIMB(TRAP.getElevatorInches(),142, 0),
-        SHOOT(0,220,0),//When Shooting,
-        AUTO(0,220,0),
-        OUT(0, 260,38)
+        HOLD(0,START.getArmDegrees(),INTAKE_SHOOTER.getIntakeSpeeds(),0),
+        CLIMB(TRAP.getElevatorInches(),142, 0,0),
+        SHOOT(0,220,0,0),//When Shooting,
+        AUTO(0,220,0,0),
+        OUT(0, 260,38,0)
 
         // (HOLD.getElevatorInches(),HOLD.getIntakeSpeeds(), HOLD.getPivotDegrees()),
         ;
@@ -46,19 +46,24 @@ public class AmpMech {
         private final ShuffleboardValue<Double> elevatorInches;
         private final ShuffleboardValue<Double> armAngle;
         private final ShuffleboardValue<Double> intakeSpeeds;
+        private final ShuffleboardValue<Double> wheelPower;
         
 
-        private Value(double elevatorInches, double armAngle, double intakeSpeeds) {
+        private Value(double elevatorInches, double armAngle, double intakeSpeeds, double wheelPower) {
             this.elevatorInches = ShuffleboardValue.create(elevatorInches, 
-                AmpMechElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "AmpMech")
                 .withSize(1, 3)
                 .build();
             this.armAngle = ShuffleboardValue.create(armAngle, 
-                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "AmpMech")
                 .withSize(1, 3)
                 .build();
             this.intakeSpeeds = ShuffleboardValue.create(intakeSpeeds, 
-                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "AmpMech")
+                .withSize(1, 3)
+                .build();
+            this.wheelPower = ShuffleboardValue.create(wheelPower, 
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/WheelPower", "AmpMech")
                 .withSize(1, 3)
                 .build();
         }
@@ -67,15 +72,19 @@ public class AmpMech {
         private Value(Value copyValue) {
             // Value value = copyValue;
             this.elevatorInches = ShuffleboardValue.create(copyValue.getElevatorInches(), 
-                AmpMechElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/ClawElevator (Inches)", "AmpMech")
                 .withSize(1, 3)
                 .build();
                 this.armAngle = ShuffleboardValue.create(copyValue.getArmDegrees(), 
-                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Arm Angle", "AmpMech")
                 .withSize(1, 3)
                 .build();
             this.intakeSpeeds = ShuffleboardValue.create(copyValue.getIntakeSpeeds(), 
-                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "Misc")
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/Intake Speed", "AmpMech")
+                .withSize(1, 3)
+                .build();
+            this.wheelPower = ShuffleboardValue.create(copyValue.getWheelPower(), 
+                AmpMechElevator.class.getSimpleName()+"/"+name()+"/WheelPower", "AmpMech")
                 .withSize(1, 3)
                 .build();
         }
@@ -90,24 +99,30 @@ public class AmpMech {
         public double getArmDegrees() {
             return armAngle.get();
         }
+        public double getWheelPower() {
+            return wheelPower.get();
+        }
     }
 
     private final AmpMechElevator elevator;
     private final AmpMechArmAbsolute arm;
     private final AmpMechIntake intake;
+    private final PowerAmpMechWheel wheel;
     private Value position = Value.START;
     private final ShuffleboardValue<String> positionWriter = ShuffleboardValue
         .create(position.name(), "Current Arm Position", "Misc")
         .withSize(1, 3)
         .build();
 
-    public AmpMech(AmpMechElevator elevator,
+    public AmpMechNew(AmpMechElevator elevator,
         AmpMechArmAbsolute arm,
-        AmpMechIntake intake
+        AmpMechIntake intake,
+        PowerAmpMechWheel wheel
         ) {
         this.elevator = elevator;
         this.arm = arm;
         this.intake = intake;
+        this.wheel = wheel;
 
         // setPositionCommand(Value.START);
         setTeleopStartPos();

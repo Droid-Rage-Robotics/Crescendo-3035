@@ -13,6 +13,7 @@ import frc.robot.utility.motor.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
+@Deprecated
 public class ArmAbstract extends SubsystemBase {
     public static class Constants {
         public static final double GEAR_RATIO = 1 / 2;//not right

@@ -16,6 +16,7 @@ import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.ampMech.AmpMechElevator;
 import frc.robot.subsystems.ampMech.AmpMechIntake;
+import frc.robot.subsystems.ampMech.PowerAmpMechWheel;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
@@ -43,9 +44,9 @@ public class Robot extends TimedRobot {
     private final Shooter shooter = new Shooter(true);//18,19  %  
 
     private final AmpMechElevator elevator = new AmpMechElevator(true);//22-DO NOT TURN THIS ON
-    private final AmpMechIntake clawIntake = new AmpMechIntake(true);//24
-    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true, clawIntake.getMotor());//23
-    private final AmpMech ampMech = new AmpMech(elevator, arm, clawIntake);
+    private final AmpMechIntake ampIntake = new AmpMechIntake(true);//24
+    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true, ampIntake.getMotor());//23
+    private final AmpMech ampMech = new AmpMech(elevator, arm, ampIntake);
 
     private final ClimbAlternate climb = new ClimbAlternate(true,true);//20,21
     private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
