@@ -45,19 +45,11 @@ public class SwerveDriveTeleop extends Command {
 
         // this.aResetButton = aResetButton;
         driver.b().onTrue(drive.setYawCommand(0));
-        // driver.povUp().onTrue(new InstantCommand(()->drive.setYawCommand(0)));
-        // driver.povDown().onTrue(new InstantCommand(()->drive.setYawCommand(-180)));//180
-        // driver.povLeft().onTrue(new InstantCommand(()->drive.setYawCommand(90)));
-        // driver.povRight().onTrue(new InstantCommand(()->drive.setYawCommand(-90)));
+        driver.povUp().onTrue(drive.setYawCommand(0));
+        driver.povDown().onTrue(drive.setYawCommand(-180));//180
+        driver.povLeft().onTrue(drive.setYawCommand(90));
+        driver.povRight().onTrue(drive.setYawCommand(-90));
 
-        heading = new Rotation2d(//TODO:Test; Don't think this will work
-            switch (DriverStation.getRawAllianceStation()) {
-                //https://github.com/Spectrum3847/2024-Ultraviolet/blob/main/src/main/java/frc/spectrumLib/swerve/Drivetrain.java#L262
-                case Unknown -> 0;//180
-                case Blue1,Blue2,Blue3 -> 0;
-                case Red1,Red2,Red3 -> 180;
-            }
-        );
         
         addRequirements(drive);
     }
