@@ -56,7 +56,7 @@ public class AutoChooser {
             .withSize(1, 3);
         autoChooser.addOption("NothingAuto", new InstantCommand());
         addAutos(drive, intake, shooter, ampMech);
-        // addTuningAuto(drive);
+        addTuningAuto(drive);
         // autoChooser.addOption("test", BasicAutos.test(drive));
         autoChooser.addOption("shootandMiddle", Autos.onePlusMiddle(drive,intake,shooter));//WORKS
         autoChooser.addOption("ShootHumanMid Pickup", Autos.onePlusHUuman(drive,intake,shooter));//Works
@@ -83,7 +83,7 @@ autoChooser.addOption("AMP", Autos.amp(drive,intake,shooter));//work ish
             Autos.onePlusThree(drive, intake, shooter,ampMech));
         autoChooser.addOption("One Plus Two", 
             Autos.onePlusTwo(drive, intake, shooter,ampMech));
-        autoChooser.setDefaultOption("One Plus FULL Seperate", 
+        autoChooser.addOption("One Plus FULL Seperate", //default??
             Autos.onePlusFullSeperate(drive, intake, shooter));
 // autoChooser.addOption("One Plus 2 Seperate", 
 //             Autos.onePlusFullSeperate(drive, intake, shooter));
@@ -113,7 +113,7 @@ autoChooser.addOption("RIGHT(non-human player)",
     
     public static void addTuningAuto(SwerveDrive drive){
         autoChooser.addOption("BackwardTest", TuningAutos.backTest(drive));
-        autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
+        autoChooser.setDefaultOption("ForwardTest", TuningAutos.forwardTest(drive));
         // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
         autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));

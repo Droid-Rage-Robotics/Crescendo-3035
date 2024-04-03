@@ -45,8 +45,8 @@ public final class TuningAutos {
     public static Command turnTest(SwerveDrive drive) {
         return new SequentialCommandGroup(
             PathPlannerFollow.create(drive, "TurnTest")
-                .setMaxVelocity(0.2)
-                .setAcceleration(0.2)
+                .setMaxVelocity(2)
+                .setAcceleration(2)
                 .build()
             // drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(180)).getDegrees())//Works
         );
