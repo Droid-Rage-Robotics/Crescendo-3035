@@ -56,7 +56,7 @@ public class AutoChooser {
             .withSize(1, 3);
         autoChooser.addOption("NothingAuto", new InstantCommand());
         addAutos(drive, intake, shooter, ampMech);
-        addTuningAuto(drive);
+        // addTuningAuto(drive);
         // autoChooser.addOption("test", BasicAutos.test(drive));
         autoChooser.addOption("shootandMiddle", Autos.onePlusMiddle(drive,intake,shooter));//WORKS
         autoChooser.addOption("ShootHumanMid Pickup", Autos.onePlusHUuman(drive,intake,shooter));//Works
