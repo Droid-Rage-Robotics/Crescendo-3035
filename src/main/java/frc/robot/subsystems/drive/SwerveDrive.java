@@ -81,7 +81,7 @@ public class SwerveDrive extends SubsystemBase {
         12, 
         SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        false,POD.BL
+        DriveOptions.IS_ENABLED.get(),POD.BL
     );
     private final SwerveModuleKraken frontLeft = new SwerveModuleKraken(
         9,
@@ -427,7 +427,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void changeAllianceRotation(){
-        //Need to Turn on Bot facing towards the red alliance on robot start   
+        //Need to Turn on Bot(front) facing towards the red alliance on robot start   
         pigeon2.setYaw(
             pigeon2.getYaw().getValueAsDouble()+
             switch (DriverStation.getRawAllianceStation()) {

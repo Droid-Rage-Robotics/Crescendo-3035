@@ -41,16 +41,16 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     //15 missing^
     private final SwerveDrive drive = new SwerveDrive(true);//2-10
-    private final Shooter shooter = new Shooter(false);//18,19  %  
+    private final Shooter shooter = new Shooter(true);//18,19  %  
 
-    private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
-    private final AmpMechIntake ampIntake = new AmpMechIntake(false);//24
-    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false, ampIntake.getMotor());//23
+    private final AmpMechElevator elevator = new AmpMechElevator(true);//22-DO NOT TURN THIS ON
+    private final AmpMechIntake ampIntake = new AmpMechIntake(true);//24
+    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true, ampIntake.getMotor());//23
     private final AmpMech ampMech = new AmpMech(elevator, arm, ampIntake);
 
-    private final ClimbAlternate climb = new ClimbAlternate(false,false);//20,21
-    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
+    private final ClimbAlternate climb = new ClimbAlternate(true,true);//20,21
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17
     private final Intake intake = new Intake(dropDown, intakeWheel);
     
     private AutoChooser autoChooser = new AutoChooser(
@@ -148,21 +148,10 @@ public class Robot extends TimedRobot {
 		DriverStation.silenceJoystickConnectionWarning(true);
         ampMech.setTeleopStartPos();
         drive.changeAllianceRotation();//Works
-        // testButton.configureDriveBindings(drive);
-        // testButton.configureIntakeTestBindings(intake);
-        
         // drive.runOnce(()->drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
 
 		// drive.driveAutoReset();//TODO: Test
         robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker);
-        // testButton.test(drive, intake, shooter, climb);
-        // testButton.configureIntakeTestBindings(intake);
-        // testButton.configureAmpMechTestBindings(ampMech, intake);
-        // testButton.configureCycleTrackerBindings(cycleTracker);//works
-        // testButton.configureOperatorBindings(ampMech, intake, shooter);
-        // testButton.configureShooterTestBindings(shooter);
-        // testButton.configureOperatorBindings(climb, intake, ampMech,shooter);
-        // testButton.configureClimbTestBindings(climb, intake, ampMech);
 
     }
 

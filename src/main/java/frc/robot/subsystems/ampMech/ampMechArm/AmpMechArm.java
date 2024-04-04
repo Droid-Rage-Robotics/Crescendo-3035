@@ -69,7 +69,7 @@ public class AmpMechArm extends SubsystemBase {
             23, 
             MotorType.kBrushless,
             true,
-            IdleMode.Coast,
+            IdleMode.Brake,
             Constants.ROTATIONS_TO_RADIANS,
             1.0,
             ShuffleboardValue.create(isEnabled, "Arm/Arm Is Enabled", AmpMech.class.getSimpleName())

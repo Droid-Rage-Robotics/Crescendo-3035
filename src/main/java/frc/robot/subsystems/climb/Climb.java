@@ -30,7 +30,7 @@ public class Climb extends SubsystemBase{
         // ;
         CLIMB(.8),
         START(0),
-        TRAP(-1.1);//-1.1
+        TRAP(-1.05);//-1.1
 
         private final ShuffleboardValue<Double>  climbPos;
 
@@ -63,7 +63,7 @@ public class Climb extends SubsystemBase{
             21, 
             MotorType.kBrushless,
             true,
-            IdleMode.Brake,
+            IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
             ShuffleboardValue.create(isEnabledLeft, "Climb/Is Enabled Left", 
@@ -78,7 +78,7 @@ public class Climb extends SubsystemBase{
             20, 
             MotorType.kBrushless,
             false,
-            IdleMode.Brake,
+            IdleMode.Coast,
             Constants.ROT_TO_INCHES,
             1.0,
             ShuffleboardValue.create(isEnabledRight, "Climb/Is Enabled Right", 
@@ -89,7 +89,7 @@ public class Climb extends SubsystemBase{
             60
         );
 
-        controller.setTolerance(.1);
+        controller.setTolerance(.15);
 
         ComplexWidgetBuilder.create(controller, "PID", 
             Climb.class.getSimpleName())
