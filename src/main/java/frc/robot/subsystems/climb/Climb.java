@@ -25,12 +25,12 @@ public class Climb extends SubsystemBase{
     public enum Position{
         //Normal Motor Value
         // CLIMB(12),
-        // START(0),
+        // START(0),a 
         // TRAP(-29)
         // ;
         CLIMB(.8),
         START(0),
-        TRAP(-1.05);//-1.1
+        TRAP(-1.2);//-1.1
 
         private final ShuffleboardValue<Double>  climbPos;
 

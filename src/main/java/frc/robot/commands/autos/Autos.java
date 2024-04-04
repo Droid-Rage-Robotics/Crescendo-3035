@@ -108,6 +108,16 @@ public final class Autos {
                 .build()
         );
     }
+    public static Command onePlusMiddleAndHuman(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            new WaitCommand(.7),
+            PathPlannerFollow.create(drive, "shootMidPlusHuman")
+                .setMaxVelocity(3)
+                .setAcceleration(3)
+                .build()
+        );
+    }
     public static Command onePlusTwoSeperate(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
