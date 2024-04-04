@@ -15,8 +15,16 @@ On ALL Subsystems:
 - Add IsEnabled Button to all!!!!!
 - Track Battery Voltage?
 - How to convert from rotation to distance and rotations through gears to get rotation
-make the motors create their own writers for us to use with; Write out in a file
+- make the motors create their own writers for us to use with; Write out in a file
 - Make better Field Image with Values
+
+
+Buy:
+- Small Ethernet Cords
+NEw Battery Cart
+Improve Pit
+Storage and pit effiency
+Clen Wiing Bin
 
 
 
