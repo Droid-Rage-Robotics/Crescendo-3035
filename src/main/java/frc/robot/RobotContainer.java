@@ -78,6 +78,9 @@ public class RobotContainer {
 		driver.y().onTrue(
 			ampMech.setPositionCommand(AmpMech.Value.OUT)
 		);
+		driver.x().onTrue(
+				ampMech.setPositionCommand(AmpMech.Value.START)
+			);
 
 		operator.rightTrigger()
 			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
@@ -90,7 +93,6 @@ public class RobotContainer {
 			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
 		operator.a()
 			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
-		
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB_DOWN));
