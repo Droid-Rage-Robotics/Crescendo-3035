@@ -13,9 +13,9 @@ public class TeleopShoot extends SequentialCommandGroup {
     public TeleopShoot (Intake intake, Shooter shooter, CycleTracker cycleTracker, AmpMech ampMech){
         addCommands(
             new SequentialCommandGroup(
-                ampMech.setPositionCommand(AmpMech.Value.SHOOT),
-                shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
-                new WaitCommand(.9),
+                // ampMech.setPositionCommand(AmpMech.Value.SHOOT),
+                // shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+                // new WaitCommand(.9),
                 intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
                 new InstantCommand(()-> cycleTracker.trackCycle(CycleTracker.ScorePos.SPEAKER))
                 )

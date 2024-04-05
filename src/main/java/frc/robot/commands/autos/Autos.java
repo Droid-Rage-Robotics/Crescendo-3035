@@ -33,10 +33,13 @@ public final class Autos {
     }    
     public static Command amp(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
-            new WaitCommand(2),//.8
-            intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
-            new WaitCommand(4.7),
+            // shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+            // new WaitCommand(2),//.8
+            // intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
+            // new WaitCommand(4.7),
+            //^^ Freiendswood Playoff
+            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            
             PathPlannerFollow.create(drive, "amp")
                 .setMaxVelocity(3)
                 .setAcceleration(3)

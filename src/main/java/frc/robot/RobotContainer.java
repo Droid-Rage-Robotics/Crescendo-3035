@@ -83,7 +83,9 @@ public class RobotContainer {
 			);
 
 		operator.rightTrigger()
-			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech))
+			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech)
+			
+			)
 			.onFalse(new SequentialCommandGroup(
 				new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD),
                 ampMech.setPositionCommand(AmpMech.Value.START)
@@ -100,6 +102,15 @@ public class RobotContainer {
 			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
 
+		operator.rightBumper()
+			.onTrue(
+
+			new SequentialCommandGroup(
+			ampMech.setPositionCommand(AmpMech.Value.SHOOT),
+			shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+
+			)
+			);
 		
 		// operator.povUp()
 		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
