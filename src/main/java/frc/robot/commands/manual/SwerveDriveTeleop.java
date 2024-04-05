@@ -37,10 +37,10 @@ public class SwerveDriveTeleop extends Command {
         this.yLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ACCELERATION_UNITS_PER_SECOND.get());
         this.turnLimiter = new SlewRateLimiter(SwerveDriveConstants.SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND.get());
         this.isLimiter = isLimiter;
-        drive.setSpeed(Speed.NORMAL);
+        // drive.setSpeed(Speed.NORMAL);
         // drive.setSpeed(Speed.SLOW);
-        // driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
-        //     .whileFalse(drive.setSpeed(Speed.NORMAL));
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
+            .whileFalse(drive.setSpeed(Speed.NORMAL));
                         // .onFalse(drive.setSpeed(Speed.NORMAL));
 
         // this.aResetButton = aResetButton;
@@ -121,7 +121,7 @@ public class SwerveDriveTeleop extends Command {
         // Apply deadband
         if (Math.abs(xSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) xSpeed = 0;
         if (Math.abs(ySpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) ySpeed = 0;
-        if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;
+        if (Math.abs(turnSpeed) < .1) turnSpeed = 0;//DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE
 
         // Smooth driving and apply speed
         if(isLimiter){

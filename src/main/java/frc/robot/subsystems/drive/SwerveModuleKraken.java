@@ -95,7 +95,7 @@ public class SwerveModuleKraken {
             ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Voltage "+ 
                 podName.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
                 .build(),
-                60,
+                80,
                 120
                 );//45,40 
                 //40,25

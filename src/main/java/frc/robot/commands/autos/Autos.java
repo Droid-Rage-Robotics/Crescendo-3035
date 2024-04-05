@@ -38,8 +38,17 @@ public final class Autos {
             // intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
             // new WaitCommand(4.7),
             //^^ Freiendswood Playoff
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+
+            // new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             
+
+            shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+                new WaitCommand(1.1),//.8
+                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
+                new WaitCommand(1.35),
+                new SetIntakeAndShooter(intake, Intake.Value.HOLD, 
+                    shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+                
             PathPlannerFollow.create(drive, "amp")
                 .setMaxVelocity(3)
                 .setAcceleration(3)
