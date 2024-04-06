@@ -17,6 +17,8 @@ On ALL Subsystems:
 - How to convert from rotation to distance and rotations through gears to get rotation
 - make the motors create their own writers for us to use with; Write out in a file
 - Make better Field Image with Values
+-Safety Things: CPR, First Aid, etc
+- find Husky stwist handle thing
 
 
 Buy:
@@ -24,7 +26,7 @@ Buy:
 NEw Battery Cart
 Improve Pit
 Storage and pit effiency
-Clen Wiing Bin
+Clen Wiring Bin
 -Elevator Nuts
 
 
