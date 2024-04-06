@@ -71,8 +71,7 @@ public class RobotContainer {
 				()->(AmpMech.Value.HOLD_AMP==ampMech.getPosition()||
 					AmpMech.Value.AMP==ampMech.getPosition())))	//Check
 			.onFalse(new SequentialCommandGroup(
-				intake.setPositionCommand(Intake.Value.HOLD),
-				
+				intake.setPositionCommand(Intake.Value.HOLD),				
 				ampMech.setPositionCommand(AmpMech.Value.START)
 				));
 		driver.y().onTrue(
@@ -87,8 +86,8 @@ public class RobotContainer {
 			
 			)
 			.onFalse(new SequentialCommandGroup(
-				new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD),
-                ampMech.setPositionCommand(AmpMech.Value.START)
+				new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD)
+                // ampMech.setPositionCommand(AmpMech.Value.START)
 
 			));
 		operator.leftTrigger()
@@ -100,18 +99,39 @@ public class RobotContainer {
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB_DOWN));
 		operator.povDown()
 			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
-			.onTrue(new ClimbAndTrap(intake, shooter, ampMech, climb));
+			.onTrue(
+				new SequentialCommandGroup(
+					new ClimbAndTrap(intake, shooter, ampMech, climb)
+					// new InstantCommand(()->intake.getDropDown().setMotorMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
+				)
+				
+			);
+		operator.povRight().onTrue(
+			new InstantCommand(()->intake.getDropDown().setMotorMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 
-		operator.rightBumper()
+		);
+
+		operator.povLeft()
+		.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)));
+		
+		// operator.rightBumper()
+		// 	.onTrue(	
+
+		// 	new SequentialCommandGroup(
+		// 	ampMech.setPositionCommand(AmpMech.Value.OUT),//STAGE
+		// 	shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
+
+		// 	)
+		// 	);
+		operator.y()
 			.onTrue(
 
 			new SequentialCommandGroup(
-			ampMech.setPositionCommand(AmpMech.Value.SHOOT),
+			ampMech.setPositionCommand(AmpMech.Value.OUT),
 			shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
 
 			)
 			);
-		
 		// operator.povUp()
 		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
 		// operator.povDown()
