@@ -45,13 +45,13 @@ public final class Autos {
             shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
                 new WaitCommand(1.1),//.8
                 intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
-                new WaitCommand(1.35),
+                new WaitCommand(1.3),
                 new SetIntakeAndShooter(intake, Intake.Value.HOLD, 
                     shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
                 
             PathPlannerFollow.create(drive, "amp")
-                .setMaxVelocity(3)
-                .setAcceleration(3)
+                .setMaxVelocity(3.5)
+                .setAcceleration(3.5)
                 .build()
         );
     }

@@ -63,7 +63,8 @@ public class AutoChooser {
         autoChooser.addOption("ShootHumanPlusmIddle", Autos.onePlusHumanAndMidle(drive,intake,shooter));//work ish
         autoChooser.addOption("ShootMiddleAndHuman", Autos.onePlusMiddleAndHuman(drive,intake,shooter));//work ish
         //
-        autoChooser.setDefaultOption("AMP", Autos.amp(drive,intake,shooter));//work ish
+        autoChooser.addOption("AMP", Autos.amp(drive,intake,shooter));//work
+        autoChooser.setDefaultOption("RIGHT(non-human player)",  BasicAutos.right(drive,intake, shooter));//work
         
     }
     public static Command getAutonomousCommand() {
@@ -100,8 +101,6 @@ public class AutoChooser {
         autoChooser.addOption("OUT(San Antonio Playoff))", 
             BasicAutos.out(drive,intake, shooter));
         
-autoChooser.addOption("RIGHT(non-human player)", 
-            BasicAutos.right(drive,intake, shooter));
 // autoChooser.addOption("LEFT(human player)", 
 //             BasicAutos.left(drive,intake, shooter));
         // autoChooser.addOption("ToCenter", BasicAutos.toCenter(drive, intake, shooter));
