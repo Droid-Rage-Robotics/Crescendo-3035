@@ -121,7 +121,8 @@ public class SwerveDriveTeleop extends Command {
         // Apply deadband
         if (Math.abs(xSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) xSpeed = 0;
         if (Math.abs(ySpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) ySpeed = 0;
-        if (Math.abs(turnSpeed) < .1) turnSpeed = 0;//DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE
+        if (Math.abs(turnSpeed) < DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE) turnSpeed = 0;//DroidRageConstants.Gamepad.DRIVER_STICK_DEADZONE
+//.1
 
         // Smooth driving and apply speed
         if(isLimiter){

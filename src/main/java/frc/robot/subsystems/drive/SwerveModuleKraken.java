@@ -42,7 +42,8 @@ public class SwerveModuleKraken {
         public static final double TURN_ENCODER_ROT_2_RAD = 2 * Math.PI / READINGS_PER_REVOLUTION;
         public static final double TURN_ENCODER_ROT_2_RAD_SEC = TURN_ENCODER_ROT_2_RAD/60;
 
-        public static final double TURN_P = 0.115;//0.5
+        public static final double TURN_P = 0.33;//0.5
+        //.115
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
 
@@ -95,8 +96,8 @@ public class SwerveModuleKraken {
             ShuffleboardValue.create(0.0, "Module/Module " + podName.toString() + "/Drive Voltage "+ 
                 podName.toString() + driveMotorId, SwerveDrive.class.getSimpleName())
                 .build(),
-                80,
-                120
+                50,
+                90
                 );//45,40 
                 //40,25
             //30,0 San Antonio
