@@ -175,4 +175,8 @@ public class IntakeDropDown extends SubsystemBase {
     public void setDropIdleMode(IdleMode mode){
         motor.setIdleMode(mode);
     }
+
+    public void setMotorMode(IdleMode mode){
+        motor.setIdleMode(mode);
+    }
 }  

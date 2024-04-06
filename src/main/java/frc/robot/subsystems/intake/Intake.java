@@ -33,10 +33,10 @@ public class Intake {
        
         INTAKE_HOLD(SHOOTER_HOLD.getAngle(),INTAKE_GROUND.getIntakeSpeeds()),
 
-        HOLD(57, 0),
+        HOLD(90, 0),
         OUTTAKE(130,1600),
         CLIMB_DOWN(170, 0),
-                CLIMB_HOLD(55, 0),
+                // CLIMB_HOLD(55, 0),
 
         OUTTAKE_AMP(88,3200)//
         ;
