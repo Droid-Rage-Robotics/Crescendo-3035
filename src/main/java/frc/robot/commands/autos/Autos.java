@@ -55,6 +55,38 @@ public final class Autos {
                 .build()
         );
     }
+    public static Command centerAppreciate(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+                new WaitCommand(1.1),//.8
+                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
+                new WaitCommand(1.3),
+                new SetIntakeAndShooter(intake, Intake.Value.HOLD, 
+                    shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+                
+            new WaitCommand(4),
+            PathPlannerFollow.create(drive, "centerAp")
+                .setMaxVelocity(3.5)
+                .setAcceleration(3.5)
+                .build()
+        );
+    }
+    public static Command shootOut(SwerveDrive drive, Intake intake, Shooter shooter) {
+        return new SequentialCommandGroup(
+            shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+                new WaitCommand(1.1),//.8
+                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
+                new WaitCommand(1.3),
+                new SetIntakeAndShooter(intake, Intake.Value.HOLD, 
+                    shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+                
+            new WaitCommand(4),
+            PathPlannerFollow.create(drive, "shootOut")
+                .setMaxVelocity(3.5)
+                .setAcceleration(3.5)
+                .build()
+        );
+    }
     public static Command onePlusFullSeperate(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
             new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),

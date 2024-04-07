@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 2
+      "x": 1.2069872572793579,
+      "y": 5.601499977928731
     },
     "rotation": 0
   },
@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "forwardA"
+            "pathName": "LessForwardTest"
           }
         }
       ]
     }
   },
-  "folder": "TuningAutos",
+  "folder": "Seperate",
   "choreoAuto": false
 }

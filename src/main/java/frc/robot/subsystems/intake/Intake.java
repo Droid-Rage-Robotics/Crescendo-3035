@@ -17,7 +17,7 @@ public class Intake {
     //Position Based on game element
     //170-340
     public enum Value {
-        START(20,0),//15
+        START(24.4,0),//15
 
         //IntakePos
         INTAKE_GROUND(206.8,-4500),//205.21
@@ -27,7 +27,7 @@ public class Intake {
         // CLIMB(INTAKE_GROUND,-3000),
         
 
-        SHOOTER_HOLD(23, 0),//Ready to give Note to shooter, but not doing it//0,-100
+        SHOOTER_HOLD(24.2, 0),//Ready to give Note to shooter, but not doing it//0,-100
         SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 1400),//Giving Note to Shooter
         AUTO_SHOOTER_TRANSFER(SHOOTER_HOLD.getAngle(), 2000),//Giving Note to Shooter
        

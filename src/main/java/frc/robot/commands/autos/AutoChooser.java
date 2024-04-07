@@ -65,7 +65,9 @@ public class AutoChooser {
         //
         autoChooser.addOption("AMP", Autos.amp(drive,intake,shooter));//work
         autoChooser.setDefaultOption("RIGHT(non-human player)",  BasicAutos.right(drive,intake, shooter));//work
-        
+        autoChooser.addOption("Center Appreciate",  Autos.centerAppreciate(drive,intake, shooter));//maybe to tesgt
+        autoChooser.addOption("Shoot Out Center",  Autos.shootOut(drive,intake, shooter));//maybe to tesgt
+
     }
     public static Command getAutonomousCommand() {
         return autoChooser.getSelected();

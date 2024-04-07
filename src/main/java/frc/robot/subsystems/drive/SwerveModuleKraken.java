@@ -42,8 +42,9 @@ public class SwerveModuleKraken {
         public static final double TURN_ENCODER_ROT_2_RAD = 2 * Math.PI / READINGS_PER_REVOLUTION;
         public static final double TURN_ENCODER_ROT_2_RAD_SEC = TURN_ENCODER_ROT_2_RAD/60;
 
-        public static final double TURN_P = 0.33;//0.5
-        //.115
+        public static final double TURN_P = 0.5;//0.5 Change this tomake the robot turn the turn motor as fast aspossible
+        //If strafimg, therobot drifts to he frot/back, then increase
+                //.115
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = 4.47;
 

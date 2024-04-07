@@ -81,7 +81,7 @@ public class IntakeDropDown extends SubsystemBase {
 
         controller.setTolerance(Math.toRadians(1));
 
-        feedforward = new ArmFeedforward(0.453,.65,.0859,.0036); //SysID with minor changes
+        feedforward = new ArmFeedforward(0.452,.65,.0859,.003); //SysID with minor changes
         // feedforward = new ArmFeedforward(0.453,.65,.0859,.0035872); //SysID with just motor 
 
 

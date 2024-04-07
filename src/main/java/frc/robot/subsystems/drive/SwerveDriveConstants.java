@@ -81,7 +81,7 @@ public class SwerveDriveConstants {
     public enum Speed {
         TURBO(1, 1),
         NORMAL(6, .8),//3.5, 1 //1,.4
-        SLOW(1, 0.3),
+        SLOW(.9, 0.3),
         SUPER_SLOW(0.05, 0.05),
         ;
         private final ShuffleboardValue<Double> shuffleboardTranslationalValue;
