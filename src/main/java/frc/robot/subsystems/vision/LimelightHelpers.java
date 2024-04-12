@@ -729,7 +729,7 @@ public class LimelightHelpers {
      * code.
      */
     public static void setLEDMode_PipelineControl(String limelightName) {
-        setLimelightNTDouble(limelightName, "ledMode", 0);
+        setLimelightNTDouble(limelightName, "ledMode",0);
     }
 
     public static void setLEDMode_ForceOff(String limelightName) {

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.autos.AutoChooser;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.Shooter;
@@ -41,16 +42,16 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class Robot extends TimedRobot {
     //15 missing^
     private final SwerveDrive drive = new SwerveDrive(true);//2-10
-    private final Shooter shooter = new Shooter(true);//18,19  %  
+    private final Shooter shooter = new Shooter(false);//18,19  %  
 
-    private final AmpMechElevator elevator = new AmpMechElevator(true);//22-DO NOT TURN THIS ON
-    private final AmpMechIntake ampIntake = new AmpMechIntake(true);//24
-    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(true, ampIntake.getMotor());//23
+    private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
+    private final AmpMechIntake ampIntake = new AmpMechIntake(false);//24
+    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false, ampIntake.getMotor());//23
     private final AmpMech ampMech = new AmpMech(elevator, arm, ampIntake);
 
-    private final ClimbAlternate climb = new ClimbAlternate(true,true);//20,21
-    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
-    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17
+    private final ClimbAlternate climb = new ClimbAlternate(false,false);//20,21
+    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
     private final Intake intake = new Intake(dropDown, intakeWheel);
     
     private AutoChooser autoChooser = new AutoChooser(
@@ -60,7 +61,7 @@ public class Robot extends TimedRobot {
 // private final Climb climb = new Climb(false,false);//20,21
 
     private final Vision vision = new Vision();
-    private final Light light = new Light();
+    // private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
 
@@ -113,13 +114,18 @@ public class Robot extends TimedRobot {
     
     @Override
     public void disabledPeriodic() {
+        //In Here, Try using controller to pick the auto
+        // CommandXboxController commandXboxController = new CommandXboxController(3);
+        // commandXboxController.a().onTrue(
+        //     autoChooser.set
+        // )
         // if(RobotController.getBatteryVoltage()<11.5){
         //     light.setAllColor(light.batteryBlue);
         //     // drive.playMusic(2);
         // } else{
         //     light.flashingColors(light.yellow, light.blue);
         // }
-        light.setAllColor(light.blue);
+        // light.setAllColor(light.blue);
     }
 
     @Override
@@ -146,12 +152,13 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 		DriverStation.silenceJoystickConnectionWarning(true);
-        ampMech.setTeleopStartPos();
-        drive.changeAllianceRotation();//Works
+        // ampMech.setTeleopStartPos();
+        // drive.changeAllianceRotation();//Works
         // drive.runOnce(()->drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
 
 		// drive.driveAutoReset();//TODO: Test
-        robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker);
+        robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
+        );
 
     }
 

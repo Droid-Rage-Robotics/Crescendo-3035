@@ -1,10 +1,10 @@
 TO DO:
 - Trapezoid Profile: https://github.com/wpilibsuite/allwpilib/blob/main/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/elevatortrapezoidprofile/Robot.java
-On ALL Subsystems:
-- Have the 2 commands and one protected
-- Positions/Velocity
-- Min/Max Position
-- Check FeedForward/PID calculations
+- On ALL Subsystems:
+   - Have the 2 commands and one protected
+   - Positions/Velocity
+   - Min/Max Position
+   - Check FeedForward/PID calculations
 - Make and extended Subsystems to have protected instead of private
 - Make where the absolute encoders discconnect then the mechanism should just turn off
 - When transfertoampmech, make it where the ampmach transfers when shooter stalls out: figure Out how to indicate stall; Shooter Stall
@@ -17,18 +17,24 @@ On ALL Subsystems:
 - How to convert from rotation to distance and rotations through gears to get rotation
 - make the motors create their own writers for us to use with; Write out in a file
 - Make better Field Image with Values
--Safety Things: CPR, First Aid, etc
+- Safety Things: CPR, First Aid, etc
 - find Husky stwist handle thing
 
 
 Buy:
 - Small Ethernet Cords
-NEw Battery Cart
-Improve Pit
-Storage and pit effiency
-Clen Wiring Bin
--Elevator Nuts
+- NEw Battery Cart
+- Improve Pit
+- Storage and pit effiency
+- Clen Wiring Bin
+- Elevator Nuts
+- order hex shafts from thrifty bot they are cheaper
+- https://app.smartsheet.com/b/form/e800cb5efe0742ca8ccdf610e8047005 Harbor Freight Card
+- ZipTies - https://www.cabletiesandmore.com/natural-zip-ties-nylon: 5.5 and 8 in length with 2.5mm width
+- Pool Noodles
 
+Find:
+Limit Switch
 
 
 Extra Ideas:
@@ -70,6 +76,6 @@ Notes:
 - Without any PID, the arm should stay upright, basically sayign that the kg is good
 - System.out.println("setting command."+ targetPosition.name()); <-- Use this to troubleshoot>
 - Connect in Pathplanner with Robot: 10.30.35.2
-- Color: 5V - Multi COlor Strip/12V - Single COlor Strip
--CycleTracker: https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html; https://www.chiefdelphi.com/t/roborio-wpilib-logging/159434/17
--Drive Feedforward: kS - Increase until the robot very slowly moves forward (this means too much,so lower) Then kV until the robot goes forward the amount needed
+- Color: 5V - Multi COlor; Strip/12V - Single COlor Strip
+- CycleTracker: https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html; https://www.chiefdelphi.com/t/roborio-wpilib-logging/159434/17
+- Drive Feedforward: kS - Increase until the robot very slowly moves forward (this means too much,so lower) Then kV until the robot goes forward the amount needed

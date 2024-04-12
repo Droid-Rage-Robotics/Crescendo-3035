@@ -12,6 +12,7 @@ import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.climbAndAmp.ClimbAndTrap;
 import frc.robot.commands.climbAndAmp.DropAmp;
 import frc.robot.commands.climbAndAmp.TransferToAmpMech;
+import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
 
 public class RobotContainer {
@@ -43,7 +45,8 @@ public class RobotContainer {
 	//Add Manual Control
 	public void configureTeleOpBindings(SwerveDrive drive, Intake intake, Shooter shooter, 
 		AmpMech ampMech, ClimbAlternate climb, 
-		 CycleTracker cycleTracker){
+		 CycleTracker cycleTracker, Vision vision
+		 ){
 		// drive.setYawCommand(-90);
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 		ampMech.getElevator().setDefaultCommand(new ManualElevator(operator::getLeftY, ampMech));
@@ -81,15 +84,15 @@ public class RobotContainer {
 				ampMech.setPositionCommand(AmpMech.Value.START)
 			);
 
-		operator.rightTrigger()
-			.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech)
+		// operator.rightTrigger()
+		// 	.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech)
 			
-			)
-			.onFalse(new SequentialCommandGroup(
-				new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD)
-                // ampMech.setPositionCommand(AmpMech.Value.START)
+		// 	)
+		// 	.onFalse(new SequentialCommandGroup(
+		// 		new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD)
+        //         // ampMech.setPositionCommand(AmpMech.Value.START)
 
-			));
+		// 	));
 		operator.leftTrigger()
 			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
 		operator.a()
@@ -142,8 +145,8 @@ public class RobotContainer {
 		operator.back()
 			.onTrue(ampMech.resetElevator());
 
-		// operator.rightTrigger()
-		// 	.onTrue(new AutoAim(drive, vision, light)
+		operator.rightTrigger()
+			.onTrue(new AutoAim(drive, vision));
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
 		// 		.andThen(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)))
 		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)

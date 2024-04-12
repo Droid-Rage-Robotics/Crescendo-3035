@@ -55,6 +55,7 @@ public class AutoChooser {
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
         autoChooser.addOption("NothingAuto", new InstantCommand());
+        // autoChooser.
         addAutos(drive, intake, shooter, ampMech);
         // addTuningAuto(drive);
         // autoChooser.addOption("test", BasicAutos.test(drive));
@@ -114,7 +115,7 @@ public class AutoChooser {
     }
     
     public static void addTuningAuto(SwerveDrive drive){
-        autoChooser.addOption("BackwardTest", TuningAutos.backTest(drive));
+        autoChooser.addOption(TuningAutos.backTest(drive).toString()+"BackwardTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
         autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
@@ -158,4 +159,6 @@ public class AutoChooser {
             drive // Reference to this subsystem to set requirements
         );
     }
+
+    // public setDefaultOption
 }
