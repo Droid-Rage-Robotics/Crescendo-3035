@@ -44,19 +44,60 @@ public class SafeTalonFX extends SafeMotor{
             mode, positionConversionFactor,
             velocityConversionFactor,
             isEnabled, 
-            outputWriter, 0,0);
+            outputWriter, 
+            "", 0,0);
     }
 
     public SafeTalonFX(int deviceNumber, boolean isInverted, 
         IdleMode mode, double positionConversionFactor,
         double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
-        ShuffleboardValue<Double> outputWriter, double supplyCurrentLimit) {
+        ShuffleboardValue<Double> outputWriter, 
+        double supplyCurrentLimit) {
             this(deviceNumber, isInverted, 
             mode, positionConversionFactor,
             velocityConversionFactor,
             isEnabled, 
-            outputWriter, supplyCurrentLimit,0);
+            outputWriter,
+            "", 
+            supplyCurrentLimit,0);
+    }
+
+    public SafeTalonFX(int deviceNumber, boolean isInverted, 
+        IdleMode mode, double positionConversionFactor,
+        double velocityConversionFactor,
+        ShuffleboardValue<Boolean> isEnabled, 
+        ShuffleboardValue<Double> outputWriter, String canName) {
+            this(deviceNumber, isInverted, 
+            mode, positionConversionFactor,
+            velocityConversionFactor,
+            isEnabled, 
+            outputWriter, canName, 0,0);
+    }
+
+    public SafeTalonFX(int deviceNumber, boolean isInverted, 
+        IdleMode mode, double positionConversionFactor,
+        double velocityConversionFactor,
+        ShuffleboardValue<Boolean> isEnabled, 
+        ShuffleboardValue<Double> outputWriter, 
+        String canName, double supplyCurrentLimit) {
+            this(deviceNumber, isInverted, 
+            mode, positionConversionFactor,
+            velocityConversionFactor,
+            isEnabled, 
+            outputWriter, canName,
+            supplyCurrentLimit,0);
+    }
+
+    public SafeTalonFX(int deviceNumber, boolean isInverted, 
+        IdleMode mode, double positionConversionFactor,
+        double velocityConversionFactor,
+        ShuffleboardValue<Boolean> isEnabled, 
+        ShuffleboardValue<Double> outputWriter,
+        double supplyCurrentLimit, double statorCurrentLimit) {
+            this(deviceNumber, isInverted, mode, 
+            positionConversionFactor, velocityConversionFactor, 
+            isEnabled, outputWriter, "", supplyCurrentLimit);
     }
 
     // motor.getVoltageCompensationNominalVoltage()
@@ -64,30 +105,32 @@ public class SafeTalonFX extends SafeMotor{
         IdleMode mode, double positionConversionFactor,
         double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
-        ShuffleboardValue<Double> outputWriter, double supplyCurrentLimit, double statorCurrentLimit) {
-        super(isEnabled, outputWriter);
-        motor = new TalonFX(deviceNumber);
-        
-        motor.setInverted(isInverted);
-        setIdleMode(mode);
-        configuration.Audio.AllowMusicDurDisable = false; //true
-        // configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //Does not work as intended
-        if(supplyCurrentLimit!=0){
-            configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
-            configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
-        }
-        if(statorCurrentLimit!=0){
-            configuration.CurrentLimits.StatorCurrentLimitEnable =true;
-            configuration.CurrentLimits.StatorCurrentLimit = supplyCurrentLimit;
-        }
-        
-        this.positionConversionFactor = positionConversionFactor;
-        this.velocityConversionFactor = velocityConversionFactor;
+        ShuffleboardValue<Double> outputWriter, 
+        String canName,
+        double supplyCurrentLimit, double statorCurrentLimit) {
+            super(isEnabled, outputWriter);
+            motor = new TalonFX(deviceNumber);
+            
+            motor.setInverted(isInverted);
+            setIdleMode(mode);
+            configuration.Audio.AllowMusicDurDisable = false; //true
+            // configuration.Feedback.SensorToMechanismRatio = positionConversionFactor;    //Does not work as intended
+            if(supplyCurrentLimit!=0){
+                configuration.CurrentLimits.SupplyCurrentLimitEnable =true;
+                configuration.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+            }
+            if(statorCurrentLimit!=0){
+                configuration.CurrentLimits.StatorCurrentLimitEnable =true;
+                configuration.CurrentLimits.StatorCurrentLimit = supplyCurrentLimit;
+            }
+            
+            this.positionConversionFactor = positionConversionFactor;
+            this.velocityConversionFactor = velocityConversionFactor;
 
-        motor.getConfigurator().apply(configuration);
+            motor.getConfigurator().apply(configuration);
 
-        orchestra = new Orchestra();
-        orchestra.addInstrument(motor);
+            orchestra = new Orchestra();
+            orchestra.addInstrument(motor);
     }
 
     public void setPower(double power) {

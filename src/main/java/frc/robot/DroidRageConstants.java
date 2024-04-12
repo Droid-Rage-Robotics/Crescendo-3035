@@ -22,4 +22,6 @@ public final class DroidRageConstants {
     public static boolean isWithinDeadzone(double stick) {
         return Math.abs(stick) < DroidRageConstants.Gamepad.OPERATOR_STICK_DEADZONE;
     }
+
+    public static String canName = "structure"; //Rev stuff does not work on CANivore
 }

@@ -64,6 +64,7 @@ Test:
 
 Done:
 April Tag - https://github.com/Mechanical-Advantage/RobotCode2023/blob/main/src/main/java/org/littletonrobotics/frc2023/subsystems/apriltagvision/AprilTagVision.java#L38
+- Implemented CANivore
 
 
 
