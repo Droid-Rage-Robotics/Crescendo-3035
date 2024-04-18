@@ -23,10 +23,10 @@ public class AutoAim extends Command {//TODO: Test this
             0,
             0.0000,
             new TrapezoidProfile.Constraints(1.525, 1));
-        turnController.setTolerance(.01);//1 degree - No use degrees
+        turnController.setTolerance(.03);//-27 degrees to 27 degrees
         
         distanceController = new ProfiledPIDController(
-            0.0, //.034
+            0.5, //.034
             0,
             0.0000,
             new TrapezoidProfile.Constraints(1.525, 1));
@@ -42,7 +42,7 @@ public class AutoAim extends Command {//TODO: Test this
   
   @Override
   public void initialize() {
-    System.out.println("AutoAiming Start");
+    // System.out.println("AutoAiming Start");
   }
 
   @Override
