@@ -22,15 +22,15 @@ extends PIDCommand
     private static double lowKP = 0.035;
     private static double highKP = 0.06;
     private static double tolerance = 2;
-    Command driveCommand;
+    // Command driveCommand;
     DoubleSupplier fwdPositiveSupplier;
     private static double out;
     private Vision vision;
-    // private SwerveDrive drive;
+    private SwerveDrive drive;
 
     /** Creates a new AlignToAprilTag. */
     public AlignToAprilTagSpectrum(Vision vision, SwerveDrive drive,
-        DoubleSupplier fwdPositiveSupplier, double offset) {
+        DoubleSupplier fwdPositiveSupplier) {
         super(
                 // The controller that the command will use
                 new PIDController(lowKP, 0, 0),
@@ -42,9 +42,10 @@ extends PIDCommand
                 output -> setOutput(output));
                 //drive, vision);
             this.vision = vision;
+            this.drive = drive;
 
         this.getController().setTolerance(tolerance);
-        driveCommand = new InstantCommand(()-> drive.drive(getOutput(), 0, getSteering()));
+        // driveCommand = new InstantCommand(()-> drive.drive(getOutput(), 0, getSteering()));
                 // new SwerveDrive(
                 //         fwdPositiveSupplier, // Allows pilot to drive fwd and rev
                 //         () -> getOutput(), // Moves us center to the tag
@@ -80,7 +81,7 @@ extends PIDCommand
         out = 0;
         // getLedCommand(tagID).initialize();
         // Robot.swerve.resetRotationController();
-        driveCommand.initialize();
+        // driveCommand.initialize();
         if (vision.gettX() > 16) {
             this.getController().setP(highKP);
         } else {
@@ -91,7 +92,8 @@ extends PIDCommand
     @Override
     public void execute() {
         super.execute();
-        driveCommand.execute();
+        // driveCommand.execute();
+        new InstantCommand(()-> drive.drive(getOutput(), 0, getSteering()));
         // getLedCommand(tagID).execute();
     }
 

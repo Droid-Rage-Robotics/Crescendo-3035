@@ -9,7 +9,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.Light;
 import frc.robot.subsystems.drive.SwerveDrive;
-@Deprecated
+import frc.robot.subsystems.vision.Vision;
+// @Deprecated
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
@@ -17,28 +18,34 @@ public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TIme
   /** Creates a new AutoBalance. */
   // private static DriverStation driverStation;
   // private SwerveDrive drive;
-  private Light light;
+  // private Light light;
   // private Timer timer;
   // private WriteOnlyBoolean atSetpointWriter = new WriteOnlyBoolean(false, "PID Auto balance at positionn", Drive.class.getSimpleName());
-  public AutoBalancetoAutoAim(SwerveDrive drive, Light light) {//TODO:Test
+  public AutoBalancetoAutoAim(SwerveDrive drive, Vision vision) {//TODO:Test
     
     super(
         new ProfiledPIDController(
-            0.034, 
+            1.2, //.034
             0,
             0.0000,
             new TrapezoidProfile.Constraints(1.525, 1)),
 
-            drive::getPitch,
+            // drive::getPitch,
+            vision::gettX,
         0,
         (output, setpoint) -> {
             // Use the output (and setpoint, if desired) here
-            drive.drive(output, 0, 0);
+            drive.drive(0, 0, output);
+            if(vision.gettX()<0){
+              drive.drive(0, 0, -output);
+            } else if(vision.gettX()>0){
+              drive.drive(0, 0, output);
+            }
           });
 
     addRequirements(drive);
     // this.drive = drive;
-    this.light = light;
+    // this.light = light;
     getController().setTolerance(0.5); //degrees
     // ComplexWidgetBuilder.create(getController(), "PID Auto balance controller", Drive.class.getSimpleName());
   }
@@ -51,7 +58,7 @@ public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TIme
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      light.setAllColor(light.red);
+      // light.setAllColor(light.red);
     // final int time = driverStation.getMatchTime();
     // if(isMatchTime()){
     //   return true;
@@ -59,7 +66,7 @@ public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TIme
 
     // atSetpointWriter.set(getController().atSetpoint());
     if(getController().atSetpoint()){
-      light.setAllColor(light.green);
+      // light.setAllColor(light.green);
     }
     return getController().atSetpoint();
   }
