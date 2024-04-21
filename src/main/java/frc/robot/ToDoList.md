@@ -80,3 +80,13 @@ Notes:
 - Color: 5V - Multi COlor; Strip/12V - Single COlor Strip
 - CycleTracker: https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html; https://www.chiefdelphi.com/t/roborio-wpilib-logging/159434/17
 - Drive Feedforward: kS - Increase until the robot very slowly moves forward (this means too much,so lower) Then kV until the robot goes forward the amount needed
+- /** Max RPM of NEO */
+  public static final int NEO_MAX_RPM = 5676;
+  /** Max RPM of Vortex */
+  public static final int VORTEX_MAX_RPM = 6784;
+  /** Ticks per revolution of NEO built-in encoder */
+  public static final int NEO_ENCODER_TICKS_PER_ROTATION = 42;
+  /** Ticks per rotation of Vortex built-in encoder */
+  public static final int VORTEX_ENCODER_TICKS_PER_ROTATION = 7168;
+  /** Ticks per revolution of REV through bore encoder */
+  public static final int REV_ENCODER_TICKS_PER_ROTATION = 8192;

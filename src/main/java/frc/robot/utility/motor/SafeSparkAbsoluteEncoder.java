@@ -20,6 +20,8 @@ public class SafeSparkAbsoluteEncoder {
     public SafeSparkAbsoluteEncoder(SafeCanSparkMax motor, boolean isInverted, 
         double positionConversionFactor, double velocityConversionFactor, SubsystemBase base){
         encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
+        // motor.getAbsoluteEncoder(Type.kDutyCycle).
+    
         encoder.setInverted(isInverted);
         encoder.setPositionConversionFactor(positionConversionFactor);
         encoder.setVelocityConversionFactor(velocityConversionFactor);
@@ -57,5 +59,6 @@ public class SafeSparkAbsoluteEncoder {
         encoder.setVelocityConversionFactor(velocityConversionFactor);
     }
     public void setInverted(boolean b) {
+        
     }
 }
