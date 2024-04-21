@@ -5,10 +5,12 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.CommandList;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.climbAndAmp.ClimbAndTrap;
 import frc.robot.commands.climbAndAmp.DropAmp;
@@ -150,7 +152,7 @@ public class RobotContainer {
 			.onTrue(ampMech.resetElevator());
 
 		operator.rightTrigger()
-		.onTrue(new AutoBalancetoAutoAim(drive, vision));
+			.onTrue(new AutoBalancetoAutoAim(drive, vision));
 		// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
 			// .onTrue(new AutoAim(drive, vision));
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
@@ -172,5 +174,12 @@ public class RobotContainer {
 			operator.getHID().setRumble(RumbleType.kBothRumble, 1);
 		}
 		
+	}
+
+	public void testCommands(Intake intake){
+		operator.rightTrigger()
+		.onTrue(CommandList.intake(intake));
+		operator.leftTrigger()
+		.onTrue(CommandList.outtake(intake));
 	}
 }
