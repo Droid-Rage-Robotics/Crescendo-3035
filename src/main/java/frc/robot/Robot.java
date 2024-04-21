@@ -18,7 +18,6 @@ import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.ampMech.AmpMechElevator;
 import frc.robot.subsystems.ampMech.AmpMechIntake;
-import frc.robot.subsystems.ampMech.PowerAmpMechWheel;
 import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
@@ -70,7 +69,6 @@ public class Robot extends TimedRobot {
 
     private RobotContainer robotContainer = new RobotContainer();
     // private TestButton testButton = new TestButton();
-    private NewTeleopButtons teleopButtons = new NewTeleopButtons();    
 
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
