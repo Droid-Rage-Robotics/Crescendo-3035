@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.reduxrobotics.sensors.canandcoder.Canandcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -12,7 +13,9 @@ import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.climbAndAmp.ClimbAndTrap;
 import frc.robot.commands.climbAndAmp.DropAmp;
 import frc.robot.commands.climbAndAmp.TransferToAmpMech;
+import frc.robot.commands.drive.AlignToAprilTagSpectrum;
 import frc.robot.commands.drive.AutoAim;
+import frc.robot.commands.drive.AutoBalancetoAutoAim;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
@@ -36,6 +39,7 @@ public class RobotContainer {
 	// PS4Controller controller = new PS4Controller(0);
 	// CommandPS5Controller;
 	// CommandStadiaController
+	Canandcoder canandcoder = new Canandcoder(0);
 
 	public RobotContainer() {
 		DriverStation.silenceJoystickConnectionWarning(true);
@@ -146,7 +150,9 @@ public class RobotContainer {
 			.onTrue(ampMech.resetElevator());
 
 		operator.rightTrigger()
-			.onTrue(new AutoAim(drive, vision));
+		.onTrue(new AutoBalancetoAutoAim(drive, vision));
+		// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
+			// .onTrue(new AutoAim(drive, vision));
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
 		// 		.andThen(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)))
 		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
