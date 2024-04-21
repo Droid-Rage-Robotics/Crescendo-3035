@@ -21,6 +21,8 @@ public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TIme
   // private Light light;
   // private Timer timer;
   // private WriteOnlyBoolean atSetpointWriter = new WriteOnlyBoolean(false, "PID Auto balance at positionn", Drive.class.getSimpleName());
+  SwerveDrive drive;
+  Vision vision;
   public AutoBalancetoAutoAim(SwerveDrive drive, Vision vision) {//TODO:Test
     
     super(
@@ -45,7 +47,8 @@ public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TIme
           });
 
     addRequirements(drive);
-    // this.drive = drive;
+    this.drive = drive;
+    this.vision=vision;
     // this.light = light;
     getController().setTolerance(0.5); //degrees
     // ComplexWidgetBuilder.create(getController(), "PID Auto balance controller", Drive.class.getSimpleName());
@@ -76,4 +79,26 @@ public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TIme
   //   return DriverStation.getMatchTime()<2;
   // }
 
+  //https://github.com/frc3175/Scorpion-2024/blob/main/src/main/java/frc/robot/subsystems/Limelight.java
+  public double getDistanceToTarget()  {
+
+    double targetOffsetAngle_Vertical = vision.gettY();
+
+    // how many degrees back is your limelight rotated from perfectly vertical?
+    double limelightMountAngleDegrees = 30;//TODO: Measure 
+
+    // distance from the center of the Limelight lens to the floor
+    double limelightLensHeightInches = 1; //TODO Measure
+
+    // distance from the target to the floor
+    double goalHeightInches = 53.88; 
+
+    double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0); //Turing Degree to Radian
+
+    //calculate distance
+    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+
+    return distanceFromLimelightToGoalInches;
+  }
 }
