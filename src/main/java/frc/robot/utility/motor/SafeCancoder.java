@@ -40,7 +40,7 @@ public class SafeCancoder{
             }
             canConfiguration.MagnetSensor.MagnetOffset = offset;
             this.positionConversionFactor = positionConversionFactor;
-            this.velocityConversionFactor = velocityConversionFactor;
+            this.velocityConversionFactor = positionConversionFactor/60;
             
             // encoder.getConfigurator() = canConfiguration;
             // encoder.setCon

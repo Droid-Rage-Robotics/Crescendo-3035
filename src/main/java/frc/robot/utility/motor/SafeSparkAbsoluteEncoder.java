@@ -18,13 +18,14 @@ public class SafeSparkAbsoluteEncoder {
     //Math.PI*2 = 360 Degrees
     //Math.PI*2/60
     public SafeSparkAbsoluteEncoder(SafeCanSparkMax motor, boolean isInverted, 
-        double positionConversionFactor, double velocityConversionFactor, SubsystemBase base){
+        double positionConversionFactor, double velocityConversionFactor, 
+        SubsystemBase base){
         encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
         // motor.getAbsoluteEncoder(Type.kDutyCycle).
     
         encoder.setInverted(isInverted);
         encoder.setPositionConversionFactor(positionConversionFactor);
-        encoder.setVelocityConversionFactor(velocityConversionFactor);
+        encoder.setVelocityConversionFactor(positionConversionFactor/60);
         // this.base = base;
 
         rawWriter = ShuffleboardValue

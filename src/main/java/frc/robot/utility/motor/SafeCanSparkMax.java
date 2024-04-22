@@ -38,7 +38,7 @@ public class SafeCanSparkMax extends SafeMotor {
         motor.setInverted(isInverted);
         setIdleMode(mode);
         motor.getEncoder().setPositionConversionFactor(positionConversionFactor);
-        motor.getEncoder().setVelocityConversionFactor(velocityConversionFactor);
+        motor.getEncoder().setVelocityConversionFactor(positionConversionFactor/60);
         setSmartCurrentLimit(smartCurrentLimit);//Sparks usual default is 80
         motor.burnFlash();
     }   

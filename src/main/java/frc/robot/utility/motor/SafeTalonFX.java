@@ -42,7 +42,7 @@ public class SafeTalonFX extends SafeMotor{
         ShuffleboardValue<Double> outputWriter) {
             this(deviceNumber, isInverted, 
             mode, positionConversionFactor,
-            velocityConversionFactor,
+            positionConversionFactor/60,
             isEnabled, 
             outputWriter, 
             "", 0,0);
@@ -56,7 +56,7 @@ public class SafeTalonFX extends SafeMotor{
         double supplyCurrentLimit) {
             this(deviceNumber, isInverted, 
             mode, positionConversionFactor,
-            velocityConversionFactor,
+            positionConversionFactor/60,
             isEnabled, 
             outputWriter,
             "", 
@@ -70,7 +70,7 @@ public class SafeTalonFX extends SafeMotor{
         ShuffleboardValue<Double> outputWriter, String canName) {
             this(deviceNumber, isInverted, 
             mode, positionConversionFactor,
-            velocityConversionFactor,
+            positionConversionFactor/60,
             isEnabled, 
             outputWriter, canName, 0,0);
     }
@@ -83,7 +83,7 @@ public class SafeTalonFX extends SafeMotor{
         String canName, double supplyCurrentLimit) {
             this(deviceNumber, isInverted, 
             mode, positionConversionFactor,
-            velocityConversionFactor,
+            positionConversionFactor/60,
             isEnabled, 
             outputWriter, canName,
             supplyCurrentLimit,0);
@@ -96,7 +96,7 @@ public class SafeTalonFX extends SafeMotor{
         ShuffleboardValue<Double> outputWriter,
         double supplyCurrentLimit, double statorCurrentLimit) {
             this(deviceNumber, isInverted, mode, 
-            positionConversionFactor, velocityConversionFactor, 
+            positionConversionFactor, positionConversionFactor/60, 
             isEnabled, outputWriter, "", supplyCurrentLimit);
     }
 
