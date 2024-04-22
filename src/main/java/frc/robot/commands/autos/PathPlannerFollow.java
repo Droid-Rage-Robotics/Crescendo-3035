@@ -16,21 +16,21 @@ public class PathPlannerFollow {
 
     
 
-    private PathPlannerFollow(SwerveDrive drive, String pathName, double maxVelocity, double acceleration, HashMap<String, Command> eventMap) {
+    private PathPlannerFollow(SwerveDrive drive, String autoName, double maxVelocity, double acceleration, HashMap<String, Command> eventMap) {
         this.drive = drive;
-        this.autoName = pathName;
+        this.autoName = autoName;
         this.maxVelocity = maxVelocity;
         this.acceleration = acceleration;
         this.eventMap = eventMap;
     }
 
-    private PathPlannerFollow(SwerveDrive drive, String pathName) {
+    private PathPlannerFollow(SwerveDrive drive, String patautoNamehName) {
         this.drive = drive;
-        this.autoName = pathName;
+        this.autoName = patautoNamehName;
     }
 
-    public static PathPlannerFollow create(SwerveDrive drive, String pathName) {
-        return new PathPlannerFollow(drive, pathName);
+    public static PathPlannerFollow create(SwerveDrive drive, String autoName) {
+        return new PathPlannerFollow(drive, autoName);
     }
 
     public PathPlannerFollow setMaxVelocity(double maxVelocity) {
