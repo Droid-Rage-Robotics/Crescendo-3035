@@ -1,6 +1,6 @@
 package frc.robot.utility.template;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.utility.motor.SafeCanSparkMax;
 
@@ -8,7 +8,7 @@ public class ArmAbsolute extends Arm {
     public ArmAbsolute(
         SafeCanSparkMax[] motors,
         PIDController controller,
-        ElevatorFeedforward feedforward,
+        ArmFeedforward feedforward,
         double maxPosition,
         double minPosition,
         Control control,

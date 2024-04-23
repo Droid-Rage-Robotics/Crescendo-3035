@@ -1,35 +1,35 @@
 package frc.robot.utility.template;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class Elevator extends SubsystemBase {
+public class Intake extends SubsystemBase{
     public enum Control{
         PID,
         FEEDFORWARD
     }
     private final SafeCanSparkMax[] motors;
     private final PIDController controller;
-    private final ElevatorFeedforward feedforward;
+    private final SimpleMotorFeedforward feedforward;
     private final Control control;
-    private final double maxPosition;
-    private final double minPosition;
-    private final ShuffleboardValue<Double> positionWriter;
+    private final double maxSpeed;
+    private final double minSpeed;
+    private final ShuffleboardValue<Double> speedWriter;
     private final ShuffleboardValue<Double> targetWriter;
     private final ShuffleboardValue<Double> voltageWriter;
     private final int mainNum;
 
-    public Elevator(
+    public Intake(
         SafeCanSparkMax[] motors,
         PIDController controller,
-        ElevatorFeedforward feedforward,
-        double maxPosition,
-        double minPosition,
+        SimpleMotorFeedforward feedforward,
+        double maxSpeed,
+        double minSpeed,
         Control control,
         String name,
         int mainNum
@@ -38,15 +38,15 @@ public class Elevator extends SubsystemBase {
         this.controller=controller;
         this.feedforward=feedforward;
         this.control=control;
-        this.maxPosition=maxPosition;
-        this.minPosition=minPosition;
+        this.maxSpeed=minSpeed;
+        this.minSpeed=minSpeed;
         this.mainNum=mainNum;
 
-        positionWriter = ShuffleboardValue
-            .create(0.0, name+"/Position", name)
+        speedWriter = ShuffleboardValue
+            .create(0.0, name+"/Speed", name)
             .build();
         targetWriter = ShuffleboardValue
-            .create(0.0, name+"/Target", name)
+            .create(0.0, name+"/TargetSpeed", name)
             .build();
         voltageWriter = ShuffleboardValue
             .create(0.0, name+"/Voltage", name)
@@ -82,7 +82,7 @@ public class Elevator extends SubsystemBase {
      * Use this for initialization
      */
     public void setTargetPosition(double target) {
-        if(target>maxPosition||target<minPosition) return;
+        if(target>maxSpeed||target<minSpeed) return;
         targetWriter.set(target);
     }
 
@@ -102,7 +102,7 @@ public class Elevator extends SubsystemBase {
 
     public double getEncoderPosition() {
         double position = motors[mainNum].getPosition();
-        positionWriter.write(position);
+        speedWriter.write(position);
         return position;
     }
 

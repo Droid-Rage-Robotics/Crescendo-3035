@@ -1,6 +1,6 @@
 package frc.robot.utility.template;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -13,23 +13,23 @@ public class Arm extends SubsystemBase {
         PID,
         FEEDFORWARD
     }
-    SafeCanSparkMax[] motors;
-    PIDController controller;
-    ElevatorFeedforward feedforward;
-    Control control;
-    double maxPosition;
-    double minPosition;
-    protected final ShuffleboardValue<Double> positionRadianWriter;
-    protected final ShuffleboardValue<Double> positionDegreeWriter;
-    protected final ShuffleboardValue<Double> targetRadianWriter;
-    protected final ShuffleboardValue<Double> targetDegreeWriter;
+    private final SafeCanSparkMax[] motors;
+    private final PIDController controller;
+    private final ArmFeedforward feedforward;
+    private final Control control;
+    private final double maxPosition;
+    private final double minPosition;
+    private final ShuffleboardValue<Double> positionRadianWriter;
+    private final ShuffleboardValue<Double> positionDegreeWriter;
+    private final ShuffleboardValue<Double> targetRadianWriter;
+    private final ShuffleboardValue<Double> targetDegreeWriter;
     private final ShuffleboardValue<Double> voltageWriter;
-    int mainNum;
+    private final int mainNum;
 
     public Arm(
         SafeCanSparkMax[] motors,
         PIDController controller,
-        ElevatorFeedforward feedforward,
+        ArmFeedforward feedforward,
         double maxPosition,
         double minPosition,
         Control control,
@@ -81,7 +81,7 @@ public class Arm extends SubsystemBase {
     public void simulationPeriodic() {
         periodic();
     }
-
+    
     public Command setTargetPositionCommand(double degree){
         return new InstantCommand(()->setTargetPosition(degree));
     }
