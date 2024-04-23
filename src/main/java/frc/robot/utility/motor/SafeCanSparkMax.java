@@ -15,19 +15,19 @@ public class SafeCanSparkMax extends SafeMotor {
     //     .build();
     public SafeCanSparkMax(
         int deviceId, MotorType type, 
-        boolean isInverted, IdleMode mode,
+        boolean isInverted, IdleMode idleMode,
         double positionConversionFactor,
         double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
         ShuffleboardValue<Double> outputWriter) {
-            this(deviceId, type, isInverted, mode, 
+            this(deviceId, type, isInverted, idleMode, 
             positionConversionFactor, velocityConversionFactor, 
             isEnabled, outputWriter, 40);
             //Makes Default for all Spark Maxes; Sparks usual default is 80
     }   
     public SafeCanSparkMax(
         int deviceId, MotorType type, 
-        boolean isInverted, IdleMode mode,
+        boolean isInverted, IdleMode idleMode,
         double positionConversionFactor,
         double velocityConversionFactor,
         ShuffleboardValue<Boolean> isEnabled, 
@@ -36,7 +36,7 @@ public class SafeCanSparkMax extends SafeMotor {
         super(isEnabled, outputWriter);
         motor = new CANSparkMax(deviceId, type);
         motor.setInverted(isInverted);
-        setIdleMode(mode);
+        setIdleMode(idleMode);
         motor.getEncoder().setPositionConversionFactor(positionConversionFactor);
         motor.getEncoder().setVelocityConversionFactor(positionConversionFactor/60);
         setSmartCurrentLimit(smartCurrentLimit);//Sparks usual default is 80
@@ -157,6 +157,10 @@ public class SafeCanSparkMax extends SafeMotor {
         // return motor.getAppliedOutput();//motor controller's applied output duty cycle.
         // return motor.getBusVoltage();//voltage fed into the motor controller.
         return motor.getOutputCurrent();//motor controller's output current in Amps.
+    }
+
+    public void reset(double num){
+        motor.getEncoder().setPosition(num);
     }
 }
 
