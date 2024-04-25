@@ -6,6 +6,11 @@
       }
     },
     "Other Devices": {
+      "SPARK MAX [2]": {
+        "header": {
+          "open": true
+        }
+      },
       "SPARK MAX [4]": {
         "header": {
           "open": true
@@ -38,6 +43,8 @@
       "/Shuffleboard/AmpMech/Arm PID": "PIDController",
       "/Shuffleboard/AmpMech/Claw Intake": "PIDController",
       "/Shuffleboard/AmpMech/Claw Intake Reset Claw Encoder": "Command",
+      "/Shuffleboard/AmpMech/Elevator Reset Encoder": "Command",
+      "/Shuffleboard/AmpMech/Elevator/ Elev PID": "PIDController",
       "/Shuffleboard/AmpMech/Reset Arm Encoder": "Command",
       "/Shuffleboard/AmpMechElevator/Elev PID": "PIDController",
       "/Shuffleboard/AmpMechElevator/Elevator Reset Encoder": "Command",
@@ -48,7 +55,8 @@
       "/Shuffleboard/Intake/Reset Intake Wheel Encoder": "Command",
       "/Shuffleboard/Intake/Wheel PID": "PIDController",
       "/Shuffleboard/Misc/Auto Chooser": "String Chooser",
-      "/Shuffleboard/SwerveDrive/Field": "Field2d"
+      "/Shuffleboard/SwerveDrive/Field": "Field2d",
+      "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
       "/FMSInfo": {
@@ -60,6 +68,24 @@
         "window": {
           "visible": true
         }
+      }
+    }
+  },
+  "NetworkTables": {
+    "retained": {
+      "Shuffleboard": {
+        "SwerveDrive": {
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "transitory": {
+      "FMSInfo": {
+        "open": true
+      },
+      "Shuffleboard": {
+        "open": true
       }
     }
   },

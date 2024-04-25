@@ -24,11 +24,13 @@ import frc.robot.subsystems.climb.ClimbAlternate;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
+import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
 import frc.robot.subsystems.misc.AbsoluteDutyEncoder;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
+import frc.robot.utility.template.Arm;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -42,8 +44,8 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
-    // private AbsoluteDutyEncoder encoder = new AbsoluteDutyEncoder(0,1,0.86);
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10
+    private AbsoluteDutyEncoder encoder = new AbsoluteDutyEncoder(0,1,0.);
+    private final SwerveDrive drive = new SwerveDrive(false);//2-10
     private final Shooter shooter = new Shooter(false);//18,19  %  
 
     private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
@@ -66,9 +68,9 @@ public class Robot extends TimedRobot {
     // private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
-
+    // Arm armr =new Arm(null, null, null, 0, 0, null, null, 0);
     private RobotContainer robotContainer = new RobotContainer();
-    // private TestButton testButton = new TestButton();
+    // private Test test = new Test();
 
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
 		(0.0, "Match Time", "Misc")
@@ -117,10 +119,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         //In Here, Try using controller to pick the auto
-        // CommandXboxController commandXboxController = new CommandXboxController(3);
-        // commandXboxController.a().onTrue(
-        //     autoChooser.set
-        // )
         // if(RobotController.getBatteryVoltage()<11.5){
         //     light.setAllColor(light.batteryBlue);
         //     // drive.playMusic(2);
@@ -159,8 +157,10 @@ public class Robot extends TimedRobot {
         // drive.runOnce(()->drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
 
 		// drive.driveAutoReset();//TODO: Test
-        robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
-        );
+        // robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
+        // );
+        robotContainer.testCommands(intake);
+        // robotContainer.testSixWheel();
         // teleopButtons.newTeleopButtons( climb, intake, shooter, ampMech , drive);
     }
 

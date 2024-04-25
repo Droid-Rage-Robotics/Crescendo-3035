@@ -9,7 +9,7 @@ import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.utility.InfoTracker.CycleTracker;
-
+//THIS WORKS
 public class CommandList {
     public SequentialCommandGroup climbAndTrap(Intake intake, Shooter shooter, AmpMech ampMech, Climb climb){
         return new SequentialCommandGroup(
@@ -37,6 +37,11 @@ public class CommandList {
     public static SequentialCommandGroup outtake (Intake intake){
         return new SequentialCommandGroup(
             intake.setPositionCommand(Intake.Value.OUTTAKE)
+        );
+    }
+    public static SequentialCommandGroup hold (Intake intake){
+        return new SequentialCommandGroup(
+            intake.setPositionCommand(Intake.Value.HOLD)
         );
     }
 

@@ -28,6 +28,7 @@ import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
+import frc.robot.subsystems.drive.SixWheel;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
@@ -38,10 +39,9 @@ public class RobotContainer {
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
 	private final CommandXboxController operator =
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
-	// PS4Controller controller = new PS4Controller(0);
-	// CommandPS5Controller;
-	// CommandStadiaController
-	Canandcoder canandcoder = new Canandcoder(0);
+		// CommandList commandList = new CommandList();
+	
+	// private SixWheel sixWheel = new SixWheel(false);
 
 	public RobotContainer() {
 		DriverStation.silenceJoystickConnectionWarning(true);
@@ -153,6 +153,7 @@ public class RobotContainer {
 
 		operator.rightTrigger()
 			.onTrue(new AutoBalancetoAutoAim(drive, vision));
+		driver.rightTrigger();
 		// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
 			// .onTrue(new AutoAim(drive, vision));
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
@@ -177,9 +178,21 @@ public class RobotContainer {
 	}
 
 	public void testCommands(Intake intake){
+		//Works
 		operator.rightTrigger()
-		.onTrue(CommandList.intake(intake));
+		.onTrue(CommandList.intake(intake))
+		.onFalse(CommandList.hold(intake));
+
 		operator.leftTrigger()
-		.onTrue(CommandList.outtake(intake));
+		.onTrue(CommandList.outtake(intake))
+		.onFalse(CommandList.hold(intake));
+
+
+	}
+	public void testSixWheel(){
+		// driver.rightTrigger()
+		// 	.onTrue(sixWheel.setPower(1));
+		// driver.leftTrigger()
+		// 	.onTrue(sixWheel.setPower(0));
 	}
 }

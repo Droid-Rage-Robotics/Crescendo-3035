@@ -19,6 +19,7 @@ TO DO:
 - Make better Field Image with Values
 - Safety Things: CPR, First Aid, etc
 - find Husky stwist handle thing
+- Move most Commands into 1 File
 
 
 Buy:

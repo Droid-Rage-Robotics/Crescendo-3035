@@ -10,6 +10,9 @@ public class AbsoluteDutyEncoder extends SubsystemBase {
     protected final ShuffleboardValue<Double> encoderPos = ShuffleboardValue.create
         (0.0, "Encoder Position", AbsoluteDutyEncoder.class.getSimpleName())
         .build();
+    protected final ShuffleboardValue<Double> encoderPosFlip = ShuffleboardValue.create
+        (0.0, "Encoder Position Flip", AbsoluteDutyEncoder.class.getSimpleName())
+        .build();
     protected final ShuffleboardValue<Boolean> isConnectedValue = ShuffleboardValue.create
         (true, "isConnectedValue", AbsoluteDutyEncoder.class.getSimpleName())
         .build();
@@ -19,11 +22,12 @@ public class AbsoluteDutyEncoder extends SubsystemBase {
         protected final ShuffleboardValue<Double> distance = ShuffleboardValue.create
         (0.0, "Distance", AbsoluteDutyEncoder.class.getSimpleName())
         .build();
+    private boolean isInverted;
     public AbsoluteDutyEncoder(int channelNum, double distancePerRotation, double offset) {
         encoder = new DutyCycleEncoder(channelNum);
-        encoder.setDistancePerRotation(distancePerRotation);
+        encoder.setDistancePerRotation(distancePerRotation);//Can you do .5?
 
-        // encoder.setPositionOffset(offset);
+        encoder.setPositionOffset(0);
         // encoder.reset();
         // encoder.isConnected();//use this to show disconnections of encoder
     }
@@ -34,7 +38,9 @@ public class AbsoluteDutyEncoder extends SubsystemBase {
 
         isConnectedValue.set(encoder.isConnected());
         // encoderPos.set((encoder.getAbsolutePosition()-encoder.getPositionOffset())+.75);
-        encoderPos.set((encoder.getAbsolutePosition()-encoder.getPositionOffset())-.25);
+        encoderPos.set(calculateAbsPos());
+        encoderPosFlip.set(1-(encoder.getAbsolutePosition()-encoder.getPositionOffset()));
+
 
         // encoderPos.set(encoder.getDistance());
         distance.set(encoder.getDistancePerRotation());
@@ -43,5 +49,19 @@ public class AbsoluteDutyEncoder extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         periodic();
+    }
+
+    public double calculateAbsPos(){
+        double givenPos = encoder.getAbsolutePosition()-encoder.getPositionOffset();
+        if(givenPos<0){
+            givenPos=1-Math.abs(givenPos);
+        }
+
+        if(isInverted){
+            return 1-givenPos;
+        }{
+            return givenPos;
+        }
+
     }
 }  
