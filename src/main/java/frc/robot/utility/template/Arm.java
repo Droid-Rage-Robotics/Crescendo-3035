@@ -13,18 +13,18 @@ public class Arm extends SubsystemBase {
         PID,
         FEEDFORWARD
     }
-    private final SafeCanSparkMax[] motors;
-    private final PIDController controller;
-    private final ArmFeedforward feedforward;
-    private final Control control;
-    private final double maxPosition;
-    private final double minPosition;
-    private final ShuffleboardValue<Double> positionRadianWriter;
-    private final ShuffleboardValue<Double> positionDegreeWriter;
-    private final ShuffleboardValue<Double> targetRadianWriter;
-    private final ShuffleboardValue<Double> targetDegreeWriter;
-    private final ShuffleboardValue<Double> voltageWriter;
-    private final int mainNum;
+    protected final SafeCanSparkMax[] motors;
+    protected final PIDController controller;
+    protected final ArmFeedforward feedforward;
+    protected final Control control;
+    protected final double maxPosition;
+    protected final double minPosition;
+    protected final ShuffleboardValue<Double> positionRadianWriter;
+    protected final ShuffleboardValue<Double> positionDegreeWriter;
+    protected final ShuffleboardValue<Double> targetRadianWriter;
+    protected final ShuffleboardValue<Double> targetDegreeWriter;
+    protected final ShuffleboardValue<Double> voltageWriter;
+    protected final int mainNum;
 
     public Arm(
         SafeCanSparkMax[] motors,
