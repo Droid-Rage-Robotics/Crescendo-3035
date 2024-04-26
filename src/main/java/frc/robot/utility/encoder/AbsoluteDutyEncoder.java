@@ -1,4 +1,4 @@
-package frc.robot.subsystems.misc;
+package frc.robot.utility.encoder;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;

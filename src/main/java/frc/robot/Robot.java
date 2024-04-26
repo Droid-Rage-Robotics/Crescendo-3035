@@ -26,9 +26,9 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
-import frc.robot.subsystems.misc.AbsoluteDutyEncoder;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
+import frc.robot.utility.encoder.AbsoluteDutyEncoder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 import frc.robot.utility.template.Arm;
 

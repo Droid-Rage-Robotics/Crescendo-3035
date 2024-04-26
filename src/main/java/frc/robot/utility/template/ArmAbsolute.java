@@ -4,7 +4,7 @@ import com.revrobotics.AbsoluteEncoder;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.subsystems.misc.AbsoluteDutyEncoder;
+import frc.robot.utility.encoder.AbsoluteDutyEncoder;
 import frc.robot.utility.motor.SafeCanSparkMax;
 
 public class ArmAbsolute extends Arm {
