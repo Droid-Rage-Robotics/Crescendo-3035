@@ -24,7 +24,13 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModuleKraken.POD;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
+import frc.robot.utility.motor.CANMotorEx;
+import frc.robot.utility.motor.CANMotorEx2;
+import frc.robot.utility.motor.MotorProperties;
 import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.TalonEx;
+import frc.robot.utility.motor.TalonEx2;
+import frc.robot.utility.motor.TalonEx3;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -45,6 +51,28 @@ public class SwerveDrive extends SubsystemBase {
         new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, SwerveDriveConfig.TRACK_WIDTH.get() / 2), // Back Left -+
         new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, -SwerveDriveConfig.TRACK_WIDTH.get() / 2)   // Back Right ++
     );
+
+    private TalonEx motor1 = TalonEx.create(0)
+        .withDirection(CANMotorEx.Direction.Forward)
+        .withIdleMode(CANMotorEx.IdleMode.Break)
+        .withPositionConversionFactor(1)
+        .withVelocityConversionFactor(1)
+        .into()
+        ;
+
+    private TalonEx2 motor2 = TalonEx2.create(0)
+        .withDirection(CANMotorEx2.Direction.Forward)
+        .withIdleMode(CANMotorEx2.IdleMode.Break)
+        .withPositionConversionFactor(1)
+        .withVelocityConversionFactor(1)
+        ;
+    private TalonEx3 motor3 = TalonEx3.create(0)
+        .withDirection(MotorProperties.Direction.Forward)
+        .withIdleMode(MotorProperties.IdleMode.Break)
+        .withPositionConversionFactor(1)
+        .withVelocityConversionFactor(1)
+        .build()
+        ;
 
     
     private final SwerveModuleKraken frontRight = new SwerveModuleKraken(
