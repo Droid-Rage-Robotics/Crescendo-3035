@@ -45,14 +45,10 @@ public abstract class CANMotorEx {
         }
     }
     public class VelocityConversionFactorBuilder {
-        public CANMotorEx withVelocityConversionFactor(double velocityConversionFactor) {
+        public <T extends CANMotorEx> T withVelocityConversionFactor(double velocityConversionFactor) {
             setPositionConversionFactor(positionConversionFactor);
-            return CANMotorEx.this;
+            return (T) CANMotorEx.this;
         }
-    }
-
-    public <T extends CANMotorEx> T into() {
-        return (T) this;
     }
 
     public abstract void setPower(double power);

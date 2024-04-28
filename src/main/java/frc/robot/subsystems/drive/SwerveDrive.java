@@ -57,7 +57,6 @@ public class SwerveDrive extends SubsystemBase {
         .withIdleMode(CANMotorEx.IdleMode.Break)
         .withPositionConversionFactor(1)
         .withVelocityConversionFactor(1)
-        .into()
         ;
 
     private TalonEx2 motor2 = TalonEx2.create(0)
