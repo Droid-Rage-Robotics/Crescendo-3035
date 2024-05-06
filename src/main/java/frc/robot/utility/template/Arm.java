@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utility.motor.CANMotorEx;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -13,7 +14,8 @@ public class Arm extends SubsystemBase {
         PID,
         FEEDFORWARD
     }
-    protected final SafeCanSparkMax[] motors;
+    protected final CANMotorEx[] motors;
+    // CANMotorEx mors = new TalonEX
     protected final PIDController controller;
     protected final ArmFeedforward feedforward;
     protected final Control control;
@@ -27,7 +29,7 @@ public class Arm extends SubsystemBase {
     protected final int mainNum;
 
     public Arm(
-        SafeCanSparkMax[] motors,
+        CANMotorEx[] motors,
         PIDController controller,
         ArmFeedforward feedforward,
         double maxPosition,
@@ -97,15 +99,15 @@ public class Arm extends SubsystemBase {
 
     protected void setVoltage(double voltage) {
         voltageWriter.set(voltage);
-        for (SafeCanSparkMax motor: motors) {
+        for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
     }
     
     public void resetEncoder() {
-        for (SafeCanSparkMax motor: motors) {
+        for (CANMotorEx motor: motors) {
             // motor.getEncoder().setPosition(0);
-            motor.reset(0);
+            motor.resetEncoder(0);
         }
     }
 
@@ -116,7 +118,7 @@ public class Arm extends SubsystemBase {
         return position;
     }
 
-    public SafeCanSparkMax getMotors(){
+    public CANMotorEx getMotors(){
         return motors[mainNum];
     }
 }

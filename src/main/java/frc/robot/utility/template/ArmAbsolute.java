@@ -1,11 +1,9 @@
 package frc.robot.utility.template;
 
-import com.revrobotics.AbsoluteEncoder;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.utility.encoder.AbsoluteDutyEncoder;
-import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.CANMotorEx;
 
 public class ArmAbsolute extends Arm {
     // public enum Location{
@@ -14,12 +12,12 @@ public class ArmAbsolute extends Arm {
     // }
     protected AbsoluteDutyEncoder encoder;
     public ArmAbsolute(
-        SafeCanSparkMax[] motors,
+        CANMotorEx[] motors,
         PIDController controller,
         ArmFeedforward feedforward,
         double maxPosition,
         double minPosition,
-        Control control,
+        Arm.Control control,
         String name,
         int mainNum,
         AbsoluteDutyEncoder encoder
