@@ -1,6 +1,6 @@
 package frc.robot.utility;
 
-public class GearRatio {
+public abstract class GearRatio {
     // (count.countPerPulse * gearRatio) - This allows 
     // for you to know how many rotations the output 
     // shaft does compared to the input
@@ -41,6 +41,7 @@ public class GearRatio {
             //(count.countPerPulse * gearRatio) / (diameter * Math.PI);
             //(count.countPerPulse*gearRatio) * (diameter * Math.PI)
             //((count.countPerPulse * gearRatio)*(2*Math.PI))*(diameter /2);
+            
             //s=radius*theta(in radians)
             //(count.countPerPulse*gearRatio) - This should give the rotation
         } else{
@@ -64,5 +65,5 @@ public class GearRatio {
 
     }
 
-    public GearRatio(){};
+    // public GearRatio(){};
 }
