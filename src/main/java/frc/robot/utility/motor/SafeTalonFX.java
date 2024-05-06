@@ -32,8 +32,8 @@ public class SafeTalonFX extends SafeMotor{
       /* schedule a play request, after a delay.  
             This gives the Orchestra service time to parse chirp file.
             If play() is called immedietely after, you may get an invalid action error code. */
-        private int timeToPlayLoops = 10;
-        private TalonFXConfiguration configuration = new TalonFXConfiguration();
+    private int timeToPlayLoops = 10;
+    private TalonFXConfiguration configuration = new TalonFXConfiguration();
 
     public SafeTalonFX(int deviceNumber, boolean isInverted, 
         IdleMode mode, double positionConversionFactor,

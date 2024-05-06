@@ -45,10 +45,17 @@ public abstract class CANMotorEx {
         }
     }
     public class VelocityConversionFactorBuilder {
+        @SuppressWarnings("unchecked")
         public <T extends CANMotorEx> T withVelocityConversionFactor(double velocityConversionFactor) {
-            setPositionConversionFactor(positionConversionFactor);
+            setVelocityConversionFactor(positionConversionFactor);
             return (T) CANMotorEx.this;
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T extends CANMotorEx> T withSupplyCurrentLimit(double currentLimit) {
+        setSupplyCurrentLimit(currentLimit);
+        return (T) CANMotorEx.this;
     }
 
     public abstract void setPower(double power);
@@ -57,10 +64,12 @@ public abstract class CANMotorEx {
     public abstract void setIdleMode(IdleMode mode);
     public abstract void setPositionConversionFactor(double positionConversionFactor);
     public abstract void setVelocityConversionFactor(double velocityConversionFactor);
+    public abstract void setSupplyCurrentLimit(double currentLimit);
     
     public abstract double getVelocity();
     public abstract double getPosition();
     public abstract int getDeviceID();
+    public abstract void resetEncoder(int num);
 
     public void stop() {
         setPower(0);
