@@ -12,7 +12,7 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
     private SafeSparkAbsoluteEncoder absoluteEncoder;
     public IntakeDropDownAbsolute(Boolean isEnabled, SafeCanSparkMax sparkMax) {
         super(isEnabled);
-        absoluteEncoder = new SafeSparkAbsoluteEncoder(sparkMax,false, (Math.PI * 2), (Math.PI * 2 / 60), this);
+        absoluteEncoder = new SafeSparkAbsoluteEncoder(sparkMax,false, this);
         // absoluteEncoder = sparkMax.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         
         // absoluteEncoder.setPositionConversionFactor(Math.PI * 2);

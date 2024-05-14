@@ -11,8 +11,7 @@ public class AmpMechArmAbsolute extends AmpMechArm {
     SafeSparkAbsoluteEncoder absoluteEncoder;
     public AmpMechArmAbsolute(Boolean isEnabled, SafeCanSparkMax sparkMax) {
         super(isEnabled);
-        absoluteEncoder = new SafeSparkAbsoluteEncoder(sparkMax, false, 
-         (Constants.RADIANS_PER_ROTATION), (Constants.RADIANS_PER_ROTATION / 60), this);
+        absoluteEncoder = new SafeSparkAbsoluteEncoder(sparkMax, false, this);
         // absoluteEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
        
         // absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
