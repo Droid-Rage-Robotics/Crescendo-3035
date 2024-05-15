@@ -44,7 +44,6 @@ import frc.robot.utility.template.Arm;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
-    private AbsoluteDutyEncoder encoder = new AbsoluteDutyEncoder(0,true, 1,0.);
     private final SwerveDrive drive = new SwerveDrive(false);//2-10
     private final Shooter shooter = new Shooter(false);//18,19  %  
 
@@ -57,6 +56,7 @@ public class Robot extends TimedRobot {
     private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
     private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
     private final Intake intake = new Intake(dropDown, intakeWheel);
+    private AbsoluteDutyEncoder encoder = new AbsoluteDutyEncoder(0,true, 1,0., arm);
     
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive, intake, shooter, ampMech//, claw, climb, vision, light

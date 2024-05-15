@@ -5,8 +5,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.DroidRageConstants;
 import frc.robot.utility.motor.CANMotorEx;
-import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Arm extends SubsystemBase {
@@ -25,7 +25,6 @@ public class Arm extends SubsystemBase {
     protected final ShuffleboardValue<Double> positionDegreeWriter;
     protected final ShuffleboardValue<Double> targetRadianWriter;
     protected final ShuffleboardValue<Double> targetDegreeWriter;
-    protected final ShuffleboardValue<Double> voltageWriter;
     protected final int mainNum;
 
     public Arm(
@@ -57,9 +56,6 @@ public class Arm extends SubsystemBase {
             .build();
         targetRadianWriter = ShuffleboardValue
             .create(0.0, name+"/TargetRadian", name)
-            .build();
-        voltageWriter = ShuffleboardValue
-            .create(0.0, name+"/Voltage", name)
             .build();
     }
 
@@ -98,7 +94,6 @@ public class Arm extends SubsystemBase {
     }
 
     protected void setVoltage(double voltage) {
-        voltageWriter.set(voltage);
         for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }

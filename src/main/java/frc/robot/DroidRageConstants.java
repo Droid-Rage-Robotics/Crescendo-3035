@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.robot.utility.shuffleboard.ShuffleboardValue;
+
 public final class DroidRageConstants {
     public static class Gamepad {
         public static final int DRIVER_CONTROLLER_PORT = 0;
@@ -24,4 +26,9 @@ public final class DroidRageConstants {
     }
 
     public static String canName = "structure"; //Rev stuff does not work on CANivore
+    // public static boolean removeWriter = true; //Can be used to turn off certain writers, hopefulyl preventing loop overruns
+    public static ShuffleboardValue<Boolean> removeWriterWriter = 
+        ShuffleboardValue.create(true, "RemoveWritersWriter", Robot.class.getSimpleName())
+        .withSize(1, 3)
+        .build();
 }

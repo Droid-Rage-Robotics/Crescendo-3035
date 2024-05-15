@@ -48,13 +48,13 @@ public class SwerveDrive extends SubsystemBase {
         new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, -SwerveDriveConfig.TRACK_WIDTH.get() / 2)   // Back Right ++
     );
 
-    private TalonEx motor1 = TalonEx.create(0)
-        .withDirection(CANMotorEx.Direction.Forward)
-        .withIdleMode(CANMotorEx.IdleMode.Break)
-        .withPositionConversionFactor(1)
-        .withVelocityConversionFactor(1)
-        .withSupplyCurrentLimit(0)
-        ;
+    // private TalonEx motor1 = TalonEx.create(0)
+    //     .withDirection(CANMotorEx.Direction.Forward)
+    //     .withIdleMode(CANMotorEx.ZeroPowerMode.Brake)
+    //     .withPositionConversionFactor(1)
+    //     .withIsEnabled(true)
+    //     .withSupplyCurrentLimit(0)
+    //     ;
 
     
     private final SwerveModuleKraken frontRight = new SwerveModuleKraken(

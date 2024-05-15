@@ -7,26 +7,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.motor.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
-public class SafeSparkAbsoluteEncoder {
+public class SafeSparkAbsoluteEncoder extends SubsystemBase {
     private SparkAbsoluteEncoder encoder;
-    // private final SubsystemBase base;
     protected final ShuffleboardValue<Double> degreeWriter;
     protected final ShuffleboardValue<Double> radianWriter;
     protected final ShuffleboardValue<Double> rawWriter;
 
-
-
-    //Math.PI*2 = 360 Degrees
-    //Math.PI*2/60
-    public SafeSparkAbsoluteEncoder(SafeCanSparkMax motor, boolean isInverted, 
-        double positionConversionFactor, double velocityConversionFactor, 
+    public SafeSparkAbsoluteEncoder(SafeCanSparkMax motor, boolean isInverted,
         SubsystemBase base){
         encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
-        // motor.getAbsoluteEncoder(Type.kDutyCycle).
-    
         encoder.setInverted(isInverted);
-        encoder.setPositionConversionFactor(positionConversionFactor);
-        encoder.setVelocityConversionFactor(positionConversionFactor/60);
+        encoder.setPositionConversionFactor(Math.PI*2);
+        encoder.setVelocityConversionFactor((Math.PI*2)/60);
         // this.base = base;
 
         rawWriter = ShuffleboardValue
@@ -42,11 +34,18 @@ public class SafeSparkAbsoluteEncoder {
             .withSize(1, 2)
             .build();
     } 
+    @Override
+    public void periodic(){
+        rawWriter.set(getPosition());
+        degreeWriter.set(getDegrees());
+        radianWriter.set(getRadian());
+    }
     public double getPosition() {
+        //Raw Position/Radian Position
         return encoder.getPosition();
     }
     public double getDegrees() {
-        return encoder.getPosition()*(Math.PI*2);
+        return encoder.getPosition()*(180/Math.PI);
     }
     public double getRadian() {
         return encoder.getPosition();
@@ -59,8 +58,5 @@ public class SafeSparkAbsoluteEncoder {
     }
     public void setVelocityConversionFactor(double velocityConversionFactor) {
         encoder.setVelocityConversionFactor(velocityConversionFactor);
-    }
-    public void setInverted(boolean b) {
-        
     }
 }
