@@ -1,12 +1,15 @@
 package frc.robot.utility.encoder;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 /***Used to plug in directly to the Roborio */
 public class AbsoluteDutyEncoder extends SubsystemBase {
+    // DigitalInput
     protected final DutyCycleEncoder encoder;
+    protected double positionOffset=0;
     protected final ShuffleboardValue<Double> degreeWriter;
     protected final ShuffleboardValue<Double> radianWriter;
     protected final ShuffleboardValue<Double> rawWriter;
@@ -28,9 +31,13 @@ public class AbsoluteDutyEncoder extends SubsystemBase {
     public AbsoluteDutyEncoder(int channelNum, boolean isInverted, 
         double distancePerRotation, double offset, SubsystemBase base) {
         encoder = new DutyCycleEncoder(channelNum);
-        encoder.setDistancePerRotation(distancePerRotation);//Can you do .5?//Default should be Math.PI*2
+        if(!(distancePerRotation<1)){
+            encoder.setDistancePerRotation(distancePerRotation);
+        } else{
+            encoder.setDistancePerRotation(Math.PI*2);//Default should be Math.PI*2 or 1
+        }
         this.isInverted=isInverted;
-        encoder.setPositionOffset(offset);
+        this.positionOffset = offset;
         rawWriter = ShuffleboardValue
             .create(0.0, base.getName()+"/Pos/Raw", base.getClass().getSimpleName())
             .withSize(1, 2)
@@ -55,7 +62,7 @@ public class AbsoluteDutyEncoder extends SubsystemBase {
         isConnectedWriter.set(encoder.isConnected());
         encoderPosWriter.set(calculateAbsPos());
         
-        encoderPosFlip.set(1-(encoder.getAbsolutePosition()-encoder.getPositionOffset()));
+        encoderPosFlip.set(testFlip(true));
         distanceWriter.set(encoder.getDistancePerRotation());
     }
   
@@ -64,18 +71,47 @@ public class AbsoluteDutyEncoder extends SubsystemBase {
         periodic();
     }
 
+    // if (getInverted()) {
+    //     absoluteOffset = 1 - encoder.getPositionOffset();
+    //   }
     /**
      * 
      * @return The Absolute Position of the Encoder 
      */
     public double calculateAbsPos(){
         double givenPos = encoder.getAbsolutePosition()-encoder.getPositionOffset();
-        if(givenPos<0){ //To account for negative values/rollovers
+        if(givenPos<0){ //To account for negative values/rollovers - no work
             givenPos=1-Math.abs(givenPos);
         }
 
-        if(isInverted){ //To invert values based on direction
+        if(isInverted){ //To invert values based on direction - Works
             givenPos = 1-givenPos;
+        }
+        return givenPos*encoder.getDistancePerRotation();
+    }
+    // public double testFlip(boolean test){
+    //     double givenPos = encoder.getAbsolutePosition()-encoder.getPositionOffset();
+    //     if(givenPos<0){ //To account for negative values/rollovers
+    //         givenPos=1-Math.abs(givenPos);
+    //     }
+
+    //     if(test){ //To invert values based on direction - Work
+    //         givenPos = 1-givenPos;
+    //     }
+    //     return givenPos*encoder.getDistancePerRotation();
+    // }
+    //totest
+    public double testFlip(boolean test){
+        double givenPos = encoder.getAbsolutePosition();
+        
+
+        if(test){ //To invert values based on direction - Work
+            givenPos = 1-givenPos;
+        }
+        givenPos = givenPos-(positionOffset/encoder.getDistancePerRotation());
+
+        if(givenPos<0){ //To account for negative values/rollovers
+            givenPos=1-Math.abs(givenPos);
         }
         return givenPos*encoder.getDistancePerRotation();
     }
