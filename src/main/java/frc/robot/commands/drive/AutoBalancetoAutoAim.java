@@ -38,7 +38,7 @@ public class AutoBalancetoAutoAim extends ProfiledPIDCommand {//TODO: Add a TIme
         (output, setpoint) -> {
             // Use the output (and setpoint, if desired) here
             // drive.drive(0, 0, output);
-            //Harizontal
+            //Horizontal
             if(vision.gettX()<0){
               drive.drive(0, 0, -output);
             } else if(vision.gettX()>0){

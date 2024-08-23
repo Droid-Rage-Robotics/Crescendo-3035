@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.commands.drive;
 
 import java.util.function.DoubleSupplier;
@@ -6,59 +10,55 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.Robot;
 import frc.robot.subsystems.drive.SwerveDrive;
-import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.utility.RotationController;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-// /https://github.com/Spectrum3847/2023-X-Ray/blob/main/src/main/java/frc/robot/swerve/commands/AlignToAprilTag.java
-public class AlignToAprilTagSpectrum
-extends PIDCommand 
-{
+public class AlignToAprilTag extends PIDCommand {
 
     private static double lowKP = 0.035;
     private static double highKP = 0.06;
     private static double tolerance = 2;
-    // Command driveCommand;
+    SwerveDrive drive;
+    Vision vision;
+    Command driveCommand;
     DoubleSupplier fwdPositiveSupplier;
+    private final RotationController rotationController;
     private static double out;
-    private Vision vision;
-    private SwerveDrive drive;
 
     /** Creates a new AlignToAprilTag. */
-    public AlignToAprilTagSpectrum(Vision vision, SwerveDrive drive,
-        DoubleSupplier fwdPositiveSupplier) {
+    public AlignToAprilTag(DoubleSupplier fwdPositiveSupplier, double offset, SwerveDrive drive, Vision vision) {
         super(
                 // The controller that the command will use
                 new PIDController(lowKP, 0, 0),
                 // This should return the measurement
                 () -> vision.gettX(),
                 // This should return the setpoint (can also be a constant)
-                () -> 0,//offset - 0
+                () -> offset, //0
                 // This uses the output
-                output -> setOutput(output));
-                //drive, vision);
-            this.vision = vision;
-            this.drive = drive;
-
+                output -> setOutput(output),
+                drive);
+        this.drive = drive;
+        this.vision = vision;
         this.getController().setTolerance(tolerance);
-        // driveCommand = new InstantCommand(()-> drive.drive(getOutput(), 0, getSteering()));
-                // new SwerveDrive(
-                //         fwdPositiveSupplier, // Allows pilot to drive fwd and rev
-                //         () -> getOutput(), // Moves us center to the tag
-                //         () -> getSteering(), // Aligns to grid
-                //         () -> 1.0, // full velocity
-                //         () -> true); // Field relative is true
+        this.rotationController = new RotationController(drive);
+        driveCommand =
+                new InstantCommand(()->drive.drive(
+                        fwdPositiveSupplier.getAsDouble(), // Allows pilot to drive fwd and rev
+                         getOutput(), // Moves us center to the tag
+                        getSteering())); // Aligns to grid
+                        // () -> 1.0, // full velocity
+                        // () -> true); // Field relative is true
         // Use addRequirements() here to declare subsystem dependencies.
         // Configure additional PID options by calling `getController` here.
-        // this.setName("AlignToAprilTag");
+        this.setName("AlignToAprilTag");
     }
 
     public double getSteering() {
-        return 0;
+        return rotationController.calculate(Math.PI);
         // return drive.calculateRotationController(() -> Math.PI);
     }
 
@@ -68,7 +68,7 @@ extends PIDCommand
             out = 1 * Math.signum(out);
         }
 
-        out = out  * 0.3;//* Maxvelocity
+        out = out * 1 * 0.3;
     }
 
     public static double getOutput() {
@@ -80,9 +80,9 @@ extends PIDCommand
         super.initialize();
         out = 0;
         // getLedCommand(tagID).initialize();
-        // Robot.swerve.resetRotationController();
-        // driveCommand.initialize();
-        if (vision.gettX() > 16) {
+        // drive.resetRotationController();
+        driveCommand.initialize();
+        if (0 > 16) {
             this.getController().setP(highKP);
         } else {
             this.getController().setP(lowKP);
@@ -92,8 +92,7 @@ extends PIDCommand
     @Override
     public void execute() {
         super.execute();
-        // driveCommand.execute();
-        new InstantCommand(()-> drive.drive(getOutput(), 0, getSteering()));
+        driveCommand.execute();
         // getLedCommand(tagID).execute();
     }
 

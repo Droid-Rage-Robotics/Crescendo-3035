@@ -26,7 +26,7 @@ public class AutoAim extends Command {//TODO: Test this
         turnController.setTolerance(.03);//-27 degrees to 27 degrees
         
         distanceController = new ProfiledPIDController(
-            0.5, //.034
+            0., //.034
             0,
             0.0000,
             new TrapezoidProfile.Constraints(1.525, 1));
