@@ -40,7 +40,7 @@ public class SwerveDriveTeleop extends Command {
         // drive.setSpeed(Speed.NORMAL);
         // drive.setSpeed(Speed.SLOW);
         driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
-            .whileFalse(drive.setSpeed(Speed.NORMAL));
+            .whileFalse(drive.setSpeed(Speed.SLOW));
                         // .onFalse(drive.setSpeed(Speed.NORMAL));
 
         // this.aResetButton = aResetButton;

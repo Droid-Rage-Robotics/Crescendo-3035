@@ -44,20 +44,20 @@ import frc.robot.utility.template.Arm;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
-    // private final SwerveDrive drive = new SwerveDrive(false);//2-10
-    // private final Shooter shooter = new Shooter(false);//18,19  %  
+    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
+    private final Shooter shooter = new Shooter(true);//18,19 Works
 
-    // private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
+    private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
     private final AmpMechIntake ampIntake = new AmpMechIntake(false);//24
-    // private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false, ampIntake.getMotor());//23
-    // private final AmpMech ampMech = new AmpMech(elevator, arm, ampIntake);
+    private final AmpMechArmAbsolute arm = new AmpMechArmAbsolute(false, ampIntake.getMotor());//23
+    private final AmpMech ampMech = new AmpMech(elevator, arm, ampIntake);
 
-    // private final ClimbAlternate climb = new ClimbAlternate(false,false);//20,21
-    // private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    // private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
-    // private final Intake intake = new Intake(dropDown, intakeWheel);
-    private AbsoluteDutyEncoder encoder = 
-        new AbsoluteDutyEncoder(0,false, 1,0.38, ampIntake);
+    private final ClimbAlternate climb = new ClimbAlternate(false,false);//20,21
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
+    private final Intake intake = new Intake(dropDown, intakeWheel);
+    // private AbsoluteDutyEncoder encoder = 
+    //     new AbsoluteDutyEncoder(0,false, 1,0.38, ampIntake);
     
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive, intake, shooter, ampMech//, claw, climb, vision, light
@@ -65,12 +65,12 @@ public class Robot extends TimedRobot {
     private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
 // private final Climb climb = new Climb(false,false);//20,21
 
-    // private final Vision vision = new Vision();
+    private final Vision vision = new Vision();
     // private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
     // Arm armr =new Arm(null, null, null, 0, 0, null, null, 0);
-    // private RobotContainer robotContainer = new RobotContainer();
+    private RobotContainer robotContainer = new RobotContainer();
     // private Test test = new Test();
 
     private ShuffleboardValue<Double> matchTime = ShuffleboardValue.create
@@ -158,9 +158,9 @@ public class Robot extends TimedRobot {
         // drive.runOnce(()->drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
 
 		// drive.driveAutoReset();//TODO: Test
-        // robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
-        // );
-        // robotContainer.testCommands(intake);
+        robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
+        );
+        // robotContainer.testCommands(vision, drive);
         // robotContainer.testSixWheel();
         // teleopButtons.newTeleopButtons( climb, intake, shooter, ampMech , drive);
     }

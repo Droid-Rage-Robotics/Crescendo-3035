@@ -1,34 +1,31 @@
 package frc.robot;
 
-import com.reduxrobotics.sensors.canandcoder.Canandcoder;
-import com.revrobotics.CANSparkBase.IdleMode;
+import edu.wpi.first.math.controller.PIDController;
+
+// import com.reduxrobotics.sensors.canandcoder.Canandcoder;
+// import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.CommandList;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.climbAndAmp.ClimbAndTrap;
 import frc.robot.commands.climbAndAmp.DropAmp;
 import frc.robot.commands.climbAndAmp.TransferToAmpMech;
-import frc.robot.commands.drive.AlignToAprilTagSpectrum;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.drive.AutoBalancetoAutoAim;
+import frc.robot.commands.drive.Test;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
-import frc.robot.commands.shooter.SetIntakeAndShooter;
-import frc.robot.commands.shooter.TeleopShoot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
-import frc.robot.subsystems.drive.SixWheel;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
@@ -39,6 +36,8 @@ public class RobotContainer {
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
 	private final CommandXboxController operator =
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
+		PIDController controller = new PIDController(.001, 0, 0);
+		
 		// CommandList commandList = new CommandList();
 	
 	// private SixWheel sixWheel = new SixWheel(false);
@@ -134,13 +133,20 @@ public class RobotContainer {
 		// 	);
 		operator.y()
 			.onTrue(
-
-			new SequentialCommandGroup(
-			ampMech.setPositionCommand(AmpMech.Value.OUT),
-			shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-
+				new SequentialCommandGroup(
+				ampMech.setPositionCommand(AmpMech.Value.OUT),
+				shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+				intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)
+				)
 			)
-			);
+			.onFalse(
+				new SequentialCommandGroup(
+				// ampMech.setPositionCommand(AmpMech.Value.OUT),
+				shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.STOP)),
+				intake.setPositionCommand(Intake.Value.HOLD)
+				)
+			)
+			;
 		// operator.povUp()
 		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
 		// operator.povDown()
@@ -154,7 +160,7 @@ public class RobotContainer {
 		operator.rightTrigger()
 			.onTrue(new AutoBalancetoAutoAim(drive, vision));
 		driver.rightTrigger();
-		// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
+			// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
 			// .onTrue(new AutoAim(drive, vision));
 		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
 		// 		.andThen(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)))
@@ -177,15 +183,16 @@ public class RobotContainer {
 		
 	}
 
-	public void testCommands(Intake intake){
-		//Works
-		operator.rightTrigger()
-		.onTrue(CommandList.intake(intake))
-		.onFalse(CommandList.hold(intake));
-
-		operator.leftTrigger()
-		.onTrue(CommandList.outtake(intake))
-		.onFalse(CommandList.hold(intake));
+	public void testCommands(Vision vision, SwerveDrive drive){
+		// controller.setTolerance(1);
+		driver.rightTrigger();
+			// .onTrue(new InstantCommand(()->drive.drive(0, 0, controller.calculate(vision.gettX(), 0))
+			// ));
+			driver.a()
+			.onTrue(new InstantCommand());
+			// .onTrue(new Test(drive, vision, driver));
+			// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
+			// .onTrue(new AutoAim(drive, vision));
 
 
 	}
