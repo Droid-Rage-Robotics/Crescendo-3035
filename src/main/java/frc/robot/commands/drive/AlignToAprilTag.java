@@ -21,7 +21,7 @@ public class AlignToAprilTag extends PIDCommand {
 
     private static double lowKP = 0.035;
     private static double highKP = 0.06;
-    private static double tolerance = 2;
+    private static double tolerance = 1;
     SwerveDrive drive;
     Vision vision;
     Command driveCommand;
@@ -48,7 +48,7 @@ public class AlignToAprilTag extends PIDCommand {
         driveCommand =
                 new InstantCommand(()->drive.drive(
                         fwdPositiveSupplier.getAsDouble(), // Allows pilot to drive fwd and rev
-                         getOutput(), // Moves us center to the tag
+                        getOutput(), // Moves us center to the tag
                         getSteering())); // Aligns to grid
                         // () -> 1.0, // full velocity
                         // () -> true); // Field relative is true

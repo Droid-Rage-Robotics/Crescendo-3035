@@ -15,8 +15,10 @@ import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.climbAndAmp.ClimbAndTrap;
 import frc.robot.commands.climbAndAmp.DropAmp;
 import frc.robot.commands.climbAndAmp.TransferToAmpMech;
+import frc.robot.commands.drive.AlignToAprilTag;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.drive.AutoBalancetoAutoAim;
+import frc.robot.commands.drive.SimpleAim;
 import frc.robot.commands.drive.Test;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
@@ -185,11 +187,13 @@ public class RobotContainer {
 
 	public void testCommands(Vision vision, SwerveDrive drive){
 		// controller.setTolerance(1);
-		driver.rightTrigger();
+		driver.rightTrigger()
+			.onTrue(new SimpleAim(drive, vision));
+			// .onTrue(new AlignToAprilTag(()->driver.getLeftX(), 0, drive, vision));
 			// .onTrue(new InstantCommand(()->drive.drive(0, 0, controller.calculate(vision.gettX(), 0))
 			// ));
-			driver.a()
-			.onTrue(new InstantCommand());
+			// driver.a()
+			// .onTrue(new InstantCommand());
 			// .onTrue(new Test(drive, vision, driver));
 			// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
 			// .onTrue(new AutoAim(drive, vision));

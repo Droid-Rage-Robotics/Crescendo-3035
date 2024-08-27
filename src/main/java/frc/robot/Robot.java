@@ -157,10 +157,10 @@ public class Robot extends TimedRobot {
         // drive.changeAllianceRotation();//Works
         // drive.runOnce(()->drive.setYawCommand(drive.getRotation2d().rotateBy(Rotation2d.fromDegrees(0)).getDegrees()));
 
-		// drive.driveAutoReset();//TODO: Test
-        robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
-        );
-        // robotContainer.testCommands(vision, drive);
+		// drive.driveAutoReset();//TODO:Test
+        // robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
+        // );
+        robotContainer.testCommands(vision, drive);
         // robotContainer.testSixWheel();
         // teleopButtons.newTeleopButtons( climb, intake, shooter, ampMech , drive);
     }
