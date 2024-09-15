@@ -40,7 +40,7 @@ public class RobotContainer {
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
 		PIDController controller = new PIDController(.001, 0, 0);
 		
-		// CommandList commandList = new CommandList();
+	// CommandList commandList = new CommandList();
 	
 	// private SixWheel sixWheel = new SixWheel(false);
 
@@ -54,6 +54,8 @@ public class RobotContainer {
 		AmpMech ampMech, ClimbAlternate climb, 
 		 CycleTracker cycleTracker, Vision vision
 		 ){
+
+		
 		// drive.setYawCommand(-90);
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 		ampMech.getElevator().setDefaultCommand(new ManualElevator(operator::getLeftY, ampMech));

@@ -18,7 +18,6 @@ public class AmpMechArm extends SubsystemBase {
         public static final double GEAR_RATIO = 1 / 2;//not right
         public static final double READINGS_PER_REVOLUTION = 1;//4089
         public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK; cause gear ratio: (2*Math.PI)/Constants.GEAR_RATIO
-    
     }
 
 
