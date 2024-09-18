@@ -188,9 +188,20 @@ public class RobotContainer {
 	}
 
 	public void testCommands(Vision vision, SwerveDrive drive){
-		// controller.setTolerance(1);
+		// controller.setTolerance(1);\
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver,
+				false//No Work; Do no use this
+				)
+			);
 		driver.rightTrigger()
-			.onTrue(new SimpleAim(drive, vision));
+			.whileTrue(new SimpleAim(drive, vision))
+			.onFalse(new InstantCommand(()->drive.stop()));
 			// .onTrue(new AlignToAprilTag(()->driver.getLeftX(), 0, drive, vision));
 			// .onTrue(new InstantCommand(()->drive.drive(0, 0, controller.calculate(vision.gettX(), 0))
 			// ));
