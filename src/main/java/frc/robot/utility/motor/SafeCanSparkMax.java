@@ -81,7 +81,7 @@ public class SafeCanSparkMax extends SafeMotor {
         });
     }
     
-    private CANSparkMax getSparkMax() {
+    public CANSparkMax getSparkMax() {
         return motor;
     }
 

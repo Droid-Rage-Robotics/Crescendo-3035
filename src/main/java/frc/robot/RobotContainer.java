@@ -18,6 +18,7 @@ import frc.robot.commands.climbAndAmp.TransferToAmpMech;
 import frc.robot.commands.drive.AlignToAprilTag;
 import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.drive.AutoBalancetoAutoAim;
+import frc.robot.commands.drive.ManualSixWheel;
 import frc.robot.commands.drive.SimpleAim;
 import frc.robot.commands.drive.Test;
 import frc.robot.commands.manual.ManualClimb;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
+import frc.robot.subsystems.drive.OwnSixWheel;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
@@ -213,10 +215,11 @@ public class RobotContainer {
 
 
 	}
-	public void testSixWheel(){
+	public void testSixWheel(OwnSixWheel drive){
 		// driver.rightTrigger()
 		// 	.onTrue(sixWheel.setPower(1));
 		// driver.leftTrigger()
 		// 	.onTrue(sixWheel.setPower(0));
+		drive.setDefaultCommand(new ManualSixWheel(drive, driver));
 	}
 }
