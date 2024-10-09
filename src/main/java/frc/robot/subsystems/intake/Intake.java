@@ -20,7 +20,7 @@ public class Intake {
         START(24.4,0),//15
 
         //IntakePos
-        INTAKE_GROUND(206.8,-4500),//205.21
+        INTAKE_GROUND(190.6,-4500),//206.8
         // AUTO_INTAKE_GROUND(IN)
         AUTO_INTAKE_GROUND(207,-5000),
         INTAKE_HUMAN(100,-INTAKE_GROUND.getIntakeSpeeds()),//INTAKE_GROUND

@@ -21,7 +21,7 @@ public class Constants {
     public enum ShooterSpeeds {
         //15000+
         AMP_SHOOT(3000),//200
-        SPEAKER_SHOOT(8000),//17900 CHNGE THIS
+        SPEAKER_SHOOT(12000),//17900 CHNGE THIS
         AUTO_SPEAKER_SHOOT(18900),//10000
 
         HOLD(4000),

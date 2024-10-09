@@ -44,8 +44,8 @@ import frc.robot.utility.template.Arm;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
-    private final Shooter shooter = new Shooter(false);//18,19 Works
+    private final SwerveDrive drive = new SwerveDrive(false);//2-10 Works
+    private final Shooter shooter = new Shooter(true);//18,19 Works
 
     private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
     private final AmpMechIntake ampIntake = new AmpMechIntake(false);//24
@@ -53,8 +53,8 @@ public class Robot extends TimedRobot {
     private final AmpMech ampMech = new AmpMech(elevator, arm, ampIntake);
 
     private final ClimbAlternate climb = new ClimbAlternate(false,false);//20,21
-    private final IntakeWheel intakeWheel = new IntakeWheel(false);//16
-    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(false, climb.getMotorR());//17
+    private final IntakeWheel intakeWheel = new IntakeWheel(true);//16
+    private final IntakeDropDownAbsolute dropDown = new IntakeDropDownAbsolute(true, climb.getMotorR());//17
     private final Intake intake = new Intake(dropDown, intakeWheel);
     // private AbsoluteDutyEncoder encoder = 
     //     new AbsoluteDutyEncoder(0,false, 1,0.38, ampIntake);
@@ -160,7 +160,9 @@ public class Robot extends TimedRobot {
 		// drive.driveAutoReset();//TODO:Test
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
         // );
-        robotContainer.testCommands(vision, drive);
+        robotContainer.showcase(drive, intake, shooter);
+
+        // robotContainer.testCommands(vision, drive);
         // robotContainer.testSixWheel();
         // teleopButtons.newTeleopButtons( climb, intake, shooter, ampMech , drive);
     }

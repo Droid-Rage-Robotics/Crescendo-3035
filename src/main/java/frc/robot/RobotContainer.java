@@ -176,6 +176,58 @@ public class RobotContainer {
 		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
 		// intake.getIntakeWheel().setDefaultCommand(new IntakeElementInCommand(intake));
 	}
+	public void showcase(SwerveDrive drive, Intake intake, Shooter shooter){
+
+		// drive.setDefaultCommand(
+		// 	new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+		// 		drive,
+		// 		driver::getLeftX,
+		// 		driver::getLeftY,
+		// 		driver::getRightX,
+		// 		driver,
+		// 		false//No Work; Do no use this
+		// 		)
+		// 	);
+		driver.rightTrigger()
+			.whileTrue(new IntakeElementInCommand(driver, intake))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+
+		driver.leftTrigger()
+			.onTrue(intake.setPositionCommand(Intake.Value.OUTTAKE))
+			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+
+		// driver.rightTrigger().and(driver.leftBumper())
+		// 	.whileTrue(intake.setPositionCommand(Intake.Value.INTAKE_HOLD))
+		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
+		// driver.leftTrigger().whileTrue(
+		// 	new ConditionalCommand(
+		// 		new DropAmp(ampMech, cycleTracker),//true
+		// 		intake.setPositionCommand(Intake.Value.OUTTAKE), //false
+		// 		()->(AmpMech.Value.HOLD_AMP==ampMech.getPosition()||
+		// 			AmpMech.Value.AMP==ampMech.getPosition())))	//Check
+		// 	.onFalse(new SequentialCommandGroup(
+		// 		intake.setPositionCommand(Intake.Value.HOLD),				
+		// 		ampMech.setPositionCommand(AmpMech.Value.START)
+		// 		));
+	
+		driver.y()
+			.onTrue(
+				new SequentialCommandGroup(
+				// ampMech.setPositionCommand(AmpMech.Value.OUT),
+				shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
+				intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)
+				)
+			)
+			.onFalse(
+				new SequentialCommandGroup(
+				// ampMech.setPositionCommand(AmpMech.Value.OUT),
+				shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.STOP)),
+				intake.setPositionCommand(Intake.Value.HOLD)
+				)
+			)
+			;
+
+	}
 
 	public void teleopPeriodic(Intake intake, Shooter shooter){
 		if(intake.isElementInClaw()){

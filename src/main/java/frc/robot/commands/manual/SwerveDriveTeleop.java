@@ -39,9 +39,9 @@ public class SwerveDriveTeleop extends Command {
         this.isLimiter = isLimiter;
         // drive.setSpeed(Speed.NORMAL);
         // drive.setSpeed(Speed.SLOW);
-        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SLOW))
+        driver.rightBumper().whileTrue(drive.setSpeed(Speed.SUPER_SLOW))
             .whileFalse(drive.setSpeed(Speed.SLOW));
-                        // .onFalse(drive.setSpeed(Speed.NORMAL));
+                        // .onFalse(drive.setSpeed(Speed.SLOW));
 
         // this.aResetButton = aResetButton;
         driver.b().onTrue(drive.setYawCommand(0));
