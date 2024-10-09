@@ -77,22 +77,22 @@ public class SixWheel extends SubsystemBase {
     
     public SixWheel(Boolean isEnabled){
         this.isEnabled.set(isEnabled);
-        frontLeft = new SafeCanSparkMax(4, MotorType.kBrushless, 
+        frontLeft = new SafeCanSparkMax(3, MotorType.kBrushless, 
             false, IdleMode.Coast, 
             1,1, 
             this.isEnabled, ShuffleboardValue.create(0.0, "Motor/Drive Voltage FL", SixWheel.class.getSimpleName())
             .build());
-        frontRight = new SafeCanSparkMax(6, MotorType.kBrushless, 
+        frontRight = new SafeCanSparkMax(1, MotorType.kBrushless, 
             false, IdleMode.Coast, 
             1,1, 
             this.isEnabled, ShuffleboardValue.create(0.0, "Motor/Drive Voltage FR", SixWheel.class.getSimpleName())
             .build());
-        backLeft = new SafeCanSparkMax(8, MotorType.kBrushless, 
+        backLeft = new SafeCanSparkMax(4, MotorType.kBrushless, 
             false, IdleMode.Coast, 
             1,1, 
             this.isEnabled, ShuffleboardValue.create(0.0, "Motor/Drive Voltage BL", SixWheel.class.getSimpleName())
             .build());
-        backRight = new SafeCanSparkMax(22, MotorType.kBrushless, 
+        backRight = new SafeCanSparkMax(2, MotorType.kBrushless, 
             false, IdleMode.Coast, 
             1,1, 
             this.isEnabled, ShuffleboardValue.create(0.0, "Motor/Drive Voltage BR", SixWheel.class.getSimpleName())
