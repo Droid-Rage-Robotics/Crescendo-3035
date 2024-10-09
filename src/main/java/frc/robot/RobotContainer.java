@@ -1,5 +1,9 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -12,6 +16,7 @@ import frc.robot.commands.ClimbAndAmpCommands;
 import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.drive.AutoBalancetoAutoAim;
 import frc.robot.commands.drive.ManualSixWheel;
+import frc.robot.commands.drive.ManualSixWheelOLD;
 import frc.robot.commands.drive.SimpleAim;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
@@ -22,6 +27,7 @@ import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
 import frc.robot.subsystems.drive.OwnSixWheel;
+import frc.robot.subsystems.drive.SixWheel;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
@@ -175,11 +181,23 @@ public class RobotContainer {
 
 
 	}
-	public void testSixWheel(OwnSixWheel drive){
+	public void testSixWheel(
+		OwnSixWheel drive
+		// SixWheel drive
+		){
+			// CANSparkMax test = new CANSparkMax(2, MotorType.kBrushed);
+
+			// driver.rightTrigger()
+			// .onTrue(new InstantCommand(()->test.set(-.5)))
+			// .onFalse(new InstantCommand(()->test.set(0)))
+
+			;
 		// driver.rightTrigger()
 		// 	.onTrue(sixWheel.setPower(1));
 		// driver.leftTrigger()
 		// 	.onTrue(sixWheel.setPower(0));
 		drive.setDefaultCommand(new ManualSixWheel(drive, driver));
+		// drive.setDefaultCommand(new ManualSixWheelOLD(drive, driver));
+
 	}
 }
