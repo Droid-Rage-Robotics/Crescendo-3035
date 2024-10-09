@@ -3,8 +3,7 @@ package frc.robot.commands.autos;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.shooter.SetIntakeAndShooter;
-import frc.robot.commands.shooter.ShootPreload;
+import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
@@ -14,7 +13,7 @@ import frc.robot.subsystems.intake.Intake;
 public final class Autos {
     public static Command onePlusThree(SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             // new WaitCommand(.3),
             PathPlannerFollow.create(drive, "1+3")
                 .setMaxVelocity(2.3)
@@ -24,7 +23,7 @@ public final class Autos {
     }
     public static Command onePlusTwo(SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             PathPlannerFollow.create(drive, "1+2")
                 .setMaxVelocity(3)
                 .setAcceleration(3)
@@ -46,7 +45,7 @@ public final class Autos {
                 new WaitCommand(1.1),//.8
                 intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
                 new WaitCommand(1.3),
-                new SetIntakeAndShooter(intake, Intake.Value.HOLD, 
+                ShooterCommands.shootPreload(intake, Intake.Value.HOLD, 
                     shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
                 
             PathPlannerFollow.create(drive, "amp")
@@ -61,7 +60,7 @@ public final class Autos {
                 new WaitCommand(1.1),//.8
                 intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
                 new WaitCommand(1.3),
-                new SetIntakeAndShooter(intake, Intake.Value.HOLD, 
+                ShooterCommands.setIntakeAndShooter(intake, Intake.Value.HOLD, 
                     shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
                 
             new WaitCommand(4),
@@ -77,7 +76,7 @@ public final class Autos {
                 new WaitCommand(1.1),//.8
                 intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
                 new WaitCommand(1.3),
-                new SetIntakeAndShooter(intake, Intake.Value.HOLD, 
+                ShooterCommands.setIntakeAndShooter(intake, Intake.Value.HOLD, 
                     shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
                 
             new WaitCommand(4),
@@ -89,7 +88,7 @@ public final class Autos {
     }
     public static Command onePlusFullSeperate(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             PathPlannerFollow.create(drive, "F1+F2")
                 .setMaxVelocity(3)
                 .setAcceleration(3)
@@ -116,7 +115,7 @@ public final class Autos {
     }
     public static Command onePlusMiddle(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.7),
             PathPlannerFollow.create(drive, "shootMiddle")
                 .setMaxVelocity(3)
@@ -134,7 +133,7 @@ public final class Autos {
     }
     public static Command onePlusHUuman(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.7),
             PathPlannerFollow.create(drive, "shootHuman")
                 .setMaxVelocity(3)
@@ -144,7 +143,7 @@ public final class Autos {
     }
     public static Command onePlusHumanAndMidle(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.7),
             PathPlannerFollow.create(drive, "shootHumanPlusMid")
                 .setMaxVelocity(3)
@@ -154,7 +153,7 @@ public final class Autos {
     }
     public static Command onePlusMiddleAndHuman(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.7),
             PathPlannerFollow.create(drive, "shootMidPlusHuman")
                 .setMaxVelocity(3)
@@ -164,7 +163,7 @@ public final class Autos {
     }
     public static Command onePlusTwoSeperate(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             PathPlannerFollow.create(drive, "1+F1")
                 .setMaxVelocity(3)
                 .setAcceleration(3)
@@ -189,9 +188,9 @@ public final class Autos {
     }
     public static Command onePlusF1PlusParkBlue(SwerveDrive drive, Intake intake, Shooter shooter) {//Top Red/Bottom Blue
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.3),
-            new SetIntakeAndShooter(intake, Intake.Value.HOLD, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.setIntakeAndShooter(intake, Intake.Value.HOLD, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             // new SetIntakeAndShooter(intake, Intake.Value.AUTO_INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.8),
             PathPlannerFollow.create(drive, "R1+F1+ParkBlue")
@@ -203,9 +202,9 @@ public final class Autos {
     
     public static Command onePlusF1ParkBlue(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.3),
-            new SetIntakeAndShooter(intake, Intake.Value.AUTO_INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.setIntakeAndShooter(intake, Intake.Value.AUTO_INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.8),
             PathPlannerFollow.create(drive, "R1+F1Blue")
                 .setMaxVelocity(1.5)
@@ -216,9 +215,9 @@ public final class Autos {
 
     public static Command onePlusF1ParkRed(SwerveDrive drive, Intake intake, Shooter shooter) {
         return new SequentialCommandGroup(
-            new ShootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.shootPreload(intake, Intake.Value.SHOOTER_TRANSFER, shooter, ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.3),
-            new SetIntakeAndShooter(intake, Intake.Value.AUTO_INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
+            ShooterCommands.setIntakeAndShooter(intake, Intake.Value.AUTO_INTAKE_GROUND, shooter, Shooter.ShooterSpeeds.AUTO_SPEAKER_SHOOT),
             new WaitCommand(.8),
             PathPlannerFollow.create(drive, "L1+F3Red")
                 .setMaxVelocity(1.5)

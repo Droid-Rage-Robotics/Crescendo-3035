@@ -11,14 +11,14 @@ import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.robot.subsystems.vision.Vision;
 
-public class Test extends Command {
+public class TestLimelight extends Command {
   /** Creates a new Test. */
   SwerveDrive drive;
    Vision vision;
    CommandXboxController controller;
    double rot_limelight=0;
    double forward_limelight=0;
-  public Test(SwerveDrive drive, Vision vision, CommandXboxController controller) {
+  public TestLimelight(SwerveDrive drive, Vision vision, CommandXboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
     this.vision= vision;
