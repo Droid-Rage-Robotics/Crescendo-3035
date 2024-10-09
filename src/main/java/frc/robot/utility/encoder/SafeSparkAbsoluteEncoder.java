@@ -13,12 +13,13 @@ public class SafeSparkAbsoluteEncoder extends SubsystemBase {
     protected final ShuffleboardValue<Double> radianWriter;
     protected final ShuffleboardValue<Double> rawWriter;
 
-    public SafeSparkAbsoluteEncoder(SafeCanSparkMax motor, boolean isInverted,
+    public SafeSparkAbsoluteEncoder(SafeCanSparkMax motor, 
+        boolean isInverted,
         SubsystemBase base){
         encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
         encoder.setInverted(isInverted);
-        encoder.setPositionConversionFactor(Math.PI*2);
-        encoder.setVelocityConversionFactor((Math.PI*2)/60);
+        setPositionConversionFactor(Math.PI*2);//Radian
+        setVelocityConversionFactor((Math.PI*2)/60);
         // this.base = base;
 
         rawWriter = ShuffleboardValue
@@ -53,10 +54,10 @@ public class SafeSparkAbsoluteEncoder extends SubsystemBase {
     public double getVelocity() {
         return encoder.getVelocity();  
     }
-    public void setPositionConversionFactor(double positionConversionFactor) {
+    private void setPositionConversionFactor(double positionConversionFactor) {
         encoder.setPositionConversionFactor(positionConversionFactor);
     }
-    public void setVelocityConversionFactor(double velocityConversionFactor) {
+    private void setVelocityConversionFactor(double velocityConversionFactor) {
         encoder.setVelocityConversionFactor(velocityConversionFactor);
     }
 }
