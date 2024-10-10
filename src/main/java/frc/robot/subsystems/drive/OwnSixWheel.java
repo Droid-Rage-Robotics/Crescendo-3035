@@ -13,53 +13,53 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class OwnSixWheel extends SubsystemBase {
     private final SafeCanSparkMax frontLeftMotor = new SafeCanSparkMax(
         3,
-        MotorType.kBrushless,
+        MotorType.kBrushed,
         false,
         IdleMode.Coast,
         1,
         1/60,
-        ShuffleboardValue.create(true, "SixWheel/Is Enabled Wheel", SixWheel.class.getSimpleName())
+        ShuffleboardValue.create(true, "OwnSixWheel/Is Enabled Wheelfl", SixWheel.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-        ShuffleboardValue.create(0.0, "SixWheel/Output Writer", SixWheel.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "OwnSixWheel/Output Writerfl", SixWheel.class.getSimpleName())
                 .build() );
         
     private final SafeCanSparkMax frontRightMotor = new SafeCanSparkMax(1,
-        MotorType.kBrushless,
+        MotorType.kBrushed,
         false,
         IdleMode.Coast,
         1,
         1/60,
-        ShuffleboardValue.create(true, "SixWheel/Is Enabled Wheel", SixWheel.class.getSimpleName())
+        ShuffleboardValue.create(true, "OwnSixWheel/Is Enabled Wheelfr", SixWheel.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-        ShuffleboardValue.create(0.0, "SixWheel/Output Writer", SixWheel.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "OwnSixWheel/Output Writerfr", SixWheel.class.getSimpleName())
                 .build() );
 
     private final SafeCanSparkMax backLeftMotor = new SafeCanSparkMax(
         4,
-        MotorType.kBrushless,
+        MotorType.kBrushed,
         false,
         IdleMode.Coast,
         1,
         1/60,
-        ShuffleboardValue.create(true, "SixWheel/Is Enabled Wheel", SixWheel.class.getSimpleName())
+        ShuffleboardValue.create(true, "OwnSixWheel/Is Enabled Wheelbl", SixWheel.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-        ShuffleboardValue.create(0.0, "SixWheel/Output Writer", SixWheel.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "OwnSixWheel/Output Writerbl", SixWheel.class.getSimpleName())
                 .build() );
 
     private final SafeCanSparkMax backRightMotor = new SafeCanSparkMax(
         2,
-        MotorType.kBrushless,
+        MotorType.kBrushed,
         false,
         IdleMode.Coast,
         1,
         1/60,
-        ShuffleboardValue.create(true, "SixWheel/Is Enabled Wheel", SixWheel.class.getSimpleName())
+        ShuffleboardValue.create(true, "OwnSixWheel/Is Enabled Wheelbr", SixWheel.class.getSimpleName())
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .build(),
-        ShuffleboardValue.create(0.0, "SixWheel/Output Writer", SixWheel.class.getSimpleName())
+        ShuffleboardValue.create(0.0, "OwnSixWheel/Output Writerbr", SixWheel.class.getSimpleName())
                 .build() );
  
     public final DifferentialDrive drive = new DifferentialDrive(frontLeftMotor.getSparkMax(), frontRightMotor.getSparkMax());

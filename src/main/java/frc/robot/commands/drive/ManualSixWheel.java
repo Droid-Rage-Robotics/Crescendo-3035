@@ -11,6 +11,8 @@ public class ManualSixWheel extends Command {
     public ManualSixWheel(OwnSixWheel drive, CommandXboxController driverController) {
         this.drive = drive;
         this.driverController = driverController;
+
+        addRequirements(drive);
     }
 
     @Override

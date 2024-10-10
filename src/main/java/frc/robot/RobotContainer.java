@@ -175,11 +175,18 @@ public class RobotContainer {
 
 
 	}
-	public void testSixWheel(OwnSixWheel drive){
-		// driver.rightTrigger()
-		// 	.onTrue(sixWheel.setPower(1));
-		// driver.leftTrigger()
-		// 	.onTrue(sixWheel.setPower(0));
-		drive.setDefaultCommand(new ManualSixWheel(drive, driver));
+	public void testDrive(SwerveDrive drive
+	){
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver,
+				false//No Work; Do no use this
+				)
+			);
+		// drive.setDefaultCommand(new ManualSixWheel(drive, driver));
 	}
 }

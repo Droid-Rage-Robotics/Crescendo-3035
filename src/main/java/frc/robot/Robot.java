@@ -45,8 +45,8 @@ import frc.robot.utility.template.Arm;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
-    private final OwnSixWheel drive = new OwnSixWheel();
-    // private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
+    // private final OwnSixWheel drive = new OwnSixWheel();
+    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
     // private final Shooter shooter = new Shooter(false);//18,19 Works
 
     // private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
@@ -64,10 +64,10 @@ public class Robot extends TimedRobot {
     // private AutoChooser autoChooser = new AutoChooser(
     //     drive, intake, shooter, ampMech//, claw, climb, vision, light
     // );
-    private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
+    // private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
 // private final Climb climb = new Climb(false,false);//20,21
 
-    private final Vision vision = new Vision();
+    // private final Vision vision = new Vision();
     // private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
@@ -163,7 +163,7 @@ public class Robot extends TimedRobot {
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
         // );
         // robotContainer.testCommands(vision, drive);
-        robotContainer.testSixWheel(drive);
+        robotContainer.testDrive(drive);
         // teleopButtons.newTeleopButtons( climb, intake, shooter, ampMech , drive);
     }
 
