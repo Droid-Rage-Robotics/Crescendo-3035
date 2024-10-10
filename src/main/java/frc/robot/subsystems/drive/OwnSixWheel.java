@@ -13,7 +13,7 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 public class OwnSixWheel extends SubsystemBase {
     private final SafeCanSparkMax frontLeftMotor = new SafeCanSparkMax(
         3,
-        MotorType.kBrushless,
+        MotorType.kBrushed,
         false,
         IdleMode.Coast,
         1,
@@ -25,7 +25,7 @@ public class OwnSixWheel extends SubsystemBase {
                 .build() );
         
     private final SafeCanSparkMax frontRightMotor = new SafeCanSparkMax(1,
-        MotorType.kBrushless,
+        MotorType.kBrushed,
         false,
         IdleMode.Coast,
         1,
@@ -38,7 +38,7 @@ public class OwnSixWheel extends SubsystemBase {
 
     private final SafeCanSparkMax backLeftMotor = new SafeCanSparkMax(
         4,
-        MotorType.kBrushless,
+        MotorType.kBrushed,
         false,
         IdleMode.Coast,
         1,
@@ -51,7 +51,7 @@ public class OwnSixWheel extends SubsystemBase {
 
     private final SafeCanSparkMax backRightMotor = new SafeCanSparkMax(
         2,
-        MotorType.kBrushless,
+        MotorType.kBrushed,
         false,
         IdleMode.Coast,
         1,
