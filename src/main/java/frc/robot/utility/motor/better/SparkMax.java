@@ -1,4 +1,4 @@
-package frc.robot.utility.motor;
+package frc.robot.utility.motor.better;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -24,7 +24,7 @@ public class SparkMax extends CANMotorEx{
         if(isEnabledWriter.get()){
             motor.set(power);
         }
-        if(DroidRageConstants.removeWriterWriter.get()){//if(!DriverStation.isFMSAttached())
+        if(DroidRageConstants.removeWriterWriter.get()){
             outputWriter.set(power);
         }
     }
@@ -34,7 +34,7 @@ public class SparkMax extends CANMotorEx{
         if(isEnabledWriter.get()){
             motor.setVoltage(outputVolts);
         }
-        if(DroidRageConstants.removeWriterWriter.get()){//if(!DriverStation.isFMSAttached())
+        if(DroidRageConstants.removeWriterWriter.get()){
             outputWriter.set(outputVolts);
         }
     }

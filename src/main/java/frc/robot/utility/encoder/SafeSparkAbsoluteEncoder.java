@@ -4,7 +4,7 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.utility.motor.old.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SafeSparkAbsoluteEncoder extends SubsystemBase {

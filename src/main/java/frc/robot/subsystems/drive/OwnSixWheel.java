@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.motor.SafeMotor.IdleMode;
+import frc.robot.utility.motor.old.SafeCanSparkMax;
+import frc.robot.utility.motor.old.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class OwnSixWheel extends SubsystemBase {

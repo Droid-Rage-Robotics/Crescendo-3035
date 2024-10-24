@@ -1,4 +1,4 @@
-package frc.robot.utility.motor;
+package frc.robot.utility.motor.better;
 
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -21,12 +21,6 @@ public abstract class CANMotorEx {
         Brake,
         Coast,
     }
-
-    // public MotorEx(ShuffleboardValue<Boolean> isEnabled, 
-    //     ShuffleboardValue<Double> outputWriter) {
-    //     this.isEnabled = isEnabled;
-    //     this.outputWriter = outputWriter;
-    // }
 
     public class DirectionBuilder {
         public IdleModeBuilder withDirection(Direction direction) {

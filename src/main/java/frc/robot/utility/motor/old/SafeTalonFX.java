@@ -1,4 +1,4 @@
-package frc.robot.utility.motor;
+package frc.robot.utility.motor.old;
 
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;

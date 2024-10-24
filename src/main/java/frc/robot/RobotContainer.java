@@ -102,7 +102,7 @@ public class RobotContainer {
 				)
 		);
 		operator.povRight().onTrue(
-			new InstantCommand(()->intake.getDropDown().setMotorMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
+			new InstantCommand(()->intake.getDropDown().setMotorMode(frc.robot.utility.motor.old.SafeMotor.IdleMode.Brake))
 
 		);
 		operator.povLeft()
@@ -172,8 +172,6 @@ public class RobotContainer {
 			// .onTrue(new Test(drive, vision, driver));
 			// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
 			// .onTrue(new AutoAim(drive, vision));
-
-
 	}
 	public void testDrive(SwerveDrive drive
 	){
