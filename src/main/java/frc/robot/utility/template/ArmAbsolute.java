@@ -2,7 +2,7 @@ package frc.robot.utility.template;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.utility.encoder.AbsoluteDutyEncoder;
+import frc.robot.utility.encoder.old.AbsoluteDutyEncoder;
 import frc.robot.utility.motor.better.CANMotorEx;
 
 public class ArmAbsolute extends Arm {

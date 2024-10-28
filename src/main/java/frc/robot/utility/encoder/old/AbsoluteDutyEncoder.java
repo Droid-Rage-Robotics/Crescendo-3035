@@ -1,6 +1,5 @@
-package frc.robot.utility.encoder;
+package frc.robot.utility.encoder.old;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
@@ -38,6 +37,7 @@ public class AbsoluteDutyEncoder extends SubsystemBase {
         }
         this.isInverted=isInverted;
         this.positionOffset = offset;
+        encoder.setPositionOffset(offset);
         rawWriter = ShuffleboardValue
             .create(0.0, base.getName()+"/Pos/Raw", base.getClass().getSimpleName())
             .withSize(1, 2)

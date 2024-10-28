@@ -1,6 +1,6 @@
 package frc.robot.subsystems.ampMech.ampMechArm;
 
-import frc.robot.utility.encoder.SafeSparkAbsoluteEncoder;
+import frc.robot.utility.encoder.old.SafeSparkAbsoluteEncoder;
 import frc.robot.utility.motor.old.SafeCanSparkMax;
 
 public class AmpMechArmAbsolute extends AmpMechArm {

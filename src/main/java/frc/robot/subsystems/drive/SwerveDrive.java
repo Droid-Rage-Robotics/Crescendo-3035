@@ -25,8 +25,6 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModuleKraken.POD;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
-import frc.robot.utility.motor.CANMotorEx;
-import frc.robot.utility.motor.TalonEx;
 import frc.robot.utility.motor.old.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;

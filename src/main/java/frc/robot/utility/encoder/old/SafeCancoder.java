@@ -1,4 +1,4 @@
-package frc.robot.utility.motor;
+package frc.robot.utility.encoder.old;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;

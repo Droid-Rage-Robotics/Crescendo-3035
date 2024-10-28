@@ -1,4 +1,4 @@
-package frc.robot.utility.encoder;
+package frc.robot.utility.encoder.old;
 
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;

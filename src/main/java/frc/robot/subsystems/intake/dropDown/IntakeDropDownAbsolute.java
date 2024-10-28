@@ -1,6 +1,6 @@
 package frc.robot.subsystems.intake.dropDown;
 
-import frc.robot.utility.encoder.SafeSparkAbsoluteEncoder;
+import frc.robot.utility.encoder.old.SafeSparkAbsoluteEncoder;
 import frc.robot.utility.motor.old.SafeCanSparkMax;
 
 public class IntakeDropDownAbsolute extends IntakeDropDown {
