@@ -5,14 +5,11 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.DroidRageConstants.Control;
 import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Intake extends SubsystemBase{
-    public enum Control{
-        PID,
-        FEEDFORWARD
-    }
     private final CANMotorEx[] motors;
     private final PIDController controller;
     private final SimpleMotorFeedforward feedforward;

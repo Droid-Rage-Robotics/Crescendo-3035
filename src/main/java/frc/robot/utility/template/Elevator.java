@@ -5,14 +5,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.DroidRageConstants.Control;
 import frc.robot.utility.motor.old.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Elevator extends SubsystemBase {
-    public enum Control{
-        PID,
-        FEEDFORWARD
-    }
     private final SafeCanSparkMax[] motors;
     private final PIDController controller;
     private final ElevatorFeedforward feedforward;
@@ -24,6 +21,16 @@ public class Elevator extends SubsystemBase {
     private final ShuffleboardValue<Double> voltageWriter;
     private final int mainNum;
 
+    /**
+     * @param motors - The Motors to Control
+     * @param controller - PID Controller
+     * @param feedforward - Feedforward
+     * @param maxPosition 
+     * @param minPosition
+     * @param control - PID or FEEDFORWARD
+     * @param name - Name of Subsystem
+     * @param mainNum - Motor to use for Encoder
+     */
     public Elevator(
         SafeCanSparkMax[] motors,
         PIDController controller,

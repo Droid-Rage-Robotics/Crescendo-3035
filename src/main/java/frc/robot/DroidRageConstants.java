@@ -31,4 +31,9 @@ public final class DroidRageConstants {
         ShuffleboardValue.create(true, "RemoveWritersWriter", Robot.class.getSimpleName())
         .withSize(1, 3)
         .build();
+
+    public enum Control{
+        PID,
+        FEEDFORWARD
+    }
 }
