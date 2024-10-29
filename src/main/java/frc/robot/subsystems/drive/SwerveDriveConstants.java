@@ -1,9 +1,6 @@
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 

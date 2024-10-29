@@ -1,9 +1,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.intake.Intake;
 
 public class AutoShoot extends SequentialCommandGroup {

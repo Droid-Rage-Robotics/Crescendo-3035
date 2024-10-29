@@ -1,8 +1,6 @@
 package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
-import com.ctre.phoenix6.configs.Pigeon2FeaturesConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,7 +23,6 @@ import frc.robot.subsystems.drive.SwerveModuleKraken.POD;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 //Set Voltage instead of set Power

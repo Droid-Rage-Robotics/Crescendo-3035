@@ -1,7 +1,6 @@
 package frc.robot;
 
 import com.reduxrobotics.sensors.canandcoder.Canandcoder;
-import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -13,14 +12,10 @@ import frc.robot.commands.IntakeElementInCommand;
 import frc.robot.commands.climbAndAmp.ClimbAndTrap;
 import frc.robot.commands.climbAndAmp.DropAmp;
 import frc.robot.commands.climbAndAmp.TransferToAmpMech;
-import frc.robot.commands.drive.AlignToAprilTagSpectrum;
-import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.drive.AutoBalancetoAutoAim;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
-import frc.robot.commands.shooter.SetIntakeAndShooter;
-import frc.robot.commands.shooter.TeleopShoot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;

@@ -2,7 +2,6 @@ package frc.robot.commands.autos;
 
 import frc.robot.subsystems.drive.SwerveDrive;
 
-import java.nio.file.Path;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 
