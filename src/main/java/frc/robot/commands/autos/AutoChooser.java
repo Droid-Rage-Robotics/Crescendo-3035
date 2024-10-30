@@ -39,33 +39,12 @@ public class AutoChooser {
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
         autoChooser.addOption("NothingAuto", new InstantCommand());
-        addAutos(drive, intake, shooter, ampMech);
-        autoChooser.addOption("shootandMiddle", Autos.onePlusMiddle(drive,intake,shooter));//WORKS - DO
-        autoChooser.addOption("ShootHumanMid Pickup", Autos.onePlusHUuman(drive,intake,shooter));//Works
-        autoChooser.addOption("ShootHumanPlusmIddle", Autos.onePlusHumanAndMidle(drive,intake,shooter));//work ish
-        autoChooser.addOption("ShootMiddleAndHuman", Autos.onePlusMiddleAndHuman(drive,intake,shooter));//work ish
-        autoChooser.addOption("AMP", Autos.amp(drive,intake,shooter));//work
-        autoChooser.setDefaultOption("RIGHT(non-human player)",  BasicAutos.right(drive,intake, shooter));//work
-        autoChooser.addOption("Center Appreciate",  Autos.centerAppreciate(drive,intake, shooter));//maybe to tesgt
-        autoChooser.addOption("Shoot Out Center",  Autos.shootOut(drive,intake, shooter));//maybe to tesgt
 
     }
     public static Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
 
-    public static void addAutos(SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech){
-        autoChooser.addOption("ShootPlusPark", 
-            BasicAutos.shootPLusPark(drive,intake,shooter,0));//Works
-        autoChooser.addOption("ShootPlusWait6Park", 
-            BasicAutos.shootPLusPark(drive,intake,shooter,6));//Works
-        autoChooser.addOption("OnlyShoot", BasicAutos.shoot(intake,shooter));//Works
-        autoChooser.addOption("SHOOTPLUSTURN(Only the human player side)", 
-            BasicAutos.shootPLusTurnParkHuman(drive,intake, shooter, 2));//Work
-        autoChooser.addOption("OUT(San Antonio Playoff))", 
-            BasicAutos.out(drive,intake, shooter));
-    }
-    
     public static void addTuningAuto(SwerveDrive drive){
         autoChooser.addOption(TuningAutos.backTest(drive).toString()+"BackwardTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
