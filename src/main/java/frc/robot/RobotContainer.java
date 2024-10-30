@@ -2,24 +2,17 @@ package frc.robot;
 
 import edu.wpi.first.math.controller.PIDController;
 
-// import com.reduxrobotics.sensors.canandcoder.Canandcoder;
-// import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.ClimbAndAmpCommands;
 import frc.robot.commands.IntakeElementInCommand;
-import frc.robot.commands.climbAndAmp.ClimbAndTrap;
-import frc.robot.commands.climbAndAmp.DropAmp;
-import frc.robot.commands.climbAndAmp.TransferToAmpMech;
-import frc.robot.commands.drive.AlignToAprilTag;
-import frc.robot.commands.drive.AutoAim;
 import frc.robot.commands.drive.AutoBalancetoAutoAim;
+import frc.robot.commands.drive.ManualSixWheel;
 import frc.robot.commands.drive.SimpleAim;
-import frc.robot.commands.drive.Test;
 import frc.robot.commands.manual.ManualClimb;
 import frc.robot.commands.manual.ManualElevator;
 import frc.robot.commands.manual.SwerveDriveTeleop;
@@ -28,6 +21,7 @@ import frc.robot.subsystems.Shooter.ShooterSpeeds;
 import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
+import frc.robot.subsystems.drive.OwnSixWheel;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.vision.Vision;
@@ -40,7 +34,7 @@ public class RobotContainer {
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
 		PIDController controller = new PIDController(.001, 0, 0);
 		
-		// CommandList commandList = new CommandList();
+	// CommandList commandList = new CommandList();
 	
 	// private SixWheel sixWheel = new SixWheel(false);
 
@@ -54,6 +48,8 @@ public class RobotContainer {
 		AmpMech ampMech, ClimbAlternate climb, 
 		 CycleTracker cycleTracker, Vision vision
 		 ){
+
+		
 		// drive.setYawCommand(-90);
 		climb.setDefaultCommand(new ManualClimb(climb, operator::getRightY, intake));
 		ampMech.getElevator().setDefaultCommand(new ManualElevator(operator::getLeftY, ampMech));
@@ -76,7 +72,7 @@ public class RobotContainer {
 			.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD));
 		driver.leftTrigger().whileTrue(
 			new ConditionalCommand(
-				new DropAmp(ampMech, cycleTracker),//true
+				ClimbAndAmpCommands.dropAmp(ampMech, cycleTracker),//true
 				intake.setPositionCommand(Intake.Value.OUTTAKE), //false
 				()->(AmpMech.Value.HOLD_AMP==ampMech.getPosition()||
 					AmpMech.Value.AMP==ampMech.getPosition())))	//Check
@@ -90,20 +86,10 @@ public class RobotContainer {
 		driver.x().onTrue(
 				ampMech.setPositionCommand(AmpMech.Value.START)
 			);
-
-		// operator.rightTrigger()
-		// 	.onTrue(new TeleopShoot(intake, shooter, cycleTracker, ampMech)
-			
-		// 	)
-		// 	.onFalse(new SequentialCommandGroup(
-		// 		new SetIntakeAndShooter(intake, Intake.Value.SHOOTER_HOLD, shooter, ShooterSpeeds.HOLD)
-        //         // ampMech.setPositionCommand(AmpMech.Value.START)
-
-		// 	));
 		operator.leftTrigger()
 			.onTrue(ampMech.setPositionCommand(AmpMech.Value.HOLD_AMP));
 		operator.a()
-			.onTrue(new TransferToAmpMech(intake, shooter, ampMech));
+			.onTrue(ClimbAndAmpCommands.transferToAmpMech(intake, shooter, ampMech));
 		operator.povUp()
 			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.CLIMB)))
 			.onTrue(intake.setPositionCommand(Intake.Value.CLIMB_DOWN));
@@ -111,28 +97,16 @@ public class RobotContainer {
 			// .onTrue(intake.setDropIdleMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 			.onTrue(
 				new SequentialCommandGroup(
-					new ClimbAndTrap(intake, shooter, ampMech, climb)
+					ClimbAndAmpCommands.climbAndTrap(intake, shooter, ampMech, climb)
 					// new InstantCommand(()->intake.getDropDown().setMotorMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
 				)
-				
-			);
+		);
 		operator.povRight().onTrue(
-			new InstantCommand(()->intake.getDropDown().setMotorMode(frc.robot.utility.motor.SafeMotor.IdleMode.Brake))
+			new InstantCommand(()->intake.getDropDown().setMotorMode(frc.robot.utility.motor.old.SafeMotor.IdleMode.Brake))
 
 		);
-
 		operator.povLeft()
-		.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)));
-		
-		// operator.rightBumper()
-		// 	.onTrue(	
-
-		// 	new SequentialCommandGroup(
-		// 	ampMech.setPositionCommand(AmpMech.Value.OUT),//STAGE
-		// 	shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-
-		// 	)
-		// 	);
+			.onTrue(climb.runOnce(()->climb.setTargetPosition(Climb.Position.START)));
 		operator.y()
 			.onTrue(
 				new SequentialCommandGroup(
@@ -147,13 +121,7 @@ public class RobotContainer {
 				shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.STOP)),
 				intake.setPositionCommand(Intake.Value.HOLD)
 				)
-			)
-			;
-		// operator.povUp()
-		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(50)));
-		// operator.povDown()
-		// 	.onTrue(shooter.runOnce(()->shooter.addShooterSpeed(-50)));
-
+			);
 		operator.start()
 			.onTrue(new InstantCommand(()->climb.resetEncoder()));
 		operator.back()
@@ -164,11 +132,7 @@ public class RobotContainer {
 		driver.rightTrigger();
 			// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
 			// .onTrue(new AutoAim(drive, vision));
-		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT))
-		// 		.andThen(intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)))
-		// 	.onFalse(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)
-		// 		.alongWith(shooter.setTargetVelocity(ShooterSpeeds.HOLD))
-		// 		.alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
+			// .alongWith(new InstantCommand(()->new AutoAim(drive, vision, light).cancel())));//Not Sure if this Works
 		// operator.start().onTrue(new ClimbAndScoreSequence(ampMech, climb, intake));
 
 		// light.setDefaultCommand(new LightCommand(intake, light, driver, operator));
@@ -186,9 +150,20 @@ public class RobotContainer {
 	}
 
 	public void testCommands(Vision vision, SwerveDrive drive){
-		// controller.setTolerance(1);
+		// controller.setTolerance(1);\
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver,
+				false//No Work; Do no use this
+				)
+			);
 		driver.rightTrigger()
-			.onTrue(new SimpleAim(drive, vision));
+			.whileTrue(new SimpleAim(drive, vision))
+			.onFalse(new InstantCommand(()->drive.stop()));
 			// .onTrue(new AlignToAprilTag(()->driver.getLeftX(), 0, drive, vision));
 			// .onTrue(new InstantCommand(()->drive.drive(0, 0, controller.calculate(vision.gettX(), 0))
 			// ));
@@ -197,13 +172,19 @@ public class RobotContainer {
 			// .onTrue(new Test(drive, vision, driver));
 			// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
 			// .onTrue(new AutoAim(drive, vision));
-
-
 	}
-	public void testSixWheel(){
-		// driver.rightTrigger()
-		// 	.onTrue(sixWheel.setPower(1));
-		// driver.leftTrigger()
-		// 	.onTrue(sixWheel.setPower(0));
+	public void testDrive(SwerveDrive drive
+	){
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver,
+				false//No Work; Do no use this
+				)
+			);
+		// drive.setDefaultCommand(new ManualSixWheel(drive, driver));
 	}
 }

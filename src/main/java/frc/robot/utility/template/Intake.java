@@ -5,15 +5,12 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utility.motor.SafeCanSparkMax;
+import frc.robot.DroidRageConstants.Control;
+import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Intake extends SubsystemBase{
-    public enum Control{
-        PID,
-        FEEDFORWARD
-    }
-    private final SafeCanSparkMax[] motors;
+    private final CANMotorEx[] motors;
     private final PIDController controller;
     private final SimpleMotorFeedforward feedforward;
     private final Control control;
@@ -25,7 +22,7 @@ public class Intake extends SubsystemBase{
     private final int mainNum;
 
     public Intake(
-        SafeCanSparkMax[] motors,
+        CANMotorEx[] motors,
         PIDController controller,
         SimpleMotorFeedforward feedforward,
         double maxSpeed,
@@ -88,15 +85,14 @@ public class Intake extends SubsystemBase{
 
     protected void setVoltage(double voltage) {
         voltageWriter.set(voltage);
-        for (SafeCanSparkMax motor: motors) {
+        for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
     }
     
     public void resetEncoder() {
-        for (SafeCanSparkMax motor: motors) {
-            // motor.getEncoder().setPosition(0);
-            motor.reset(0);
+        for (CANMotorEx motor: motors) {
+            motor.resetEncoder(0);
         }
     }
 
@@ -106,7 +102,7 @@ public class Intake extends SubsystemBase{
         return position;
     }
 
-    public SafeCanSparkMax getMotors(){
+    public CANMotorEx getMotors(){
         return motors[mainNum];
     }
 }

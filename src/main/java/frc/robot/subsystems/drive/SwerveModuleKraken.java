@@ -16,10 +16,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.motor.SafeMotor;
-import frc.robot.utility.motor.SafeMotor.IdleMode;
-import frc.robot.utility.motor.SafeTalonFX;
+import frc.robot.utility.motor.old.SafeCanSparkMax;
+import frc.robot.utility.motor.old.SafeMotor;
+import frc.robot.utility.motor.old.SafeTalonFX;
+import frc.robot.utility.motor.old.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class SwerveModuleKraken {

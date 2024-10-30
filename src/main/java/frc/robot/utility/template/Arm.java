@@ -6,14 +6,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants;
-import frc.robot.utility.motor.CANMotorEx;
+import frc.robot.DroidRageConstants.Control;
+import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Arm extends SubsystemBase {
-    public enum Control{
-        PID,
-        FEEDFORWARD
-    }
     protected final CANMotorEx[] motors;
     // CANMotorEx mors = new TalonEX
     protected final PIDController controller;

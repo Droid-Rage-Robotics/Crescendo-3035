@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.motor.SafeTalonFX;
+import frc.robot.utility.motor.old.SafeCanSparkMax;
+import frc.robot.utility.motor.old.SafeTalonFX;
 
 public class SysID extends SubsystemBase {
   public enum Measurement{

@@ -5,8 +5,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utility.motor.SafeTalonFX;
-import frc.robot.utility.motor.SafeMotor.IdleMode;
+import frc.robot.utility.motor.old.SafeTalonFX;
+import frc.robot.utility.motor.old.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Shooter extends SubsystemBase {

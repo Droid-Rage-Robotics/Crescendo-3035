@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.general.DisabledCommand;
 import frc.robot.subsystems.ampMech.AmpMech;
-import frc.robot.utility.motor.SafeCanSparkMax;
-import frc.robot.utility.motor.SafeMotor.IdleMode;
+import frc.robot.utility.motor.old.SafeCanSparkMax;
+import frc.robot.utility.motor.old.SafeMotor.IdleMode;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -18,7 +18,6 @@ public class AmpMechArm extends SubsystemBase {
         public static final double GEAR_RATIO = 1 / 2;//not right
         public static final double READINGS_PER_REVOLUTION = 1;//4089
         public static final double ROTATIONS_TO_RADIANS = (2 * Math.PI / READINGS_PER_REVOLUTION)*2; //<--THIS WORK; cause gear ratio: (2*Math.PI)/Constants.GEAR_RATIO
-    
     }
 
 
