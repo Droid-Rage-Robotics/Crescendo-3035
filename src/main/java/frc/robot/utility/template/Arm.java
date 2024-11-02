@@ -18,6 +18,7 @@ public class Arm extends SubsystemBase {
     protected final Control control;
     protected final double maxPosition;
     protected final double minPosition;
+    protected final double offset;
     protected final ShuffleboardValue<Double> positionRadianWriter;
     protected final ShuffleboardValue<Double> positionDegreeWriter;
     protected final ShuffleboardValue<Double> targetRadianWriter;
@@ -30,6 +31,7 @@ public class Arm extends SubsystemBase {
         ArmFeedforward feedforward,
         double maxPosition,
         double minPosition,
+        double offset,
         Control control,
         String name,
         int mainNum
@@ -40,6 +42,7 @@ public class Arm extends SubsystemBase {
         this.control=control;
         this.maxPosition=maxPosition;
         this.minPosition=minPosition;
+        this.offset=offset;
         this.mainNum=mainNum;
 
         positionDegreeWriter = ShuffleboardValue

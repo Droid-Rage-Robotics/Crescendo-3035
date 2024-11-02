@@ -79,6 +79,11 @@ public class TalonEx extends CANMotorEx {
         motor.getConfigurator().apply(configuration);
     }
 
+    @Override
+    public void resetEncoder(int num) {
+        motor.setPosition(num);
+    }
+
     public TalonEx withStatorCurrentLimit(double statorCurrent){
         setStatorCurrentLimit(statorCurrent);
         return this;
@@ -90,10 +95,5 @@ public class TalonEx extends CANMotorEx {
         configuration.CurrentLimits.StatorCurrentLimit = statorCurrent;
         configuration.CurrentLimits.StatorCurrentLimitEnable = true;
         motor.getConfigurator().apply(configuration);
-    }
-
-    @Override
-    public void resetEncoder(int num) {
-        motor.setPosition(num);
     }
 }

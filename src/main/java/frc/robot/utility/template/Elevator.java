@@ -6,11 +6,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
+import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.motor.old.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Elevator extends SubsystemBase {
-    private final SafeCanSparkMax[] motors;
+    private final CANMotorEx[] motors;
     private final PIDController controller;
     private final ElevatorFeedforward feedforward;
     private final Control control;
@@ -32,7 +33,7 @@ public class Elevator extends SubsystemBase {
      * @param mainNum - Motor to use for Encoder
      */
     public Elevator(
-        SafeCanSparkMax[] motors,
+        CANMotorEx[] motors,
         PIDController controller,
         ElevatorFeedforward feedforward,
         double maxPosition,
@@ -95,15 +96,15 @@ public class Elevator extends SubsystemBase {
 
     protected void setVoltage(double voltage) {
         voltageWriter.set(voltage);
-        for (SafeCanSparkMax motor: motors) {
+        for (CANMotorEx motor: motors) {
             motor.setVoltage(voltage);
         }
     }
     
     public void resetEncoder() {
-        for (SafeCanSparkMax motor: motors) {
+        for (CANMotorEx motor: motors) {
             // motor.getEncoder().setPosition(0);
-            motor.reset(0);
+            motor.resetEncoder(0);
         }
     }
 
@@ -113,7 +114,7 @@ public class Elevator extends SubsystemBase {
         return position;
     }
 
-    public SafeCanSparkMax getMotors(){
+    public CANMotorEx getMotors(){
         return motors[mainNum];
     }
 }

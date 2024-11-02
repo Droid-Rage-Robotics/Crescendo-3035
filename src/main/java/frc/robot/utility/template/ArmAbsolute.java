@@ -7,10 +7,6 @@ import frc.robot.utility.encoder.old.AbsoluteDutyEncoder;
 import frc.robot.utility.motor.better.CANMotorEx;
 
 public class ArmAbsolute extends Arm {
-    // public enum Location{
-    //     RIO,
-    //     CONTROLLER
-    // }
     protected AbsoluteDutyEncoder encoder;
     public ArmAbsolute(
         CANMotorEx[] motors,
@@ -18,13 +14,14 @@ public class ArmAbsolute extends Arm {
         ArmFeedforward feedforward,
         double maxPosition,
         double minPosition,
+        double offset,
         Control control,
         String name,
         int mainNum,
         AbsoluteDutyEncoder encoder
     ){
         super(motors, controller, feedforward, 
-        maxPosition, minPosition, control, 
+        maxPosition, minPosition, offset, control, 
         name, mainNum);
         this.encoder=encoder;
 

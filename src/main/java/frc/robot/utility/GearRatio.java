@@ -27,7 +27,7 @@ public abstract class GearRatio {
     /**
     *Create a GearedMechanism with a gear ratio.
     *
-    * <p>For example, if the pinion is 10 teeth and the gear is 50 teeth, 
+    * <p>For example, if the pinion is 10 teeth and the  gear is 50 teeth, 
     *    the gear ratio is 1:5 and therefore the value is (1/5) = 0.2.
     * @param count = How many pulses does the encoder get to recognize as 1 rotation
     * <p>gearRatio is 1 if used with encoder on output shaft
@@ -49,6 +49,15 @@ public abstract class GearRatio {
         }
 
     }
+    /**
+    *Create a GearedMechanism with a gear ratio.
+    *
+    * <p>For example, if the pinion is 10 teeth and the  gear is 50 teeth, 
+    *    the gear ratio is 1:5 and therefore the value is (1/5) = 0.2.
+    * @param count = How many pulses does the encoder get to recognize as 1 rotation
+    * <p>gearRatio is 1 if used with encoder on output shaft
+    * @param gearRatio Gear ratio (input / output, driving:driven) - This needs to thought about
+    */
     public static double getConversion(Type type, PulseCount count, double gearRatio){
         switch (type) {
             case DISTANCE:
