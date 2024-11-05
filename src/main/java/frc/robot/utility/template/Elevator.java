@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.utility.motor.better.CANMotorEx;
-import frc.robot.utility.motor.old.SafeCanSparkMax;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Elevator extends SubsystemBase {

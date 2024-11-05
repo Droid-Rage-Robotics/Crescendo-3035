@@ -27,6 +27,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeWheel;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
 import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
+import frc.robot.subsystems.newSub.TestSubsystem;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
 import frc.robot.utility.encoder.old.AbsoluteDutyEncoder;
@@ -45,6 +46,7 @@ import frc.robot.utility.template.Arm;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
+    private final TestSubsystem test = new TestSubsystem();
     // private final OwnSixWheel drive = new OwnSixWheel();
     private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
     // private final Shooter shooter = new Shooter(false);//18,19 Works
@@ -116,7 +118,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         // cycleTracker.printAllData();
-
     }
     
     @Override

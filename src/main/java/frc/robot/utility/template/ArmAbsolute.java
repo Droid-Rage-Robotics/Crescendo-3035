@@ -3,11 +3,11 @@ package frc.robot.utility.template;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.DroidRageConstants.Control;
-import frc.robot.utility.encoder.old.AbsoluteDutyEncoder;
+import frc.robot.utility.encoder.AbsoluteDutyEncoderRIO;
 import frc.robot.utility.motor.better.CANMotorEx;
 
 public class ArmAbsolute extends Arm {
-    protected AbsoluteDutyEncoder encoder;
+    protected AbsoluteDutyEncoderRIO encoder;
     public ArmAbsolute(
         CANMotorEx[] motors,
         PIDController controller,
@@ -16,13 +16,13 @@ public class ArmAbsolute extends Arm {
         double minPosition,
         double offset,
         Control control,
-        String name,
+        String subsystemName,
         int mainNum,
-        AbsoluteDutyEncoder encoder
+        AbsoluteDutyEncoderRIO encoder
     ){
         super(motors, controller, feedforward, 
         maxPosition, minPosition, offset, control, 
-        name, mainNum);
+        subsystemName, mainNum);
         this.encoder=encoder;
 
     }
@@ -45,10 +45,9 @@ public class ArmAbsolute extends Arm {
 
     @Override
     public double getEncoderPosition() {
-        double position = encoder.calculateAbsPos();
-        positionRadianWriter.write(position);
-        positionDegreeWriter.write(Math.toDegrees(position));
-        return position;
+        positionRadianWriter.write(encoder.getRadian());
+        positionDegreeWriter.write(encoder.getDegrees());
+        return encoder.getDegrees();
     }
     
 }

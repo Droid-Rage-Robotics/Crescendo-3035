@@ -5,14 +5,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.DroidRageConstants;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class Arm extends SubsystemBase {
     protected final CANMotorEx[] motors;
-    // CANMotorEx mors = new TalonEX
     protected final PIDController controller;
     protected final ArmFeedforward feedforward;
     protected final Control control;
@@ -33,7 +31,7 @@ public class Arm extends SubsystemBase {
         double minPosition,
         double offset,
         Control control,
-        String name,
+        String subsystemName,
         int mainNum
     ){
         this.motors=motors;
@@ -46,16 +44,16 @@ public class Arm extends SubsystemBase {
         this.mainNum=mainNum;
 
         positionDegreeWriter = ShuffleboardValue
-            .create(0.0, name+"/PositionDegree", name)
+            .create(0.0, subsystemName+"/PositionDegree", subsystemName)
             .build();
         targetDegreeWriter = ShuffleboardValue
-            .create(0.0, name+"/TargetDegree", name)
+            .create(0.0, subsystemName+"/TargetDegree", subsystemName)
             .build();
         positionRadianWriter = ShuffleboardValue
-            .create(0.0, name+"/PositionRadian", name)
+            .create(0.0, subsystemName+"/PositionRadian", subsystemName)
             .build();
         targetRadianWriter = ShuffleboardValue
-            .create(0.0, name+"/TargetRadian", name)
+            .create(0.0, subsystemName+"/TargetRadian", subsystemName)
             .build();
     }
 

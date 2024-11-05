@@ -3,6 +3,7 @@ package frc.robot.utility.encoder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.encoder.old.AbsoluteDutyEncoder;
+import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public class AbsoluteDutyEncoderRIO {
@@ -14,7 +15,7 @@ public class AbsoluteDutyEncoderRIO {
     protected final ShuffleboardValue<Double> radianWriter;
     protected final ShuffleboardValue<Double> rawWriter;
     protected final ShuffleboardValue<Boolean> isConnectedWriter;
-    protected SubsystemBase base;
+    protected String name;
     // protected final ShuffleboardValue<Double> encoderPosWriter = ShuffleboardValue.create
     //     (0.0, "Encoder Position", AbsoluteDutyEncoder.class.getSimpleName())
     //     .build();
@@ -27,18 +28,18 @@ public class AbsoluteDutyEncoderRIO {
     //     .build();
 
 
-    public AbsoluteDutyEncoderRIO(DutyCycleEncoder encoder){
+    private AbsoluteDutyEncoderRIO(DutyCycleEncoder encoder){
         this.encoder=encoder;
         rawWriter = ShuffleboardValue
-            .create(0.0, base.getName()+"/Pos/Raw", base.getClass().getSimpleName())
+            .create(0.0, name+"/Pos/Raw", name)
             .withSize(1, 2)
             .build();
         degreeWriter = ShuffleboardValue
-            .create(0.0, base.getName()+"/Pos/Degree", base.getClass().getSimpleName())
+            .create(0.0, name+"/Pos/Degree", name)
             .withSize(1, 2)
             .build();
         radianWriter = ShuffleboardValue
-            .create(0.0, base.getName()+"/Pos/Radian", base.getClass().getSimpleName())
+            .create(0.0, name+"/Pos/Radian", name)
             .withSize(1, 2)
             .build();
         isConnectedWriter = ShuffleboardValue.create
@@ -46,9 +47,9 @@ public class AbsoluteDutyEncoderRIO {
             .build();
     }
 
-    public InverterBuilder create(int deviceID) {
-        new AbsoluteDutyEncoderRIO(new DutyCycleEncoder(deviceID));
-        return new InverterBuilder();
+    public static InverterBuilder create(int deviceID) {
+        AbsoluteDutyEncoderRIO encoder = new AbsoluteDutyEncoderRIO(new DutyCycleEncoder(deviceID));
+        return encoder. new InverterBuilder();
     }
     public class InverterBuilder {
         public OffsetWriter withDirection(boolean isInvertedBoolean) {
@@ -63,9 +64,10 @@ public class AbsoluteDutyEncoderRIO {
         }
     }
     public class BaseWriter {
-        public AbsoluteDutyEncoderRIO withSubssystemBase(SubsystemBase subsystemBase) {
-            base = subsystemBase;
-            return AbsoluteDutyEncoderRIO.this;
+        @SuppressWarnings("unchecked")
+        public <T extends AbsoluteDutyEncoderRIO> T withSubsystemBase(String subsystemBaseName) {
+            name = subsystemBaseName;
+            return (T) AbsoluteDutyEncoderRIO.this;
         }
     }
 

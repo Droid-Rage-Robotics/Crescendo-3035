@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake.dropDown;
 
+import frc.robot.utility.encoder.AbsoluteDutyEncoderRIO;
 import frc.robot.utility.encoder.old.SafeSparkAbsoluteEncoder;
 import frc.robot.utility.motor.old.SafeCanSparkMax;
 
@@ -9,10 +10,11 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
         public static double OFFSET = Math.PI / 2;  //90 Degree
     }
     // SparkAbsoluteEncoder absoluteEncoder;
-    private SafeSparkAbsoluteEncoder absoluteEncoder;
+    private AbsoluteDutyEncoderRIO absoluteEncoder;
     public IntakeDropDownAbsolute(Boolean isEnabled, SafeCanSparkMax sparkMax) {
         super(isEnabled);
-        absoluteEncoder = new SafeSparkAbsoluteEncoder(sparkMax,false, this);
+        absoluteEncoder = AbsoluteDutyEncoderRIO.create(0).withDirection(true).withOffset(90).withSubsystemBase(IntakeDropDownAbsolute.class.getName());
+        // absoluteEncoder = new SafeSparkAbsoluteEncoder(sparkMax,false, this);
         // absoluteEncoder = sparkMax.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         
         // absoluteEncoder.setPositionConversionFactor(Math.PI * 2);
@@ -42,7 +44,8 @@ public class IntakeDropDownAbsolute extends IntakeDropDown {
 
     @Override
     public double getEncoderVelocity() {
-        double velocity = absoluteEncoder.getVelocity();
+        double velocity =0;
+        // double velocity = absoluteEncoder.getVelocity();
         encoderVelocityWriter.write(velocity);
         return velocity;
     }
