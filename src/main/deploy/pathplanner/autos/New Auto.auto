@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.938021705103239,
-      "y": 4.385307915914978
+      "x": 2,
+      "y": 2
     },
-    "rotation": -57.52880770915146
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,18 +14,18 @@
         {
           "type": "named",
           "data": {
-            "name": "intake"
+            "name": "shoot"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": null
+            "name": null
           }
         }
       ]
     }
   },
-  "folder": "Used",
+  "folder": "Autos",
   "choreoAuto": false
 }
