@@ -1,10 +1,8 @@
 package frc.robot.subsystems.newSub;
 
-import com.revrobotics.SparkMaxLimitSwitch.Direction;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.DroidRageConstants.Control;
 import frc.robot.utility.encoder.AbsoluteDutyEncoderRIO;
 import frc.robot.utility.motor.better.CANMotorEx;
@@ -19,12 +17,14 @@ public class TestSubsystem extends ArmAbsolute {
             .withDirection(CANMotorEx.Direction.Forward)
             .withIdleMode(ZeroPowerMode.Brake)
             .withPositionConversionFactor(1)
+            .withSubsystemName(TestSubsystem.class.getName())
             .withIsEnabled(false);
     
     private static TalonEx talon = TalonEx.create(2)
         .withDirection(CANMotorEx.Direction.Forward)
         .withIdleMode(ZeroPowerMode.Brake)
         .withPositionConversionFactor(1)
+        .withSubsystemName(TestSubsystem.class.getName())
         .withIsEnabled(false)
         .withSupplyCurrentLimit(0);
             

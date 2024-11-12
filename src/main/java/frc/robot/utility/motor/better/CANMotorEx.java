@@ -1,5 +1,6 @@
 package frc.robot.utility.motor.better;
 
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public abstract class CANMotorEx {
@@ -11,6 +12,8 @@ public abstract class CANMotorEx {
     protected double velocityConversionFactor;
     protected ShuffleboardValue<Boolean> isEnabledWriter;
     protected ShuffleboardValue<Double> outputWriter;
+    protected String subSystemName;
+    public int motorID;
     
     public enum Direction {
         Forward,
@@ -35,17 +38,30 @@ public abstract class CANMotorEx {
         }
     }
     public class PositionConversionFactorBuilder {
-        public IsEnabledBuilder withPositionConversionFactor(double positionConversionFactor) {
+        public SubstemNameBuilder withPositionConversionFactor(double positionConversionFactor) {
             setPositionConversionFactor(positionConversionFactor);
             setVelocityConversionFactor(positionConversionFactor/60);
+            return new SubstemNameBuilder();
+        }
+    }
+    public class SubstemNameBuilder {
+        public IsEnabledBuilder withSubsystemName(String nameString) {
+            subSystemName = nameString;
             return new IsEnabledBuilder();
         }
     }
     public class IsEnabledBuilder {
         @SuppressWarnings("unchecked")
         public <T extends CANMotorEx> T withIsEnabled(boolean isEnabled) {
-            setIsEnabled(isEnabled);
+            isEnabledWriter = ShuffleboardValue
+                .create(isEnabled, motorID + "/Is Enabled", subSystemName)
+                .withWidget(BuiltInWidgets.kToggleSwitch)
+                .build();
+            outputWriter = ShuffleboardValue
+                .create(0.0, motorID +"/Output", subSystemName)
+                .build();
             return (T) CANMotorEx.this;
+
         }
     }
 

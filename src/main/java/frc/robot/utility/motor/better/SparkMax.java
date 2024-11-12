@@ -16,6 +16,7 @@ public class SparkMax extends CANMotorEx{
 
     public static DirectionBuilder create(int deviceID) {
         CANMotorEx motor = new SparkMax(new CANSparkMax(deviceID, MotorType.kBrushless));
+        motor.motorID = deviceID;
         return motor.new DirectionBuilder();
     }
 
