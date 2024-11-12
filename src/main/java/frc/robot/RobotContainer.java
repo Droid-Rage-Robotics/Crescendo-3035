@@ -23,6 +23,7 @@ import frc.robot.subsystems.climb.ClimbAlternate;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.newSub.IntakeTest;
+import frc.robot.subsystems.newSub.TestSubsystem;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
 
@@ -150,11 +151,23 @@ public class RobotContainer {
 
 	public void testCommands(
 		// Vision vision, SwerveDrive drive
-	IntakeTest test
+	// IntakeTest test
+	TestSubsystem test
 	){
-		driver.rightTrigger().whileTrue(test.setTargetPowerCommand(-.4))
-		.onFalse(test.setTargetPowerCommand(0));
+		//setPower
+		// driver.rightTrigger().whileTrue(test.setTargetPowerCommand(-.4))
+		// .onFalse(test.setTargetPowerCommand(0));
 
+		//arm
+		driver.rightTrigger()
+			.whileTrue(test.setTargetPositionCommand(Intake.Value.INTAKE_HOLD.getAngle()))
+			.onFalse(test.setTargetPositionCommand(Intake.Value.SHOOTER_HOLD.getAngle()));
+
+		driver.leftTrigger().whileTrue(
+			test.setTargetPositionCommand(Intake.Value.OUTTAKE.getAngle()))
+			.onFalse(
+				test.setTargetPositionCommand(Intake.Value.HOLD.getAngle())
+			);
 
 
 		// controller.setTolerance(1);

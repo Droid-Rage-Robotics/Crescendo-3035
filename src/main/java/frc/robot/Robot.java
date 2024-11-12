@@ -47,8 +47,8 @@ import frc.robot.utility.template.Arm;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
-    // private final TestSubsystem test = new TestSubsystem();
-    private final IntakeTest test = new IntakeTest();
+    private final TestSubsystem test = new TestSubsystem();
+    // private final IntakeTest test = new IntakeTest();
     // private final OwnSixWheel drive = new OwnSixWheel();
     private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
     // private final Shooter shooter = new Shooter(false);//18,19 Works
