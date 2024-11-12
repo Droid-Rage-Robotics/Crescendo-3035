@@ -22,6 +22,7 @@ import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.newSub.IntakeTest;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
 
@@ -147,30 +148,39 @@ public class RobotContainer {
 		
 	}
 
-	public void testCommands(Vision vision, SwerveDrive drive){
-		// controller.setTolerance(1);\
-		drive.setDefaultCommand(
-			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
-				drive,
-				driver::getLeftX,
-				driver::getLeftY,
-				driver::getRightX,
-				driver,
-				false//No Work; Do no use this
-				)
-			);
-		driver.rightTrigger()
-			.whileTrue(new SimpleAim(drive, vision))
-			.onFalse(new InstantCommand(()->drive.stop()));
-			// .onTrue(new AlignToAprilTag(()->driver.getLeftX(), 0, drive, vision));
-			// .onTrue(new InstantCommand(()->drive.drive(0, 0, controller.calculate(vision.gettX(), 0))
-			// ));
-			// driver.a()
-			// .onTrue(new InstantCommand());
-			// .onTrue(new Test(drive, vision, driver));
-			// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
-			// .onTrue(new AutoAim(drive, vision));
+	public void testCommands(
+		// Vision vision, SwerveDrive drive
+	IntakeTest test
+	){
+		driver.rightTrigger().whileTrue(test.setTargetPowerCommand(-.4))
+		.onFalse(test.setTargetPowerCommand(0));
+
+
+
+		// controller.setTolerance(1);
+		// drive.setDefaultCommand(
+		// 	new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+		// 		drive,
+		// 		driver::getLeftX,
+		// 		driver::getLeftY,
+		// 		driver::getRightX,
+		// 		driver,
+		// 		false//No Work; Do no use this
+		// 		)
+		// 	);
+		// driver.rightTrigger()
+		// 	.whileTrue(new SimpleAim(drive, vision))
+		// 	.onFalse(new InstantCommand(()->drive.stop()));
+		// 	// .onTrue(new AlignToAprilTag(()->driver.getLeftX(), 0, drive, vision));
+		// 	// .onTrue(new InstantCommand(()->drive.drive(0, 0, controller.calculate(vision.gettX(), 0))
+		// 	// ));
+		// 	// driver.a()
+		// 	// .onTrue(new InstantCommand());
+		// 	// .onTrue(new Test(drive, vision, driver));
+		// 	// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
+		// 	// .onTrue(new AutoAim(drive, vision));
 	}
+
 	public void testDrive(SwerveDrive drive
 	){
 		drive.setDefaultCommand(
