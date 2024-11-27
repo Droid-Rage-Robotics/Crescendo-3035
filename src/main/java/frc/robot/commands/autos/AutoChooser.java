@@ -1,7 +1,6 @@
 package frc.robot.commands.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -10,34 +9,33 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ampMech.AmpMech;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
 
 public class AutoChooser {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
     public AutoChooser(
-        SwerveDrive drive, Intake intake, Shooter shooter, AmpMech ampMech//, Claw claw, Climb climb, Light light
+        SwerveDrive drive, Vision vision   //, Intake intake, Shooter shooter, AmpMech ampMech//, Claw claw, Climb climb, Light light
     ) {
-        //Put Named Commands HERE
-        NamedCommands.registerCommand("shoot",
-            intake.setPositionCommand(Intake.Value.AUTO_SHOOTER_TRANSFER)
-        );
-        NamedCommands.registerCommand("intake",
-             new SequentialCommandGroup(
-                intake.setPositionCommand(Intake.Value.AUTO_INTAKE_GROUND)
-//                    new WaitCommand(.3)
-         ));
-        NamedCommands.registerCommand("pickUp", new SequentialCommandGroup(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)));
+//         //Put Named Commands HERE
+//         NamedCommands.registerCommand("shoot",
+//             intake.setPositionCommand(Intake.Value.AUTO_SHOOTER_TRANSFER)
+//         );
+//         NamedCommands.registerCommand("intake",
+//              new SequentialCommandGroup(
+//                 intake.setPositionCommand(Intake.Value.AUTO_INTAKE_GROUND)
+// //                    new WaitCommand(.3)
+//          ));
+//         NamedCommands.registerCommand("pickUp", new SequentialCommandGroup(intake.setPositionCommand(Intake.Value.SHOOTER_HOLD)));
 
         createAutoBuilder(drive);
         ComplexWidgetBuilder.create(autoChooser, "Auto Chooser", "Misc")
             .withSize(1, 3);
+        addTuningAuto(drive);
+
         autoChooser.addOption("NothingAuto", new InstantCommand());
 
     }
@@ -46,14 +44,14 @@ public class AutoChooser {
     }
 
     public static void addTuningAuto(SwerveDrive drive){
-        autoChooser.addOption(TuningAutos.backTest(drive).toString()+"BackwardTest", TuningAutos.backTest(drive));
-        autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
-        // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
-        autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
-        autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
-        // autoChooser.addOption("LineToLinearTest", TuningAutos.lineToLinearTest(drive));
-        autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
-        autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
+        autoChooser.addOption(TuningAutos.backTest(drive).getName()+"BackwardTest", TuningAutos.backTest(drive));
+        // autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
+        // // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
+        // autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
+        // autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
+        // // autoChooser.addOption("LineToLinearTest", TuningAutos.lineToLinearTest(drive));
+        // autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
+        // autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
         // autoChooser.addOption("ForwardAndBack", TuningAutos.forwardAndBackTest(drive));
     }
 

@@ -24,11 +24,8 @@ TO DO:
 
 Buy:
 - Small Ethernet Cords
-- NEw Battery Cart
 - Improve Pit
 - Storage and pit effiency
-- Clen Wiring Bin
-- Elevator Nuts
 - order hex shafts from thrifty bot they are cheaper
 - https://app.smartsheet.com/b/form/e800cb5efe0742ca8ccdf610e8047005 Harbor Freight Card
 - ZipTies - https://www.cabletiesandmore.com/natural-zip-ties-nylon: 5.5 and 8 in length with 2.5mm width

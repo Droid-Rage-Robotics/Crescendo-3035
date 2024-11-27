@@ -32,7 +32,7 @@ public class RobotContainer {
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
 	private final CommandXboxController operator =
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
-		PIDController controller = new PIDController(.001, 0, 0);
+		// PIDController controller = new PIDController(.001, 0, 0);
 		
 	// CommandList commandList = new CommandList();
 	
@@ -194,18 +194,19 @@ public class RobotContainer {
 		// 	// .onTrue(new AutoAim(drive, vision));
 	}
 
-	public void testDrive(SwerveDrive drive
+	public void testDrive(SwerveDrive drive, Vision vision
 	){
-		drive.setDefaultCommand(
-			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
-				drive,
-				driver::getLeftX,
-				driver::getLeftY,
-				driver::getRightX,
-				driver,
-				false//No Work; Do no use this
-				)
-			);
+		// drive.setDefaultCommand(
+		// 	new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+		// 		drive,
+		// 		driver::getLeftX,
+		// 		driver::getLeftY,
+		// 		driver::getRightX,
+		// 		driver,
+		// 		false//No Work; Do no use this
+		// 		)
+		// 	);
 		// drive.setDefaultCommand(new ManualSixWheel(drive, driver));
+		driver.a().onTrue(new InstantCommand(()->drive.setPose()));
 	}
 }

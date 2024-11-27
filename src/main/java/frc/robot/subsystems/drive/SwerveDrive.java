@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModuleKraken.POD;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.old.SafeCanSparkMax;
@@ -135,16 +136,18 @@ public class SwerveDrive extends SubsystemBase  {
         ShuffleboardValue.create(true, "Is Drive Enabled", SwerveDrive.class.getSimpleName())
         .withWidget(BuiltInWidgets.kToggleSwitch)
         .build();
-
+    protected final ShuffleboardValue<String> drivePoseWriter = ShuffleboardValue.create
+        ("none", "SwerveDrive/Pose", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<Double> forwardVelocityWriter = 
         ShuffleboardValue.create(0.0, "Forward Velocity Writer", SwerveDrive.class.getSimpleName()).build();
 
     // private boolean isBreakMode = false;
     private final Field2d field2d = new Field2d();
+    private final Vision vision;
     
     // ComplexWidgetBuilder.create(field2d);
 
-    public SwerveDrive(Boolean isEnabled) {
+    public SwerveDrive(Vision vision, Boolean isEnabled) {
         // field2d.se();
         for (SwerveModuleKraken swerveModule: swerveModules) {
             swerveModule.brakeMode();
@@ -166,6 +169,7 @@ public class SwerveDrive extends SubsystemBase  {
         // ComplexWidgetBuilder.create(field2d, "Field", SwerveDrive.class.getSimpleName());
         SmartDashboard.putData(field2d);
         this.isEnabled.set(isEnabled);
+        this.vision =vision;
         
     }
 
@@ -178,6 +182,7 @@ public class SwerveDrive extends SubsystemBase  {
         );
 
         field2d.setRobotPose(getPose());
+        drivePoseWriter.set(getPose().toString());
 
         headingWriter.set(getHeading());
         rollWriter.set(getRoll());
@@ -445,5 +450,11 @@ public class SwerveDrive extends SubsystemBase  {
                 case Red1,Red2,Red3 -> 180;
             }
         );
+    }
+
+    //TODO:Test
+    
+    public void setPose(){
+        odometry.resetPosition(getRotation2d(), getModulePositions(), vision.getPose());
     }
 }
