@@ -59,14 +59,16 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // targetDegreeWriter.set(Math.toDegrees(controller.getSetpoint()));
+        // targetRadianWriter.set(controller.getSetpoint());
         switch(control){
             case PID:
-                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint()));
+                setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get()));
                 // setVoltage((controller.calculate(getEncoderPosition(), getTargetPosition())) + .37);
                 //.37 is kG ^^
                 break;
             case FEEDFORWARD:
-                setVoltage(controller.calculate(getEncoderPosition(), controller.getSetpoint())
+                setVoltage(controller.calculate(getEncoderPosition(), targetRadianWriter.get())
                 +feedforward.calculate(1,1)); 
                 //ks * Math.signum(velocity) + kg + kv * velocity + ka * acceleration; ^^
                 break;
@@ -89,6 +91,7 @@ public class Arm extends SubsystemBase {
         if(degree>maxPosition||degree<minPosition) return;
         targetDegreeWriter.set(degree);
         targetRadianWriter.set(Math.toRadians(degree));
+        controller.setSetpoint(Math.toRadians(degree));
     }
 
     protected void setVoltage(double voltage) {
@@ -105,10 +108,10 @@ public class Arm extends SubsystemBase {
     }
 
     public double getEncoderPosition() {
-        double position = motors[mainNum].getPosition();
-        positionRadianWriter.write(position);
-        positionDegreeWriter.write(Math.toDegrees(position));
-        return position;
+        double radian = motors[mainNum].getPosition();
+        positionRadianWriter.write(radian);
+        positionDegreeWriter.write(Math.toDegrees(radian));
+        return radian;
     }
 
     public CANMotorEx getMotors(){

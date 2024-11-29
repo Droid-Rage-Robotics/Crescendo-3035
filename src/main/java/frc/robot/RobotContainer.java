@@ -160,8 +160,8 @@ public class RobotContainer {
 
 		//arm
 		driver.rightTrigger()
-			.whileTrue(test.setTargetPositionCommand(Intake.Value.INTAKE_HOLD.getAngle()))
-			.onFalse(test.setTargetPositionCommand(Intake.Value.SHOOTER_HOLD.getAngle()));
+			.whileTrue(test.setTargetPositionCommand(Intake.Value.INTAKE_HUMAN.getAngle()))
+			.onFalse(test.setTargetPositionCommand(Intake.Value.HOLD.getAngle()));
 
 		driver.leftTrigger().whileTrue(
 			test.setTargetPositionCommand(Intake.Value.OUTTAKE.getAngle()))

@@ -43,7 +43,8 @@ public class TalonEx extends CANMotorEx {
 
     @Override
     public void setDirection(Direction direction) {
-        motor.setInverted(switch (direction) {
+        motor.setInverted(
+            switch (direction) {
                 case Forward -> false;
                 case Reversed -> true;
             });
