@@ -91,6 +91,7 @@ public class Elevator extends SubsystemBase {
     public void setTargetPosition(double target) {
         if(target>maxPosition||target<minPosition) return;
         targetWriter.set(target);
+        controller.setSetpoint(target);
     }
 
     protected void setVoltage(double voltage) {
