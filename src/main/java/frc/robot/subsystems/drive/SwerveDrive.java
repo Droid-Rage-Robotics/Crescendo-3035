@@ -115,6 +115,8 @@ public class SwerveDrive extends SubsystemBase  {
         new Rotation2d(0), 
         getModulePositions()
     );
+    SwerveDrivePoseEstimator;
+    DifferentialDrivePoseEstimator;
 
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;

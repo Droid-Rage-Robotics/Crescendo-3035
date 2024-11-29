@@ -1,8 +1,15 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.apriltag.AprilTagDetection;
+import edu.wpi.first.apriltag.AprilTagDetector;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.apriltag.AprilTagPoseEstimator;
+import edu.wpi.first.apriltag.AprilTagPoseEstimator.Config;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,6 +17,17 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 // Visit Limelight Web interface at http://10.30.35.11:5801
 public class Vision extends SubsystemBase {
+
+    Pose3d visionMeasurement3d;
+
+    Config config = new Config(1, 0,0,0,0); //The Values from LimelightHelper
+    // AprilTagFieldLayout layout = new AprilTagFieldLayout(null);
+    public static final AprilTagFieldLayout kFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+
+    AprilTagDetector;
+    AprilTagDetection detection= new AprilTagDetection("", 1, 0, 0, null, gettX(), gettA(), null)
+    AprilTagPoseEstimator estimator = new AprilTagPoseEstimator(config);
+
     protected final ShuffleboardValue<Double> tAWriter = ShuffleboardValue.create
         (0.0, "Vision/tA", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<Double> tXWriter = ShuffleboardValue.create
@@ -80,6 +98,22 @@ public class Vision extends SubsystemBase {
     public Pose2d getPose(){
         // return LimelightHelpers.getBotPose2d("");
         return LimelightHelpers.getBotPoseEstimate_wpiBlue("").pose;
+    }
+
+    public Pose2d getRobotPoseFromTag(){
+        visionMeasurement3d = new Pose3d(getPose())
+        // objectToRobotPose();
+        //m_objectInField, m_robotToCamera, m_cameraToObjectEntry
+        
+        // Convert robot pose from Pose3d to Pose2d needed to apply vision measurements.
+        Pose2d visionMeasurement2d = visionMeasurement3d.toPose2d();
+
+        // // Apply vision measurements. For simulation purposes only, we don't input a latency delay -- on
+        // // a real robot, this must be calculated based either on known latency or timestamps.
+        // m_poseEstimator.addVisionMeasurement(visionMeasurement2d, Timer.getFPGATimestamp());
+        // ^^ On Robot
+
+        estimator.estimate(null);
     }
 
 }

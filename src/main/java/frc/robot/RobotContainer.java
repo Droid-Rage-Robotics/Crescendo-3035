@@ -196,16 +196,16 @@ public class RobotContainer {
 
 	public void testDrive(SwerveDrive drive, Vision vision
 	){
-		// drive.setDefaultCommand(
-		// 	new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
-		// 		drive,
-		// 		driver::getLeftX,
-		// 		driver::getLeftY,
-		// 		driver::getRightX,
-		// 		driver,
-		// 		false//No Work; Do no use this
-		// 		)
-		// 	);
+		drive.setDefaultCommand(
+			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+				drive,
+				driver::getLeftX,
+				driver::getLeftY,
+				driver::getRightX,
+				driver,
+				false//No Work; Do no use this
+				)
+			);
 		// drive.setDefaultCommand(new ManualSixWheel(drive, driver));
 		driver.a().onTrue(new InstantCommand(()->drive.setPose()));
 	}

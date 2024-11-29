@@ -9,6 +9,7 @@ import frc.robot.DroidRageConstants.Control;
 import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
+//Works
 public class Elevator extends SubsystemBase {
     private final CANMotorEx[] motors;
     private final PIDController controller;

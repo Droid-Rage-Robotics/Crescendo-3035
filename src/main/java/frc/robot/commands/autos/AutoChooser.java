@@ -44,15 +44,15 @@ public class AutoChooser {
     }
 
     public static void addTuningAuto(SwerveDrive drive){
-        autoChooser.addOption(TuningAutos.backTest(drive).getName()+"BackwardTest", TuningAutos.backTest(drive));
-        // autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
+        autoChooser.addOption(TuningAutos.backTest(drive).getName(), TuningAutos.backTest(drive));
+        autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         // // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
         // autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
         // autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
         // // autoChooser.addOption("LineToLinearTest", TuningAutos.lineToLinearTest(drive));
         // autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
         // autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
-        // autoChooser.addOption("ForwardAndBack", TuningAutos.forwardAndBackTest(drive));
+        // // autoChooser.addOption("ForwardAndBack", TuningAutos.forwardAndBackTest(drive));
     }
 
     public static void createAutoBuilder(SwerveDrive drive){
