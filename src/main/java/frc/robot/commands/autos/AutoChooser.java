@@ -39,19 +39,19 @@ public class AutoChooser {
         autoChooser.addOption("NothingAuto", new InstantCommand());
 
     }
-    public static Command getAutonomousCommand() {
+    public  Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
 
     public static void addTuningAuto(SwerveDrive drive){
-        autoChooser.addOption(TuningAutos.backTest(drive).getName(), TuningAutos.backTest(drive));
+        autoChooser.addOption("BackTest", TuningAutos.backTest(drive));
         autoChooser.addOption("ForwardTest", TuningAutos.forwardTest(drive));
         // // autoChooser.addOption("ForwardThenTurnTest", TuningAutos.forwardThenTurnTest(drive));
-        // autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
-        // autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
+        autoChooser.addOption("TurnTest", TuningAutos.turnTest(drive));
+        autoChooser.addOption("SplineTest", TuningAutos.splineTest(drive));
         // // autoChooser.addOption("LineToLinearTest", TuningAutos.lineToLinearTest(drive));
-        // autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
-        // autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
+        autoChooser.addOption("StrafeRight", TuningAutos.strafeRight(drive));
+        autoChooser.addOption("StrafeLeft", TuningAutos.strafeLeft(drive));
         // // autoChooser.addOption("ForwardAndBack", TuningAutos.forwardAndBackTest(drive));
     }
 

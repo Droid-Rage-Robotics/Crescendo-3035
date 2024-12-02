@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
     // private final IntakeTest test = new IntakeTest();
     // private final OwnSixWheel drive = new OwnSixWheel();
     private final Vision vision = new Vision();
-    private final SwerveDrive drive = new SwerveDrive(vision, false);//2-10 Works
+    private final SwerveDrive drive = new SwerveDrive(vision, true);//2-10 Works
     // private final Shooter shooter = new Shooter(false);//18,19 Works
 
     // private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
@@ -126,10 +126,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        autonomousCommand = AutoChooser.getAutonomousCommand();
-        // ampMech.setAutoStartPos();
-        // shooter.setTargetVelocity(ShooterSpeeds.AUTO_SPEAKER_SHOOT);
-        autonomousCommand = new InstantCommand();
+        autonomousCommand = autoChooser.getAutonomousCommand();
+        // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();

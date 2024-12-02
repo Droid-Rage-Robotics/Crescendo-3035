@@ -23,13 +23,15 @@ public class SwerveDriveConstants {
         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED(1),
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
 
-        TRANSLATIONAL_KP(3), //2.5
+        TRANSLATIONAL_KP( 3),//2.5
         TRANSLATIONAL_KI(0),
         TRANSLATIONAL_KD(0),
+        //12
 
-        THETA_KP(0.22), //.7
+        THETA_KP(5), //.25
         THETA_KI(0),
         THETA_KD(0),
+        //8,0,.2
 //1.8, 7
         //Jack in the Bot
     //     private final PIDController xController = new PIDController(8, 0, 0);
