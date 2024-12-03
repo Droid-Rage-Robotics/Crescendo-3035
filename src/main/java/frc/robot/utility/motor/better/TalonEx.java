@@ -17,6 +17,7 @@ public class TalonEx extends CANMotorEx {
 
     public static DirectionBuilder create(int deviceID) {
         CANMotorEx motor = new TalonEx(new TalonFX(deviceID));
+        motor.motorID = deviceID;
         return motor.new DirectionBuilder();
     }
 
@@ -42,7 +43,8 @@ public class TalonEx extends CANMotorEx {
 
     @Override
     public void setDirection(Direction direction) {
-        motor.setInverted(switch (direction) {
+        motor.setInverted(
+            switch (direction) {
                 case Forward -> false;
                 case Reversed -> true;
             });

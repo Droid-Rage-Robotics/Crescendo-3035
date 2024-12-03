@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
+//Works
 public class SetPower {
     private final CANMotorEx[] motors;
     private final ShuffleboardValue<Double> powerWriter;

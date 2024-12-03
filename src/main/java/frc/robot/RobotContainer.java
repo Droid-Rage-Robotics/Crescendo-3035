@@ -22,6 +22,8 @@ import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbAlternate;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.newSub.IntakeTest;
+import frc.robot.subsystems.newSub.TestSubsystem;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utility.InfoTracker.CycleTracker;
 
@@ -30,7 +32,7 @@ public class RobotContainer {
 		new CommandXboxController(DroidRageConstants.Gamepad.DRIVER_CONTROLLER_PORT);
 	private final CommandXboxController operator =
 		new CommandXboxController(DroidRageConstants.Gamepad.OPERATOR_CONTROLLER_PORT);
-		PIDController controller = new PIDController(.001, 0, 0);
+		// PIDController controller = new PIDController(.001, 0, 0);
 		
 	// CommandList commandList = new CommandList();
 	
@@ -147,31 +149,52 @@ public class RobotContainer {
 		
 	}
 
-	public void testCommands(Vision vision, SwerveDrive drive){
-		// controller.setTolerance(1);\
-		drive.setDefaultCommand(
-			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
-				drive,
-				driver::getLeftX,
-				driver::getLeftY,
-				driver::getRightX,
-				driver,
-				false//No Work; Do no use this
-				)
-			);
+	public void testCommands(
+		// Vision vision, SwerveDrive drive
+	// IntakeTest test
+	TestSubsystem test
+	){
+		//setPower
+		// driver.rightTrigger().whileTrue(test.setTargetPowerCommand(-.4))
+		// .onFalse(test.setTargetPowerCommand(0));
+
+		//arm
 		driver.rightTrigger()
-			.whileTrue(new SimpleAim(drive, vision))
-			.onFalse(new InstantCommand(()->drive.stop()));
-			// .onTrue(new AlignToAprilTag(()->driver.getLeftX(), 0, drive, vision));
-			// .onTrue(new InstantCommand(()->drive.drive(0, 0, controller.calculate(vision.gettX(), 0))
-			// ));
-			// driver.a()
-			// .onTrue(new InstantCommand());
-			// .onTrue(new Test(drive, vision, driver));
-			// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
-			// .onTrue(new AutoAim(drive, vision));
+			.whileTrue(test.setTargetPositionCommand(AmpMech.Value.AMP.getElevatorInches()))
+			.onFalse(test.setTargetPositionCommand(AmpMech.Value.START.getElevatorInches()));
+
+		driver.leftTrigger().whileTrue(
+			test.setTargetPositionCommand(10))
+			.onFalse(
+				test.setTargetPositionCommand(AmpMech.Value.START.getElevatorInches())
+			);
+
+
+		// controller.setTolerance(1);
+		// drive.setDefaultCommand(
+		// 	new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
+		// 		drive,
+		// 		driver::getLeftX,
+		// 		driver::getLeftY,
+		// 		driver::getRightX,
+		// 		driver,
+		// 		false//No Work; Do no use this
+		// 		)
+		// 	);
+		// driver.rightTrigger()
+		// 	.whileTrue(new SimpleAim(drive, vision))
+		// 	.onFalse(new InstantCommand(()->drive.stop()));
+		// 	// .onTrue(new AlignToAprilTag(()->driver.getLeftX(), 0, drive, vision));
+		// 	// .onTrue(new InstantCommand(()->drive.drive(0, 0, controller.calculate(vision.gettX(), 0))
+		// 	// ));
+		// 	// driver.a()
+		// 	// .onTrue(new InstantCommand());
+		// 	// .onTrue(new Test(drive, vision, driver));
+		// 	// .onTrue(new AlignToAprilTagSpectrum(vision, drive, ()->1));
+		// 	// .onTrue(new AutoAim(drive, vision));
 	}
-	public void testDrive(SwerveDrive drive
+
+	public void testDrive(SwerveDrive drive, Vision vision
 	){
 		drive.setDefaultCommand(
 			new SwerveDriveTeleop( //Slow Mode and Gyro Reset in the Default Command
@@ -184,5 +207,6 @@ public class RobotContainer {
 				)
 			);
 		// drive.setDefaultCommand(new ManualSixWheel(drive, driver));
+		driver.a().onTrue(new InstantCommand(()->drive.setPose()));
 	}
 }

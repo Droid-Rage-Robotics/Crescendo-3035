@@ -10,27 +10,12 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.autos.AutoChooser;
-import frc.robot.subsystems.Light;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.ShooterSpeeds;
-import frc.robot.subsystems.ampMech.AmpMech;
-import frc.robot.subsystems.ampMech.AmpMechElevator;
-import frc.robot.subsystems.ampMech.AmpMechIntake;
-import frc.robot.subsystems.ampMech.ampMechArm.AmpMechArmAbsolute;
-import frc.robot.subsystems.climb.Climb;
-import frc.robot.subsystems.climb.ClimbAlternate;
-import frc.robot.subsystems.drive.OwnSixWheel;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeWheel;
-import frc.robot.subsystems.intake.dropDown.IntakeDropDown;
-import frc.robot.subsystems.intake.dropDown.IntakeDropDownAbsolute;
 import frc.robot.subsystems.newSub.TestSubsystem;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.utility.InfoTracker.CycleTracker;
-import frc.robot.utility.encoder.old.AbsoluteDutyEncoder;
+import frc.robot.utility.encoder.AbsoluteDutyEncoderRIO;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 import frc.robot.utility.template.Arm;
 
@@ -46,9 +31,15 @@ import frc.robot.utility.template.Arm;
 //current stuff
 public class Robot extends TimedRobot {
     //15 missing^
-    private final TestSubsystem test = new TestSubsystem();
+    // private AbsoluteDutyEncoderRIO enoder =  AbsoluteDutyEncoderRIO.create(3, "Test")
+    //         .withDirection(false)
+    //         .withOffset(0)
+    //         .withSubsystemBase(TestSubsystem.class.getSimpleName());
+    // private final TestSubsystem test = new TestSubsystem();
+    // private final IntakeTest test = new IntakeTest();
     // private final OwnSixWheel drive = new OwnSixWheel();
-    private final SwerveDrive drive = new SwerveDrive(true);//2-10 Works
+    private final Vision vision = new Vision();
+    private final SwerveDrive drive = new SwerveDrive(vision, true);//2-10 Works
     // private final Shooter shooter = new Shooter(false);//18,19 Works
 
     // private final AmpMechElevator elevator = new AmpMechElevator(false);//22-DO NOT TURN THIS ON
@@ -63,13 +54,13 @@ public class Robot extends TimedRobot {
     // private AbsoluteDutyEncoder encoder = 
     //     new AbsoluteDutyEncoder(0,false, 1,0.38, ampIntake);
     
-    // private AutoChooser autoChooser = new AutoChooser(
-    //     drive, intake, shooter, ampMech//, claw, climb, vision, light
-    // );
+    
+    private AutoChooser autoChooser = new AutoChooser(
+        drive,vision //, intake, shooter, ampMech//, claw, climb, vision, light
+    );
     // private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
 // private final Climb climb = new Climb(false,false);//20,21
 
-    // private final Vision vision = new Vision();
     // private final Light light = new Light();
     // private final SysID sysID = new SysID(climb.getMotorL(), climb.getMotorR(), Measurement.ANGLE);
     // private final SysID sysID = new SysID(claw.getClawIntake().getMotor(), Measurement.DISTANCE);
@@ -135,10 +126,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        autonomousCommand = AutoChooser.getAutonomousCommand();
-        // ampMech.setAutoStartPos();
-        // shooter.setTargetVelocity(ShooterSpeeds.AUTO_SPEAKER_SHOOT);
-        autonomousCommand = new InstantCommand();
+        autonomousCommand = autoChooser.getAutonomousCommand();
+        // autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -163,8 +152,11 @@ public class Robot extends TimedRobot {
 		// drive.driveAutoReset();//TODO:Test
         // robotContainer.configureTeleOpBindings(drive, intake, shooter, ampMech, climb, cycleTracker,vision
         // );
+        // test.setTargetPosition(Intake.Value.START.getAngle());
+        // robotContainer.testCommands(test);
+
         // robotContainer.testCommands(vision, drive);
-        robotContainer.testDrive(drive);
+        robotContainer.testDrive(drive,vision);
         // teleopButtons.newTeleopButtons( climb, intake, shooter, ampMech , drive);
     }
 

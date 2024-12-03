@@ -9,6 +9,7 @@ import frc.robot.DroidRageConstants.Control;
 import frc.robot.utility.motor.better.CANMotorEx;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
+//Works
 public class Elevator extends SubsystemBase {
     private final CANMotorEx[] motors;
     private final PIDController controller;
@@ -91,6 +92,7 @@ public class Elevator extends SubsystemBase {
     public void setTargetPosition(double target) {
         if(target>maxPosition||target<minPosition) return;
         targetWriter.set(target);
+        controller.setSetpoint(target);
     }
 
     protected void setVoltage(double voltage) {
