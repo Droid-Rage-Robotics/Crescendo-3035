@@ -88,3 +88,23 @@ Notes:
   public static final int VORTEX_ENCODER_TICKS_PER_ROTATION = 7168;
   /** Ticks per revolution of REV through bore encoder */
   public static final int REV_ENCODER_TICKS_PER_ROTATION = 8192;
+
+
+Auto Setup
+- Align wheels straight or in direction of robot travel
+- 
+
+
+Wiring
+- Kraken has a 12V40A
+- Talon FX has a 12V30A
+- Drive Kraken has a 12V40A
+- Drive NEO has a 12V40A
+- CTR Absolute encoder has a 5A mini fuse
+- Pigeon has a 5A mini fuse
+- Limelight is powered by a 10A mini fuse
+- mini power modual powered my a 12V 20A fuse
+- ethernet switch is powered by a 10A mini fuse
+- Radio power modual is powered by a 10A mini fuse
+- RoboRio has a 10A mini fuse
+ 
