@@ -28,8 +28,8 @@ public class ShooterCommands {
                 // ampMech.setPositionCommand(AmpMech.Value.SHOOT),
                 // shooter.runOnce(()->shooter.setTargetVelocity(ShooterSpeeds.SPEAKER_SHOOT)),
                 // new WaitCommand(.9),
-                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER),
-                new InstantCommand(()-> cycleTracker.trackCycle(CycleTracker.ScorePos.SPEAKER))
+                intake.setPositionCommand(Intake.Value.SHOOTER_TRANSFER)
+                // new InstantCommand(()-> cycleTracker.trackCycle(CycleTracker.ScorePos.SPEAKER))
             );
         }
         public static SequentialCommandGroup shootPreload (Intake intake, Intake.Value intakePos, Shooter shooter, Shooter.ShooterSpeeds speed){

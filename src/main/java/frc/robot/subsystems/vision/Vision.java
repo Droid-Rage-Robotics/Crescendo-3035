@@ -38,8 +38,6 @@ public class Vision extends SubsystemBase {
         (false, "Vision/tV", Vision.class.getSimpleName()).build();
     protected final ShuffleboardValue<String> pose2dWriter = ShuffleboardValue.create
         ("none", "Vision/Pose2d", Vision.class.getSimpleName()).build();
-    protected final ShuffleboardValue<String> pose3dWriter = ShuffleboardValue.create
-        ("none", "Vision/Pose3d", Vision.class.getSimpleName()).build();
     HttpCamera httpCamera = new
         HttpCamera("Limelight", "http://roborio-3035-FRC.local:5801");
     // http://roborio-2928-FRC.local:5801 - Works
@@ -73,8 +71,6 @@ public class Vision extends SubsystemBase {
         tYWriter.set(LimelightHelpers.getTY(""));
         tVWriter.set(LimelightHelpers.getTV(""));
         pose2dWriter.set(getPose().toString());
-        pose3dWriter.set(getPose3d().toString());
-
     }
 
     @Override
@@ -103,24 +99,5 @@ public class Vision extends SubsystemBase {
         // return LimelightHelpers.getBotPose2d("");
         return LimelightHelpers.getBotPoseEstimate_wpiBlue("").pose;
     }
-    public Pose3d getPose3d(){
-        return LimelightHelpers.getBotPose3d_wpiBlue("");
-    }
-
-    // public Pose2d getRobotPoseFromTag(){
-    //     visionMeasurement3d = new Pose3d(getPose())
-    //     // objectToRobotPose();
-    //     //m_objectInField, m_robotToCamera, m_cameraToObjectEntry
-        
-    //     // Convert robot pose from Pose3d to Pose2d needed to apply vision measurements.
-    //     Pose2d visionMeasurement2d = visionMeasurement3d.toPose2d();
-
-    //     // // Apply vision measurements. For simulation purposes only, we don't input a latency delay -- on
-    //     // // a real robot, this must be calculated based either on known latency or timestamps.
-    //     // m_poseEstimator.addVisionMeasurement(visionMeasurement2d, Timer.getFPGATimestamp());
-    //     // ^^ On Robot
-
-    //     estimator.estimate(null);
-    // }
 
 }

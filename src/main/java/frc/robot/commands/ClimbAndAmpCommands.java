@@ -32,7 +32,7 @@ public class ClimbAndAmpCommands {
     public static SequentialCommandGroup dropAmp (AmpMech ampMech, CycleTracker cycleTracker){
         return new SequentialCommandGroup(
             ampMech.setPositionCommand(AmpMech.Value.AMP), //true
-            new InstantCommand(()->cycleTracker.trackCycle(CycleTracker.ScorePos.AMP)),
+            // new InstantCommand(()->cycleTracker.trackCycle(CycleTracker.ScorePos.AMP)),
             new WaitCommand(.5),
             ampMech.setPositionCommand(AmpMech.Value.START)
         );
