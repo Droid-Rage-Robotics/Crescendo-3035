@@ -207,6 +207,6 @@ public class RobotContainer {
 				)
 			);
 		// drive.setDefaultCommand(new ManualSixWheel(drive, driver));
-		driver.a().onTrue(new InstantCommand(()->drive.setPose()));
+		driver.a().onTrue(new InstantCommand(()->drive.resetOdometry(vision.getPose())));
 	}
 }

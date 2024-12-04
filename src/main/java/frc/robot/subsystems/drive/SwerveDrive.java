@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveModuleKraken.POD;
-import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.old.SafeCanSparkMax;
@@ -115,9 +114,6 @@ public class SwerveDrive extends SubsystemBase  {
         new Rotation2d(0), 
         getModulePositions()
     );
-    // SwerveDrivePoseEstimator;
-    // DifferentialDrivePoseEstimator;
-
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
 
@@ -145,11 +141,10 @@ public class SwerveDrive extends SubsystemBase  {
 
     // private boolean isBreakMode = false;
     private final Field2d field2d = new Field2d();
-    private final Vision vision;
     
     // ComplexWidgetBuilder.create(field2d);
 
-    public SwerveDrive(Vision vision, Boolean isEnabled) {
+    public SwerveDrive(Boolean isEnabled) {
         // field2d.se();
         for (SwerveModuleKraken swerveModule: swerveModules) {
             swerveModule.brakeMode();
@@ -160,19 +155,9 @@ public class SwerveDrive extends SubsystemBase  {
         poseConfigs.MountPosePitch = 0;//Up-Down//0
         poseConfigs.MountPoseRoll = 90;//Side-Side//90
         poseConfigs.MountPoseYaw = 180;//Heading//180
-        // pigeon2.configMountPose();
         pigeon2.getConfigurator().apply(poseConfigs);
-        // pigeon2.setYaw(0);
-        
-        // pigeon2.configMountPose(AxisDirection.NegativeX, AxisDirection.PositiveZ);
-        // pigeon2.setYaw(0);
-        // setYawCommand(SwerveDriveConfig.DEFAULT_HEADING_OFFSET.get()); //<-This will not work
-
-        // ComplexWidgetBuilder.create(field2d, "Field", SwerveDrive.class.getSimpleName());
         SmartDashboard.putData(field2d);
         this.isEnabled.set(isEnabled);
-        this.vision =vision;
-        
     }
 
     
@@ -454,10 +439,4 @@ public class SwerveDrive extends SubsystemBase  {
         );
     }
 
-    //TODO:Test
-    
-    public void setPose(){
-        // odometry.resetPosition(pigeon2.getYaw(), getModulePositions(), getPose());
-        odometry.resetPosition(getRotation2d(), getModulePositions(), vision.getPose());
-    }
 }

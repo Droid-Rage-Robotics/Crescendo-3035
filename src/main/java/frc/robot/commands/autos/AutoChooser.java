@@ -1,14 +1,18 @@
 package frc.robot.commands.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.ResetPoseVision;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.vision.Vision;
@@ -20,6 +24,10 @@ public class AutoChooser {
     public AutoChooser(
         SwerveDrive drive, Vision vision   //, Intake intake, Shooter shooter, AmpMech ampMech//, Claw claw, Climb climb, Light light
     ) {
+        NamedCommands.registerCommand("resetPose",
+        new ResetPoseVision(drive, vision)
+            
+        );
 //         //Put Named Commands HERE
 //         NamedCommands.registerCommand("shoot",
 //             intake.setPositionCommand(Intake.Value.AUTO_SHOOTER_TRANSFER)
@@ -37,6 +45,7 @@ public class AutoChooser {
         addTuningAuto(drive);
 
         autoChooser.addOption("NothingAuto", new InstantCommand());
+        autoChooser.setDefaultOption("VisionTest", Autos.testVision(drive, vision));
 
     }
     public  Command getAutonomousCommand() {

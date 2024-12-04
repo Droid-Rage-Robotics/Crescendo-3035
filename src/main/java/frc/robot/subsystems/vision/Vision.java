@@ -91,6 +91,7 @@ public class Vision extends SubsystemBase {
         return tYWriter.get();
     }
     //tv Whether the limelight has any valid targets (0 or 1)
+    //0 is __ and 1 is __
     public boolean gettV(){
         return tVWriter.get();
     }
