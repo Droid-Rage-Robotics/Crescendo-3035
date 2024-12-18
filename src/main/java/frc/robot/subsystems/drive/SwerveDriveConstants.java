@@ -38,10 +38,12 @@ public class SwerveDriveConstants {
     // private final PIDController yController = new PIDController(8, 0, 0);
     // private final PIDController rotationController = new PIDController(1.5, 0, 0);
 
-    FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-5.33),
-        FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.7),
-        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-2.22),
-        BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.31),
+        // Bevel Gears to the Right ->
+        FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.351),
+        FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.71),
+        BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-3.73),
+        BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-3.78),
+        
         // use witth 4096 reading
         // FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-2.22),
         // FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-3.82),
