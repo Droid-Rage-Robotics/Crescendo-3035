@@ -1,64 +1,54 @@
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 import frc.robot.utility.shuffleboard.ShuffleboardValueEnum;
 
 public class SwerveDriveConstants {
     public enum SwerveDriveConfig implements ShuffleboardValueEnum<Double> {
         PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(2 * (2 * Math.PI)),
-        // TRACK_WIDTH(0.7239),//Units.inchesToMeters(28.5)
-        // WHEEL_BASE(0.7239),//Units.inchesToMeters(28.5)
         TRACK_WIDTH(Units.inchesToMeters(28.5)),//Units.inchesToMeters(28.5)
         WHEEL_BASE(Units.inchesToMeters(28.5)),//Units.inchesToMeters(28.5)
 
         MAX_ACCELERATION_UNITS_PER_SECOND(10),
         MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND(10),
 
-        MAX_SPEED_METERS_PER_SECOND(SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 4),
+        MAX_SPEED_METERS_PER_SECOND(SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 4),
         MAX_ANGULAR_SPEED_RADIANS_PER_SECOND(PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get() / 10),
         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED(1),
         MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED(1), // 1 / 8 of a full rotation per second per second),
 
-        TRANSLATIONAL_KP( 3),//2.5
+        // Translational PID
+        TRANSLATIONAL_KP(3),
         TRANSLATIONAL_KI(0),
         TRANSLATIONAL_KD(0),
-        //12
 
-        THETA_KP(5), //.25
+        // Theta PID
+        THETA_KP(5),
         THETA_KI(0),
         THETA_KD(0),
-        //8,0,.2
-//1.8, 7
-        //Jack in the Bot
-    //     private final PIDController xController = new PIDController(8, 0, 0);
-    // private final PIDController yController = new PIDController(8, 0, 0);
-    // private final PIDController rotationController = new PIDController(1.5, 0, 0);
+
+        // Turn PID
+        TURN_KP(0.5),
+
+        // Drive SVA
+        DRIVE_KS(0.13), // this value is multiplied by veloicty in meteres per second
+        DRIVE_KV(2.7), //this value is the voltage that iwll be constantly applied
+        // DRIVE_KA = 0.12,
 
         // Bevel Gears to the Right ->
         FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.351),
         FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-0.71),
         BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-3.73),
         BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-3.78),
-        
-        // use witth 4096 reading
-        // FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-2.22),
-        // FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-3.82),
-        // BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-5.48),
-        // BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-3.47),
-
-        // FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-5.39),
-        // FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-.638),
-        // BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS(-2.24),
-        // BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS(0),//-.24
 
         DEFAULT_HEADING_OFFSET(0),
         ;
         private final ShuffleboardValue<Double> shuffleboardValue;
+        
+        public double value;
         private SwerveDriveConfig(double value) {
+            this.value = value;
             shuffleboardValue = ShuffleboardValue.create(value, 
                 "Constants/"+SwerveDriveConfig.class.getSimpleName()+"/"+name(), SwerveDrive.class.getSimpleName())
                 // .withWidget(BuiltInWidgets.kAccelerometer)
@@ -66,6 +56,10 @@ public class SwerveDriveConstants {
         }
         @Override 
         public ShuffleboardValue<Double> getNum() { return shuffleboardValue; }
+        
+        public double getValue() {
+            return value;
+        }
     }
 
     public enum DriveOptions implements ShuffleboardValueEnum<Boolean> { 

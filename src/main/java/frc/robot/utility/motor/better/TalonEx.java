@@ -64,14 +64,31 @@ public class TalonEx extends CANMotorEx {
         return motor.getVelocity().getValueAsDouble()*positionConversionFactor;
     }
 
+    public double getSpeed() {
+        return motor.get();
+    }
+
     @Override
     public double getPosition() {
         return motor.getPosition().getValueAsDouble()*positionConversionFactor;
     }
 
+    public void setPosition(double position) {
+        motor.setPosition(position);
+    }
+
     @Override
     public int getDeviceID() {
         return motor.getDeviceID();
+    }
+
+    public double getVoltage(){
+        return motor.getMotorVoltage().getValueAsDouble();//The applied (output) motor voltage//1.58 Most Consistent
+        // return motor.getSupplyCurrent().getValueAsDouble();//Measured supply side current
+        // return motor.getSupplyVoltage().getValueAsDouble();//Measured supply voltage to the TalonFX//no
+        // return motor.getTorqueCurrent().getValueAsDouble();//Stator current where positive current means 
+            //torque is applied in the forward direction as determined by the Inverted setting; 
+            //Doesn't seem like this ^^
     }
 
     @Override

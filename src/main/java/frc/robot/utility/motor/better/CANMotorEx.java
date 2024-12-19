@@ -5,7 +5,6 @@ import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 public abstract class CANMotorEx {
     // protected int deviceID; // specific and should not be in the abstract class
-    // TODO: which fields should be final?
     protected Direction direction;
     protected ZeroPowerMode idleMode;
     protected double positionConversionFactor;

@@ -3,8 +3,9 @@ package frc.robot.utility.motor.better;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.DroidRageConstants;
-
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 public class SparkMax extends CANMotorEx{
@@ -56,6 +57,18 @@ public class SparkMax extends CANMotorEx{
         });
     }
 
+    public CANSparkMax getSparkMax() {
+        return motor;
+    }
+
+    public RelativeEncoder getEncoder() {
+        return motor.getEncoder();
+    }
+
+    public RelativeEncoder getAlternateEncoder(int countsPerRev) {
+        return motor.getAlternateEncoder(countsPerRev);
+    }
+
     @Override
     public double getVelocity() {
         return motor.getEncoder().getVelocity();
@@ -66,15 +79,37 @@ public class SparkMax extends CANMotorEx{
         return motor.getEncoder().getPosition();
     }
 
+    public SparkAbsoluteEncoder getAbsoluteEncoder(SparkAbsoluteEncoder.Type encoderType) {
+        return motor.getAbsoluteEncoder(encoderType);
+    }
+
+    public void follow(SparkMax leader, boolean invert) {
+        motor.follow(leader.getSparkMax(), invert);
+    }
+
+    public void burnFlash() {
+        motor.burnFlash();
+    }
+
     @Override
     public int getDeviceID() {
         return motor.getDeviceId();
+    }
+
+    public double getSpeed(){
+        return motor.get();
     }
 
     //Casting the double to an int
     @Override
     public void setSupplyCurrentLimit(double currentLimit) {
         motor.setSmartCurrentLimit((int) currentLimit);
+    }
+        
+    public double getVoltage(){
+        // return motor.getAppliedOutput();//motor controller's applied output duty cycle.
+        // return motor.getBusVoltage();//voltage fed into the motor controller.
+        return motor.getOutputCurrent();//motor controller's output current in Amps.
     }
 
     @Override

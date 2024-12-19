@@ -1,10 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
-import com.ctre.phoenix6.configs.Pigeon2FeaturesConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,18 +12,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
-import frc.robot.subsystems.drive.SwerveModuleKraken.POD;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
-import frc.robot.utility.motor.old.SafeCanSparkMax;
-import frc.robot.utility.shuffleboard.ComplexWidgetBuilder;
+import frc.robot.utility.motor.better.SparkMax;
+import frc.robot.utility.motor.better.CANMotorEx.Direction;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
 //Set Voltage instead of set Power
@@ -47,64 +40,32 @@ public class SwerveDrive extends SubsystemBase  {
         new Translation2d(-SwerveDriveConfig.WHEEL_BASE.get() / 2, -SwerveDriveConfig.TRACK_WIDTH.get() / 2)   // Back Right ++
     );
 
-    // private TalonEx motor1 = TalonEx.create(0)
-    //     .withDirection(CANMotorEx.Direction.Forward)
-    //     .withIdleMode(CANMotorEx.ZeroPowerMode.Brake)
-    //     .withPositionConversionFactor(1)
-    //     .withIsEnabled(true)
-    //     .withSupplyCurrentLimit(0)
-    //     ;
-
-    
-    private final SwerveModuleKraken frontRight = new SwerveModuleKraken(
-        3,
-        2,
-
-        false, 
-        true,
-
-        10, 
+    private final SwerveModule frontRight = new SwerveModule(
+        3, 2, Direction.Forward, Direction.Reversed, 10, 
         SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        DriveOptions.IS_ENABLED.get(),POD.FR
+        DriveOptions.IS_ENABLED.get(),SwerveModule.POD.FR
     );
-    private final SwerveModuleKraken backRight = new SwerveModuleKraken(
-        5,
-        4,
-
-        false, 
-        true,
-
-        11, 
+    private final SwerveModule backRight = new SwerveModule(
+        5, 4, Direction.Forward, Direction.Reversed, 11, 
         SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        DriveOptions.IS_ENABLED.get(),POD.BR
+        DriveOptions.IS_ENABLED.get(),SwerveModule.POD.BR
     );
-    private final SwerveModuleKraken backLeft = new SwerveModuleKraken(
-        7,
-        6,
-
-        false, 
-        true,
-
-        12, 
+    private final SwerveModule backLeft = new SwerveModule(
+        7, 6, Direction.Forward, Direction.Reversed, 12, 
         SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        DriveOptions.IS_ENABLED.get(),POD.BL
+        DriveOptions.IS_ENABLED.get(),SwerveModule.POD.BL
     );
-    private final SwerveModuleKraken frontLeft = new SwerveModuleKraken(
-        9,
-        8,
-
-        false, 
-        true,
-
-        13, 
+    private final SwerveModule frontLeft = new SwerveModule(
+        9, 8, Direction.Forward, Direction.Reversed, 13, 
         SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
         true,
-        DriveOptions.IS_ENABLED.get(),POD.FL
+        DriveOptions.IS_ENABLED.get(),SwerveModule.POD.FL
     );
-    private final SwerveModuleKraken[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
+    
+    private final SwerveModule[] swerveModules = { frontLeft, frontRight, backLeft, backRight };
 
     private final Pigeon2 pigeon2 = new Pigeon2(14);
     private final MountPoseConfigs poseConfigs  = new MountPoseConfigs();
@@ -114,9 +75,12 @@ public class SwerveDrive extends SubsystemBase  {
         new Rotation2d(0), 
         getModulePositions()
     );
+
     private volatile Speed speed = Speed.NORMAL;
     private volatile TippingState tippingState = TippingState.NO_TIP_CORRECTION;
 
+    
+    // Shuffleboard values
     private final ShuffleboardValue<String> tippingStateWriter = 
         ShuffleboardValue.create(tippingState.name(), "Current/State/Tipping State", SwerveDrive.class.getSimpleName()).build();
     private final ShuffleboardValue<String> speedStateWriter = 
@@ -140,24 +104,21 @@ public class SwerveDrive extends SubsystemBase  {
         ShuffleboardValue.create(0.0, "Forward Velocity Writer", SwerveDrive.class.getSimpleName()).build();
 
     // private boolean isBreakMode = false;
-    private final Field2d field2d = new Field2d();
     
     // ComplexWidgetBuilder.create(field2d);
 
     public SwerveDrive(Boolean isEnabled) {
         // field2d.se();
-        for (SwerveModuleKraken swerveModule: swerveModules) {
+        for (SwerveModule swerveModule: swerveModules) {
             swerveModule.brakeMode();
             // swerveModule.coastMode();
             // swerveModule.brakeAndCoast^Mode();
         }
-        //TODO: Figure Out Mounting Config
+
         poseConfigs.MountPosePitch = 0;//Up-Down//0
         poseConfigs.MountPoseRoll = 90;//Side-Side//90
-        poseConfigs.MountPoseYaw = 180;//Heading//180
-        pigeon2.getConfigurator().apply(poseConfigs);
-        SmartDashboard.putData(field2d);
-        this.isEnabled.set(isEnabled);
+        poseConfigs.MountPoseYaw = 180;//Heading//180;
+        pigeon2.getConfigurator().apply(poseConfigs);        
     }
 
     
@@ -168,21 +129,11 @@ public class SwerveDrive extends SubsystemBase  {
             getModulePositions()
         );
 
-        field2d.setRobotPose(getPose());
         drivePoseWriter.set(getPose().toString());
-
         headingWriter.set(getHeading());
         rollWriter.set(getRoll());
         pitchWriter.set(getPitch());
         locationWriter.set(getPose().getTranslation().toString());
-
-
-
-
-        // for (SwerveModuleKraken swerveModule: swerveModules) {
-        //     swerveModule.getTurningPosition();
-        //     swerveModule.getDrivePos();
-        // }
         forwardVelocityWriter.write(getForwardVelocity());
     }
 
@@ -217,7 +168,7 @@ public class SwerveDrive extends SubsystemBase  {
     }
 
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(getHeading());//TODO:Make
+        return Rotation2d.fromDegrees(getHeading());
 
     }
 
@@ -266,9 +217,10 @@ public class SwerveDrive extends SubsystemBase  {
         if (!isEnabled.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
         );
 
+        // swerveModules[1].setState(states[1]);
         for (int i = 0; i < 4; i++) {
             swerveModules[i].setState(states[i]);
         }
@@ -282,7 +234,7 @@ public class SwerveDrive extends SubsystemBase  {
         if (!isEnabled.get()) return;
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, 
-            SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
+            SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND
         );
 
         for (int i = 0; i < 4; i++) {
@@ -291,7 +243,7 @@ public class SwerveDrive extends SubsystemBase  {
     }
 
     public void stop() {
-        for (SwerveModuleKraken swerveModule: swerveModules) {
+        for (SwerveModule swerveModule: swerveModules) {
             swerveModule.stop();
         }
     }
@@ -311,7 +263,7 @@ public class SwerveDrive extends SubsystemBase  {
 
     public Command resetEncoders() {
         return runOnce(() -> {
-            for (SwerveModuleKraken swerveModule: swerveModules) {
+            for (SwerveModule swerveModule: swerveModules) {
                 swerveModule.resetDriveEncoder();
                 // pigeon2.setYaw(getAngularSpeed())
             }
@@ -328,17 +280,17 @@ public class SwerveDrive extends SubsystemBase  {
     //     return setYawCommand(-90);
     // }
 
-    private void coastMode() {
-        for (SwerveModuleKraken swerveModule: swerveModules) {
-            swerveModule.coastMode();
-        }
-    }
-
-    private void breakMode() {
-        for (SwerveModuleKraken swerveModule: swerveModules) {
-            swerveModule.brakeMode();
-        }
-    }
+    // DO NOT DELETE
+    // private void coastMode() {
+    //     for (SwerveModuleKraken swerveModule: swerveModules) {
+    //         swerveModule.coastMode();
+    //     }
+    // }
+    // private void breakMode() {
+    //     for (SwerveModuleKraken swerveModule: swerveModules) {
+    //         swerveModule.brakeMode();
+    //     }
+    // }
 
     // public Command toggleBreakMode() {
     //     return runOnce(() -> {
@@ -368,7 +320,6 @@ public class SwerveDrive extends SubsystemBase  {
     }
 
     public Command toggleAntiTipping() {
-        // TODO: if you can upgrade java version to 17 in gradle and it works, you could simplify this switch statement using switch expression
         return runOnce(() -> setTippingState(
             TippingState.NO_TIP_CORRECTION
             // switch (tippingState) {
@@ -396,7 +347,7 @@ public class SwerveDrive extends SubsystemBase  {
         return runOnce(this::stop);
     }
 
-    public TrapezoidProfile.Constraints getThetaConstraints() { //TODO when do you use this? I think for turning
+    public TrapezoidProfile.Constraints getThetaConstraints() {
         return new TrapezoidProfile.Constraints(
             SwerveDriveConfig.MAX_ANGULAR_SPEED_RADIANS_PER_SECOND.get(),
             SwerveDriveConfig.MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED.get());
@@ -416,14 +367,8 @@ public class SwerveDrive extends SubsystemBase  {
         }
         return states;
     }
-    public void playMusic(int num){
-        for (SwerveModuleKraken swerveModule: swerveModules) {
-            // swerveModule.brakeMode();
-            swerveModule.playMusic(num);
-        }
-    }
 
-    public SafeCanSparkMax getFRTurnCanSparkMax(){
+    public SparkMax getFRTurnCanSparkMax(){
         return frontLeft.getTurnMotor();
     }
 
@@ -438,5 +383,4 @@ public class SwerveDrive extends SubsystemBase  {
             }
         );
     }
-
 }

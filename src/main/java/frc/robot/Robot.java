@@ -55,9 +55,9 @@ public class Robot extends TimedRobot {
     //     new AbsoluteDutyEncoder(0,false, 1,0.38, ampIntake);
     
     
-    private AutoChooser autoChooser = new AutoChooser(
-        drive,vision //, intake, shooter, ampMech//, claw, climb, vision, light
-    );
+    // private AutoChooser autoChooser = new AutoChooser(
+    //     drive,vision //, intake, shooter, ampMech//, claw, climb, vision, light
+    // );
     // private final CycleTracker cycleTracker = new CycleTracker();//Good to Use
 // private final Climb climb = new Climb(false,false);//20,21
 
@@ -126,8 +126,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        autonomousCommand = autoChooser.getAutonomousCommand();
-        // autonomousCommand = new InstantCommand();
+        // autonomousCommand = autoChooser.getAutonomousCommand();
+        autonomousCommand = new InstantCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();

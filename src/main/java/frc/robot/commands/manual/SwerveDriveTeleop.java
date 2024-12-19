@@ -12,7 +12,7 @@ import frc.robot.DroidRageConstants;
 import frc.robot.subsystems.drive.SwerveDrive;
 import frc.robot.subsystems.drive.SwerveDriveConstants;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
-import frc.robot.subsystems.drive.SwerveModuleKraken;
+import frc.robot.subsystems.drive.SwerveModule;
 
 public class SwerveDriveTeleop extends Command {
     private final SwerveDrive drive;
@@ -142,11 +142,11 @@ public class SwerveDriveTeleop extends Command {
         } else {
             xSpeed = 
                 xSpeed *
-                SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
+                SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 
                 drive.getTranslationalSpeed();
             ySpeed = 
                 ySpeed *
-                SwerveModuleKraken.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
+                SwerveModule.Constants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND *
                 drive.getTranslationalSpeed();
             turnSpeed = 
                 turnSpeed *
