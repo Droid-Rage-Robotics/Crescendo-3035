@@ -31,7 +31,8 @@ public class TestSubsystem extends Elevator {
         .withIdleMode(ZeroPowerMode.Coast)
         .withPositionConversionFactor(1)
         .withSubsystemName(TestSubsystem.class.getSimpleName())
-        .withIsEnabled(true);
+        .withIsEnabled(true)
+        .withSupplyCurrentLimit(0);
 
     // private static TalonEx talon = TalonEx.create(17)//DropDown
     //     .withDirection(CANMotorEx.Direction.Reversed)

@@ -103,10 +103,8 @@ public class TalonEx extends CANMotorEx {
         motor.setPosition(num);
     }
 
-    public TalonEx withStatorCurrentLimit(double statorCurrent){
-        setStatorCurrentLimit(statorCurrent);
-        return this;
-    }
+    
+
     public void setStatorCurrentLimit(double statorCurrent){
         // CurrentLimitsConfigs configs = new CurrentLimitsConfigs();
         // configs.StatorCurrentLimit = 50;
