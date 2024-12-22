@@ -19,6 +19,7 @@ import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
 import frc.robot.subsystems.drive.SwerveDriveConstants.Speed;
 import frc.robot.subsystems.drive.SwerveDriveConstants.DriveOptions;
 import frc.robot.utility.motor.better.SparkMax;
+import frc.robot.utility.encoder.CANcoderEx.EncoderDirection;
 import frc.robot.utility.motor.better.CANMotorEx.Direction;
 import frc.robot.utility.shuffleboard.ShuffleboardValue;
 
@@ -43,25 +44,25 @@ public class SwerveDrive extends SubsystemBase  {
     private final SwerveModule frontRight = new SwerveModule(
         3, 2, Direction.Forward, Direction.Reversed, 10, 
         SwerveDriveConfig.FRONT_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        true,
+        EncoderDirection.Reversed,
         DriveOptions.IS_ENABLED.get(),SwerveModule.POD.FR
     );
     private final SwerveModule backRight = new SwerveModule(
         5, 4, Direction.Forward, Direction.Reversed, 11, 
         SwerveDriveConfig.BACK_RIGHT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        true,
+        EncoderDirection.Reversed,
         DriveOptions.IS_ENABLED.get(),SwerveModule.POD.BR
     );
     private final SwerveModule backLeft = new SwerveModule(
         7, 6, Direction.Forward, Direction.Reversed, 12, 
         SwerveDriveConfig.BACK_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        true,
+        EncoderDirection.Reversed,
         DriveOptions.IS_ENABLED.get(),SwerveModule.POD.BL
     );
     private final SwerveModule frontLeft = new SwerveModule(
         9, 8, Direction.Forward, Direction.Reversed, 13, 
         SwerveDriveConfig.FRONT_LEFT_ABSOLUTE_ENCODER_OFFSET_RADIANS::get,
-        true,
+        EncoderDirection.Reversed,
         DriveOptions.IS_ENABLED.get(),SwerveModule.POD.FL
     );
     

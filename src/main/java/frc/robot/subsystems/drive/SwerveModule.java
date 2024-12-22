@@ -2,10 +2,6 @@ package frc.robot.subsystems.drive;
 
 import java.util.function.Supplier;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,6 +10,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.drive.SwerveDriveConstants.SwerveDriveConfig;
+import frc.robot.utility.encoder.CANcoderEx;
+import frc.robot.utility.encoder.CANcoderEx.EncoderDirection;
+import frc.robot.utility.encoder.CANcoderEx.EncoderRange;
 import frc.robot.utility.motor.better.CANMotorEx.Direction;
 import frc.robot.utility.motor.better.CANMotorEx.ZeroPowerMode;
 import frc.robot.utility.motor.better.SparkMax;
@@ -52,7 +51,7 @@ public class SwerveModule {
     
     // Turn motor and encoder
     private final SparkMax turnMotor;
-    private final CANcoder turnEncoder;
+    private final CANcoderEx turnEncoder;
 
     private final PIDController turningPidController;
     private final SimpleMotorFeedforward feedforward;
@@ -64,18 +63,24 @@ public class SwerveModule {
         int turnMotorId, Direction driveMotorReversed, 
         Direction turningMotorReversed, int absoluteEncoderId, 
         Supplier<Double> absoluteEncoderOffsetRad, 
-        boolean absoluteEncoderReversed, boolean isEnabled, POD podName) {
+        EncoderDirection absoluteEncoderReversed, boolean isEnabled, POD podName) {
         
-        turnEncoder = new CANcoder(absoluteEncoderId);
-        CANcoderConfiguration config = new CANcoderConfiguration();
-        if(absoluteEncoderReversed){
-            config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        } else{
-            config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        }
-        config.MagnetSensor.MagnetOffset = absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD;
-        config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-        turnEncoder.getConfigurator().apply(config);
+        // turnEncoder = new CANcoder(absoluteEncoderId);
+        // CANcoderConfiguration config = new CANcoderConfiguration();
+        // if(absoluteEncoderReversed){
+        //     config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        // } else{
+        //     config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        // }
+        // config.MagnetSensor.MagnetOffset = absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD;
+        // config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+        // turnEncoder.getConfigurator().apply(config);
+
+        turnEncoder = CANcoderEx.create(absoluteEncoderId) // TODO: Test
+            .withDirection(absoluteEncoderReversed)
+            .withRange(EncoderRange.ZERO_TO_ONE)
+            .withOffset(absoluteEncoderOffsetRad.get()/Constants.TURN_ENCODER_ROT_2_RAD)
+            .configure();
 
         driveMotor = TalonEx.create(driveMotorId)
             .withDirection(driveMotorReversed)
@@ -115,8 +120,8 @@ public class SwerveModule {
         }
     
         public double getTurningPosition() {
-            turnPositionWriter.write(turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
-            return (turnEncoder.getAbsolutePosition().getValueAsDouble()*Constants.TURN_ENCODER_ROT_2_RAD);
+            turnPositionWriter.write(turnEncoder.getAbsolutePosition()*Constants.TURN_ENCODER_ROT_2_RAD);
+            return (turnEncoder.getAbsolutePosition()*Constants.TURN_ENCODER_ROT_2_RAD);
         }
     
         public double getDriveVelocity(){
