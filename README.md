@@ -12,10 +12,9 @@ The 2024 season saw Team 3035 compete at two FIRST in Texas district events and 
 
 ### Events Attended
 
-* FIT District Waco Event
-* FIT District Channelview Event
-* FIRST in Texas District Championship — Apollo Division
-* Daly Division
+* FIT District San Antonio Event
+* FIT District Space City Event
+* FIRST in Texas District Championship — Mercury Division
 
 ### Competition Results
 
