@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains the competition code for Team 3035's 2024 FRC robot, **Dissonance**, built for the **Crescendo** season.
+This repository contains the competition code for Team 3035's FRC robot, **Dissonance**, from the 2024 **Crescendo** season.
 
 ---
 
