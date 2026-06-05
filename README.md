@@ -8,8 +8,6 @@ This repository contains the competition code for Team 3035's FRC robot, **Disso
 
 ## Season Summary
 
-The 2024 season saw Team 3035 compete at two FIRST in Texas district events and the District Championship.
-
 ### Events Attended
 
 * FIT District San Antonio Event
